@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:TheSynergizingOfIsaac.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="120"
+             x:Class="TheSynergizingOfIsaac.Views.Controls.TrinketSlotControl"
+             x:DataType="vm:TrinketSlotViewModel">
+
+    <StackPanel HorizontalAlignment="Center">
+        <!-- Trinket image box - half the pedestal size (64x64) -->
+        <Border Width="64" Height="64"
+                Background="#22223a"
+                BorderBrush="#4a4a6e" BorderThickness="1.5"
+                CornerRadius="4"
+                ToolTip.Tip="{Binding SelectedTrinket.Description}">
+            <Panel>
+                <TextBlock Text="{Binding SlotLabel}"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="#333355"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding SelectedTrinket, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                <Image Source="{Binding TrinketImage}"
+                       Width="32" Height="32"
+                       Stretch="Uniform"
+                       RenderOptions.BitmapInterpolationMode="None"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       IsVisible="{Binding SelectedTrinket, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </Panel>
+        </Border>
+
+        <!-- Autocomplete input — NO Text binding, control manages its own text -->
+        <AutoCompleteBox ItemsSource="{Binding AllTrinkets}"
+                         FilterMode="Contains"
+                         PlaceholderText="Trinket..."
+                         MinimumPrefixLength="1"
+                         Width="100"
+                         Margin="0,6,0,0"
+                         x:Name="TrinketAutoComplete"/>
+    </StackPanel>
+</UserControl>

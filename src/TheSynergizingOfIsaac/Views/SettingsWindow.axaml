@@ -1,0 +1,107 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TheSynergizingOfIsaac.ViewModels"
+        x:Class="TheSynergizingOfIsaac.Views.SettingsWindow"
+        x:DataType="vm:SettingsViewModel"
+        Title="Settings"
+        Width="500" Height="520"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Background="#1a1a2e">
+
+    <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="FontFamily" Value="Inter, Segoe UI, sans-serif"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="MinHeight" Value="32"/>
+        </Style>
+        <Style Selector="RadioButton">
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+        </Style>
+        <Style Selector="Button.save">
+            <Setter Property="Background" Value="#2a3a2a"/>
+            <Setter Property="Foreground" Value="#88cc88"/>
+            <Setter Property="BorderBrush" Value="#4a6a4a"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="24,8"/>
+        </Style>
+        <Style Selector="Button.save:pointerover">
+            <Setter Property="Background" Value="#3a4a3a"/>
+        </Style>
+        <Style Selector="Button.cancel">
+            <Setter Property="Background" Value="#3a2a2a"/>
+            <Setter Property="Foreground" Value="#cc8888"/>
+            <Setter Property="BorderBrush" Value="#6a4a4a"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="24,8"/>
+        </Style>
+        <Style Selector="Button.cancel:pointerover">
+            <Setter Property="Background" Value="#4a3a3a"/>
+        </Style>
+    </Window.Styles>
+
+    <StackPanel Margin="30">
+        <!-- Title -->
+        <TextBlock Text="Settings"
+                   FontSize="24" FontWeight="Bold"
+                   Foreground="#c9a96e"
+                   Margin="0,0,0,24"/>
+
+        <!-- AI Provider Selection -->
+        <TextBlock Text="AI PROVIDER"
+                   FontSize="13" FontWeight="SemiBold"
+                   Foreground="#8888cc"
+                   Margin="0,0,0,10"/>
+        <StackPanel Spacing="8" Margin="8,0,0,20">
+            <RadioButton GroupName="Provider"
+                         Content="Anthropic Claude (claude-sonnet-4-20250514)"
+                         IsChecked="{Binding IsAnthropicSelected}"/>
+            <RadioButton GroupName="Provider"
+                         Content="OpenAI ChatGPT (gpt-4o-mini)"
+                         IsChecked="{Binding IsOpenAiSelected}"/>
+            <RadioButton GroupName="Provider"
+                         Content="Google Gemini (gemini-2.0-flash)"
+                         IsChecked="{Binding IsGeminiSelected}"/>
+        </StackPanel>
+
+        <!-- API Keys -->
+        <TextBlock Text="API KEYS"
+                   FontSize="13" FontWeight="SemiBold"
+                   Foreground="#8888cc"
+                   Margin="0,0,0,10"/>
+
+        <TextBlock Text="Anthropic API Key" FontSize="12" Margin="0,0,0,4"/>
+        <TextBox Text="{Binding AnthropicApiKey}"
+                 PasswordChar="*"
+                 PlaceholderText="sk-ant-api03-..."
+                 Margin="0,0,0,12"/>
+
+        <TextBlock Text="OpenAI API Key" FontSize="12" Margin="0,0,0,4"/>
+        <TextBox Text="{Binding OpenAiApiKey}"
+                 PasswordChar="*"
+                 PlaceholderText="sk-..."
+                 Margin="0,0,0,12"/>
+
+        <TextBlock Text="Google Gemini API Key" FontSize="12" Margin="0,0,0,4"/>
+        <TextBox Text="{Binding GeminiApiKey}"
+                 PasswordChar="*"
+                 PlaceholderText="AIza..."
+                 Margin="0,0,0,24"/>
+
+        <!-- Buttons -->
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="12">
+            <Button Classes="cancel" Content="Cancel"
+                    Click="OnCancelClick"/>
+            <Button Classes="save" Content="Save"
+                    Click="OnSaveClick"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:TheSynergizingOfIsaac.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="210" d:DesignHeight="400"
+             x:Class="TheSynergizingOfIsaac.Views.Controls.PedestalControl"
+             x:DataType="vm:PedestalSlotViewModel">
+
+    <StackPanel HorizontalAlignment="Center" Width="200">
+        <!-- Pedestal with item image -->
+        <Border Width="128" Height="128"
+                Background="#22223a"
+                BorderBrush="#4a4a6e" BorderThickness="2"
+                CornerRadius="6"
+                HorizontalAlignment="Center"
+                ToolTip.Tip="{Binding SelectedItem.Description}">
+            <Panel>
+                <!-- Pedestal base visual -->
+                <StackPanel VerticalAlignment="Bottom"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,4">
+                    <Border Width="60" Height="8"
+                            Background="#555577"
+                            CornerRadius="2,2,0,0"/>
+                    <Border Width="80" Height="6"
+                            Background="#444466"/>
+                </StackPanel>
+
+                <!-- Slot label when empty -->
+                <TextBlock Text="{Binding SlotLabel}"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="#333355"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}"/>
+
+                <!-- Item image floating above pedestal -->
+                <Image Source="{Binding ItemImage}"
+                       Width="64" Height="64"
+                       Stretch="Uniform"
+                       RenderOptions.BitmapInterpolationMode="None"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0,0,0,16"
+                       IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </Panel>
+        </Border>
+
+        <!-- Autocomplete text input -->
+        <AutoCompleteBox ItemsSource="{Binding AllItems}"
+                         FilterMode="Contains"
+                         PlaceholderText="Search items..."
+                         MinimumPrefixLength="1"
+                         Width="190"
+                         Margin="0,8,0,0"
+                         x:Name="ItemAutoComplete"/>
+
+        <!-- Item description card -->
+        <Border Height="130"
+                Background="#1a1a30"
+                BorderBrush="#3a3a5e" BorderThickness="1"
+                CornerRadius="6"
+                Padding="10"
+                Margin="0,8,0,0">
+            <Panel>
+                <!-- Empty state -->
+                <TextBlock Text="No item selected"
+                           Foreground="#333355"
+                           FontSize="11"
+                           FontStyle="Italic"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}"/>
+                <!-- Item info when selected -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                             IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding SelectedItem.Name}"
+                                   FontWeight="Bold"
+                                   FontSize="13"
+                                   Foreground="#ccaa77"
+                                   Margin="0,0,0,3"/>
+                        <TextBlock Text="{Binding SelectedItem.Quote}"
+                                   FontStyle="Italic"
+                                   FontSize="11"
+                                   Foreground="#8888aa"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,5"/>
+                        <TextBlock Text="{Binding SelectedItem.Description}"
+                                   TextWrapping="Wrap"
+                                   FontSize="11"
+                                   LineHeight="16"
+                                   Foreground="#aaaacc"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Panel>
+        </Border>
+    </StackPanel>
+</UserControl>

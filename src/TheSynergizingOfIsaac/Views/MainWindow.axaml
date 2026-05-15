@@ -1,0 +1,282 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TheSynergizingOfIsaac.ViewModels"
+        xmlns:controls="using:TheSynergizingOfIsaac.Views.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="900"
+        x:Class="TheSynergizingOfIsaac.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="The Synergizing of Isaac"
+        MinWidth="1100" MinHeight="800"
+        Background="#1a1a2e">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <!-- Global dark Isaac-inspired styling -->
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="FontFamily" Value="Inter, Segoe UI, sans-serif"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="AutoCompleteBox">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="MinHeight" Value="32"/>
+        </Style>
+        <Style Selector="Button.clear">
+            <Setter Property="Background" Value="#3a2a2a"/>
+            <Setter Property="Foreground" Value="#cc8888"/>
+            <Setter Property="BorderBrush" Value="#6a4a4a"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="16,8"/>
+        </Style>
+        <Style Selector="Button.clear:pointerover">
+            <Setter Property="Background" Value="#4a3a3a"/>
+        </Style>
+        <Style Selector="Button.gear">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.gear:pointerover">
+            <Setter Property="Background" Value="#30ffffff"/>
+        </Style>
+        <Style Selector="ToggleButton.ai-toggle">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#666688"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="ToggleButton.ai-toggle:checked">
+            <Setter Property="Background" Value="#2a3a2a"/>
+            <Setter Property="Foreground" Value="#88cc88"/>
+            <Setter Property="BorderBrush" Value="#4a6a4a"/>
+        </Style>
+    </Window.Styles>
+
+    <Panel>
+        <!-- Background mosaic (pre-blended with dark base, variable tile opacity) -->
+        <Image Source="{Binding BackgroundImage}"
+               Stretch="UniformToFill"
+               IsVisible="{Binding BackgroundImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+
+        <!-- Loading overlay -->
+        <TextBlock Text="Loading game data..."
+                   IsVisible="{Binding IsLoading}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="24"
+                   Foreground="#8888aa"/>
+
+        <!-- Main content — DockPanel ensures synergy area fills remaining space exactly -->
+        <DockPanel IsVisible="{Binding !IsLoading}">
+
+            <!-- TOP: Title bar with settings gear -->
+            <Panel DockPanel.Dock="Top" Margin="0,50,0,10">
+                <!-- Settings gear (top-left) -->
+                <Button Classes="gear"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="20,0,0,0"
+                        Command="{Binding OpenSettingsCommand}"
+                        ToolTip.Tip="Settings — configure AI API keys">
+                    <TextBlock Text="&#x2699;" FontSize="28" Foreground="#8888aa"/>
+                </Button>
+
+                <!-- Gothic title with drop shadow (centered) -->
+                <Panel HorizontalAlignment="Center">
+                    <TextBlock Text="THE SYNERGIZING OF ISAAC"
+                               FontFamily="Impact, Franklin Gothic Medium, Arial Black, sans-serif"
+                               FontSize="44"
+                               FontWeight="Bold"
+                               Foreground="#50000000"
+                               HorizontalAlignment="Center">
+                        <TextBlock.RenderTransform>
+                            <TranslateTransform X="-2" Y="-2"/>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <TextBlock Text="THE SYNERGIZING OF ISAAC"
+                               FontFamily="Impact, Franklin Gothic Medium, Arial Black, sans-serif"
+                               FontSize="44"
+                               FontWeight="Bold"
+                               Foreground="#c9a96e"
+                               HorizontalAlignment="Center"/>
+                </Panel>
+            </Panel>
+
+            <!-- TOP: Character | Pedestals | Trinkets -->
+            <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,Auto,Auto"
+                  Margin="40,10,40,10"
+                  HorizontalAlignment="Center">
+
+                <!-- CHARACTER PANEL (left) — 50% enlarged, vertically centered -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center"
+                            Margin="0,0,30,0">
+                    <Border Width="192" Height="192"
+                            Background="#22223a"
+                            BorderBrush="#4a4a6e" BorderThickness="2"
+                            CornerRadius="8">
+                        <Panel>
+                            <TextBlock Text="?"
+                                       FontSize="72"
+                                       Foreground="#4a4a6e"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       IsVisible="{Binding SelectedCharacter, Converter={x:Static ObjectConverters.IsNull}}"/>
+                            <Image Source="{Binding CharacterImage}"
+                                   Stretch="Uniform"
+                                   RenderOptions.BitmapInterpolationMode="None"
+                                   IsVisible="{Binding SelectedCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                   Margin="12"/>
+                        </Panel>
+                    </Border>
+                    <ComboBox ItemsSource="{Binding Characters}"
+                              SelectedItem="{Binding SelectedCharacter}"
+                              PlaceholderText="Character..."
+                              Width="210" Margin="0,10,0,0"
+                              HorizontalAlignment="Center">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ViewModelBase">
+                                <TextBlock Text="{Binding}" Foreground="#e0d5c1"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- PEDESTALS (center) — 3 slots each with description card -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Spacing="20">
+                    <controls:PedestalControl DataContext="{Binding Pedestal1}"/>
+                    <controls:PedestalControl DataContext="{Binding Pedestal2}"/>
+                    <controls:PedestalControl DataContext="{Binding Pedestal3}"/>
+                </StackPanel>
+
+                <!-- TRINKETS (right) — vertically centered to pedestals -->
+                <StackPanel Grid.Column="2" VerticalAlignment="Center"
+                            Spacing="12" Margin="30,0,0,0">
+                    <controls:TrinketSlotControl DataContext="{Binding Trinket1}"/>
+                    <controls:TrinketSlotControl DataContext="{Binding Trinket2}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- BOTTOM: Clear All button -->
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                        HorizontalAlignment="Right" Margin="20,5,20,15">
+                <Button Classes="clear" Content="Clear All"
+                        Command="{Binding ClearAllCommand}"/>
+            </StackPanel>
+
+            <!-- FILL: Synergy results panel — takes all remaining vertical space -->
+            <Border Margin="120,10,120,10"
+                    Background="#16162a"
+                    BorderBrush="#3a3a5e"
+                    BorderThickness="2"
+                    CornerRadius="8"
+                    Padding="24"
+                    ClipToBounds="True">
+                <DockPanel>
+                    <!-- Header row: SYNERGIES label + AI toggle -->
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <TextBlock Text="SYNERGIES"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="#8888cc"
+                                   VerticalAlignment="Center"/>
+                        <ToggleButton Classes="ai-toggle"
+                                      DockPanel.Dock="Right"
+                                      IsChecked="{Binding IsAiModeEnabled}"
+                                      ToolTip.Tip="Toggle AI-powered synergy analysis">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="&#x26A1;" FontSize="13"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="AI Analysis"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ToggleButton>
+                    </DockPanel>
+
+                    <!-- Scrollable synergy content -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="0">
+                            <!-- Database synergies section -->
+                            <Panel>
+                                <TextBlock Text="Select at least 2 items to see synergies..."
+                                           Foreground="#555577"
+                                           FontSize="14"
+                                           FontStyle="Italic"
+                                           IsVisible="{Binding !SynergyText.Length}"/>
+                                <TextBlock Text="{Binding SynergyText}"
+                                           TextWrapping="Wrap"
+                                           FontSize="14"
+                                           LineHeight="22"
+                                           Foreground="#ccccdd"
+                                           IsVisible="{Binding SynergyText.Length}"/>
+                            </Panel>
+
+                            <!-- AI Analysis section (shown when AI mode is on) -->
+                            <StackPanel IsVisible="{Binding IsAiModeEnabled}"
+                                        Margin="0,12,0,0">
+                                <!-- Separator -->
+                                <Border Height="1" Background="#3a3a5e" Margin="0,0,0,10"/>
+
+                                <TextBlock Text="&#x1F916; AI ANALYSIS"
+                                           FontSize="13"
+                                           FontWeight="Bold"
+                                           Foreground="#aa88cc"
+                                           Margin="0,0,0,8"/>
+
+                                <!-- Loading indicator -->
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="8"
+                                            IsVisible="{Binding IsAiLoading}">
+                                    <TextBlock Text="&#x27F3;" FontSize="16"
+                                               Foreground="#7777aa"/>
+                                    <TextBlock Text="Analyzing combination..."
+                                               FontStyle="Italic" FontSize="13"
+                                               Foreground="#7777aa"/>
+                                </StackPanel>
+
+                                <!-- AI result (when not loading) -->
+                                <Panel IsVisible="{Binding !IsAiLoading}">
+                                    <TextBlock Text="Select items to get AI analysis..."
+                                               FontStyle="Italic" FontSize="12"
+                                               Foreground="#555577"
+                                               IsVisible="{Binding !AiAnalysisText.Length}"/>
+                                    <TextBlock Text="{Binding AiAnalysisText}"
+                                               TextWrapping="Wrap"
+                                               FontSize="13"
+                                               LineHeight="20"
+                                               Foreground="#ccbbdd"
+                                               IsVisible="{Binding AiAnalysisText.Length}"/>
+                                </Panel>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+        </DockPanel>
+    </Panel>
+</Window>
