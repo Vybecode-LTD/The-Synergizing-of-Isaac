@@ -1,0 +1,222 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TheSynergizingOfIsaac.ViewModels"
+        x:Class="TheSynergizingOfIsaac.Views.AddSynergyWindow"
+        x:DataType="vm:AddSynergyViewModel"
+        Title="Add Synergy"
+        Width="600" Height="640"
+        MinWidth="500" MinHeight="560"
+        WindowStartupLocation="CenterOwner"
+        Background="#1a1a2e">
+
+    <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="FontFamily" Value="Inter, Segoe UI, sans-serif"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="AutoCompleteBox">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="MinHeight" Value="32"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#2a2a3e"/>
+            <Setter Property="Foreground" Value="#e0d5c1"/>
+            <Setter Property="BorderBrush" Value="#4a4a6e"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <!-- Chip style for selected items -->
+        <Style Selector="Button.chip">
+            <Setter Property="Background" Value="#2a3a4a"/>
+            <Setter Property="Foreground" Value="#aaccee"/>
+            <Setter Property="BorderBrush" Value="#3a5a7a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,6,6"/>
+        </Style>
+        <Style Selector="Button.chip:pointerover">
+            <Setter Property="Background" Value="#3a2a2a"/>
+            <Setter Property="Foreground" Value="#cc8888"/>
+            <Setter Property="BorderBrush" Value="#6a4a4a"/>
+        </Style>
+        <Style Selector="Button.save">
+            <Setter Property="Background" Value="#2a3a2a"/>
+            <Setter Property="Foreground" Value="#88cc88"/>
+            <Setter Property="BorderBrush" Value="#4a6a4a"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="24,8"/>
+        </Style>
+        <Style Selector="Button.save:pointerover">
+            <Setter Property="Background" Value="#3a4a3a"/>
+        </Style>
+        <Style Selector="Button.cancel">
+            <Setter Property="Background" Value="#3a2a2a"/>
+            <Setter Property="Foreground" Value="#cc8888"/>
+            <Setter Property="BorderBrush" Value="#6a4a4a"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="24,8"/>
+        </Style>
+        <Style Selector="Button.cancel:pointerover">
+            <Setter Property="Background" Value="#4a3a3a"/>
+        </Style>
+    </Window.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <!-- Title -->
+            <TextBlock Text="Add Synergy"
+                       FontSize="24" FontWeight="Bold"
+                       Foreground="#c9a96e"
+                       Margin="0,0,0,20"/>
+
+            <!-- ITEMS -->
+            <TextBlock Text="ITEMS"
+                       FontSize="13" FontWeight="SemiBold"
+                       Foreground="#8888cc"
+                       Margin="0,0,0,6"/>
+            <AutoCompleteBox ItemsSource="{Binding AllItems}"
+                             FilterMode="Contains"
+                             PlaceholderText="Search and select items..."
+                             MinimumPrefixLength="1"
+                             Margin="0,0,0,8"
+                             x:Name="ItemAutoComplete"/>
+            <ItemsControl ItemsSource="{Binding SelectedItems}" Margin="0,0,0,16">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Button Classes="chip"
+                                Command="{Binding $parent[Window].((vm:AddSynergyViewModel)DataContext).RemoveItemCommand}"
+                                CommandParameter="{Binding}"
+                                ToolTip.Tip="Click to remove">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                <TextBlock Text="&#x2715;" FontSize="10"
+                                           Foreground="#886666" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- TRINKETS (optional) -->
+            <TextBlock Text="TRINKETS (optional)"
+                       FontSize="13" FontWeight="SemiBold"
+                       Foreground="#8888cc"
+                       Margin="0,0,0,6"/>
+            <AutoCompleteBox ItemsSource="{Binding AllTrinkets}"
+                             FilterMode="Contains"
+                             PlaceholderText="Search and select trinkets..."
+                             MinimumPrefixLength="1"
+                             Margin="0,0,0,8"
+                             x:Name="TrinketAutoComplete"/>
+            <ItemsControl ItemsSource="{Binding SelectedTrinkets}" Margin="0,0,0,16">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Button Classes="chip"
+                                Command="{Binding $parent[Window].((vm:AddSynergyViewModel)DataContext).RemoveTrinketCommand}"
+                                CommandParameter="{Binding}"
+                                ToolTip.Tip="Click to remove">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                <TextBlock Text="&#x2715;" FontSize="10"
+                                           Foreground="#886666" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- CHARACTERS (optional) -->
+            <TextBlock Text="CHARACTERS (optional)"
+                       FontSize="13" FontWeight="SemiBold"
+                       Foreground="#8888cc"
+                       Margin="0,0,0,6"/>
+            <AutoCompleteBox ItemsSource="{Binding AllCharacters}"
+                             FilterMode="Contains"
+                             PlaceholderText="Search and select characters..."
+                             MinimumPrefixLength="1"
+                             Margin="0,0,0,8"
+                             x:Name="CharacterAutoComplete"/>
+            <ItemsControl ItemsSource="{Binding SelectedCharacters}" Margin="0,0,0,16">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Button Classes="chip"
+                                Command="{Binding $parent[Window].((vm:AddSynergyViewModel)DataContext).RemoveCharacterCommand}"
+                                CommandParameter="{Binding}"
+                                ToolTip.Tip="Click to remove">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                <TextBlock Text="&#x2715;" FontSize="10"
+                                           Foreground="#886666" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- RATING -->
+            <TextBlock Text="RATING"
+                       FontSize="13" FontWeight="SemiBold"
+                       Foreground="#8888cc"
+                       Margin="0,0,0,6"/>
+            <ComboBox ItemsSource="{Binding Ratings}"
+                      SelectedItem="{Binding SelectedRating}"
+                      Width="100"
+                      Margin="0,0,0,16"/>
+
+            <!-- DESCRIPTION -->
+            <TextBlock Text="DESCRIPTION"
+                       FontSize="13" FontWeight="SemiBold"
+                       Foreground="#8888cc"
+                       Margin="0,0,0,6"/>
+            <TextBox Text="{Binding Description}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     Height="100"
+                     PlaceholderText="Describe the synergy interaction..."
+                     Margin="0,0,0,16"/>
+
+            <!-- Validation error -->
+            <TextBlock Text="{Binding ValidationError}"
+                       Foreground="#cc6666"
+                       FontSize="12"
+                       IsVisible="{Binding ValidationError.Length}"
+                       Margin="0,0,0,12"/>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Spacing="12">
+                <Button Classes="cancel" Content="Cancel"
+                        Click="OnCancelClick"/>
+                <Button Classes="save" Content="Save Synergy"
+                        Click="OnSaveClick"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

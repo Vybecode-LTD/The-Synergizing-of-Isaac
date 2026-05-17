@@ -18,6 +18,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private SynergyEngine? _synergyEngine;
     private CancellationTokenSource? _aiCts;
 
+    /// <summary>Exposes data service for dialog construction (View layer only).</summary>
+    public GameDataService DataService => _dataService;
+
     [ObservableProperty]
     private bool _isLoading = true;
 
@@ -66,6 +69,12 @@ public partial class MainWindowViewModel : ViewModelBase
     /// The ViewModel doesn't reference Views directly (MVVM pattern).
     /// </summary>
     public Func<Task>? ShowSettingsDialog { get; set; }
+
+    /// <summary>
+    /// Callback set by the View to show the Add Synergy dialog.
+    /// Returns the new SynergyEntry if saved, or null if cancelled.
+    /// </summary>
+    public Func<Task<SynergyEntry?>>? ShowAddSynergyDialog { get; set; }
 
     public MainWindowViewModel()
     {
@@ -125,6 +134,22 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (ShowSettingsDialog is not null)
             await ShowSettingsDialog();
+    }
+
+    [RelayCommand]
+    private async Task AddSynergy()
+    {
+        if (ShowAddSynergyDialog is null) return;
+
+        var entry = await ShowAddSynergyDialog();
+        if (entry is null) return;
+
+        _dataService.AddSynergy(entry);
+        await _dataService.SaveSynergiesAsync();
+
+        // Rebuild the engine with the updated list
+        _synergyEngine = new SynergyEngine(_dataService.Synergies);
+        UpdateSynergies();
     }
 
     private void LoadBackgroundImage()

@@ -74,6 +74,19 @@
             <Setter Property="Foreground" Value="#88cc88"/>
             <Setter Property="BorderBrush" Value="#4a6a4a"/>
         </Style>
+        <Style Selector="Button.add-synergy">
+            <Setter Property="Background" Value="#2a2a4a"/>
+            <Setter Property="Foreground" Value="#8888cc"/>
+            <Setter Property="BorderBrush" Value="#4a4a7a"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.add-synergy:pointerover">
+            <Setter Property="Background" Value="#3a3a5a"/>
+            <Setter Property="Foreground" Value="#aaaaee"/>
+        </Style>
     </Window.Styles>
 
     <Panel>
@@ -198,7 +211,7 @@
                     Padding="24"
                     ClipToBounds="True">
                 <DockPanel>
-                    <!-- Header row: SYNERGIES label + AI toggle -->
+                    <!-- Header row: SYNERGIES label + Add Synergy + AI toggle -->
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
                         <TextBlock Text="SYNERGIES"
                                    FontSize="16"
@@ -216,6 +229,18 @@
                                            VerticalAlignment="Center"/>
                             </StackPanel>
                         </ToggleButton>
+                        <Button Classes="add-synergy"
+                                DockPanel.Dock="Right"
+                                Margin="0,0,10,0"
+                                Command="{Binding AddSynergyCommand}"
+                                ToolTip.Tip="Add a new synergy to the database">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="+" FontSize="15" FontWeight="Bold"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Add Synergy"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </DockPanel>
 
                     <!-- Scrollable synergy content -->
