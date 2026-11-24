@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+import datetime
 import importlib.util
 import json
 import shutil
@@ -16,9 +18,10 @@ import pytest
 from app import analysis, parity
 from app.analysis import AnalysisFailed, ClaudeAnalyzer
 from app.gamedata import Build, GameData
+from app.inflight import KeyedLocks
 from app.pages import clamp, describe, fit_title, join_names
 from app.settings import REPO, Settings
-from app.store import Store
+from app.store import SITE, LimitReached, Store
 
 from .conftest import Clock
 
@@ -28,22 +31,66 @@ from .conftest import Clock
 def test_store_counts_reserves_and_refunds(clock: Clock) -> None:
     store = Store(clock=clock)
     me = store.visitor("203.0.113.7")
-    assert store.reserve(me, 2, 10) is None
-    assert store.reserve(me, 2, 10) is None
-    assert store.reserve(me, 2, 10) == "rate_limited"
+    first = store.reserve(me, 2, 10)
+    second = store.reserve(me, 2, 10)
+    with pytest.raises(LimitReached) as refused:
+        store.reserve(me, 2, 10)
+    assert refused.value.code == "rate_limited"
     assert store.used(me) == 2
-    store.release(me)
+    store.release(first)
     assert store.used(me) == 1
-    store.release(me)
-    store.release(me)  # never goes below zero
+    store.release(second)
+    store.release(second)  # never goes below zero
     assert store.used(me) == 0
 
 
 def test_store_checks_the_site_budget_first(clock: Clock) -> None:
     store = Store(clock=clock)
-    assert store.reserve(store.visitor("a"), 5, 1) is None
-    assert store.reserve(store.visitor("b"), 5, 1) == "budget_exhausted"
+    store.reserve(store.visitor("a"), 5, 1)
+    with pytest.raises(LimitReached) as refused:
+        store.reserve(store.visitor("b"), 5, 1)
+    assert refused.value.code == "budget_exhausted"
     assert store.used(store.visitor("b")) == 0
+
+
+def test_a_refund_goes_back_to_the_day_it_was_taken_from(clock: Clock) -> None:
+    """Review finding: a call reserved before midnight that fails after it refunded the new day's usage."""
+    store = Store(clock=clock)
+    me, other = store.visitor("203.0.113.7"), store.visitor("198.51.100.9")
+    clock.now = datetime.datetime(2026, 11, 24, 23, 59, 50, tzinfo=datetime.UTC)
+    late = store.reserve(me, 1, 10)
+    assert late.day == "2026-11-24"
+
+    clock.now += datetime.timedelta(seconds=30)  # 00:00:20 on the 25th
+    store.reserve(me, 1, 10)  # the visitor's one analysis for the new day
+    store.reserve(other, 1, 10)
+    store.release(late)  # yesterday's call failed just now
+
+    # The new day is untouched: this visitor has still used their one, and the site two.
+    assert store.used(me) == 1
+    assert store.used(SITE) == 2
+    with pytest.raises(LimitReached):
+        store.reserve(me, 1, 10)
+    # Yesterday's counters are the ones that went back down.
+    clock.now -= datetime.timedelta(seconds=30)
+    assert store.used(me) == 0
+    assert store.used(SITE) == 0
+
+
+async def test_keyed_locks_hold_one_key_at_a_time_and_forget_it_afterwards() -> None:
+    locks = KeyedLocks()
+    order: list[str] = []
+
+    async def work(name: str, key: str) -> None:
+        async with locks.hold(key):
+            order.append(f"{name} in")
+            await asyncio.sleep(0.01)
+            order.append(f"{name} out")
+
+    await asyncio.gather(work("a", "k"), work("b", "k"), work("c", "other"))
+    assert order.index("a out") < order.index("b in")  # same key: one after the other
+    assert order.index("c in") < order.index("a out")  # another key is not held up
+    assert len(locks) == 0  # nothing is kept once the work is done
 
 
 def test_store_never_keeps_an_address_and_survives_a_restart(tmp_path: Path, clock: Clock) -> None:

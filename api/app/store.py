@@ -12,6 +12,7 @@ import secrets
 import sqlite3
 import threading
 from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
 
 SITE = "*"
@@ -22,6 +23,22 @@ CREATE TABLE IF NOT EXISTS usage (day TEXT NOT NULL, visitor TEXT NOT NULL, coun
                                   PRIMARY KEY (day, visitor));
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 """
+
+
+class LimitReached(Exception):
+    """Today's allowance is used up. `code` says whose: "rate_limited" (visitor) or "budget_exhausted" (site)."""
+
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.code = code
+
+
+@dataclass(frozen=True)
+class Reservation:
+    """One analysis taken from a day's allowance. Kept so a refund goes back to the same day."""
+
+    visitor: str
+    day: str
 
 
 def utc_now() -> datetime.datetime:
@@ -61,33 +78,37 @@ class Store:
         with self._lock:
             return self._count(self._day(), visitor)
 
-    def reserve(self, visitor: str, per_visitor: int, site: int) -> str | None:
-        """Take one analysis from today's allowance. Returns None, or which limit refused it."""
+    def reserve(self, visitor: str, per_visitor: int, site: int) -> Reservation:
+        """Take one analysis from today's allowance, or raise LimitReached."""
         day = self._day()
         with self._lock:
             self._db.execute("BEGIN IMMEDIATE")
             try:
                 if self._count(day, SITE) >= site:
-                    return "budget_exhausted"
+                    raise LimitReached("budget_exhausted")
                 if self._count(day, visitor) >= per_visitor:
-                    return "rate_limited"
+                    raise LimitReached("rate_limited")
                 for who in (SITE, visitor):
                     self._db.execute(
                         "INSERT INTO usage (day, visitor, count) VALUES (?, ?, 1) "
                         "ON CONFLICT (day, visitor) DO UPDATE SET count = count + 1",
                         (day, who),
                     )
-                return None
+                return Reservation(visitor=visitor, day=day)
             finally:
                 self._db.execute("COMMIT")
 
-    def release(self, visitor: str) -> None:
-        """Give an analysis back when the model call failed: the visitor got nothing for it."""
-        day = self._day()
+    def release(self, reservation: Reservation) -> None:
+        """Give an analysis back when the model call failed: the visitor got nothing for it.
+
+        The refund goes to the day the reservation was taken from, not today: a call reserved just before
+        midnight UTC that fails just after must not hand back an analysis somebody used on the new day.
+        """
         with self._lock:
-            for who in (SITE, visitor):
+            for who in (SITE, reservation.visitor):
                 self._db.execute(
-                    "UPDATE usage SET count = count - 1 WHERE day = ? AND visitor = ? AND count > 0", (day, who)
+                    "UPDATE usage SET count = count - 1 WHERE day = ? AND visitor = ? AND count > 0",
+                    (reservation.day, who),
                 )
 
     # ------------------------------------------------------------ cache

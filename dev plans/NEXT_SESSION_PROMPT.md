@@ -20,7 +20,8 @@ server in `api/`, game data in `data/`. It runs only locally so far: web dev ser
 - Open PR: `Vybecode-LTD/The-Synergizing-of-Isaac#1` (number predicted). Confirm number, head and CI with
   `gh pr list` and `gh pr checks 1`. Auto-fix was to be switched on for it.
 - Deployed: nothing. Railway: no project for this repo. Domain `issac.toys` is registered by the owner.
-- Local suites at the handoff: web 109 passed, API 67 passed, data validator 0 problems, design audit clean.
+- Local suites at the handoff: web 109 passed, API 71 passed, data validator 0 problems, design audit clean.
+- Codex's first review (two findings) is fixed and answered on the PR.
 - Half-done: nothing in the working tree. Unverified items are listed in `docs/HANDOFF.md`.
 
 ## 4. First job, then the order

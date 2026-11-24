@@ -8,6 +8,7 @@ bounded four ways (`api/app/main.py`, `api/app/store.py`):
 1. A daily cap per visitor (`AI_PER_VISITOR_PER_DAY`, default 5) and for the whole site
    (`AI_SITE_PER_DAY`, default 200). Both reset at midnight UTC.
 2. Answers are saved by build, so a repeated build costs nothing and uses none of the visitor's allowance.
+   Requests for the same build that arrive together wait for the first one and share its answer.
 3. The request carries ids only; the server writes the whole prompt. The key cannot be used as a free proxy.
 4. At most 16 items and 6 trinkets, a 4,000-token ceiling, and four model calls in flight at once.
 

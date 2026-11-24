@@ -22,7 +22,7 @@ Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
 | `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 62 files |
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
-| `.venv\Scripts\python -m pytest --cov` | `api/` | 67 passed; 99% of `app/` |
+| `.venv\Scripts\python -m pytest --cov` | `api/` | 71 passed; 99% of `app/` |
 | `.venv\Scripts\python -m ruff check .`, `-m mypy` | `api/` | clean |
 | `python scripts/gamedata.py validate` | repo root | 0 problems |
 
@@ -39,7 +39,10 @@ Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
   file (`python -m app.parity`); a difference on either side fails.
 - **AI endpoint** (`api/tests/test_analyze.py`): per-visitor and site-wide daily limits, reset at midnight
   UTC, refund when the model call fails, cache hits cost nothing, unknown ids and free text are rejected,
-  a forged Cloudflare header does not dodge the limit.
+  a forged Cloudflare header does not dodge the limit, and two requests for the same build at the same
+  moment share one model call.
+- **Store** (`api/tests/test_core.py`): a refund goes back to the day it was taken from, even when the
+  call fails after midnight UTC.
 - **Pages for crawlers** (`api/tests/test_pages.py`): one `h1`, canonical, valid JSON-LD, escaped text, real
   404s, sitemap of all 947 URLs, robots rules, no path escape from the web build.
 
@@ -47,10 +50,13 @@ Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
 
 - The data validator has a positive control (`test_the_validator_catches_what_it_exists_for`): a copy of the
   data broken in six ways must report all six.
-- Mutation check on the API, 2026-11-24: eight deliberate breaks (refund removed, Cloudflare header always
-  trusted, site budget skipped, `h1` unescaped, unknown page answering 200, cache ignoring the model,
-  character synergies always applying, path escape allowed). All eight turned a test red.
+- Mutation check on the API, 2026-11-24: nine deliberate breaks (refund removed, refund to today instead
+  of the reserved day, no second look at the cache after waiting, Cloudflare header always trusted, site
+  budget skipped, `h1` unescaped, unknown page answering 200, cache ignoring the model, path escape
+  allowed). All nine turned a test red. An earlier run also caught character synergies always applying.
 - "Removes a pickup and clears the build" failed before the build-state race was fixed and passes after.
+- Both review fixes on PR #1 were seen failing first: two model calls where one was expected, and the
+  new day's count dropping to 0 after a late refund.
 
 ## By hand
 

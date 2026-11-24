@@ -14,8 +14,10 @@
 
 ## Verified today (commands and results in `docs/TESTING.md`)
 
-- Web: 109 tests, 98.6% lines; lint, types and design audit clean. API: 67 tests, 99%; ruff and mypy clean.
-- Mutation check on the API: 8 of 8 deliberate breaks caught.
+- Web: 109 tests, 98.6% lines; lint, types and design audit clean. API: 71 tests, 99%; ruff and mypy clean.
+- Mutation check on the API: 9 of 9 deliberate breaks caught.
+- Codex's two findings on PR #1 are fixed with tests: identical requests in flight now share one model
+  call, and a refund goes back to the day it was reserved on.
 - Built site run locally on port 8001: every public route answers real HTML with one `h1`; unknown
   addresses answer 404; the browser's titles matched the server's on nine routes.
 - Rendered contrast (axe on real Chrome, 1440 and 390 wide, hover included): clean on `/`, a full build,

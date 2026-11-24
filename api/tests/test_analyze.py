@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+import asyncio
 import datetime
 from collections.abc import Callable
 
+import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from app.analysis import SYSTEM, cache_key
+from app.analysis import SYSTEM, AnalysisFailed, cache_key
 from app.gamedata import Build
+from app.main import create_app
+from app.settings import Settings
+from app.store import Store
 
 from .conftest import Clock, FakeAnalyzer
 
@@ -53,6 +58,65 @@ def test_the_same_build_is_answered_from_the_cache_for_free(client: TestClient, 
     # Someone else gets it too, without spending any of their own allowance.
     other = post(client, BRIM_TAMMY, ip="198.51.100.9")
     assert other.json()["cached"] is True and other.json()["remaining"] == 5
+
+
+class SlowAnalyzer(FakeAnalyzer):
+    """Takes long enough for a second request to arrive while the first is still being answered."""
+
+    def __init__(self, fail_first: bool = False) -> None:
+        super().__init__()
+        self.fail_first = fail_first
+
+    async def analyze(self, system: str, user: str) -> str:
+        self.calls.append((system, user))
+        first = len(self.calls) == 1
+        await asyncio.sleep(0.05)
+        if first and self.fail_first:
+            raise AnalysisFailed("boom")
+        return "Slow answer."
+
+
+def overlapping(settings: Settings, clock: Clock, analyzer: FakeAnalyzer) -> httpx.AsyncClient:
+    app = create_app(settings, analyzer=analyzer, store=Store(clock=clock))
+    return httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://test", headers={"x-forwarded-for": "203.0.113.7"}
+    )
+
+
+async def test_two_requests_for_the_same_build_share_one_model_call(settings: Settings, clock: Clock) -> None:
+    """Review finding: both missed the cache, both paid for a call, and the visitor was charged twice."""
+    analyzer = SlowAnalyzer()
+    async with overlapping(settings, clock, analyzer) as http:
+        same_build_other_order = {"character": None, "items": [38, 118], "trinkets": []}
+        a, b = await asyncio.gather(
+            http.post("/api/analyze", json=BRIM_TAMMY), http.post("/api/analyze", json=same_build_other_order)
+        )
+        assert (a.status_code, b.status_code) == (200, 200)
+        assert len(analyzer.calls) == 1
+        assert sorted([a.json()["cached"], b.json()["cached"]]) == [False, True]
+        assert a.json()["text"] == b.json()["text"] == "Slow answer."
+        # One analysis came out of the visitor's allowance, not two.
+        assert a.json()["remaining"] == b.json()["remaining"] == 4
+
+        # Different builds are not held up by each other.
+        c, d = await asyncio.gather(
+            http.post("/api/analyze", json={"items": [1]}), http.post("/api/analyze", json={"items": [2]})
+        )
+        assert len(analyzer.calls) == 3
+        assert (c.json()["cached"], d.json()["cached"]) == (False, False)
+
+
+async def test_a_waiting_request_makes_its_own_call_when_the_first_one_fails(settings: Settings, clock: Clock) -> None:
+    analyzer = SlowAnalyzer(fail_first=True)
+    async with overlapping(settings, clock, analyzer) as http:
+        a, b = await asyncio.gather(
+            http.post("/api/analyze", json=BRIM_TAMMY), http.post("/api/analyze", json=BRIM_TAMMY)
+        )
+        assert sorted([a.status_code, b.status_code]) == [200, 502]
+        assert len(analyzer.calls) == 2
+        answered = a if a.status_code == 200 else b
+        # The failed call was refunded, so only the one that answered was charged.
+        assert answered.json() == {"text": "Slow answer.", "cached": False, "remaining": 4, "limit": 5}
 
 
 def test_each_visitor_has_a_daily_limit(make_client: Callable[..., TestClient], analyzer: FakeAnalyzer) -> None:

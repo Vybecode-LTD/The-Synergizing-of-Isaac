@@ -16,9 +16,10 @@ from pydantic import BaseModel, Field
 from . import server_copy
 from .analysis import SYSTEM, AnalysisFailed, Analyzer, ClaudeAnalyzer, build_prompt, cache_key
 from .gamedata import Build, GameData
+from .inflight import KeyedLocks
 from .pages import describe
 from .settings import MAX_ITEMS, MAX_TRINKETS, Settings
-from .store import Store
+from .store import LimitReached, Store
 
 log = logging.getLogger("issac_toys")
 
@@ -81,6 +82,7 @@ def create_app(
     if analyzer is None and settings.anthropic_api_key:
         analyzer = ClaudeAnalyzer(settings)
     upstream = asyncio.Semaphore(4)
+    in_flight = KeyedLocks()
     domain = settings.site_domain
 
     index = settings.web_dist / "index.html"
@@ -133,21 +135,31 @@ def create_app(
         visitor = store.visitor(client_ip(request, settings.client_ip_header))
         limit = settings.per_visitor_per_day
 
-        saved = store.cached(key)
-        if saved is not None:
+        def from_cache(saved: str) -> dict[str, object]:
             return {"text": saved, "cached": True, "remaining": max(0, limit - store.used(visitor)), "limit": limit}
 
-        refused = store.reserve(visitor, limit, settings.site_per_day)
-        if refused:
-            raise problem(429, refused)
-        try:
-            async with upstream:
-                text = await analyzer.analyze(SYSTEM, build_prompt(data, build))
-        except AnalysisFailed as error:
-            store.release(visitor)
-            log.warning("analysis failed: %s", error)
-            raise problem(502, "failed") from error
-        store.remember(key, text)
+        saved = store.cached(key)
+        if saved is not None:
+            return from_cache(saved)
+
+        # One model call per build at a time. A request that arrives while the same build is being
+        # answered waits here, then finds the saved answer: no second paid call, nothing off its allowance.
+        async with in_flight.hold(key):
+            saved = store.cached(key)
+            if saved is not None:
+                return from_cache(saved)
+            try:
+                reservation = store.reserve(visitor, limit, settings.site_per_day)
+            except LimitReached as refused:
+                raise problem(429, refused.code) from refused
+            try:
+                async with upstream:
+                    text = await analyzer.analyze(SYSTEM, build_prompt(data, build))
+            except AnalysisFailed as error:
+                store.release(reservation)
+                log.warning("analysis failed: %s", error)
+                raise problem(502, "failed") from error
+            store.remember(key, text)
         return {"text": text, "cached": False, "remaining": max(0, limit - store.used(visitor)), "limit": limit}
 
     @app.api_route("/api/{rest:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)

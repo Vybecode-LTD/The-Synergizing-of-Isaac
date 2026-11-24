@@ -23,7 +23,7 @@ The server builds the prompt from its own data; no free text is accepted from th
 
 | Status | Body | When |
 |---|---|---|
-| 200 | `{"text": str, "cached": bool, "remaining": int, "limit": int}` | answered (fresh or from cache) |
+| 200 | `{"text": str, "cached": bool, "remaining": int, "limit": int}` | answered (fresh or from cache). Identical builds in flight share one model call; the waiter gets `cached: true` |
 | 422 | `{"detail": {"code": "invalid", "message": str}}` | unknown id, over the limits, or nothing selected |
 | 429 | `{"detail": {"code": "rate_limited" \| "budget_exhausted", "message": str}}` | visitor's or site's daily cap reached |
 | 503 | `{"detail": {"code": "not_configured", "message": str}}` | no `ANTHROPIC_API_KEY` |
@@ -57,7 +57,7 @@ No database server. `DATA_DIR/issac-toys.sqlite3`, created on start (`api/app/st
 Game data: `data/*.json`, shapes in `web/src/engine/types.ts`; rules in `data/README.md`.
 
 ## 4. Files
-`api/app/{main,settings,gamedata,analysis,store,server_copy,shell}.py`, `api/tests/`, `web/src/api/analysis.ts`,
+`api/app/{main,settings,gamedata,analysis,store,inflight,pages,server_copy,parity}.py`, `api/tests/`, `web/src/api/analysis.ts`,
 `web/src/components/builder/AiPanel.tsx`, `Dockerfile`, `railway.toml`.
 
 ## 5. Conventions this follows
