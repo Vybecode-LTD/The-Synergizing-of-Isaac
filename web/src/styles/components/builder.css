@@ -423,7 +423,7 @@
 
   .character-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--size-tile), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--size-option), 1fr));
     gap: var(--gap-tight);
     padding: var(--space-0);
     list-style: none;
@@ -438,6 +438,7 @@
     padding: var(--pad-block-sm) var(--pad-inline-xs);
     font: var(--type-label);
     color: var(--fg-default);
+    text-align: center;
     cursor: pointer;
     background: transparent;
     border: var(--stroke-default) solid var(--border-subtle);

@@ -338,7 +338,8 @@
     --size-textarea:     var(--space-32);
     --size-menu-max:     calc(var(--space-48) * 2);
     --size-sprite-2x:    calc(var(--sprite-cell) * 2);
-    --size-tile:         calc(var(--sprite-cell) * 3);    /* pedestal, character option */
+    --size-tile:         calc(var(--sprite-cell) * 3);    /* pedestal                   */
+    --size-option:       calc(var(--sprite-cell) * 2.5);  /* character option: three across on a phone */
     --size-tile-wide:    calc(var(--sprite-cell) * 3.5);  /* browse tile                */
     --size-art:          calc(var(--sprite-cell) * 6);    /* detail-page art frame      */
     --size-stone:        var(--space-12);   /* pedestal slab: width, thickness, foot */
