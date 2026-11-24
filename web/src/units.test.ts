@@ -44,6 +44,19 @@ describe("saved synergies", () => {
     ]);
     expect(sanitize("not a list")).toEqual([]);
   });
+
+  it("survives lists that were saved as something else", () => {
+    // Review finding: a number or a string where a list belongs threw, and the page never rendered.
+    const out = sanitize([
+      { id: "mine-4", itemIds: 5, trinketIds: "39", characterSlugs: { a: 1 }, rating: "A", description: "not lists" },
+      { id: "mine-5", itemIds: [118, "118", null], trinketIds: null, characterSlugs: [7, "azazel"], rating: "B", description: "mixed" },
+      { id: "mine-6", itemIds: [], trinketIds: [39, "39", 99999], characterSlugs: [], rating: "C", description: "trinket only" },
+    ]);
+    expect(out).toEqual([
+      { id: "mine-5", itemIds: [118], trinketIds: [], characterSlugs: ["azazel"], rating: "B", description: "mixed", custom: true },
+      { id: "mine-6", itemIds: [], trinketIds: [39], characterSlugs: [], rating: "C", description: "trinket only", custom: true },
+    ]);
+  });
 });
 
 describe("storage", () => {

@@ -129,6 +129,38 @@ describe("builder", () => {
     await user.click(screen.getByRole("link", { name: "Builder" }));
     expect(within(shelf()).getByRole("link", { name: "Tammy's Head" })).toBeInTheDocument();
   });
+
+  it("keeps the build when the Builder link or the logo is clicked on the builder itself", async () => {
+    // Review finding: a link to "/" while the builder was already open read as "the build is now empty".
+    const user = open("/?i=118.38");
+    await user.click(screen.getByRole("link", { name: "Builder" }));
+    expect(within(shelf()).getByRole("link", { name: "Tammy's Head" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "1 synergy" })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "issac.toys, home" }));
+    expect(within(shelf()).getByRole("link", { name: "Brimstone" })).toBeInTheDocument();
+
+    // An edit made after coming back is the one that is kept.
+    await user.click(screen.getByRole("button", { name: "Remove Tammy's Head" }));
+    await user.click(screen.getByRole("link", { name: "Builder" }));
+    expect(within(shelf()).getByRole("link", { name: "Brimstone" })).toBeInTheDocument();
+    expect(within(shelf()).queryByRole("link", { name: "Tammy's Head" })).not.toBeInTheDocument();
+
+    // Control: clearing is still clearing, and the same click does not bring the old build back.
+    await user.click(screen.getByRole("button", { name: "Clear all" }));
+    expect(screen.getByRole("heading", { name: "Start with what’s in your run" })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "Builder" }));
+    expect(screen.getByRole("heading", { name: "Start with what’s in your run" })).toBeInTheDocument();
+    expect(within(shelf()).queryByRole("link", { name: "Brimstone" })).not.toBeInTheDocument();
+  });
+
+  it("empties the build when its last pickup is removed, and keeps it empty", async () => {
+    const user = open("/?i=118");
+    await user.click(screen.getByRole("button", { name: "Remove Brimstone" }));
+    expect(screen.getByRole("heading", { name: "Start with what’s in your run" })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "Items" }));
+    await user.click(screen.getByRole("link", { name: "Builder" }));
+    expect(screen.getByRole("heading", { name: "Start with what’s in your run" })).toBeInTheDocument();
+  });
 });
 
 describe("AI analysis", () => {
@@ -293,6 +325,13 @@ describe("browse and detail pages", () => {
       "https://github.com/Rchardon/RebirthItemTracker",
     );
     expect(screen.getByText(/last updated on \d+ \w+ \d{4}/)).toBeInTheDocument();
+  });
+
+  it("treats an address in the wrong case as not found, as the server does", () => {
+    // Review finding: the router matched /Items while the server (and the page title) said 404.
+    open("/Items");
+    expect(screen.getByRole("heading", { level: 1, name: "This room is empty" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Brimstone/ })).not.toBeInTheDocument();
   });
 
   it("shows a not-found page for an address that leads nowhere", () => {

@@ -27,11 +27,15 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
     css: false,
+    // The item list is 719 tiles, which takes jsdom about four seconds under coverage on a slow machine.
+    testTimeout: 15_000,
     coverage: {
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
       exclude: ["src/main.tsx", "src/test/**", "src/**/*.d.ts"],
       reporter: ["text-summary", "json-summary"],
+      // The pull-request gate, the same floor the API's pytest run enforces.
+      thresholds: { lines: 85 },
     },
   },
 });

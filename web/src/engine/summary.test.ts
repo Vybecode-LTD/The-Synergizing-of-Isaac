@@ -38,6 +38,15 @@ describe("totalStats", () => {
   it("is empty for nothing", () => {
     expect(totalStats([])).toEqual([]);
   });
+
+  it("drops a stat whose changes cancel out", () => {
+    // Review finding: 0.1 + 0.2 - 0.3 is 5.6e-17 in floating point, which was shown as "+0".
+    const speed = (value: number) => ({ ...ITEMS[0]!, stats: { speed: value } });
+    expect(totalStats([speed(0.1), speed(0.2), speed(-0.3)])).toEqual([]);
+    // Controls: a real remainder is kept, and so is a small one.
+    expect(totalStats([speed(0.1), speed(0.2), speed(-0.2)]).map((l) => l.text)).toEqual(["+0.1"]);
+    expect(totalStats([speed(0.01)]).map((l) => l.text)).toEqual(["+0.01"]);
+  });
 });
 
 describe("transformationProgress", () => {

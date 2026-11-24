@@ -86,14 +86,15 @@ export function App() {
       <Routes>
         <Route element={<Shell />}>
           <Route index element={<BuilderPage />} />
-          <Route path="items" element={<ItemsPage />} />
-          <Route path="items/:slug" element={<ItemPage />} />
-          <Route path="trinkets" element={<TrinketsPage />} />
-          <Route path="trinkets/:slug" element={<TrinketPage />} />
-          <Route path="characters" element={<CharactersPage />} />
-          <Route path="characters/:slug" element={<CharacterPage />} />
-          <Route path="synergies" element={<SynergiesPage />} />
-          <Route path="about" element={<AboutPage />} />
+          {/* Addresses are case-sensitive, as they are on the server: /Items is a 404 there, so it is here. */}
+          <Route path="items" caseSensitive element={<ItemsPage />} />
+          <Route path="items/:slug" caseSensitive element={<ItemPage />} />
+          <Route path="trinkets" caseSensitive element={<TrinketsPage />} />
+          <Route path="trinkets/:slug" caseSensitive element={<TrinketPage />} />
+          <Route path="characters" caseSensitive element={<CharactersPage />} />
+          <Route path="characters/:slug" caseSensitive element={<CharacterPage />} />
+          <Route path="synergies" caseSensitive element={<SynergiesPage />} />
+          <Route path="about" caseSensitive element={<AboutPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

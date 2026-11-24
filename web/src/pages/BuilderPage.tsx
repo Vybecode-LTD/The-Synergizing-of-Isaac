@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link, useLocation, useSearchParams } from "react-router";
 import { RatingBadge } from "../components/Badges";
 import { AddSynergyDialog } from "../components/builder/AddSynergyDialog";
 import { AiPanel } from "../components/builder/AiPanel";
@@ -38,6 +38,9 @@ import { useCustomSynergies } from "../hooks/useCustomSynergies";
 import { usePage } from "../hooks/usePage";
 import { fill, pageContent, siteValues } from "../seo";
 
+/** Travels with a bare "/" that the builder itself produced by emptying the build. */
+const EMPTIED = { emptied: true };
+
 /** Well-known S-tier pairs, offered as one-click starting points on an empty builder. */
 const EXAMPLES = gameData.synergies
   .filter((s) => s.rating === "S" && s.itemIds.length === 2 && s.trinketIds.length === 0 && s.characterSlugs.length === 0)
@@ -49,25 +52,26 @@ export function BuilderPage() {
   const [params, setParams] = useSearchParams();
   const urlHasBuild = params.has("c") || params.has("i") || params.has("t");
   const fromUrl = useMemo(() => decodeBuild(params, gameData), [params]);
-  // Arriving at a bare "/" with a remembered build: show it, and put it in the address bar so it can be shared.
-  const [restoring, setRestoring] = useState(() => !urlHasBuild && !isEmpty(stored));
+  // A bare "/" means two things. Reached by a link, the logo or a first visit, it means "show what I had":
+  // the remembered build is shown and put in the address bar so it can be shared. Reached by emptying the
+  // build here, it means empty, and that edit says so in the navigation state. (Deciding this once, when
+  // the page mounted, wiped the build when the Builder link was clicked on the builder itself.)
+  const emptied = (useLocation().state as { emptied?: unknown } | null)?.emptied === true;
+  const restoring = !urlHasBuild && !emptied && !isEmpty(stored);
   const build = urlHasBuild ? fromUrl : restoring ? stored : EMPTY_BUILD;
 
   useEffect(() => {
-    if (restoring && !urlHasBuild) setParams(encodeBuild(stored), { replace: true });
-  }, [restoring, urlHasBuild, stored, setParams]);
+    if (restoring) setParams(encodeBuild(stored), { replace: true });
+  }, [restoring, stored, setParams]);
 
-  // From then on the address bar is the build. The store only remembers it for other pages and next time.
+  // Otherwise the address bar is the build. The store only remembers it for other pages and next time.
   // (Writing both at once raced: the address bar updates a beat later and put the old build back.)
   useEffect(() => {
-    if (restoring) {
-      if (urlHasBuild) setRestoring(false);
-      return;
-    }
-    if (encodeBuild(fromUrl) !== encodeBuild(stored)) setBuild(fromUrl);
-  }, [restoring, urlHasBuild, fromUrl, stored, setBuild]);
+    if (!restoring && encodeBuild(fromUrl) !== encodeBuild(stored)) setBuild(fromUrl);
+  }, [restoring, fromUrl, stored, setBuild]);
 
-  const update = (next: Build) => setParams(encodeBuild(next), { replace: true });
+  const update = (next: Build) =>
+    setParams(encodeBuild(next), isEmpty(next) ? { replace: true, state: EMPTIED } : { replace: true });
 
   const picker = useRef<EntityPickerHandle>(null);
   const [choosingCharacter, setChoosingCharacter] = useState(false);

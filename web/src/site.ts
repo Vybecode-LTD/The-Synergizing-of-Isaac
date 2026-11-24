@@ -1,6 +1,6 @@
 /**
  * The site's name in one place. The owner registered issac.toys on 2026-11-24;
- * if the spelling changes, change it here and in api/app/settings.py (SITE_DOMAIN).
+ * if the spelling changes, change it here and in the API's SITE_URL (api/app/settings.py).
  */
 export const SITE = {
   domain: "issac.toys",

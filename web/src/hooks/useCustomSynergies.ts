@@ -14,6 +14,9 @@ export interface NewSynergy {
   description: string;
 }
 
+/** What was saved as a list, or nothing: storage can hold anything, and a bad entry must not stop the page. */
+const list = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
+
 /** Keep only entries that still make sense against today's roster. */
 export function sanitize(raw: unknown): Synergy[] {
   if (!Array.isArray(raw)) return [];
@@ -21,9 +24,15 @@ export function sanitize(raw: unknown): Synergy[] {
   for (const entry of raw as Partial<Synergy>[]) {
     if (!entry || typeof entry.id !== "string" || typeof entry.description !== "string") continue;
     if (!RATINGS.includes(entry.rating as Rating)) continue;
-    const itemIds = (entry.itemIds ?? []).filter((id) => gameData.itemById.has(id));
-    const trinketIds = (entry.trinketIds ?? []).filter((id) => gameData.trinketById.has(id));
-    const characterSlugs = (entry.characterSlugs ?? []).filter((slug) => gameData.characterBySlug.has(slug));
+    const itemIds = list(entry.itemIds).filter(
+      (id): id is number => typeof id === "number" && gameData.itemById.has(id),
+    );
+    const trinketIds = list(entry.trinketIds).filter(
+      (id): id is number => typeof id === "number" && gameData.trinketById.has(id),
+    );
+    const characterSlugs = list(entry.characterSlugs).filter(
+      (slug): slug is string => typeof slug === "string" && gameData.characterBySlug.has(slug),
+    );
     if (itemIds.length + trinketIds.length === 0) continue;
     out.push({
       id: entry.id,

@@ -70,6 +70,8 @@ export function totalStats(entries: readonly (Item | Trinket)[]): StatLine[] {
       totals[key] = MULTIPLIERS.has(key) ? (totals[key] ?? 1) * value : (totals[key] ?? 0) + value;
     }
   }
+  // To the two places that are shown, so changes that cancel out (0.1 + 0.2 - 0.3) are exactly nothing.
+  for (const key of Object.keys(totals) as StatKey[]) totals[key] = Math.round(totals[key]! * 100) / 100;
   for (const key of MULTIPLIERS) if (totals[key] === 1) delete totals[key];
   return statLines(totals);
 }
