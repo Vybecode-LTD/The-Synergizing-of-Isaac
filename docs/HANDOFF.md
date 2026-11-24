@@ -7,8 +7,9 @@
   34 characters, the full synergy list, own synergies kept in the browser, and an AI read paid by the site
   inside daily caps. Decisions: `docs/decisions/0001` to `0004`.
 - **Game data was rebuilt from sources** (`data/README.md`). The old item list had scrambled IDs and gaps.
-- **Branch `feat/web-app`,** three commits on top of `main` (`a99151e`), pushed once.
-  PR: `Vybecode-LTD/The-Synergizing-of-Isaac#1` (predicted number; check with `gh pr list`).
+- **Branch `feat/web-app`** on top of `main` (`a99151e`). PR `Vybecode-LTD/The-Synergizing-of-Isaac#1`,
+  head `06ce42c`, CI green on GitHub for that commit (Web and API jobs), auto-fix on, not merged.
+  One local docs commit on top of it is not pushed; it goes out with the next batch of fixes.
 - **Nothing is deployed.** No Railway project exists for this repo. No real model call has been made.
 - **The desktop app is untouched** and still builds with 0 warnings (`dotnet build`, checked today).
 

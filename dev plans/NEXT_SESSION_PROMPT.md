@@ -16,17 +16,19 @@ server in `api/`, game data in `data/`. It runs only locally so far: web dev ser
 - No visual change is shown before the rendered-contrast gate passes (`verify-real-pass` skill).
 
 ## 3. State when this was written (verify before trusting it)
-- `main` head: `a99151e`. Checkout: `feat/web-app`, three commits ahead of `main`, clean, pushed once.
-- Open PR: `Vybecode-LTD/The-Synergizing-of-Isaac#1` (number predicted). Confirm number, head and CI with
-  `gh pr list` and `gh pr checks 1`. Auto-fix was to be switched on for it.
+- `main` head: `a99151e`. Checkout: `feat/web-app`, clean.
+- Open PR: `Vybecode-LTD/The-Synergizing-of-Isaac#1`, head `06ce42c`, mergeable. CI green on that commit
+  (run 45492362384: Web and API jobs passed; CodeRabbit skipped). Auto-fix is on; auto-merge is off.
+- Codex's first review (two findings) is fixed in `06ce42c`; both threads are answered and resolved.
+- **One local commit is not pushed:** the docs commit on top of `06ce42c` that holds this file's and the
+  handoff's final state lines. Push it with your first batch of fixes, not alone.
 - Deployed: nothing. Railway: no project for this repo. Domain `issac.toys` is registered by the owner.
 - Local suites at the handoff: web 109 passed, API 71 passed, data validator 0 problems, design audit clean.
-- Codex's first review (two findings) is fixed and answered on the PR.
 - Half-done: nothing in the working tree. Unverified items are listed in `docs/HANDOFF.md`.
 
 ## 4. First job, then the order
-1. **Get PR #1 to green and reviewed.** Read CI and any Codex or CodeRabbit findings, fix real ones with a
-   test, push the fixes as one batch. Reason: everything else lands on top of it.
+1. **Keep PR #1 green and get it reviewed.** Read any new Codex or CodeRabbit findings, fix real ones with
+   a test, push the fixes as one batch. Reason: everything else lands on top of it.
 2. **Ask the owner the open decisions in section 5,** in one AskUserQuestion.
 3. **Deploy,** only once the owner says so: `docs/DEPLOY.md`, then its seven post-deploy checks. The first
    deploy is also the first build of `Dockerfile`, so expect to fix it.
