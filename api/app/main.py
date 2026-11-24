@@ -21,7 +21,7 @@ from .pages import describe
 from .settings import MAX_ITEMS, MAX_TRINKETS, Settings
 from .store import LimitReached, Store
 
-log = logging.getLogger("issac_toys")
+log = logging.getLogger("isaac_toys")
 
 # Used when the web app has not been built (tests, API-only development).
 BARE_SHELL = (
@@ -87,7 +87,7 @@ def create_app(
 ) -> FastAPI:
     settings = settings or Settings.from_env()
     data = GameData.load(settings.data_path)
-    store = store or Store(settings.data_dir / "issac-toys.sqlite3")
+    store = store or Store(settings.data_dir / "isaac-toys.sqlite3")
     if analyzer is None and settings.anthropic_api_key:
         analyzer = ClaudeAnalyzer(settings)
     upstream = asyncio.Semaphore(4)

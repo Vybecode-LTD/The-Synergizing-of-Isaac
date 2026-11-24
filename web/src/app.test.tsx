@@ -28,9 +28,9 @@ describe("builder", () => {
     open("/");
     expect(screen.getByRole("heading", { level: 1, name: "Binding of Isaac synergy builder" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Start with what’s in your run" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "What does issac.toys do?" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "What does isaac.toys do?" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Brimstone \+ Tammy's Head/ })).toHaveAttribute("href", "/?i=118.38");
-    expect(document.title).toBe("Binding of Isaac Synergy Builder for Repentance | issac.toys");
+    expect(document.title).toBe("Binding of Isaac Synergy Builder for Repentance | isaac.toys");
   });
 
   it("opens a build from a link and shows its synergy", () => {
@@ -136,7 +136,7 @@ describe("builder", () => {
     await user.click(screen.getByRole("link", { name: "Builder" }));
     expect(within(shelf()).getByRole("link", { name: "Tammy's Head" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "1 synergy" })).toBeInTheDocument();
-    await user.click(screen.getByRole("link", { name: "issac.toys, home" }));
+    await user.click(screen.getByRole("link", { name: "isaac.toys, home" }));
     expect(within(shelf()).getByRole("link", { name: "Brimstone" })).toBeInTheDocument();
 
     // An edit made after coming back is the one that is kept.
@@ -238,7 +238,7 @@ describe("your own synergies", () => {
 
     expect(screen.getByText("My own note about this pair.")).toBeInTheDocument();
     expect(screen.getByText("Yours")).toBeInTheDocument();
-    expect(JSON.parse(localStorage.getItem("issac-toys:my-synergies:v1")!)).toHaveLength(1);
+    expect(JSON.parse(localStorage.getItem("isaac-toys:my-synergies:v1")!)).toHaveLength(1);
 
     await user.click(screen.getByRole("button", { name: "Delete" }));
     expect(screen.queryByText("My own note about this pair.")).not.toBeInTheDocument();
@@ -248,7 +248,7 @@ describe("your own synergies", () => {
     const user = open("/?i=118.38");
     await user.click(screen.getByRole("button", { name: "Add your own synergy" }));
     await user.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Cancel" }));
-    expect(localStorage.getItem("issac-toys:my-synergies:v1")).toBeNull();
+    expect(localStorage.getItem("isaac-toys:my-synergies:v1")).toBeNull();
   });
 });
 
@@ -274,7 +274,7 @@ describe("browse and detail pages", () => {
     expect(screen.getByText("Devil Room, Ultra Secret Room")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "64 synergies with Brimstone" })).toBeInTheDocument();
     expect(screen.getByText(/The strongest are with Azazel, Crown of Light and Epic Fetus/)).toBeInTheDocument();
-    expect(document.title).toBe("Brimstone Synergies in The Binding of Isaac | issac.toys");
+    expect(document.title).toBe("Brimstone Synergies in The Binding of Isaac | isaac.toys");
 
     await user.click(screen.getByRole("button", { name: "Add to my build" }));
     expect(within(shelf()).getByRole("link", { name: "Brimstone" })).toBeInTheDocument();
@@ -318,7 +318,7 @@ describe("browse and detail pages", () => {
 
   it("renders the About page from the shared text", () => {
     open("/about");
-    expect(screen.getByRole("heading", { level: 1, name: "About issac.toys" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "About isaac.toys" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "How do the synergy ratings work?" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Rebirth Item Tracker" })).toHaveAttribute(
       "href",

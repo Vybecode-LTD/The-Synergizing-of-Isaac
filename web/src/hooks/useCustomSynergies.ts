@@ -3,7 +3,7 @@ import { gameData } from "../engine/data";
 import { RATINGS, type Rating, type Synergy } from "../engine/types";
 import { readStored, writeStored } from "./storage";
 
-const KEY = "issac-toys:my-synergies:v1";
+const KEY = "isaac-toys:my-synergies:v1";
 export const MAX_DESCRIPTION = 600;
 
 export interface NewSynergy {

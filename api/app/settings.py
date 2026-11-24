@@ -32,7 +32,7 @@ class Settings:
     site_per_day: int = 200
     # Railway's edge writes X-Forwarded-For. Set "cf-connecting-ip" only when Cloudflare proxies the domain.
     client_ip_header: str = "x-forwarded-for"
-    site_url: str = "https://issac.toys"
+    site_url: str = "https://isaac.toys"
     environment: str = "development"
     data_path: Path = REPO / "data"
     web_dist: Path = REPO / "web" / "dist"

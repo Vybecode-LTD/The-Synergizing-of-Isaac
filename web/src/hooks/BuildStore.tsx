@@ -4,7 +4,7 @@ import { gameData } from "../engine/data";
 import type { Build } from "../engine/types";
 import { readStored, writeStored } from "./storage";
 
-const KEY = "issac-toys:build:v1";
+const KEY = "isaac-toys:build:v1";
 
 interface BuildStore {
   build: Build;

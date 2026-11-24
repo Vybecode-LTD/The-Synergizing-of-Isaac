@@ -79,7 +79,7 @@ describe("storage", () => {
 
 describe("wordmark", () => {
   it("splits the domain at its first dot", () => {
-    expect(wordmarkParts("issac.toys")).toEqual(["issac", ".toys"]);
+    expect(wordmarkParts("isaac.toys")).toEqual(["isaac", ".toys"]);
     expect(wordmarkParts("localhost")).toEqual(["localhost", ""]);
   });
 });

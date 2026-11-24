@@ -38,12 +38,12 @@ The server builds the prompt from its own data; no free text is accepted from th
 **Environment (API).** `ANTHROPIC_API_KEY`, `AI_MODEL` (default `claude-opus-5-5`), `AI_EFFORT` (`low`),
 `AI_MAX_TOKENS` (4000), `AI_PER_VISITOR_PER_DAY` (5), `AI_SITE_PER_DAY` (200), `CLIENT_IP_HEADER`
 (`x-forwarded-for`; set `cf-connecting-ip` only when Cloudflare proxies the domain; an IPv6 visitor is
-counted by /64, an IPv4 one by address), `SITE_URL` (`https://issac.toys`),
+counted by /64, an IPv4 one by address), `SITE_URL` (`https://isaac.toys`),
 `ENVIRONMENT` (`production` allows indexing), `DATA_DIR` (SQLite for cache and counters; a Railway volume),
 `PORT`.
 
 ## 3. Data
-No database server. `DATA_DIR/issac-toys.sqlite3`, created on start (`api/app/store.py`):
+No database server. `DATA_DIR/isaac-toys.sqlite3`, created on start (`api/app/store.py`):
 
 | Table | Column | Type | Null | Default / key |
 |---|---|---|---|---|
@@ -84,7 +84,7 @@ Skills `railway-deploy-playbook` (bind `$PORT`, client IP behind the edge, never
 - Which model pays its way: Opus 5.5 (about 2 cents an analysis), Sonnet 5.5 (about 1 cent) or Haiku 5.5
   (under a tenth of a cent)?
 - Are 5 analyses per visitor and 200 per day for the whole site the right caps?
-- Is the domain's spelling final (`issac.toys`; `isaac.toys` was unregistered on 2026-11-24)?
+- Is the domain's spelling final (`isaac.toys`; `isaac.toys` was unregistered on 2026-11-24)?
 - Will Cloudflare proxy the domain? It decides `CLIENT_IP_HEADER`.
 
 ## Changes after approval

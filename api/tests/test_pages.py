@@ -43,8 +43,8 @@ def test_every_public_page_is_complete_without_javascript(client: TestClient, pa
     description = re.search(r'<meta name="description" content="([^"]*)"', html)
     assert description and 50 <= len(description.group(1)) <= 160 + description.group(1).count("&") * 5
     canonical = re.search(r'<link rel="canonical" href="([^"]*)"', html)
-    assert canonical and canonical.group(1) == f"https://issac.toys{path}"
-    assert '<meta property="og:image" content="https://issac.toys/og.png"' in html
+    assert canonical and canonical.group(1) == f"https://isaac.toys{path}"
+    assert '<meta property="og:image" content="https://isaac.toys/og.png"' in html
     blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.S)
     assert blocks, "has JSON-LD"
     for block in blocks:
@@ -109,18 +109,18 @@ def test_sitemap_lists_every_public_page(client: TestClient, data: GameData) -> 
     ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     locs = [e.text for e in root.findall("s:url/s:loc", ns)]
     assert len(locs) == 6 + 719 + 188 + 34 == len(all_paths(data))
-    assert "https://issac.toys/items/brimstone" in locs and "https://issac.toys/" in locs
+    assert "https://isaac.toys/items/brimstone" in locs and "https://isaac.toys/" in locs
     assert all(e.text == data.meta["updated"] for e in root.findall("s:url/s:lastmod", ns))
     # Every listed page really answers.
-    for loc in ("https://issac.toys/trinkets/cancer", "https://issac.toys/characters/tainted-jacob"):
-        assert client.get(loc.removeprefix("https://issac.toys")).status_code == 200
+    for loc in ("https://isaac.toys/trinkets/cancer", "https://isaac.toys/characters/tainted-jacob"):
+        assert client.get(loc.removeprefix("https://isaac.toys")).status_code == 200
 
 
 def test_robots_allows_ai_crawlers_in_production(client: TestClient) -> None:
     r = client.get("/robots.txt")
     for bot in ("GPTBot", "ChatGPT-User", "PerplexityBot", "Google-Extended", "ClaudeBot", "anthropic-ai"):
         assert f"User-agent: {bot}\nAllow: /" in r.text
-    assert "Sitemap: https://issac.toys/sitemap.xml" in r.text
+    assert "Sitemap: https://isaac.toys/sitemap.xml" in r.text
     assert "x-robots-tag" not in r.headers
 
 
@@ -133,8 +133,8 @@ def test_everything_but_production_is_kept_out_of_search(make_client: Callable[.
 
 def test_llms_txt_summarises_the_site(client: TestClient) -> None:
     text = client.get("/llms.txt").text
-    assert text.startswith("# issac.toys\n\n> issac.toys checks your character, items and trinkets against 458")
-    assert "- [All items](https://issac.toys/items)" in text
+    assert text.startswith("# isaac.toys\n\n> isaac.toys checks your character, items and trinkets against 458")
+    assert "- [All items](https://isaac.toys/items)" in text
     assert "## Strongest synergies" in text
 
 

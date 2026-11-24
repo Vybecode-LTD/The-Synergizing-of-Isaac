@@ -17,7 +17,7 @@ from .gamedata import Build, GameData
 from .pages import describe
 from .settings import Settings
 
-DOMAIN = "issac.toys"
+DOMAIN = "isaac.toys"
 
 PATHS = [
     "/",

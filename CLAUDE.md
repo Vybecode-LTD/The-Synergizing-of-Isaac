@@ -1,11 +1,11 @@
-# CLAUDE.md — issac.toys (repo: The-Synergizing-of-Isaac)
+# CLAUDE.md — isaac.toys (repo: The-Synergizing-of-Isaac)
 
 Project context for any Claude Code session here. The workspace rules in `C:\DEV\CLAUDE.md` load first;
 this file adds only what is specific to this project.
 
 ## What this is
 
-**issac.toys** is a free web companion for *The Binding of Isaac: Repentance*. A visitor picks a character,
+**isaac.toys** is a free web companion for *The Binding of Isaac: Repentance*. A visitor picks a character,
 items and trinkets and sees every curated synergy that applies, which single pickup would complete another,
 raw stat changes, transformation progress, and (on request) an AI read on the build. Every item, trinket and
 character also has its own page. Unofficial fan project.

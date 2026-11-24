@@ -169,7 +169,7 @@ def test_page_text_helpers() -> None:
 def test_every_page_fits_the_search_limits_and_has_its_own_title(data: GameData) -> None:
     from app.pages import all_paths
 
-    pages = [describe(p, data, "issac.toys") for p in all_paths(data)]
+    pages = [describe(p, data, "isaac.toys") for p in all_paths(data)]
     assert [p.path for p in pages if len(p.title) > 60 or len(p.description) > 160 or not p.found] == []
     assert len({p.title for p in pages}) == len(pages)
 

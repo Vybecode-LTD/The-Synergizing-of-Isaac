@@ -6,7 +6,7 @@ import path from "node:path";
 import sharp from "sharp";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const domain = process.argv[2] ?? "issac.toys";
+const domain = process.argv[2] ?? "isaac.toys";
 const [name, tld] = [domain.slice(0, domain.indexOf(".")), domain.slice(domain.indexOf("."))];
 
 // Colours are the site's own: canvas, parchment, brass (src/styles/tokens.css, dark theme).

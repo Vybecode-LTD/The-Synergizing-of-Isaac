@@ -1,4 +1,4 @@
-# issac.toys
+# isaac.toys
 
 A free synergy builder for *The Binding of Isaac: Repentance*. Tell it what you're holding and it tells you
 what those things do together.

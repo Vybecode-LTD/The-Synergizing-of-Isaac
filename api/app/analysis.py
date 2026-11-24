@@ -16,7 +16,7 @@ import anthropic
 from .gamedata import Build, GameData
 from .settings import Settings
 
-log = logging.getLogger("issac_toys.analysis")
+log = logging.getLogger("isaac_toys.analysis")
 
 SYSTEM = """You explain item builds for The Binding of Isaac: Repentance to a player in the middle of a run.
 

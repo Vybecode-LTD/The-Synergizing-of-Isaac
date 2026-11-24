@@ -1,10 +1,10 @@
 {
- "domain": "issac.toys",
+ "domain": "isaac.toys",
  "pages": [
   {
    "path": "/",
    "kind": "home",
-   "title": "Binding of Isaac Synergy Builder for Repentance | issac.toys",
+   "title": "Binding of Isaac Synergy Builder for Repentance | isaac.toys",
    "description": "Pick your character, items and trinkets and see every known Binding of Isaac: Repentance synergy, what one more pickup unlocks, and an AI read. Free to use.",
    "h1": "Binding of Isaac synergy builder",
    "lede": "Add what you're holding. Synergies show up as you go.",
@@ -13,7 +13,7 @@
   {
    "path": "/items",
    "kind": "items",
-   "title": "All 719 Binding of Isaac Repentance Items | issac.toys",
+   "title": "All 719 Binding of Isaac Repentance Items | isaac.toys",
    "description": "Browse all 719 items in The Binding of Isaac: Repentance with quality, effects, stat changes and item pools. Open any item to see its known synergies.",
    "h1": "All Repentance items",
    "lede": "Every item in the game. Open one to see what it does and what it combines with.",
@@ -22,7 +22,7 @@
   {
    "path": "/items/brimstone",
    "kind": "item",
-   "title": "Brimstone Synergies in The Binding of Isaac | issac.toys",
+   "title": "Brimstone Synergies in The Binding of Isaac | isaac.toys",
    "description": "Brimstone in The Binding of Isaac: Repentance: Tears become blood laser, hits 9 times. Quality 4, 64 known synergies. Add it to your build.",
    "h1": "Brimstone",
    "lede": "",
@@ -31,7 +31,7 @@
   {
    "path": "/items/the-sad-onion",
    "kind": "item",
-   "title": "The Sad Onion Synergies in The Binding of Isaac | issac.toys",
+   "title": "The Sad Onion Synergies in The Binding of Isaac | isaac.toys",
    "description": "The Sad Onion in The Binding of Isaac: Repentance: A stat item that only changes your numbers. Quality 3, 0 known synergies. Add it to your build.",
    "h1": "The Sad Onion",
    "lede": "",
@@ -40,7 +40,7 @@
   {
    "path": "/items/odd-mushroom-thick",
    "kind": "item",
-   "title": "Odd Mushroom (Thick) Synergies | issac.toys",
+   "title": "Odd Mushroom (Thick) Synergies | isaac.toys",
    "description": "Odd Mushroom (Thick) in The Binding of Isaac: Repentance: A stat item that only changes your numbers. Quality 2, 0 known synergies. Add it to your build.",
    "h1": "Odd Mushroom (Thick)",
    "lede": "",
@@ -49,7 +49,7 @@
   {
    "path": "/items/broken-shovel-second-piece",
    "kind": "item",
-   "title": "Broken Shovel (second piece) Synergies | issac.toys",
+   "title": "Broken Shovel (second piece) Synergies | isaac.toys",
    "description": "Broken Shovel (second piece) in The Binding of Isaac: Repentance: Used in the Booster Pack #5 quest. Quality 4, 0 known synergies. Add it to your build.",
    "h1": "Broken Shovel (second piece)",
    "lede": "",
@@ -58,7 +58,7 @@
   {
    "path": "/trinkets",
    "kind": "trinkets",
-   "title": "All 188 Binding of Isaac Repentance Trinkets | issac.toys",
+   "title": "All 188 Binding of Isaac Repentance Trinkets | isaac.toys",
    "description": "Browse all 188 trinkets in The Binding of Isaac: Repentance with their effects. Open any trinket to see what it combines with in your build.",
    "h1": "All Repentance trinkets",
    "lede": "Every trinket in the game. Open one to see what it does and what it combines with.",
@@ -67,7 +67,7 @@
   {
    "path": "/trinkets/cancer",
    "kind": "trinket",
-   "title": "Cancer Trinket Synergies | Binding of Isaac | issac.toys",
+   "title": "Cancer Trinket Synergies | Binding of Isaac | isaac.toys",
    "description": "Cancer, a Binding of Isaac: Repentance trinket: A stat trinket that only changes your numbers. 3 known synergies. Add it to your build.",
    "h1": "Cancer",
    "lede": "",
@@ -76,7 +76,7 @@
   {
    "path": "/trinkets/swallowed-penny",
    "kind": "trinket",
-   "title": "Swallowed Penny Trinket Synergies | issac.toys",
+   "title": "Swallowed Penny Trinket Synergies | isaac.toys",
    "description": "Swallowed Penny, a Binding of Isaac: Repentance trinket: Spawn 1-2 pennies on hit. 1 known synergy. Add it to your build.",
    "h1": "Swallowed Penny",
    "lede": "",
@@ -85,7 +85,7 @@
   {
    "path": "/characters",
    "kind": "characters",
-   "title": "All 34 Binding of Isaac Repentance Characters | issac.toys",
+   "title": "All 34 Binding of Isaac Repentance Characters | isaac.toys",
    "description": "All 34 playable characters in The Binding of Isaac: Repentance with starting items and the synergies only they get. Pick one and start a build.",
    "h1": "Repentance characters",
    "lede": "Some synergies only happen for one character. Open a character to see theirs.",
@@ -94,7 +94,7 @@
   {
    "path": "/characters/azazel",
    "kind": "character",
-   "title": "Azazel Synergies | Binding of Isaac | issac.toys",
+   "title": "Azazel Synergies | Binding of Isaac | isaac.toys",
    "description": "Azazel in The Binding of Isaac: Repentance: starting items and 5 character-only synergies. Start a build as Azazel to see what your items do.",
    "h1": "Azazel",
    "lede": "",
@@ -103,7 +103,7 @@
   {
    "path": "/characters/tainted-lost",
    "kind": "character",
-   "title": "Tainted Lost Synergies | Binding of Isaac | issac.toys",
+   "title": "Tainted Lost Synergies | Binding of Isaac | isaac.toys",
    "description": "Tainted Lost in The Binding of Isaac: Repentance: starting items and 0 character-only synergies. Start a build as Tainted Lost to see what your items do.",
    "h1": "Tainted Lost",
    "lede": "",
@@ -112,7 +112,7 @@
   {
    "path": "/synergies",
    "kind": "synergies",
-   "title": "All 458 Binding of Isaac: Repentance Synergies | issac.toys",
+   "title": "All 458 Binding of Isaac: Repentance Synergies | isaac.toys",
    "description": "458 hand-written item, trinket and character synergies for The Binding of Isaac: Repentance, rated S to D. Search by item and open any in the builder.",
    "h1": "All Repentance synergies",
    "lede": "The whole list, strongest first. S is run-defining, A strong, B good, C minor, and D means the items work against each other.",
@@ -121,17 +121,17 @@
   {
    "path": "/about",
    "kind": "about",
-   "title": "About issac.toys: Data Sources, Ratings and AI Analysis",
-   "description": "What issac.toys is, where its Binding of Isaac item data comes from, how synergy ratings and the AI analysis work, and what happens to your data.",
-   "h1": "About issac.toys",
+   "title": "About isaac.toys: Data Sources, Ratings and AI Analysis",
+   "description": "What isaac.toys is, where its Binding of Isaac item data comes from, how synergy ratings and the AI analysis work, and what happens to your data.",
+   "h1": "About isaac.toys",
    "lede": "",
    "answer": ""
   },
   {
    "path": "/items/no-such-item",
    "kind": "notFound",
-   "title": "Page Not Found | issac.toys",
-   "description": "Nothing lives at this address on issac.toys. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",
+   "title": "Page Not Found | isaac.toys",
+   "description": "Nothing lives at this address on isaac.toys. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",
    "h1": "This room is empty",
    "lede": "Nothing lives at this address.",
    "answer": ""
@@ -139,8 +139,8 @@
   {
    "path": "/nowhere/at/all",
    "kind": "notFound",
-   "title": "Page Not Found | issac.toys",
-   "description": "Nothing lives at this address on issac.toys. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",
+   "title": "Page Not Found | isaac.toys",
+   "description": "Nothing lives at this address on isaac.toys. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",
    "h1": "This room is empty",
    "lede": "Nothing lives at this address.",
    "answer": ""
