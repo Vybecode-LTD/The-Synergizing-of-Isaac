@@ -27,5 +27,6 @@ COPY data/content ./data/content
 COPY api/app ./api/app
 COPY --from=web /repo/web/dist ./web/dist
 WORKDIR /app/api
-# Railway injects PORT at runtime. Bind to it on all interfaces.
-CMD ["sh", "-c", "uvicorn app.server:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Railway injects PORT at runtime. Bind to it on all interfaces. exec, so uvicorn is the process that
+# receives the stop signal and can finish the requests it is serving.
+CMD ["sh", "-c", "exec uvicorn app.server:app --host 0.0.0.0 --port ${PORT:-8000}"]

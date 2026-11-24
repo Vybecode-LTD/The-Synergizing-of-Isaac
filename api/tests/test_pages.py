@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import errno
 import json
 import re
 import xml.etree.ElementTree as ET
@@ -177,3 +178,32 @@ def test_refuses_a_build_that_lost_its_markers(make_client: Callable[..., TestCl
     (dist / "index.html").write_text("<html><head></head><body><div id='root'></div></body></html>", encoding="utf-8")
     with pytest.raises(RuntimeError, match="markers"):
         make_client(web_dist=dist)
+
+
+# ---------------------------------------------------------------- second review (2026-11-24)
+
+
+def test_an_address_the_file_system_cannot_hold_is_a_404_not_a_crash(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Review finding: a null byte in the address raised out of the file lookup and answered 500."""
+    assert client.get("/%00").status_code == 404
+    assert client.get("/a%00.png").status_code == 404
+    assert client.get("/" + "a" * 300).status_code == 404
+
+    # Python 3.12 on Linux (the image) raises "File name too long" from is_file(); Windows answers False.
+    def too_long(self: Path) -> bool:
+        raise OSError(errno.ENAMETOOLONG, "File name too long")
+
+    monkeypatch.setattr(Path, "is_file", too_long)
+    assert client.get("/whatever").status_code == 404
+
+
+def test_stats_are_written_the_way_the_app_writes_them(client: TestClient) -> None:
+    """Review finding: the server printed 0.231 where the app, rounding to two places, shows 0.23."""
+    lung = client.get("/items/monstros-lung").text
+    assert "<li>Tears \N{MULTIPLICATION SIGN}0.23</li>" in lung
+    assert "0.231" not in lung
+    # Controls: values that need no rounding are untouched.
+    assert "<li>Tears \N{MULTIPLICATION SIGN}0.33</li>" in client.get("/items/brimstone").text
+    assert "<li>Tears +1</li>" in client.get("/trinkets/cancer").text

@@ -54,10 +54,14 @@ def problem(status: int, code: str, message: str | None = None) -> HTTPException
 
 
 def client_ip(request: Request, header: str) -> str:
-    """The visitor's address behind Railway's edge (and Cloudflare, when it proxies the domain).
+    """Who to count a request against: the visitor's address behind Railway's edge (and Cloudflare, when
+    it proxies the domain).
 
     Railway's edge overwrites X-Forwarded-For, so its first entry is the real peer. CF-Connecting-IP is
     only trustworthy when every request comes through Cloudflare, which is why it is opt-in.
+
+    An IPv6 visitor is counted by their /64: a subscriber is handed the whole network, so counting single
+    addresses would give them a fresh allowance for every one they cared to use.
     """
     candidates = []
     if header == "cf-connecting-ip":
@@ -65,9 +69,14 @@ def client_ip(request: Request, header: str) -> str:
     candidates.append(request.headers.get("x-forwarded-for", "").split(",")[0])
     for candidate in candidates:
         try:
-            return str(ipaddress.ip_address(candidate.strip()))
+            address = ipaddress.ip_address(candidate.strip())
         except ValueError:
             continue
+        if isinstance(address, ipaddress.IPv6Address):
+            if address.ipv4_mapped is not None:
+                return str(address.ipv4_mapped)
+            return str(ipaddress.ip_network((address, 64), strict=False))
+        return str(address)
     return request.client.host if request.client else "unknown"
 
 
@@ -130,8 +139,10 @@ def create_app(
         if analyzer is None:
             raise problem(503, "not_configured")
 
+        # Order of pickup does not change a build: one prompt, and so one saved answer, per build.
         build = Build(character=body.character, items=tuple(body.items), trinkets=tuple(body.trinkets))
-        key = cache_key(settings.ai_model, build)
+        prompt = build_prompt(data, build.canonical())
+        key = cache_key(settings.ai_model, SYSTEM, prompt)
         visitor = store.visitor(client_ip(request, settings.client_ip_header))
         limit = settings.per_visitor_per_day
 
@@ -154,10 +165,17 @@ def create_app(
                 raise problem(429, refused.code) from refused
             try:
                 async with upstream:
-                    text = await analyzer.analyze(SYSTEM, build_prompt(data, build))
+                    text = await analyzer.analyze(SYSTEM, prompt)
             except AnalysisFailed as error:
-                store.release(reservation)
+                # The visitor got nothing either way. The site's budget is refunded only if nobody paid.
+                store.release(reservation, site=not error.billed)
                 log.warning("analysis failed: %s", error)
+                raise problem(502, "failed") from error
+            except Exception as error:
+                # Anything the analyzer did not expect (a changed SDK, a new kind of answer) must not keep
+                # the visitor's allowance or answer a bare 500.
+                store.release(reservation)
+                log.exception("analysis failed unexpectedly")
                 raise problem(502, "failed") from error
             store.remember(key, text)
         return {"text": text, "cached": False, "remaining": max(0, limit - store.used(visitor)), "limit": limit}
@@ -188,9 +206,13 @@ def create_app(
         """A file from the web build, never anything outside it."""
         if not path or path.endswith("/"):
             return None
-        candidate = (dist / path).resolve()
-        if dist in candidate.parents and candidate.is_file() and candidate.name != "index.html":
-            return candidate
+        try:
+            candidate = (dist / path).resolve()
+            if dist in candidate.parents and candidate.is_file() and candidate.name != "index.html":
+                return candidate
+        except (OSError, ValueError):
+            # A null byte, or a name longer than the file system allows: an address, but never a file.
+            return None
         return None
 
     @app.get("/{path:path}", include_in_schema=False)

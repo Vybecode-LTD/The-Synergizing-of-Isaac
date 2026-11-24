@@ -35,6 +35,10 @@ class Build:
     items: tuple[int, ...] = ()
     trinkets: tuple[int, ...] = ()
 
+    def canonical(self) -> Build:
+        """The same build whatever order it was picked in."""
+        return Build(self.character, tuple(sorted(self.items)), tuple(sorted(self.trinkets)))
+
 
 def _strength(s: Synergy) -> tuple[int, int, str]:
     return (RATING_ORDER[s.rating], -s.requirements, s.id)

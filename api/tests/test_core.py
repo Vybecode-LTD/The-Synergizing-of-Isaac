@@ -44,6 +44,15 @@ def test_store_counts_reserves_and_refunds(clock: Clock) -> None:
     assert store.used(me) == 0
 
 
+def test_store_can_refund_the_visitor_and_keep_the_site_charged(clock: Clock) -> None:
+    store = Store(clock=clock)
+    me = store.visitor("203.0.113.7")
+    store.release(store.reserve(me, 1, 2), site=False)
+    assert (store.used(me), store.used(SITE)) == (0, 1)
+    store.release(store.reserve(me, 1, 2))
+    assert (store.used(me), store.used(SITE)) == (0, 1)
+
+
 def test_store_checks_the_site_budget_first(clock: Clock) -> None:
     store = Store(clock=clock)
     store.reserve(store.visitor("a"), 5, 1)
@@ -241,19 +250,25 @@ def api_error(cls: type[anthropic.APIStatusError], status: int) -> anthropic.API
 
 
 @pytest.mark.parametrize(
-    "outcome",
+    ("outcome", "billed"),
     [
-        reply(stop_reason="refusal"),
-        reply(text="   "),
-        api_error(anthropic.RateLimitError, 429),
-        api_error(anthropic.InternalServerError, 500),
-        anthropic.APIConnectionError(request=httpx2.Request("POST", "https://api.anthropic.com/v1/messages")),
+        # The model answered, so the call may have been charged for.
+        (reply(stop_reason="refusal"), True),
+        (reply(text="   "), True),
+        (reply(text="How it plays:\n- Half an ans", stop_reason="max_tokens"), True),
+        # The call never produced an answer.
+        (api_error(anthropic.RateLimitError, 429), False),
+        (api_error(anthropic.InternalServerError, 500), False),
+        (anthropic.APIConnectionError(request=httpx2.Request("POST", "https://api.anthropic.com/v1/messages")), False),
     ],
 )
-async def test_every_way_the_model_can_fail_becomes_one_error(monkeypatch: pytest.MonkeyPatch, outcome: Any) -> None:
+async def test_every_way_the_model_can_fail_becomes_one_error_that_says_whether_it_was_paid_for(
+    monkeypatch: pytest.MonkeyPatch, outcome: Any, billed: bool
+) -> None:
     stub_client(monkeypatch, outcome)
-    with pytest.raises(AnalysisFailed):
+    with pytest.raises(AnalysisFailed) as failed:
         await ClaudeAnalyzer(Settings(anthropic_api_key="k")).analyze("S", "U")
+    assert failed.value.billed is billed
 
 
 # ---------------------------------------------------------------- the data itself

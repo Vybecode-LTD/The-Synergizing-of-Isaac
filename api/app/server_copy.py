@@ -8,6 +8,7 @@ data and the same templates (data/content/), so they describe the same thing.
 from __future__ import annotations
 
 import json
+import math
 from html import escape
 from typing import Any
 
@@ -57,11 +58,16 @@ def _a(href: str, text: str) -> str:
     return f'<a href="{escape(href, quote=True)}">{escape(text)}</a>'
 
 
+def _trim(value: float) -> str:
+    """Two decimal places at most, halves rounded up: what trim() in web/src/engine/summary.ts prints."""
+    return f"{math.floor(value * 100 + 0.5) / 100:g}"
+
+
 def _stat(key: str, value: float) -> str:
     if key.endswith("Mult"):
-        return f"{STAT_LABELS[key]} \N{MULTIPLICATION SIGN}{value:g}"
+        return f"{STAT_LABELS[key]} \N{MULTIPLICATION SIGN}{_trim(value)}"
     sign = "+" if value > 0 else "\N{MINUS SIGN}"
-    return f"{STAT_LABELS[key]} {sign}{abs(value):g}"
+    return f"{STAT_LABELS[key]} {sign}{_trim(abs(value))}"
 
 
 def _builder_href(s: Synergy) -> str:

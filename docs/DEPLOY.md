@@ -31,9 +31,17 @@ answers and the daily counters. No database server.
 | `AI_MODEL` | optional, default `claude-opus-5-5` | See `docs/decisions/0003` for the cost of each choice |
 | `AI_PER_VISITOR_PER_DAY` | optional, default `5` | Fresh analyses per visitor per day |
 | `AI_SITE_PER_DAY` | optional, default `200` | Fresh analyses for the whole site per day: the spending cap |
+| `AI_MAX_TOKENS` | optional, default `4000` | Ceiling for one answer, thinking included. A cut-off answer is refused, not saved; the log says to raise this |
 | `CLIENT_IP_HEADER` | `cf-connecting-ip` **only** if Cloudflare proxies the domain | Which header names the visitor |
 
 Railway injects `PORT`; the container binds to it.
+
+**Before choosing Cloudflare mode:** `cf-connecting-ip` is only true for requests that came through
+Cloudflare. Anyone can connect to Railway directly (the generated `*.up.railway.app` domain, or the custom
+domain's Railway target with the right `Host`) and send a made-up one, which gives them a fresh allowance
+per request. The app does not yet check that a request came through Cloudflare. If the owner chooses
+Cloudflare, add that check first (a secret header set by a Cloudflare rule, or Cloudflare's address
+ranges), and remove the generated domain.
 
 ## After the first deploy, check
 
@@ -45,10 +53,14 @@ Railway injects `PORT`; the container binds to it.
 4. **Robots:** `https://issac.toys/robots.txt` allows GPTBot, ClaudeBot and the rest. If Cloudflare is in
    front, check it is not blocking AI crawlers (it does by default).
 5. **The limit works behind the edge.** Ask for six different analyses from one connection: the sixth must
-   answer 429. Then forge a header and try again:
+   answer 429. Then forge each header the limiter could believe and try again:
+   `curl -X POST https://issac.toys/api/analyze -H "content-type: application/json" -H "x-forwarded-for: 1.2.3.4" -d "{\"items\":[1]}"`
    `curl -X POST https://issac.toys/api/analyze -H "content-type: application/json" -H "cf-connecting-ip: 1.2.3.4" -d "{\"items\":[1]}"`
-   It must still be refused unless `CLIENT_IP_HEADER` says Cloudflare. A limiter that worked locally let
-   39 of 40 through behind Railway's proxy on another project.
+   Both must still be refused. The first is the one the app trusts by default: it counts on Railway's edge
+   overwriting `X-Forwarded-For`, which is known from another project and not yet proven here. If a forged
+   one gets a fresh allowance, switch AI off (remove the key) until `client_ip` in `api/app/main.py` is
+   fixed. The second may pass only when `CLIENT_IP_HEADER` says Cloudflare. A limiter that worked locally
+   let 39 of 40 through behind Railway's proxy on another project.
 6. **The volume holds.** Redeploy, repeat an analysis already asked: it must come back `"cached": true`.
 7. Submit `https://issac.toys/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
 

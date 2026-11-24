@@ -27,7 +27,7 @@ The server builds the prompt from its own data; no free text is accepted from th
 | 422 | `{"detail": {"code": "invalid", "message": str}}` | unknown id, over the limits, or nothing selected |
 | 429 | `{"detail": {"code": "rate_limited" \| "budget_exhausted", "message": str}}` | visitor's or site's daily cap reached |
 | 503 | `{"detail": {"code": "not_configured", "message": str}}` | no `ANTHROPIC_API_KEY` |
-| 502 | `{"detail": {"code": "failed", "message": str}}` | the model call failed; the visitor's count is refunded |
+| 502 | `{"detail": {"code": "failed", "message": str}}` | the model call failed, for any reason; the visitor's count is refunded. The site's count is refunded too, unless the model did answer (declined, empty, or cut off at `AI_MAX_TOKENS`): that call may have been paid for, so it stays on the spending cap |
 
 **`GET /api/health`** → `{"status": "ok", "ai": bool, "items": int, "synergies": int}`.
 
@@ -36,8 +36,9 @@ The server builds the prompt from its own data; no free text is accepted from th
 `/synergies`, `/about`, plus `/sitemap.xml`, `/robots.txt`, `/llms.txt`.
 
 **Environment (API).** `ANTHROPIC_API_KEY`, `AI_MODEL` (default `claude-opus-5-5`), `AI_EFFORT` (`low`),
-`AI_PER_VISITOR_PER_DAY` (5), `AI_SITE_PER_DAY` (200), `CLIENT_IP_HEADER` (`x-forwarded-for`; set
-`cf-connecting-ip` only when Cloudflare proxies the domain), `SITE_URL` (`https://issac.toys`),
+`AI_MAX_TOKENS` (4000), `AI_PER_VISITOR_PER_DAY` (5), `AI_SITE_PER_DAY` (200), `CLIENT_IP_HEADER`
+(`x-forwarded-for`; set `cf-connecting-ip` only when Cloudflare proxies the domain; an IPv6 visitor is
+counted by /64, an IPv4 one by address), `SITE_URL` (`https://issac.toys`),
 `ENVIRONMENT` (`production` allows indexing), `DATA_DIR` (SQLite for cache and counters; a Railway volume),
 `PORT`.
 
@@ -46,7 +47,7 @@ No database server. `DATA_DIR/issac-toys.sqlite3`, created on start (`api/app/st
 
 | Table | Column | Type | Null | Default / key |
 |---|---|---|---|---|
-| `analysis_cache` | `key` | TEXT | no | PK: sha256 of model, prompt version and the sorted build |
+| `analysis_cache` | `key` | TEXT | no | PK: sha256 of the model, the system prompt and the prompt text built for the sorted build, so a change to the data or the wording makes a new key |
 | | `text` | TEXT | no | |
 | | `created_at` | TEXT | no | ISO 8601 UTC |
 | `usage` | `day` | TEXT | no | PK part: UTC date |
@@ -71,8 +72,9 @@ Skills `railway-deploy-playbook` (bind `$PORT`, client IP behind the edge, never
 - The desktop app under `src/` is not changed.
 
 ## 7. Acceptance
-- `api/tests/test_analyze.py`: limits, refund on failure, cache hit costs nothing, unknown ids rejected, the
-  prompt contains only server data.
+- `api/tests/test_analyze.py`: limits, refund on failure (and none to the site for a paid one), cache hit
+  costs nothing, a changed synergy is not answered from the cache, unknown ids rejected, the prompt contains
+  only server data.
 - `api/tests/test_pages.py`: one `h1`, canonical, valid JSON-LD and a real 404, per route type.
 - `web/src/engine/*.test.ts`: link round-trip, matching, suggestions.
 - Live: the builder at the dev URL shows synergies for `/?i=118.38` and the AI panel returns an answer once a

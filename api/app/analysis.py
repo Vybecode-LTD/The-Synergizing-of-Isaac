@@ -18,9 +18,6 @@ from .settings import Settings
 
 log = logging.getLogger("issac_toys.analysis")
 
-# Bump when the prompt changes: saved answers for the old prompt stop being served.
-PROMPT_VERSION = "1"
-
 SYSTEM = """You explain item builds for The Binding of Isaac: Repentance to a player in the middle of a run.
 
 The message lists the player's character, items and trinkets with facts from the game's own data, and the \
@@ -61,7 +58,15 @@ FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
 
 class AnalysisFailed(Exception):
-    """The model call did not produce an answer we can show."""
+    """The model call did not produce an answer we can show.
+
+    `billed` is True when the model did answer (it declined, said nothing, or was cut off), so the call
+    may have been charged for: the visitor gets their analysis back, the site's budget does not.
+    """
+
+    def __init__(self, message: str, billed: bool = False) -> None:
+        super().__init__(message)
+        self.billed = billed
 
 
 class Analyzer(Protocol):
@@ -117,20 +122,14 @@ def build_prompt(data: GameData, build: Build) -> str:
     return "\n".join(lines)
 
 
-def cache_key(model: str, build: Build) -> str:
-    """Order of pickup does not change a build, so sort before hashing."""
-    canonical = json.dumps(
-        {
-            "v": PROMPT_VERSION,
-            "model": model,
-            "c": build.character,
-            "i": sorted(build.items),
-            "t": sorted(build.trinkets),
-        },
-        separators=(",", ":"),
-        sort_keys=True,
-    )
-    return hashlib.sha256(canonical.encode()).hexdigest()
+def cache_key(model: str, system: str, prompt: str) -> str:
+    """A saved answer belongs to the model and to every word it was told.
+
+    Hashing the text, not the ids, means a corrected synergy, a changed item fact or a reworded system
+    prompt stops the old answer being served, with nothing to remember to bump. Build the prompt from
+    `Build.canonical()` so pick order does not change the key.
+    """
+    return hashlib.sha256(json.dumps([model, system, prompt]).encode()).hexdigest()
 
 
 class ClaudeAnalyzer:
@@ -165,8 +164,11 @@ class ClaudeAnalyzer:
             raise AnalysisFailed("could not reach the model") from error
 
         if response.stop_reason == "refusal":
-            raise AnalysisFailed("the model declined")
+            raise AnalysisFailed("the model declined", billed=True)
+        if response.stop_reason == "max_tokens":
+            # Thinking counts toward the limit. Half an answer must not be saved as this build's answer.
+            raise AnalysisFailed(f"cut off at {s.ai_max_tokens} tokens: raise AI_MAX_TOKENS", billed=True)
         text = "\n".join(block.text for block in response.content if block.type == "text").strip()
         if not text:
-            raise AnalysisFailed("empty answer")
+            raise AnalysisFailed("empty answer", billed=True)
         return text

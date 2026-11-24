@@ -98,14 +98,17 @@ class Store:
             finally:
                 self._db.execute("COMMIT")
 
-    def release(self, reservation: Reservation) -> None:
+    def release(self, reservation: Reservation, *, site: bool = True) -> None:
         """Give an analysis back when the model call failed: the visitor got nothing for it.
 
         The refund goes to the day the reservation was taken from, not today: a call reserved just before
         midnight UTC that fails just after must not hand back an analysis somebody used on the new day.
+
+        `site=False` keeps the site's counter charged, for a failure the model was paid for: the site's
+        daily budget is the spending cap, so it counts every call that cost money.
         """
         with self._lock:
-            for who in (SITE, reservation.visitor):
+            for who in (SITE, reservation.visitor) if site else (reservation.visitor,):
                 self._db.execute(
                     "UPDATE usage SET count = count - 1 WHERE day = ? AND visitor = ? AND count > 0",
                     (reservation.day, who),

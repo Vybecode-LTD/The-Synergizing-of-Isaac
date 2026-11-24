@@ -21,11 +21,12 @@ class FakeAnalyzer:
     def __init__(self) -> None:
         self.calls: list[tuple[str, str]] = []
         self.fail = False
+        self.billed = False
 
     async def analyze(self, system: str, user: str) -> str:
         self.calls.append((system, user))
         if self.fail:
-            raise AnalysisFailed("boom")
+            raise AnalysisFailed("boom", billed=self.billed)
         return f"How it plays:\n- Answer number {len(self.calls)}."
 
 

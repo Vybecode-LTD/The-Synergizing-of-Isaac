@@ -2,14 +2,17 @@ from __future__ import annotations
 
 import asyncio
 import datetime
+import json
+import shutil
 from collections.abc import Callable
+from dataclasses import replace
+from pathlib import Path
 
 import httpx
 import pytest
 from fastapi.testclient import TestClient
 
 from app.analysis import SYSTEM, AnalysisFailed, cache_key
-from app.gamedata import Build
 from app.main import create_app
 from app.settings import Settings
 from app.store import Store
@@ -225,9 +228,114 @@ def test_garbage_in_the_address_header_falls_back_to_the_peer(client: TestClient
     assert post(client, {"items": [1]}, ip="not-an-ip").status_code == 200
 
 
-def test_cache_key_ignores_pick_order_and_depends_on_the_model() -> None:
-    a = cache_key("m1", Build(character="azazel", items=(118, 38), trinkets=(39, 1)))
-    b = cache_key("m1", Build(character="azazel", items=(38, 118), trinkets=(1, 39)))
-    assert a == b
-    assert a != cache_key("m2", Build(character="azazel", items=(118, 38), trinkets=(39, 1)))
-    assert a != cache_key("m1", Build(character=None, items=(118, 38), trinkets=(39, 1)))
+def test_cache_key_depends_on_the_model_and_on_every_word_the_model_is_told() -> None:
+    a = cache_key("m1", "system", "prompt")
+    assert a == cache_key("m1", "system", "prompt")
+    assert a != cache_key("m2", "system", "prompt")
+    assert a != cache_key("m1", "system, reworded", "prompt")
+    assert a != cache_key("m1", "system", "prompt with a corrected synergy")
+    # Where one part ends and the next begins is part of the key.
+    assert cache_key("m", "ab", "c") != cache_key("m", "a", "bc")
+
+
+# ---------------------------------------------------------------- second review (2026-11-24)
+
+
+def test_saved_answers_are_not_served_after_the_data_they_cite_changes(
+    settings: Settings, clock: Clock, analyzer: FakeAnalyzer, tmp_path: Path
+) -> None:
+    """Review finding: the key was ids and model only, so a corrected synergy never reached the model again."""
+    copy = tmp_path / "data"
+    shutil.copytree(settings.data_path, copy, ignore=shutil.ignore_patterns("sprites", "sources", "tests"))
+    store = Store(clock=clock)
+
+    def site() -> TestClient:
+        return TestClient(create_app(replace(settings, data_path=copy), analyzer=analyzer, store=store))
+
+    assert post(site(), BRIM_TAMMY).json()["cached"] is False
+    # Control: a restart with the same data still answers from the cache.
+    assert post(site(), BRIM_TAMMY).json()["cached"] is True
+
+    path = copy / "synergies.json"
+    synergies = json.loads(path.read_text(encoding="utf-8"))
+    edited = [s for s in synergies if sorted(s["items"]) == ["Brimstone", "Tammy's Head"] and not s["characters"]]
+    assert len(edited) == 1
+    edited[0]["description"] = "Corrected: the lasers fire in a ring."
+    path.write_text(json.dumps(synergies), encoding="utf-8")
+
+    again = post(site(), BRIM_TAMMY)
+    assert again.json()["cached"] is False
+    assert len(analyzer.calls) == 2
+    assert "Corrected: the lasers fire in a ring." in analyzer.calls[-1][1]
+
+
+def test_an_unexpected_analyzer_error_is_refunded_and_answers_502(settings: Settings, clock: Clock) -> None:
+    """Review finding: only AnalysisFailed was refunded; anything else was a 500 that kept the allowance."""
+
+    class Broken(FakeAnalyzer):
+        async def analyze(self, system: str, user: str) -> str:
+            self.calls.append((system, user))
+            if len(self.calls) == 1:
+                raise RuntimeError("the SDK changed shape")
+            return "Fine now."
+
+    app = create_app(replace(settings, per_visitor_per_day=1), analyzer=Broken(), store=Store(clock=clock))
+    client = TestClient(app, raise_server_exceptions=False)
+    failed = post(client, {"items": [1]})
+    assert failed.status_code == 502
+    assert failed.json()["detail"]["code"] == "failed"
+    # The one analysis they are allowed is still there.
+    assert post(client, {"items": [1]}).json() == {"text": "Fine now.", "cached": False, "remaining": 0, "limit": 1}
+
+
+def test_a_failure_the_model_was_paid_for_stays_on_the_site_budget(
+    make_client: Callable[..., TestClient], analyzer: FakeAnalyzer
+) -> None:
+    """Review finding: every failure was refunded to the site counter, so paid failures never reached the cap."""
+    client = make_client(per_visitor_per_day=1, site_per_day=2)
+    analyzer.fail, analyzer.billed = True, True
+    assert post(client, {"items": [1]}).status_code == 502
+    analyzer.fail = False
+    # The visitor got nothing, so their one analysis is back...
+    assert post(client, {"items": [1]}).status_code == 200
+    # ...but the site paid for both calls, and two is its budget.
+    refused = post(client, {"items": [2]}, ip="198.51.100.9")
+    assert refused.status_code == 429 and refused.json()["detail"]["code"] == "budget_exhausted"
+
+
+def test_a_failure_nobody_was_charged_for_goes_back_to_the_site_budget(
+    make_client: Callable[..., TestClient], analyzer: FakeAnalyzer
+) -> None:
+    """The other side of the test above: an upstream outage must not use up the day."""
+    client = make_client(per_visitor_per_day=1, site_per_day=2)
+    analyzer.fail = True
+    assert post(client, {"items": [1]}).status_code == 502
+    analyzer.fail = False
+    assert post(client, {"items": [1]}).status_code == 200
+    assert post(client, {"items": [2]}, ip="198.51.100.9").status_code == 200
+
+
+def test_an_ipv6_visitor_cannot_get_a_fresh_allowance_by_changing_address(
+    make_client: Callable[..., TestClient],
+) -> None:
+    """Review finding: one IPv6 subscriber holds a whole /64, and each address in it had its own allowance."""
+    client = make_client(per_visitor_per_day=1)
+    assert post(client, {"items": [1]}, ip="2001:db8:1:2::1").status_code == 200
+    assert post(client, {"items": [2]}, ip="2001:db8:1:2:aaaa:bbbb:cccc:dddd").status_code == 429
+    # Controls: the network next door is somebody else, and IPv4 is still one visitor per address.
+    assert post(client, {"items": [2]}, ip="2001:db8:1:3::1").status_code == 200
+    assert post(client, {"items": [3]}, ip="203.0.113.8").status_code == 200
+    assert post(client, {"items": [4]}, ip="203.0.113.9").status_code == 200
+    # An IPv4 address written the IPv6 way is the same visitor as the plain one.
+    assert post(client, {"items": [5]}, ip="::ffff:203.0.113.8").status_code == 429
+
+
+def test_a_request_that_is_not_json_never_reaches_the_model(client: TestClient, analyzer: FakeAnalyzer) -> None:
+    """Another site's page can make a visitor's browser send text/plain here without asking. It must do nothing."""
+    r = client.post(
+        "/api/analyze",
+        content=json.dumps(BRIM_TAMMY),
+        headers={"content-type": "text/plain", "x-forwarded-for": "203.0.113.7"},
+    )
+    assert r.status_code == 422
+    assert analyzer.calls == []
