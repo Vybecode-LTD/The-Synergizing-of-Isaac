@@ -2,15 +2,20 @@
 
 ## Current state
 
-- **The project is a web app, `issac.toys`:** builder with shareable links, "one pickup away" suggestions,
-  stat and transformation summary, pages for all 719 items, 188 trinkets and 34 characters, the full synergy
-  list, own synergies kept in the browser, and an AI read paid by the site inside daily caps. Decisions:
-  `docs/decisions/0001` to `0004`.
+- **The project is a web app, now named `isaac.toys`:** builder with shareable links, "one pickup away"
+  suggestions, stat and transformation summary, pages for all 719 items, 188 trinkets and 34 characters, the
+  full synergy list, own synergies kept in the browser, and an AI read paid by the site inside daily caps.
+  Decisions: `docs/decisions/0001` to `0004`.
 - **Branch `feat/web-app`** on top of `main` (`a99151e`). PR `Vybecode-LTD/The-Synergizing-of-Isaac#1`, not
-  merged, auto-fix on, auto-merge off. Its head and CI: `dev plans/NEXT_SESSION_PROMPT.md` section 3.
-- **This session reviewed the whole PR** (API, deploy files, the web app's logic; not the CSS, the generated
-  data or the vendored design scripts) and fixed all 15 findings with tests. CodeRabbit has never reviewed
-  it: it skips pull requests over 100 files, and this one has 131. Codex reviewed the first push only.
+  merged, auto-merge off. Its head and CI: `dev plans/NEXT_SESSION_PROMPT.md` section 3.
+- **The whole PR was reviewed this session** (API, deploy files, the web app's logic; not the CSS, the
+  generated data or the vendored design scripts) and all 15 findings were fixed with tests. Codex was then
+  asked to review again and answered "Didn't find any major issues" on `eb8fad4`. CodeRabbit has never
+  reviewed it: it skips pull requests over 100 files, and this one has 131.
+- **The owner decided on 2026-11-24:** the name is `isaac.toys`, with `issac.toys` redirecting
+  (`decisions/0002`); the AI read uses Opus 5.5 with the caps at 5 per visitor and 200 a day
+  (`decisions/0003`); DNS only, no Cloudflare proxy. The rename is done in code, tests, snapshot and share
+  image.
 - **Nothing is deployed.** No Railway project exists for this repo. No real model call has been made.
 - **The desktop app is untouched.**
 
@@ -32,42 +37,43 @@
 ## Verified this session (commands and results in `docs/TESTING.md`)
 
 - Web: 114 tests, 98.6% lines; lint, types, build and design audit clean. API: 81 tests, 99%; ruff, mypy,
-  data validator (0 problems) and parity snapshot clean.
+  data validator (0 problems) and parity snapshot clean. All of it re-run after the rename.
 - Every new test was red before its fix. 13 of 13 mutations on the API fixes were caught.
 - In a real browser (dev server on 5273): Builder link and logo keep the build; Clear all stays cleared
-  after a fresh load; adding from an item page, Back and Forward work; `/Items` is the not-found page.
+  after a fresh load; adding from an item page, Back and Forward work; `/Items` is the not-found page;
+  after the rename the wordmark, titles and footer say `isaac.toys` and the old name appears nowhere.
 - The model call's parameters were checked against the `claude-api` skill: `output_config.effort`, the
   refusal fallback's beta name and `"default"` form, and the five models that accept it.
 
 ## Not verified
 
-- **The over-long-name 500** needs Python 3.12 on Linux. The test forces the same error by hand and CI
-  runs a real 300-character address.
+- **The over-long-name 500** cannot be reproduced here (it needs Python 3.12 on Linux). The test forces the
+  same error by hand; CI ran the real 300-character address on Linux and passed.
 - **Railway's edge overwriting `X-Forwarded-For`** is taken from another project. Post-deploy check 5
   proves or disproves it; until then the per-visitor limit behind Railway is an assumption.
-- **Rendered contrast was not re-run:** no CSS or markup changed this session. The gaps listed last time
-  stand (character dialog at 390 wide, search dropdown, the hover pass on `/items` and `/trinkets`, two
-  small CSS changes made after the gate ran).
+- **Rendered contrast was not re-run:** no CSS or markup changed, only the name's letters. The gaps listed
+  in the first session stand (character dialog at 390 wide, search dropdown, the hover pass on `/items`
+  and `/trinkets`, two small CSS changes made after the gate ran).
 - **`Dockerfile`:** never built (no Docker here). **`ClaudeAnalyzer`:** only against a stub.
 - **Core Web Vitals:** not measured. The JS bundle is 621 kB (169 kB gzipped) because it carries the data.
 
 ## Next steps, in order
 
-1. Owner decisions below, then merge PR #1 on the owner's word.
-2. Deploy on the owner's go-ahead, following `docs/DEPLOY.md`, then run its seven post-deploy checks.
+1. Merge PR #1 on the owner's word.
+2. Deploy on the owner's go-ahead, once `isaac.toys` is registered: `docs/DEPLOY.md`, then its seven checks.
 3. Verify the 458 synergies against the game or the wiki, starting with the S and D ratings.
 4. Add a browser end-to-end smoke test and a Docker build to CI.
 5. Split the data out of the main bundle and measure Core Web Vitals on the live site.
 
-## Open decisions for the owner
+## Waiting on the owner
 
-1. **Spelling of the domain.** The game is "Isaac"; `isaac.toys` was free on 2026-11-24 (`decisions/0002`).
-2. **Model and caps for the AI read** (`decisions/0003`): Opus 5.5 at about 2 cents an analysis is the
-   default; Sonnet 5.5 is about half; Haiku 5.5 is under a tenth of a cent.
-3. **Will Cloudflare proxy the domain?** If yes, the app first needs a check that a request really came
-   through Cloudflare (`docs/DEPLOY.md`, "Before choosing Cloudflare mode"): without it the per-visitor
-   limit can be dodged by connecting to Railway directly.
+1. **Register `isaac.toys`** (unregistered when checked on 2026-11-24), and point `issac.toys` at it with a
+   permanent redirect.
+2. **Merge PR #1?** CI is green and both reviews are done.
+3. **Deploy?** The Railway dashboard steps and the Anthropic key are the owner's (`docs/DEPLOY.md`).
 4. **Retire the desktop app,** or keep it in the repo?
+5. **Auto-fix** was on for the first session and could not be switched on by the agent in the second (the
+   app refused the call). Switch it on from the PR bar if wanted.
 
 ## Warnings
 
