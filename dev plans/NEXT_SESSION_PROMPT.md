@@ -64,3 +64,8 @@ Evidence: `docs/TESTING.md`. Decisions: `docs/decisions/0001` to `0004`; next fr
    (`server-copy-for-crawlers`).
 4. A spending cap counts calls that were paid for and then failed: refund the visitor, not the budget.
 5. Key a cache of model answers on the prompt text, not on ids and a hand-bumped version.
+
+## Recorded after the push (2026-11-24)
+- PR #1 head `acada89`: CI green (run 45513462120, Web and API jobs), mergeable, merge state clean.
+  CodeRabbit skipped it again. No review comment since Codex's "no major issues" on `eb8fad4`.
+- This note is one local commit on top of `acada89`, not pushed. Push it with the next batch, not alone.
