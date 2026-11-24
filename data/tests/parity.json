@@ -1,0 +1,2520 @@
+{
+ "domain": "issac.toys",
+ "pages": [
+  {
+   "path": "/",
+   "kind": "home",
+   "title": "Binding of Isaac Synergy Builder for Repentance | issac.toys",
+   "description": "Pick your character, items and trinkets and see every known Binding of Isaac: Repentance synergy, what one more pickup unlocks, and an AI read. Free to use.",
+   "h1": "Binding of Isaac synergy builder",
+   "lede": "Add what you're holding. Synergies show up as you go.",
+   "answer": ""
+  },
+  {
+   "path": "/items",
+   "kind": "items",
+   "title": "All 719 Binding of Isaac Repentance Items | issac.toys",
+   "description": "Browse all 719 items in The Binding of Isaac: Repentance with quality, effects, stat changes and item pools. Open any item to see its known synergies.",
+   "h1": "All Repentance items",
+   "lede": "Every item in the game. Open one to see what it does and what it combines with.",
+   "answer": ""
+  },
+  {
+   "path": "/items/brimstone",
+   "kind": "item",
+   "title": "Brimstone Synergies in The Binding of Isaac | issac.toys",
+   "description": "Brimstone in The Binding of Isaac: Repentance: Tears become blood laser, hits 9 times. Quality 4, 64 known synergies. Add it to your build.",
+   "h1": "Brimstone",
+   "lede": "",
+   "answer": "Brimstone has 64 known synergies in this list. The strongest are with Azazel, Crown of Light and Epic Fetus."
+  },
+  {
+   "path": "/items/the-sad-onion",
+   "kind": "item",
+   "title": "The Sad Onion Synergies in The Binding of Isaac | issac.toys",
+   "description": "The Sad Onion in The Binding of Isaac: Repentance: A stat item that only changes your numbers. Quality 3, 0 known synergies. Add it to your build.",
+   "h1": "The Sad Onion",
+   "lede": "",
+   "answer": "The list has nothing for The Sad Onion yet. That is a gap in the list, not proof it combines with nothing."
+  },
+  {
+   "path": "/items/odd-mushroom-thick",
+   "kind": "item",
+   "title": "Odd Mushroom (Thick) Synergies | issac.toys",
+   "description": "Odd Mushroom (Thick) in The Binding of Isaac: Repentance: A stat item that only changes your numbers. Quality 2, 0 known synergies. Add it to your build.",
+   "h1": "Odd Mushroom (Thick)",
+   "lede": "",
+   "answer": "The list has nothing for Odd Mushroom (Thick) yet. That is a gap in the list, not proof it combines with nothing."
+  },
+  {
+   "path": "/items/broken-shovel-second-piece",
+   "kind": "item",
+   "title": "Broken Shovel (second piece) Synergies | issac.toys",
+   "description": "Broken Shovel (second piece) in The Binding of Isaac: Repentance: Used in the Booster Pack #5 quest. Quality 4, 0 known synergies. Add it to your build.",
+   "h1": "Broken Shovel (second piece)",
+   "lede": "",
+   "answer": "The list has nothing for Broken Shovel (second piece) yet. That is a gap in the list, not proof it combines with nothing."
+  },
+  {
+   "path": "/trinkets",
+   "kind": "trinkets",
+   "title": "All 188 Binding of Isaac Repentance Trinkets | issac.toys",
+   "description": "Browse all 188 trinkets in The Binding of Isaac: Repentance with their effects. Open any trinket to see what it combines with in your build.",
+   "h1": "All Repentance trinkets",
+   "lede": "Every trinket in the game. Open one to see what it does and what it combines with.",
+   "answer": ""
+  },
+  {
+   "path": "/trinkets/cancer",
+   "kind": "trinket",
+   "title": "Cancer Trinket Synergies | Binding of Isaac | issac.toys",
+   "description": "Cancer, a Binding of Isaac: Repentance trinket: A stat trinket that only changes your numbers. 3 known synergies. Add it to your build.",
+   "h1": "Cancer",
+   "lede": "",
+   "answer": "Cancer has 3 known synergies in this list. The strongest are with Mom's Purse, Curved Horn and Mom's Box."
+  },
+  {
+   "path": "/trinkets/swallowed-penny",
+   "kind": "trinket",
+   "title": "Swallowed Penny Trinket Synergies | issac.toys",
+   "description": "Swallowed Penny, a Binding of Isaac: Repentance trinket: Spawn 1-2 pennies on hit. 1 known synergy. Add it to your build.",
+   "h1": "Swallowed Penny",
+   "lede": "",
+   "answer": "Swallowed Penny has 1 known synergy in this list. The strongest is with Keeper."
+  },
+  {
+   "path": "/characters",
+   "kind": "characters",
+   "title": "All 34 Binding of Isaac Repentance Characters | issac.toys",
+   "description": "All 34 playable characters in The Binding of Isaac: Repentance with starting items and the synergies only they get. Pick one and start a build.",
+   "h1": "Repentance characters",
+   "lede": "Some synergies only happen for one character. Open a character to see theirs.",
+   "answer": ""
+  },
+  {
+   "path": "/characters/azazel",
+   "kind": "character",
+   "title": "Azazel Synergies | Binding of Isaac | issac.toys",
+   "description": "Azazel in The Binding of Isaac: Repentance: starting items and 5 character-only synergies. Start a build as Azazel to see what your items do.",
+   "h1": "Azazel",
+   "lede": "",
+   "answer": "Azazel has 5 character-only synergies in this list. The strongest are with Brimstone, Birthright and Chocolate Milk."
+  },
+  {
+   "path": "/characters/tainted-lost",
+   "kind": "character",
+   "title": "Tainted Lost Synergies | Binding of Isaac | issac.toys",
+   "description": "Tainted Lost in The Binding of Isaac: Repentance: starting items and 0 character-only synergies. Start a build as Tainted Lost to see what your items do.",
+   "h1": "Tainted Lost",
+   "lede": "",
+   "answer": "Every general synergy still applies to Tainted Lost. The list just has nothing that is theirs alone."
+  },
+  {
+   "path": "/synergies",
+   "kind": "synergies",
+   "title": "All 458 Binding of Isaac: Repentance Synergies | issac.toys",
+   "description": "458 hand-written item, trinket and character synergies for The Binding of Isaac: Repentance, rated S to D. Search by item and open any in the builder.",
+   "h1": "All Repentance synergies",
+   "lede": "The whole list, strongest first. S is run-defining, A strong, B good, C minor, and D means the items work against each other.",
+   "answer": ""
+  },
+  {
+   "path": "/about",
+   "kind": "about",
+   "title": "About issac.toys: Data Sources, Ratings and AI Analysis",
+   "description": "What issac.toys is, where its Binding of Isaac item data comes from, how synergy ratings and the AI analysis work, and what happens to your data.",
+   "h1": "About issac.toys",
+   "lede": "",
+   "answer": ""
+  },
+  {
+   "path": "/items/no-such-item",
+   "kind": "notFound",
+   "title": "Page Not Found | issac.toys",
+   "description": "Nothing lives at this address on issac.toys. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",
+   "h1": "This room is empty",
+   "lede": "Nothing lives at this address.",
+   "answer": ""
+  },
+  {
+   "path": "/nowhere/at/all",
+   "kind": "notFound",
+   "title": "Page Not Found | issac.toys",
+   "description": "Nothing lives at this address on issac.toys. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",
+   "h1": "This room is empty",
+   "lede": "Nothing lives at this address.",
+   "answer": ""
+  }
+ ],
+ "builds": [
+  {
+   "build": {
+    "character": null,
+    "items": [],
+    "trinkets": []
+   },
+   "matched": [],
+   "awaitingCharacter": [],
+   "suggestions": []
+  },
+  {
+   "build": {
+    "character": null,
+    "items": [
+     118
+    ],
+    "trinkets": []
+   },
+   "matched": [],
+   "awaitingCharacter": [
+    "brimstone+c-azazel",
+    "brimstone+c-lilith",
+    "brimstone+c-the-lost"
+   ],
+   "suggestions": [
+    {
+     "kind": "item",
+     "id": 38,
+     "best": "S",
+     "completes": [
+      "brimstone+tammys-head"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 68,
+     "best": "S",
+     "completes": [
+      "brimstone+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 114,
+     "best": "S",
+     "completes": [
+      "brimstone+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 145,
+     "best": "S",
+     "completes": [
+      "brimstone+guppys-head"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 168,
+     "best": "S",
+     "completes": [
+      "brimstone+epic-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 395,
+     "best": "S",
+     "completes": [
+      "brimstone+tech-x"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 415,
+     "best": "S",
+     "completes": [
+      "brimstone+crown-of-light"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 531,
+     "best": "S",
+     "completes": [
+      "brimstone+haemolacria"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 562,
+     "best": "S",
+     "completes": [
+      "brimstone+rock-bottom"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 2,
+     "best": "A",
+     "completes": [
+      "brimstone+the-inner-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 3,
+     "best": "A",
+     "completes": [
+      "brimstone+spoon-bender"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 52,
+     "best": "A",
+     "completes": [
+      "brimstone+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 69,
+     "best": "A",
+     "completes": [
+      "brimstone+chocolate-milk"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 87,
+     "best": "A",
+     "completes": [
+      "brimstone+lokis-horns"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 132,
+     "best": "A",
+     "completes": [
+      "a-lump-of-coal+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 149,
+     "best": "A",
+     "completes": [
+      "brimstone+ipecac"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 153,
+     "best": "A",
+     "completes": [
+      "brimstone+mutant-spider"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 220,
+     "best": "A",
+     "completes": [
+      "brimstone+sad-bombs"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 229,
+     "best": "A",
+     "completes": [
+      "brimstone+monstros-lung"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 237,
+     "best": "A",
+     "completes": [
+      "brimstone+deaths-touch"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 245,
+     "best": "A",
+     "completes": [
+      "20-20+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 261,
+     "best": "A",
+     "completes": [
+      "brimstone+proptosis"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 329,
+     "best": "A",
+     "completes": [
+      "brimstone+the-ludovico-technique"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 330,
+     "best": "A",
+     "completes": [
+      "brimstone+soy-milk"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 374,
+     "best": "A",
+     "completes": [
+      "brimstone+holy-light"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 399,
+     "best": "A",
+     "completes": [
+      "brimstone+maw-of-the-void"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 494,
+     "best": "A",
+     "completes": [
+      "brimstone+jacobs-ladder"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 561,
+     "best": "A",
+     "completes": [
+      "almond-milk+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 572,
+     "best": "A",
+     "completes": [
+      "brimstone+eye-of-the-occult"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 573,
+     "best": "A",
+     "completes": [
+      "brimstone+immaculate-heart"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 647,
+     "best": "A",
+     "completes": [
+      "4-5-volt+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 678,
+     "best": "A",
+     "completes": [
+      "brimstone+c-section"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 55,
+     "best": "B",
+     "completes": [
+      "brimstone+moms-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 104,
+     "best": "B",
+     "completes": [
+      "brimstone+the-parasite"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 150,
+     "best": "B",
+     "completes": [
+      "brimstone+tough-love"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 152,
+     "best": "B",
+     "completes": [
+      "brimstone+technology-2"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 213,
+     "best": "B",
+     "completes": [
+      "brimstone+lost-contact"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 221,
+     "best": "B",
+     "completes": [
+      "brimstone+rubber-cement"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 222,
+     "best": "B",
+     "completes": [
+      "anti-gravity+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 224,
+     "best": "B",
+     "completes": [
+      "brimstone+crickets-body"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 244,
+     "best": "B",
+     "completes": [
+      "brimstone+tech-5"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 257,
+     "best": "B",
+     "completes": [
+      "brimstone+fire-mind"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 315,
+     "best": "B",
+     "completes": [
+      "brimstone+strange-attractor"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 316,
+     "best": "B",
+     "completes": [
+      "brimstone+cursed-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 317,
+     "best": "B",
+     "completes": [
+      "brimstone+mysterious-liquid"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 369,
+     "best": "B",
+     "completes": [
+      "brimstone+continuum"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 373,
+     "best": "B",
+     "completes": [
+      "brimstone+dead-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 394,
+     "best": "B",
+     "completes": [
+      "brimstone+marked"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 429,
+     "best": "B",
+     "completes": [
+      "brimstone+head-of-the-keeper"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 431,
+     "best": "B",
+     "completes": [
+      "brimstone+multidimensional-baby"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 443,
+     "best": "B",
+     "completes": [
+      "apple+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 444,
+     "best": "B",
+     "completes": [
+      "brimstone+lead-pencil"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 553,
+     "best": "B",
+     "completes": [
+      "brimstone+mucormycosis"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 592,
+     "best": "B",
+     "completes": [
+      "brimstone+terra"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 596,
+     "best": "B",
+     "completes": [
+      "brimstone+uranus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 606,
+     "best": "B",
+     "completes": [
+      "brimstone+ocular-rift"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 618,
+     "best": "B",
+     "completes": [
+      "brimstone+rotten-tomato"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 233,
+     "best": "C",
+     "completes": [
+      "brimstone+tiny-planet"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 579,
+     "best": "D",
+     "completes": [
+      "brimstone+spirit-sword"
+     ]
+    }
+   ]
+  },
+  {
+   "build": {
+    "character": null,
+    "items": [
+     118,
+     38
+    ],
+    "trinkets": []
+   },
+   "matched": [
+    "brimstone+tammys-head"
+   ],
+   "awaitingCharacter": [
+    "brimstone+c-azazel",
+    "brimstone+c-lilith",
+    "brimstone+c-the-lost"
+   ],
+   "suggestions": [
+    {
+     "kind": "item",
+     "id": 68,
+     "best": "S",
+     "completes": [
+      "brimstone+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 114,
+     "best": "S",
+     "completes": [
+      "brimstone+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 145,
+     "best": "S",
+     "completes": [
+      "brimstone+guppys-head"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 168,
+     "best": "S",
+     "completes": [
+      "brimstone+epic-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 395,
+     "best": "S",
+     "completes": [
+      "brimstone+tech-x"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 415,
+     "best": "S",
+     "completes": [
+      "brimstone+crown-of-light"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 531,
+     "best": "S",
+     "completes": [
+      "brimstone+haemolacria"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 562,
+     "best": "S",
+     "completes": [
+      "brimstone+rock-bottom"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 2,
+     "best": "A",
+     "completes": [
+      "brimstone+the-inner-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 3,
+     "best": "A",
+     "completes": [
+      "brimstone+spoon-bender"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 52,
+     "best": "A",
+     "completes": [
+      "brimstone+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 69,
+     "best": "A",
+     "completes": [
+      "brimstone+chocolate-milk"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 87,
+     "best": "A",
+     "completes": [
+      "brimstone+lokis-horns"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 132,
+     "best": "A",
+     "completes": [
+      "a-lump-of-coal+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 149,
+     "best": "A",
+     "completes": [
+      "brimstone+ipecac"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 153,
+     "best": "A",
+     "completes": [
+      "brimstone+mutant-spider"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 220,
+     "best": "A",
+     "completes": [
+      "brimstone+sad-bombs"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 229,
+     "best": "A",
+     "completes": [
+      "brimstone+monstros-lung"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 237,
+     "best": "A",
+     "completes": [
+      "brimstone+deaths-touch"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 245,
+     "best": "A",
+     "completes": [
+      "20-20+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 261,
+     "best": "A",
+     "completes": [
+      "brimstone+proptosis"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 329,
+     "best": "A",
+     "completes": [
+      "brimstone+the-ludovico-technique"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 330,
+     "best": "A",
+     "completes": [
+      "brimstone+soy-milk"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 374,
+     "best": "A",
+     "completes": [
+      "brimstone+holy-light"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 399,
+     "best": "A",
+     "completes": [
+      "brimstone+maw-of-the-void"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 494,
+     "best": "A",
+     "completes": [
+      "brimstone+jacobs-ladder"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 561,
+     "best": "A",
+     "completes": [
+      "almond-milk+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 572,
+     "best": "A",
+     "completes": [
+      "brimstone+eye-of-the-occult"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 573,
+     "best": "A",
+     "completes": [
+      "brimstone+immaculate-heart"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 647,
+     "best": "A",
+     "completes": [
+      "4-5-volt+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 678,
+     "best": "A",
+     "completes": [
+      "brimstone+c-section"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 55,
+     "best": "B",
+     "completes": [
+      "brimstone+moms-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 104,
+     "best": "B",
+     "completes": [
+      "brimstone+the-parasite"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 150,
+     "best": "B",
+     "completes": [
+      "brimstone+tough-love"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 152,
+     "best": "B",
+     "completes": [
+      "brimstone+technology-2"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 213,
+     "best": "B",
+     "completes": [
+      "brimstone+lost-contact"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 221,
+     "best": "B",
+     "completes": [
+      "brimstone+rubber-cement"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 222,
+     "best": "B",
+     "completes": [
+      "anti-gravity+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 224,
+     "best": "B",
+     "completes": [
+      "brimstone+crickets-body"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 244,
+     "best": "B",
+     "completes": [
+      "brimstone+tech-5"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 257,
+     "best": "B",
+     "completes": [
+      "brimstone+fire-mind"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 315,
+     "best": "B",
+     "completes": [
+      "brimstone+strange-attractor"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 316,
+     "best": "B",
+     "completes": [
+      "brimstone+cursed-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 317,
+     "best": "B",
+     "completes": [
+      "brimstone+mysterious-liquid"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 369,
+     "best": "B",
+     "completes": [
+      "brimstone+continuum"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 373,
+     "best": "B",
+     "completes": [
+      "brimstone+dead-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 394,
+     "best": "B",
+     "completes": [
+      "brimstone+marked"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 429,
+     "best": "B",
+     "completes": [
+      "brimstone+head-of-the-keeper"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 431,
+     "best": "B",
+     "completes": [
+      "brimstone+multidimensional-baby"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 443,
+     "best": "B",
+     "completes": [
+      "apple+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 444,
+     "best": "B",
+     "completes": [
+      "brimstone+lead-pencil"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 553,
+     "best": "B",
+     "completes": [
+      "brimstone+mucormycosis"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 592,
+     "best": "B",
+     "completes": [
+      "brimstone+terra"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 596,
+     "best": "B",
+     "completes": [
+      "brimstone+uranus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 606,
+     "best": "B",
+     "completes": [
+      "brimstone+ocular-rift"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 618,
+     "best": "B",
+     "completes": [
+      "brimstone+rotten-tomato"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 233,
+     "best": "C",
+     "completes": [
+      "brimstone+tiny-planet"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 579,
+     "best": "D",
+     "completes": [
+      "brimstone+spirit-sword"
+     ]
+    }
+   ]
+  },
+  {
+   "build": {
+    "character": "azazel",
+    "items": [
+     118,
+     38,
+     68,
+     114
+    ],
+    "trinkets": [
+     39
+    ]
+   },
+   "matched": [
+    "brimstone+c-azazel",
+    "brimstone+moms-knife",
+    "brimstone+tammys-head",
+    "brimstone+technology",
+    "moms-knife+technology",
+    "t-cancer",
+    "technology+c-azazel"
+   ],
+   "awaitingCharacter": [],
+   "suggestions": [
+    {
+     "kind": "item",
+     "id": 168,
+     "best": "S",
+     "completes": [
+      "brimstone+epic-fetus",
+      "epic-fetus+moms-knife",
+      "epic-fetus+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 261,
+     "best": "S",
+     "completes": [
+      "moms-knife+proptosis",
+      "brimstone+proptosis",
+      "proptosis+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 531,
+     "best": "S",
+     "completes": [
+      "brimstone+haemolacria",
+      "haemolacria+moms-knife",
+      "haemolacria+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 145,
+     "best": "S",
+     "completes": [
+      "brimstone+guppys-head",
+      "guppys-head+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 169,
+     "best": "S",
+     "completes": [
+      "moms-knife+polyphemus",
+      "polyphemus+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 395,
+     "best": "S",
+     "completes": [
+      "brimstone+tech-x",
+      "moms-knife+tech-x"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 415,
+     "best": "S",
+     "completes": [
+      "brimstone+crown-of-light"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 562,
+     "best": "S",
+     "completes": [
+      "brimstone+rock-bottom"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 579,
+     "best": "A",
+     "completes": [
+      "brimstone+moms-knife+spirit-sword",
+      "moms-knife+spirit-sword+technology",
+      "spirit-sword+technology",
+      "moms-knife+spirit-sword",
+      "brimstone+spirit-sword"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 149,
+     "best": "A",
+     "completes": [
+      "brimstone+ipecac",
+      "ipecac+moms-knife",
+      "ipecac+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 229,
+     "best": "A",
+     "completes": [
+      "brimstone+monstros-lung",
+      "moms-knife+monstros-lung",
+      "monstros-lung+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 329,
+     "best": "A",
+     "completes": [
+      "brimstone+the-ludovico-technique",
+      "moms-knife+the-ludovico-technique",
+      "technology+the-ludovico-technique"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 678,
+     "best": "A",
+     "completes": [
+      "brimstone+c-section",
+      "c-section+moms-knife",
+      "c-section+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 2,
+     "best": "A",
+     "completes": [
+      "brimstone+the-inner-eye",
+      "moms-knife+the-inner-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 69,
+     "best": "A",
+     "completes": [
+      "brimstone+chocolate-milk",
+      "chocolate-milk+c-azazel"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 220,
+     "best": "A",
+     "completes": [
+      "brimstone+sad-bombs",
+      "moms-knife+sad-bombs"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 237,
+     "best": "A",
+     "completes": [
+      "brimstone+deaths-touch",
+      "deaths-touch+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 245,
+     "best": "A",
+     "completes": [
+      "20-20+brimstone",
+      "20-20+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 330,
+     "best": "A",
+     "completes": [
+      "brimstone+soy-milk",
+      "soy-milk+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 373,
+     "best": "A",
+     "completes": [
+      "dead-eye+moms-knife",
+      "brimstone+dead-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 374,
+     "best": "A",
+     "completes": [
+      "brimstone+holy-light",
+      "holy-light+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 494,
+     "best": "A",
+     "completes": [
+      "brimstone+jacobs-ladder",
+      "jacobs-ladder+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 572,
+     "best": "A",
+     "completes": [
+      "brimstone+eye-of-the-occult",
+      "eye-of-the-occult+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 3,
+     "best": "A",
+     "completes": [
+      "brimstone+spoon-bender"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 52,
+     "best": "A",
+     "completes": [
+      "brimstone+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 87,
+     "best": "A",
+     "completes": [
+      "brimstone+lokis-horns"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 132,
+     "best": "A",
+     "completes": [
+      "a-lump-of-coal+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 153,
+     "best": "A",
+     "completes": [
+      "brimstone+mutant-spider"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 347,
+     "best": "A",
+     "completes": [
+      "diplopia+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 399,
+     "best": "A",
+     "completes": [
+      "brimstone+maw-of-the-void"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 439,
+     "best": "A",
+     "completes": [
+      "moms-box+t-cancer"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 561,
+     "best": "A",
+     "completes": [
+      "almond-milk+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 573,
+     "best": "A",
+     "completes": [
+      "brimstone+immaculate-heart"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 619,
+     "best": "A",
+     "completes": [
+      "birthright+c-azazel"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 647,
+     "best": "A",
+     "completes": [
+      "4-5-volt+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 104,
+     "best": "B",
+     "completes": [
+      "brimstone+the-parasite",
+      "moms-knife+the-parasite",
+      "technology+the-parasite"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 55,
+     "best": "B",
+     "completes": [
+      "brimstone+moms-eye",
+      "moms-eye+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 213,
+     "best": "B",
+     "completes": [
+      "brimstone+lost-contact",
+      "lost-contact+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 221,
+     "best": "B",
+     "completes": [
+      "brimstone+rubber-cement",
+      "rubber-cement+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 224,
+     "best": "B",
+     "completes": [
+      "brimstone+crickets-body",
+      "crickets-body+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 315,
+     "best": "B",
+     "completes": [
+      "brimstone+strange-attractor",
+      "moms-knife+strange-attractor"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 316,
+     "best": "B",
+     "completes": [
+      "brimstone+cursed-eye",
+      "cursed-eye+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 317,
+     "best": "B",
+     "completes": [
+      "brimstone+mysterious-liquid",
+      "moms-knife+mysterious-liquid"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 369,
+     "best": "B",
+     "completes": [
+      "brimstone+continuum",
+      "continuum+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 394,
+     "best": "B",
+     "completes": [
+      "brimstone+marked",
+      "marked+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 150,
+     "best": "B",
+     "completes": [
+      "brimstone+tough-love"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 152,
+     "best": "B",
+     "completes": [
+      "brimstone+technology-2"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 222,
+     "best": "B",
+     "completes": [
+      "anti-gravity+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 244,
+     "best": "B",
+     "completes": [
+      "brimstone+tech-5"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 257,
+     "best": "B",
+     "completes": [
+      "brimstone+fire-mind"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 358,
+     "best": "B",
+     "completes": [
+      "moms-knife+the-wiz"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 429,
+     "best": "B",
+     "completes": [
+      "brimstone+head-of-the-keeper"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 431,
+     "best": "B",
+     "completes": [
+      "brimstone+multidimensional-baby"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 443,
+     "best": "B",
+     "completes": [
+      "apple+brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 444,
+     "best": "B",
+     "completes": [
+      "brimstone+lead-pencil"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 453,
+     "best": "B",
+     "completes": [
+      "compound-fracture+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 540,
+     "best": "B",
+     "completes": [
+      "flat-stone+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 553,
+     "best": "B",
+     "completes": [
+      "brimstone+mucormycosis"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 558,
+     "best": "B",
+     "completes": [
+      "eye-sore+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 592,
+     "best": "B",
+     "completes": [
+      "brimstone+terra"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 596,
+     "best": "B",
+     "completes": [
+      "brimstone+uranus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 606,
+     "best": "B",
+     "completes": [
+      "brimstone+ocular-rift"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 618,
+     "best": "B",
+     "completes": [
+      "brimstone+rotten-tomato"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 5,
+     "best": "C",
+     "completes": [
+      "moms-knife+my-reflection",
+      "my-reflection+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 233,
+     "best": "C",
+     "completes": [
+      "brimstone+tiny-planet",
+      "moms-knife+tiny-planet"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 276,
+     "best": "D",
+     "completes": [
+      "isaacs-heart+c-azazel"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 397,
+     "best": "D",
+     "completes": [
+      "moms-knife+tractor-beam"
+     ]
+    }
+   ]
+  },
+  {
+   "build": {
+    "character": "lilith",
+    "items": [
+     247
+    ],
+    "trinkets": []
+   },
+   "matched": [
+    "box-of-friends+c-lilith",
+    "cambion-conception+c-lilith"
+   ],
+   "awaitingCharacter": [],
+   "suggestions": [
+    {
+     "kind": "item",
+     "id": 356,
+     "best": "S",
+     "completes": [
+      "box-of-friends+car-battery"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 698,
+     "best": "A",
+     "completes": [
+      "bffs+twisted-pair",
+      "box-of-friends+twisted-pair"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 118,
+     "best": "A",
+     "completes": [
+      "brimstone+c-lilith"
+     ]
+    },
+    {
+     "kind": "trinket",
+     "id": 127,
+     "best": "A",
+     "completes": [
+      "t-baby-bender+c-lilith"
+     ]
+    },
+    {
+     "kind": "trinket",
+     "id": 141,
+     "best": "A",
+     "completes": [
+      "t-forgotten-lullaby+c-lilith"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 360,
+     "best": "A",
+     "completes": [
+      "bffs+incubus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 486,
+     "best": "A",
+     "completes": [
+      "cambion-conception+dull-razor"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 581,
+     "best": "A",
+     "completes": [
+      "bffs+psy-fly"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 619,
+     "best": "A",
+     "completes": [
+      "birthright+c-lilith"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 728,
+     "best": "A",
+     "completes": [
+      "gello+c-lilith"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 275,
+     "best": "B",
+     "completes": [
+      "bffs+lil-brimstone"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 417,
+     "best": "B",
+     "completes": [
+      "bffs+succubus"
+     ]
+    }
+   ]
+  },
+  {
+   "build": {
+    "character": null,
+    "items": [
+     619
+    ],
+    "trinkets": []
+   },
+   "matched": [],
+   "awaitingCharacter": [
+    "birthright+c-jacob-and-esau",
+    "birthright+c-the-lost",
+    "birthright+c-azazel",
+    "birthright+c-bethany",
+    "birthright+c-blue-baby",
+    "birthright+c-eden",
+    "birthright+c-eve",
+    "birthright+c-isaac",
+    "birthright+c-judas",
+    "birthright+c-lilith",
+    "birthright+c-samson",
+    "birthright+c-cain",
+    "birthright+c-keeper",
+    "birthright+c-lazarus",
+    "birthright+c-magdalene"
+   ],
+   "suggestions": []
+  },
+  {
+   "build": {
+    "character": "bethany",
+    "items": [
+     619
+    ],
+    "trinkets": []
+   },
+   "matched": [
+    "book-of-virtues+c-bethany",
+    "birthright+c-bethany"
+   ],
+   "awaitingCharacter": [],
+   "suggestions": [
+    {
+     "kind": "item",
+     "id": 34,
+     "best": "A",
+     "completes": [
+      "book-of-virtues+the-book-of-belial"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 292,
+     "best": "B",
+     "completes": [
+      "book-of-virtues+the-satanic-bible"
+     ]
+    }
+   ]
+  },
+  {
+   "build": {
+    "character": null,
+    "items": [],
+    "trinkets": [
+     39
+    ]
+   },
+   "matched": [
+    "t-cancer"
+   ],
+   "awaitingCharacter": [],
+   "suggestions": [
+    {
+     "kind": "item",
+     "id": 439,
+     "best": "A",
+     "completes": [
+      "moms-box+t-cancer"
+     ]
+    }
+   ]
+  },
+  {
+   "build": {
+    "character": "tainted-cain",
+    "items": [
+     114,
+     168,
+     52,
+     149,
+     169
+    ],
+    "trinkets": [
+     39,
+     1
+    ]
+   },
+   "matched": [
+    "epic-fetus+ipecac",
+    "epic-fetus+moms-knife",
+    "moms-knife+polyphemus",
+    "dr-fetus+ipecac",
+    "dr-fetus+polyphemus",
+    "epic-fetus+polyphemus",
+    "ipecac+moms-knife",
+    "t-cancer"
+   ],
+   "awaitingCharacter": [],
+   "suggestions": [
+    {
+     "kind": "item",
+     "id": 118,
+     "best": "S",
+     "completes": [
+      "brimstone+epic-fetus",
+      "brimstone+moms-knife",
+      "brimstone+dr-fetus",
+      "brimstone+ipecac"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 395,
+     "best": "S",
+     "completes": [
+      "epic-fetus+tech-x",
+      "dr-fetus+tech-x",
+      "ipecac+tech-x",
+      "moms-knife+tech-x"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 223,
+     "best": "S",
+     "completes": [
+      "dr-fetus+pyromaniac",
+      "epic-fetus+pyromaniac",
+      "ipecac+pyromaniac"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 261,
+     "best": "S",
+     "completes": [
+      "moms-knife+proptosis",
+      "dr-fetus+proptosis"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 562,
+     "best": "S",
+     "completes": [
+      "ipecac+rock-bottom",
+      "polyphemus+rock-bottom"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 646,
+     "best": "S",
+     "completes": [
+      "brimstone-bombs+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 68,
+     "best": "A",
+     "completes": [
+      "epic-fetus+technology",
+      "ipecac+technology",
+      "moms-knife+technology",
+      "polyphemus+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 229,
+     "best": "A",
+     "completes": [
+      "dr-fetus+monstros-lung",
+      "epic-fetus+monstros-lung",
+      "ipecac+monstros-lung",
+      "moms-knife+monstros-lung"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 678,
+     "best": "A",
+     "completes": [
+      "c-section+dr-fetus",
+      "c-section+ipecac",
+      "c-section+moms-knife",
+      "c-section+polyphemus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 104,
+     "best": "A",
+     "completes": [
+      "dr-fetus+the-parasite",
+      "ipecac+the-parasite",
+      "moms-knife+the-parasite"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 220,
+     "best": "A",
+     "completes": [
+      "dr-fetus+sad-bombs",
+      "epic-fetus+sad-bombs",
+      "moms-knife+sad-bombs"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 245,
+     "best": "A",
+     "completes": [
+      "20-20+epic-fetus",
+      "20-20+moms-knife",
+      "20-20+polyphemus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 329,
+     "best": "A",
+     "completes": [
+      "ipecac+the-ludovico-technique",
+      "moms-knife+the-ludovico-technique",
+      "dr-fetus+the-ludovico-technique"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 531,
+     "best": "A",
+     "completes": [
+      "dr-fetus+haemolacria",
+      "haemolacria+ipecac",
+      "haemolacria+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 2,
+     "best": "A",
+     "completes": [
+      "epic-fetus+the-inner-eye",
+      "moms-knife+the-inner-eye"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 224,
+     "best": "A",
+     "completes": [
+      "crickets-body+dr-fetus",
+      "crickets-body+ipecac"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 353,
+     "best": "A",
+     "completes": [
+      "bomber-boy+dr-fetus",
+      "bomber-boy+epic-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 375,
+     "best": "A",
+     "completes": [
+      "epic-fetus+host-hat",
+      "host-hat+ipecac"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 540,
+     "best": "A",
+     "completes": [
+      "flat-stone+ipecac",
+      "flat-stone+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 579,
+     "best": "A",
+     "completes": [
+      "polyphemus+spirit-sword",
+      "moms-knife+spirit-sword"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 4,
+     "best": "A",
+     "completes": [
+      "crickets-head+polyphemus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 12,
+     "best": "A",
+     "completes": [
+      "magic-mushroom+polyphemus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 69,
+     "best": "A",
+     "completes": [
+      "chocolate-milk+polyphemus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 106,
+     "best": "A",
+     "completes": [
+      "dr-fetus+mr-mega"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 145,
+     "best": "A",
+     "completes": [
+      "guppys-head+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 153,
+     "best": "A",
+     "completes": [
+      "epic-fetus+mutant-spider"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 237,
+     "best": "A",
+     "completes": [
+      "deaths-touch+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 347,
+     "best": "A",
+     "completes": [
+      "diplopia+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 350,
+     "best": "A",
+     "completes": [
+      "polyphemus+toxic-shock"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 360,
+     "best": "A",
+     "completes": [
+      "epic-fetus+incubus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 373,
+     "best": "A",
+     "completes": [
+      "dead-eye+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 399,
+     "best": "A",
+     "completes": [
+      "ipecac+maw-of-the-void"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 439,
+     "best": "A",
+     "completes": [
+      "moms-box+t-cancer"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 503,
+     "best": "A",
+     "completes": [
+      "dr-fetus+little-horn"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 533,
+     "best": "A",
+     "completes": [
+      "ipecac+trisagion"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 583,
+     "best": "A",
+     "completes": [
+      "dr-fetus+rocket-in-a-jar"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 643,
+     "best": "A",
+     "completes": [
+      "ipecac+revelation"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 698,
+     "best": "A",
+     "completes": [
+      "epic-fetus+twisted-pair"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 330,
+     "best": "B",
+     "completes": [
+      "ipecac+soy-milk",
+      "dr-fetus+soy-milk",
+      "polyphemus+soy-milk"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 213,
+     "best": "B",
+     "completes": [
+      "lost-contact+moms-knife",
+      "lost-contact+polyphemus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 233,
+     "best": "B",
+     "completes": [
+      "ipecac+tiny-planet",
+      "moms-knife+tiny-planet"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 315,
+     "best": "B",
+     "completes": [
+      "epic-fetus+strange-attractor",
+      "moms-knife+strange-attractor"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 317,
+     "best": "B",
+     "completes": [
+      "dr-fetus+mysterious-liquid",
+      "moms-knife+mysterious-liquid"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 394,
+     "best": "B",
+     "completes": [
+      "epic-fetus+marked",
+      "marked+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 3,
+     "best": "B",
+     "completes": [
+      "epic-fetus+spoon-bender"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 55,
+     "best": "B",
+     "completes": [
+      "moms-eye+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 87,
+     "best": "B",
+     "completes": [
+      "epic-fetus+lokis-horns"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 125,
+     "best": "B",
+     "completes": [
+      "bobby-bomb+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 137,
+     "best": "B",
+     "completes": [
+      "dr-fetus+remote-detonator"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 257,
+     "best": "B",
+     "completes": [
+      "dr-fetus+fire-mind"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 316,
+     "best": "B",
+     "completes": [
+      "cursed-eye+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 331,
+     "best": "B",
+     "completes": [
+      "dr-fetus+godhead"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 358,
+     "best": "B",
+     "completes": [
+      "moms-knife+the-wiz"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 366,
+     "best": "B",
+     "completes": [
+      "dr-fetus+scatter-bombs"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 367,
+     "best": "B",
+     "completes": [
+      "dr-fetus+sticky-bombs"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 374,
+     "best": "B",
+     "completes": [
+      "holy-light+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 432,
+     "best": "B",
+     "completes": [
+      "epic-fetus+glitter-bombs"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 453,
+     "best": "B",
+     "completes": [
+      "compound-fracture+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 462,
+     "best": "B",
+     "completes": [
+      "dr-fetus+eye-of-belial"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 558,
+     "best": "B",
+     "completes": [
+      "eye-sore+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 614,
+     "best": "B",
+     "completes": [
+      "blood-bombs+epic-fetus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 5,
+     "best": "C",
+     "completes": [
+      "moms-knife+my-reflection",
+      "ipecac+my-reflection"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 310,
+     "best": "D",
+     "completes": [
+      "eves-mascara+polyphemus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 397,
+     "best": "D",
+     "completes": [
+      "moms-knife+tractor-beam"
+     ]
+    }
+   ]
+  }
+ ]
+}

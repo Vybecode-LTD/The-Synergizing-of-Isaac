@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, NavLink, Outlet, Route, Routes, useLocation } from "react-router";
 import { BuildProvider } from "./hooks/BuildStore";
+import { usePage, usePageHead } from "./hooks/usePage";
 import { AboutPage } from "./pages/AboutPage";
 import { BuilderPage } from "./pages/BuilderPage";
 import { CharacterPage, CharactersPage } from "./pages/CharacterPages";
@@ -36,6 +37,7 @@ function Wordmark() {
 
 function Shell() {
   const { pathname } = useLocation();
+  usePageHead(usePage());
   // A new page starts at the top; changing the build on the same page does not move you.
   useEffect(() => {
     window.scrollTo(0, 0);

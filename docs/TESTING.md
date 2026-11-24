@@ -1,0 +1,69 @@
+# Testing
+
+Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
+
+## Frameworks
+
+| Area | Tools | Config |
+|---|---|---|
+| Web | Vitest 5, React Testing Library 16, user-event 14, jsdom 31, `@vitest/coverage-v8` | `web/vite.config.ts`, `web/src/test/setup.ts` |
+| Web static checks | TypeScript 6 strict (`noUncheckedIndexedAccess`), ESLint 10 + typescript-eslint, zero warnings | `web/tsconfig.json`, `web/eslint.config.js` |
+| API | pytest 9, pytest-asyncio, pytest-cov, FastAPI `TestClient` | `api/pyproject.toml`, `api/tests/conftest.py` |
+| API static checks | ruff (lint and format), mypy strict | `api/pyproject.toml` |
+| Data | `scripts/gamedata.py validate`, run by `api/tests/test_core.py` | |
+| Design system | `scripts/design/audit_design.py --strict`, `check_roles.py` | from the `web-design-studio` skill |
+| Rendered contrast | `rendered_contrast.mjs` from the `verify-real-pass` skill (axe-core, real Chrome) | run by hand, see below |
+
+## Commands and last results
+
+| Command | Where | Result |
+|---|---|---|
+| `npm run test:coverage` | `web/` | 109 passed; lines 98.6%, statements 96.8%, branches 88.5% |
+| `npm run lint`, `npm run typecheck` | `web/` | clean |
+| `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 62 files |
+| `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
+| `.venv\Scripts\python -m pytest --cov` | `api/` | 67 passed; 99% of `app/` |
+| `.venv\Scripts\python -m ruff check .`, `-m mypy` | `api/` | clean |
+| `python scripts/gamedata.py validate` | repo root | 0 problems |
+
+## What the suites prove
+
+- **Engine** (`web/src/engine/*.test.ts`): matching needs every piece; character synergies only for that
+  character; starting items count; suggestions are exactly one pickup away; links round-trip and ignore junk.
+- **Regressions from the old data** (`web/src/engine/data.test.ts`): the game's real IDs (Birthright is 619),
+  and the synergies that never matched before (trinket `Cancer`, `Jacob and Esau`, `The Satanic Bible`).
+- **Interface** (`web/src/app.test.tsx`): adding by keyboard, suggestions, character picker, share link,
+  the AI panel's five outcomes, own synergies, filters, detail pages, 404.
+- **Browser equals server** (`web/src/parity.test.ts`, `api/tests/test_core.py`): both compute titles,
+  descriptions, headings and synergy results for the cases in `data/tests/parity.json`. The API writes that
+  file (`python -m app.parity`); a difference on either side fails.
+- **AI endpoint** (`api/tests/test_analyze.py`): per-visitor and site-wide daily limits, reset at midnight
+  UTC, refund when the model call fails, cache hits cost nothing, unknown ids and free text are rejected,
+  a forged Cloudflare header does not dodge the limit.
+- **Pages for crawlers** (`api/tests/test_pages.py`): one `h1`, canonical, valid JSON-LD, escaped text, real
+  404s, sitemap of all 947 URLs, robots rules, no path escape from the web build.
+
+## Checks that tests can fail
+
+- The data validator has a positive control (`test_the_validator_catches_what_it_exists_for`): a copy of the
+  data broken in six ways must report all six.
+- Mutation check on the API, 2026-11-24: eight deliberate breaks (refund removed, Cloudflare header always
+  trusted, site budget skipped, `h1` unescaped, unknown page answering 200, cache ignoring the model,
+  character synergies always applying, path escape allowed). All eight turned a test red.
+- "Removes a pickup and clears the build" failed before the build-state race was fixed and passes after.
+
+## By hand
+
+- **Rendered contrast** (every visual change): with the built site running on 8001,
+  `node C:\DEV\knowledge\skills\verify-real-pass\scripts\rendered_contrast.mjs http://127.0.0.1:8001/<page> --schemes dark`,
+  plus `--click-each "<selector>"` for state controls. Results for this build are in `docs/HANDOFF.md`.
+- **Browser against server**: the snippet in `docs/HANDOFF.md` compares rendered headings and paragraphs
+  with the raw HTML for nine routes.
+
+## Known gaps
+
+- No browser end-to-end suite in CI yet. Playwright cannot download browsers on the owner's machine; the
+  interface is covered in jsdom and checked by hand in the preview browser.
+- jsdom does not lay anything out: clipping, overflow and sticky behaviour are only checked by eye.
+- The `Dockerfile` has not been built locally (no Docker on this machine). CI does not build it either.
+- `ClaudeAnalyzer` is tested against a stubbed client. No real model call has been made.

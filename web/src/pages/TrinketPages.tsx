@@ -11,12 +11,12 @@ import { matchScore } from "../engine/search";
 import { statLines } from "../engine/summary";
 import { synergiesFor } from "../engine/synergy";
 import { useBuildStore } from "../hooks/BuildStore";
-import { usePageMeta } from "../hooks/usePageMeta";
-import { SITE } from "../site";
+import { usePage } from "../hooks/usePage";
+import { pageContent } from "../seo";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function TrinketsPage() {
-  usePageMeta("Trinkets", `All ${gameData.trinkets.length} trinkets in ${SITE.game}, with effects and known synergies.`);
+  const page = usePage();
   const [query, setQuery] = useState("");
   const shown = useMemo(
     () => gameData.trinkets.filter((t) => query.trim() === "" || matchScore(query, t.name) > 0),
@@ -25,7 +25,7 @@ export function TrinketsPage() {
 
   return (
     <div className="page">
-      <PageHead title="Trinkets" lede="Every trinket in the game. Open one to see what it does and what it combines with." />
+      <PageHead title={page.h1} lede={page.lede} />
       <div className="filters">
         <SearchField label="Filter trinkets by name" placeholder="Filter by name…" value={query} onChange={setQuery} />
       </div>
@@ -58,12 +58,7 @@ export function TrinketPage() {
   const { build, setBuild } = useBuildStore();
   const navigate = useNavigate();
   const synergies = useMemo(() => (trinket ? synergiesFor("trinket", trinket.id, gameData.synergies) : []), [trinket]);
-  usePageMeta(
-    trinket ? `${trinket.name} synergies` : "Trinket not found",
-    trinket
-      ? `${trinket.name}, a trinket in ${SITE.game}: ${trinket.effect || "stat trinket"}. ${synergies.length} known synergies.`
-      : undefined,
-  );
+  const page = usePage();
   if (!trinket) return <NotFoundPage what="trinket" />;
 
   const inBuild = build.trinkets.includes(trinket.id);
@@ -83,7 +78,7 @@ export function TrinketPage() {
             <Tag>{trinket.dlc}</Tag>
           </div>
           <p className="entity__effect">
-            {trinket.effect || "A stat trinket: it changes your numbers and nothing else."}
+            {trinket.effect || `${pageContent.fallbacks.trinketEffect}.`}
           </p>
           <StatChips lines={statLines(trinket.stats)} />
           <div className="entity__actions">
@@ -117,17 +112,12 @@ export function TrinketPage() {
             ? "No synergies written down yet"
             : `${synergies.length} ${synergies.length === 1 ? "synergy" : "synergies"} with ${trinket.name}`}
         </h2>
-        {synergies.length === 0 ? (
-          <p className="results__lede">
-            The list has nothing for {trinket.name} yet. That is a gap in the list, not proof it combines with nothing.
-          </p>
-        ) : (
-          <div className="results__cards">
-            {synergies.map((s) => (
-              <SynergyCard key={s.id} synergy={s} />
-            ))}
-          </div>
-        )}
+        <p className="results__lede">{page.answer}</p>
+        <div className="results__cards">
+          {synergies.map((s) => (
+            <SynergyCard key={s.id} synergy={s} />
+          ))}
+        </div>
       </section>
     </div>
   );

@@ -1,0 +1,11 @@
+# Railway reads [build] from this file. Check the deployment's own details to see which [deploy]
+# settings it actually applied before relying on them (docs/DEPLOY.md).
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5

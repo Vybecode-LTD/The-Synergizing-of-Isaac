@@ -305,7 +305,18 @@ def build() -> None:
     write_json(DATA / "items.json", items)
     write_json(DATA / "trinkets.json", trinkets)
     write_json(DATA / "characters.json", characters)
+    write_meta()
     print(f"built: {len(items)} items, {len(trinkets)} trinkets, {len(characters)} characters")
+
+
+def write_meta() -> None:
+    """Stamp the data with the day it was last built, for "last updated" lines and the sitemap."""
+    import datetime
+
+    write_json(
+        DATA / "meta.json",
+        {"updated": datetime.date.today().isoformat(), "gameVersion": "Repentance 1.7.9b"},
+    )
 
 
 # ---------------------------------------------------------------- migrate-synergies
@@ -358,6 +369,7 @@ def migrate_synergies() -> None:
     if problems:
         raise SystemExit("unresolved legacy names: " + ", ".join(sorted(set(problems))))
     write_json(DATA / "synergies.json", out)
+    write_meta()
     print(f"migrated: {len(out)} synergies")
 
 

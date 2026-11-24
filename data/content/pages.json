@@ -1,0 +1,96 @@
+{
+  "_": "Titles, descriptions and headings for every public page, written once. The web app (web/src/seo.ts) and the API (api/app/pages.py) both fill these in. `titles` are tried in order and the first that fits in 60 characters is used; descriptions are cut at 160.",
+  "home": {
+    "titles": ["Binding of Isaac Synergy Builder for Repentance | {domain}"],
+    "description": "Pick your character, items and trinkets and see every known Binding of Isaac: Repentance synergy, what one more pickup unlocks, and an AI read. Free to use.",
+    "h1": "Binding of Isaac synergy builder",
+    "lede": "Add what you're holding. Synergies show up as you go."
+  },
+  "items": {
+    "titles": ["All {items} Binding of Isaac Repentance Items | {domain}"],
+    "description": "Browse all {items} items in The Binding of Isaac: Repentance with quality, effects, stat changes and item pools. Open any item to see its known synergies.",
+    "h1": "All Repentance items",
+    "lede": "Every item in the game. Open one to see what it does and what it combines with."
+  },
+  "item": {
+    "titles": [
+      "{name} Synergies in The Binding of Isaac | {domain}",
+      "{name} Synergies | Binding of Isaac | {domain}",
+      "{name} Synergies | {domain}"
+    ],
+    "description": "{name} in The Binding of Isaac: Repentance: {effect}. Quality {quality}, {n} known {synergyWord}. Add it to your build.",
+    "h1": "{name}",
+    "lede": "",
+    "answer": "{name} has {n} known {synergyWord} in this list. The strongest {isAre} with {top}.",
+    "answerNone": "The list has nothing for {name} yet. That is a gap in the list, not proof it combines with nothing."
+  },
+  "trinkets": {
+    "titles": ["All {trinkets} Binding of Isaac Repentance Trinkets | {domain}"],
+    "description": "Browse all {trinkets} trinkets in The Binding of Isaac: Repentance with their effects. Open any trinket to see what it combines with in your build.",
+    "h1": "All Repentance trinkets",
+    "lede": "Every trinket in the game. Open one to see what it does and what it combines with."
+  },
+  "trinket": {
+    "titles": [
+      "{name} Trinket Synergies in The Binding of Isaac | {domain}",
+      "{name} Trinket Synergies | Binding of Isaac | {domain}",
+      "{name} Trinket Synergies | {domain}"
+    ],
+    "description": "{name}, a Binding of Isaac: Repentance trinket: {effect}. {n} known {synergyWord}. Add it to your build.",
+    "h1": "{name}",
+    "lede": "",
+    "answer": "{name} has {n} known {synergyWord} in this list. The strongest {isAre} with {top}.",
+    "answerNone": "The list has nothing for {name} yet. That is a gap in the list, not proof it combines with nothing."
+  },
+  "characters": {
+    "titles": ["All {characters} Binding of Isaac Repentance Characters | {domain}"],
+    "description": "All {characters} playable characters in The Binding of Isaac: Repentance with starting items and the synergies only they get. Pick one and start a build.",
+    "h1": "Repentance characters",
+    "lede": "Some synergies only happen for one character. Open a character to see theirs."
+  },
+  "character": {
+    "titles": [
+      "{name} Synergies and Starting Items | Binding of Isaac | {domain}",
+      "{name} Synergies | Binding of Isaac | {domain}",
+      "{name} Synergies | {domain}"
+    ],
+    "description": "{name} in The Binding of Isaac: Repentance: starting items and {n} character-only {synergyWord}. Start a build as {name} to see what your items do.",
+    "h1": "{name}",
+    "lede": "",
+    "answer": "{name} has {n} character-only {synergyWord} in this list. The strongest {isAre} with {top}.",
+    "answerNone": "Every general synergy still applies to {name}. The list just has nothing that is theirs alone."
+  },
+  "synergies": {
+    "titles": ["All {synergies} Binding of Isaac: Repentance Synergies | {domain}"],
+    "description": "{synergies} hand-written item, trinket and character synergies for The Binding of Isaac: Repentance, rated S to D. Search by item and open any in the builder.",
+    "h1": "All Repentance synergies",
+    "lede": "The whole list, strongest first. S is run-defining, A strong, B good, C minor, and D means the items work against each other."
+  },
+  "about": {
+    "titles": ["About {domain}: Data Sources, Ratings and AI Analysis"],
+    "description": "What {domain} is, where its Binding of Isaac item data comes from, how synergy ratings and the AI analysis work, and what happens to your data.",
+    "h1": "About {domain}",
+    "lede": ""
+  },
+  "notFound": {
+    "titles": ["Page Not Found | {domain}"],
+    "description": "Nothing lives at this address on {domain}. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",
+    "h1": "This room is empty",
+    "lede": "Nothing lives at this address."
+  },
+  "intro": {
+    "heading": "What does {domain} do?",
+    "text": "{domain} checks your character, items and trinkets against {synergies} hand-written synergies for {game}. It shows which ones apply, which single pickup would complete another, and can give an AI read on the whole build. It covers {items} items, {trinkets} trinkets and {characters} characters."
+  },
+  "copy": {
+    "examplesHeading": "Start with what’s in your run",
+    "examplesLede": "Type an item’s name in the box, or open one of these to see how it works:",
+    "browseAll": "Browse all {synergies} synergies",
+    "startingItemsNote": "Starting items come from the game’s own character table. Items the game hands out in code, such as an unlockable starting item, aren’t listed.",
+    "noStartingItems": "No items listed in the game's character table."
+  },
+  "fallbacks": {
+    "itemEffect": "A stat item that only changes your numbers",
+    "trinketEffect": "A stat trinket that only changes your numbers"
+  }
+}

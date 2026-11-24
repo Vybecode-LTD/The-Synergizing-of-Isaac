@@ -8,6 +8,7 @@
   },
   "scripts": {
     "sprites": "node scripts/build-sprites.mjs",
+    "og": "node scripts/build-og.mjs",
     "predev": "node scripts/build-sprites.mjs",
     "dev": "vite",
     "prebuild": "node scripts/build-sprites.mjs",

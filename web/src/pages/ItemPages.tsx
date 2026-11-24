@@ -11,8 +11,8 @@ import { matchScore } from "../engine/search";
 import { TRANSFORMATION_NAMES, poolNames, statLines } from "../engine/summary";
 import { synergiesFor } from "../engine/synergy";
 import { useBuildStore } from "../hooks/BuildStore";
-import { usePageMeta } from "../hooks/usePageMeta";
-import { SITE } from "../site";
+import { usePage } from "../hooks/usePage";
+import { pageContent } from "../seo";
 import { NotFoundPage } from "./NotFoundPage";
 
 const QUALITIES = [4, 3, 2, 1, 0].map((q) => ({ value: q, label: `Quality ${q}` }));
@@ -22,7 +22,7 @@ const TYPES = [
 ];
 
 export function ItemsPage() {
-  usePageMeta("Items", `All ${gameData.items.length} items in ${SITE.game}, with quality, effects and every known synergy.`);
+  const page = usePage();
   const [query, setQuery] = useState("");
   const [qualities, setQualities] = useState<ReadonlySet<number>>(new Set());
   const [types, setTypes] = useState<ReadonlySet<"active" | "passive">>(new Set());
@@ -40,7 +40,7 @@ export function ItemsPage() {
 
   return (
     <div className="page">
-      <PageHead title="Items" lede="Every item in the game. Open one to see what it does and what it combines with." />
+      <PageHead title={page.h1} lede={page.lede} />
       <div className="filters">
         <SearchField label="Filter items by name" placeholder="Filter by name…" value={query} onChange={setQuery} />
         <ToggleGroup
@@ -81,10 +81,7 @@ export function ItemPage() {
   const { build, setBuild } = useBuildStore();
   const navigate = useNavigate();
   const synergies = useMemo(() => (item ? synergiesFor("item", item.id, gameData.synergies) : []), [item]);
-  usePageMeta(
-    item ? `${item.name} synergies` : "Item not found",
-    item ? `${item.name} in ${SITE.game}: ${item.effect || "stat item"}. ${synergies.length} known synergies.` : undefined,
-  );
+  const page = usePage();
   if (!item) return <NotFoundPage what="item" />;
 
   const inBuild = build.items.includes(item.id);
@@ -110,7 +107,7 @@ export function ItemPage() {
             <Tag>{item.dlc}</Tag>
           </div>
           <p className="entity__effect">
-            {item.effect || "A stat item: it changes your numbers and nothing else."}
+            {item.effect || `${pageContent.fallbacks.itemEffect}.`}
           </p>
           <StatChips lines={statLines(item.stats)} />
           <dl className="facts">
@@ -158,17 +155,12 @@ export function ItemPage() {
             ? "No synergies written down yet"
             : `${synergies.length} ${synergies.length === 1 ? "synergy" : "synergies"} with ${item.name}`}
         </h2>
-        {synergies.length === 0 ? (
-          <p className="results__lede">
-            The list has nothing for {item.name} yet. That is a gap in the list, not proof it combines with nothing.
-          </p>
-        ) : (
-          <div className="results__cards">
-            {synergies.map((s) => (
-              <SynergyCard key={s.id} synergy={s} />
-            ))}
-          </div>
-        )}
+        <p className="results__lede">{page.answer}</p>
+        <div className="results__cards">
+          {synergies.map((s) => (
+            <SynergyCard key={s.id} synergy={s} />
+          ))}
+        </div>
       </section>
     </div>
   );

@@ -35,8 +35,8 @@ import {
 import { EMPTY_BUILD, type Build } from "../engine/types";
 import { useBuildStore } from "../hooks/BuildStore";
 import { useCustomSynergies } from "../hooks/useCustomSynergies";
-import { usePageMeta } from "../hooks/usePageMeta";
-import { SITE } from "../site";
+import { usePage } from "../hooks/usePage";
+import { fill, pageContent, siteValues } from "../seo";
 
 /** Well-known S-tier pairs, offered as one-click starting points on an empty builder. */
 const EXAMPLES = gameData.synergies
@@ -44,30 +44,30 @@ const EXAMPLES = gameData.synergies
   .slice(0, 4);
 
 export function BuilderPage() {
-  usePageMeta(
-    undefined,
-    `Pick a character, items and trinkets and see every known synergy, what one more pickup would unlock, and an AI read on the build. Unofficial fan tool for ${SITE.game}.`,
-  );
+  const page = usePage();
   const { build: stored, setBuild } = useBuildStore();
   const [params, setParams] = useSearchParams();
   const urlHasBuild = params.has("c") || params.has("i") || params.has("t");
   const fromUrl = useMemo(() => decodeBuild(params, gameData), [params]);
-  const build = urlHasBuild ? fromUrl : stored;
+  // Arriving at a bare "/" with a remembered build: show it, and put it in the address bar so it can be shared.
+  const [restoring, setRestoring] = useState(() => !urlHasBuild && !isEmpty(stored));
+  const build = urlHasBuild ? fromUrl : restoring ? stored : EMPTY_BUILD;
 
-  // A link that carries a build wins over the remembered one.
   useEffect(() => {
-    if (urlHasBuild && encodeBuild(fromUrl) !== encodeBuild(stored)) setBuild(fromUrl);
-  }, [urlHasBuild, fromUrl, stored, setBuild]);
+    if (restoring && !urlHasBuild) setParams(encodeBuild(stored), { replace: true });
+  }, [restoring, urlHasBuild, stored, setParams]);
 
-  // Coming back to a bare "/" with a remembered build: put it in the address bar so it can be shared.
+  // From then on the address bar is the build. The store only remembers it for other pages and next time.
+  // (Writing both at once raced: the address bar updates a beat later and put the old build back.)
   useEffect(() => {
-    if (!urlHasBuild && !isEmpty(stored)) setParams(encodeBuild(stored), { replace: true });
-  }, [urlHasBuild, stored, setParams]);
+    if (restoring) {
+      if (urlHasBuild) setRestoring(false);
+      return;
+    }
+    if (encodeBuild(fromUrl) !== encodeBuild(stored)) setBuild(fromUrl);
+  }, [restoring, urlHasBuild, fromUrl, stored, setBuild]);
 
-  const update = (next: Build) => {
-    setBuild(next);
-    setParams(encodeBuild(next), { replace: true });
-  };
+  const update = (next: Build) => setParams(encodeBuild(next), { replace: true });
 
   const picker = useRef<EntityPickerHandle>(null);
   const [choosingCharacter, setChoosingCharacter] = useState(false);
@@ -113,9 +113,9 @@ export function BuilderPage() {
       <section className="builder__build" aria-labelledby="build-title">
         <header className="builder__intro">
           <h1 id="build-title" className="builder__title">
-            What are you holding?
+            {page.h1}
           </h1>
-          <p className="builder__lede">Add your items and trinkets. Synergies show up as you go.</p>
+          <p className="builder__lede">{page.lede}</p>
         </header>
 
         <EntityPicker
@@ -155,11 +155,9 @@ export function BuilderPage() {
         {pickups === 0 && !build.character ? (
           <section className="empty" aria-labelledby="empty-title">
             <h2 id="empty-title" className="results__title">
-              Start with what&rsquo;s in your run
+              {pageContent.copy.examplesHeading}
             </h2>
-            <p className="results__lede">
-              Type an item&rsquo;s name in the box, or open one of these to see how it works:
-            </p>
+            <p className="results__lede">{pageContent.copy.examplesLede}</p>
             <ul className="examples" role="list">
               {EXAMPLES.map((s) => (
                 <li key={s.id}>
@@ -177,11 +175,11 @@ export function BuilderPage() {
                 </li>
               ))}
             </ul>
+            <h2 className="results__title">{fill(pageContent.intro.heading, siteValues())}</h2>
+            <p className="results__lede">{fill(pageContent.intro.text, siteValues())}</p>
             <p className="results__lede">
-              {gameData.items.length} items, {gameData.trinkets.length} trinkets, {gameData.characters.length}{" "}
-              characters and {gameData.synergies.length} hand-written synergies.{" "}
               <Link className="text-link" to="/synergies">
-                Browse them all
+                {fill(pageContent.copy.browseAll, siteValues())}
               </Link>
             </p>
           </section>

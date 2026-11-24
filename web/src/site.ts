@@ -13,7 +13,3 @@ export function wordmarkParts(domain: string = SITE.domain): [string, string] {
   const dot = domain.indexOf(".");
   return dot === -1 ? [domain, ""] : [domain.slice(0, dot), domain.slice(dot)];
 }
-
-export function pageTitle(page?: string): string {
-  return page ? `${page} · ${SITE.domain}` : `${SITE.domain}: ${SITE.tagline.toLowerCase()}`;
-}

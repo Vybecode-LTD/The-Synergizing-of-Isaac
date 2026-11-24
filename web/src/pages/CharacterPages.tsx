@@ -9,8 +9,8 @@ import { gameData } from "../engine/data";
 import { synergiesFor } from "../engine/synergy";
 import type { Character } from "../engine/types";
 import { useBuildStore } from "../hooks/BuildStore";
-import { usePageMeta } from "../hooks/usePageMeta";
-import { SITE } from "../site";
+import { usePage } from "../hooks/usePage";
+import { pageContent } from "../seo";
 import { NotFoundPage } from "./NotFoundPage";
 
 function CharacterGrid({ title, list }: { title: string; list: Character[] }) {
@@ -32,13 +32,10 @@ function CharacterGrid({ title, list }: { title: string; list: Character[] }) {
 }
 
 export function CharactersPage() {
-  usePageMeta(
-    "Characters",
-    `All ${gameData.characters.length} playable characters in ${SITE.game}, with starting items and character-only synergies.`,
-  );
+  const page = usePage();
   return (
     <div className="page">
-      <PageHead title="Characters" lede="Some synergies only happen for one character. Open a character to see theirs." />
+      <PageHead title={page.h1} lede={page.lede} />
       <CharacterGrid title="Characters" list={gameData.characters.filter((c) => !c.tainted)} />
       <CharacterGrid title="Tainted" list={gameData.characters.filter((c) => c.tainted)} />
     </div>
@@ -54,12 +51,7 @@ export function CharacterPage() {
     () => (character ? synergiesFor("character", character.slug, gameData.synergies) : []),
     [character],
   );
-  usePageMeta(
-    character ? `${character.name} synergies` : "Character not found",
-    character
-      ? `${character.name} in ${SITE.game}: starting items and ${synergies.length} character-only synergies.`
-      : undefined,
-  );
+  const page = usePage();
   if (!character) return <NotFoundPage what="character" />;
 
   const starting = [
@@ -86,7 +78,7 @@ export function CharacterPage() {
               <dt className="facts__label">Starts with</dt>
               <dd className="facts__value">
                 {starting.length === 0 ? (
-                  "No items listed in the game's character table."
+                  pageContent.copy.noStartingItems
                 ) : (
                   <ul className="inline-items" role="list">
                     {starting.map((item) => (
@@ -102,10 +94,7 @@ export function CharacterPage() {
               </dd>
             </div>
           </dl>
-          <p className="entity__note">
-            Starting items come from the game&rsquo;s own character table. Items the game hands out in code, such as
-            an unlockable starting item, aren&rsquo;t listed.
-          </p>
+          <p className="entity__note">{pageContent.copy.startingItemsNote}</p>
           <div className="entity__actions">
             {playing ? (
               <Link className="button" data-variant="primary" to="/">
@@ -136,17 +125,12 @@ export function CharacterPage() {
             ? "No character-only synergies written down yet"
             : `${synergies.length} ${synergies.length === 1 ? "synergy" : "synergies"} only ${character.name} gets`}
         </h2>
-        {synergies.length === 0 ? (
-          <p className="results__lede">
-            Every general synergy still applies to {character.name}. The list just has nothing that is theirs alone.
-          </p>
-        ) : (
-          <div className="results__cards">
-            {synergies.map((s) => (
-              <SynergyCard key={s.id} synergy={s} />
-            ))}
-          </div>
-        )}
+        <p className="results__lede">{page.answer}</p>
+        <div className="results__cards">
+          {synergies.map((s) => (
+            <SynergyCard key={s.id} synergy={s} />
+          ))}
+        </div>
       </section>
     </div>
   );

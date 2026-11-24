@@ -6,8 +6,7 @@ import { normalize } from "../engine/search";
 import { compareRating } from "../engine/synergy";
 import { RATINGS, type Rating, type Synergy } from "../engine/types";
 import { useCustomSynergies } from "../hooks/useCustomSynergies";
-import { usePageMeta } from "../hooks/usePageMeta";
-import { SITE } from "../site";
+import { usePage } from "../hooks/usePage";
 
 const PAGE = 40;
 const RATING_OPTIONS = RATINGS.map((r) => ({ value: r, label: `${r} tier` }));
@@ -25,10 +24,7 @@ function haystack(s: Synergy): string {
 }
 
 export function SynergiesPage() {
-  usePageMeta(
-    "All synergies",
-    `${gameData.synergies.length} hand-written item, trinket and character synergies for ${SITE.game}, rated S to D.`,
-  );
+  const page = usePage();
   const { mine } = useCustomSynergies();
   const [query, setQuery] = useState("");
   const [ratings, setRatings] = useState<ReadonlySet<Rating>>(new Set());
@@ -56,10 +52,7 @@ export function SynergiesPage() {
 
   return (
     <div className="page">
-      <PageHead
-        title="All synergies"
-        lede="The whole list, strongest first. S is run-defining, A strong, B good, C minor, and D means the items work against each other."
-      />
+      <PageHead title={page.h1} lede={page.lede} />
       <div className="filters">
         <SearchField
           label="Search synergies"

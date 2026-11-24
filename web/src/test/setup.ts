@@ -22,3 +22,6 @@ if (!HTMLDialogElement.prototype.showModal) {
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
 }
+
+// jsdom logs "not implemented" for scrolling; the app only scrolls to the top on a new page.
+window.scrollTo = () => {};

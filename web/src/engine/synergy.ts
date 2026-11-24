@@ -22,7 +22,8 @@ function requirements(synergy: Synergy): number {
 }
 
 function byStrength(a: Synergy, b: Synergy): number {
-  return compareRating(a.rating, b.rating) || requirements(b) - requirements(a) || a.id.localeCompare(b.id);
+  // Plain code-unit order, not localeCompare: the API sorts the same list in Python and must agree.
+  return compareRating(a.rating, b.rating) || requirements(b) - requirements(a) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 }
 
 interface Gap {
@@ -135,6 +136,29 @@ export function synergiesFor(kind: SubjectKind, key: number | string, synergies:
           : s.characterSlugs.includes(key as string),
     )
     .sort(byStrength);
+}
+
+/** Names of the other pieces in this subject's strongest synergies, without repeats. Mirrors top_partners in the API. */
+export function topPartners(kind: SubjectKind, key: number | string, data: GameData, limit = 3): string[] {
+  const own =
+    kind === "item"
+      ? data.itemById.get(key as number)?.name
+      : kind === "trinket"
+        ? data.trinketById.get(key as number)?.name
+        : undefined;
+  const names: string[] = [];
+  for (const s of synergiesFor(kind, key, data.synergies)) {
+    const partners = [
+      ...s.itemIds.map((id) => data.itemById.get(id)!.name),
+      ...s.trinketIds.map((id) => data.trinketById.get(id)!.name),
+    ].filter((name) => name !== own);
+    if (kind !== "character") partners.push(...s.characterSlugs.map((slug) => data.characterBySlug.get(slug)!.name));
+    for (const name of partners) {
+      if (!names.includes(name)) names.push(name);
+      if (names.length === limit) return names;
+    }
+  }
+  return names;
 }
 
 /** How many synergies sit at each rating, in S..D order, for a one-line tally. */
