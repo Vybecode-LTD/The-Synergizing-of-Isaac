@@ -1,0 +1,111 @@
+/* RatingBadge, QualityPips, StatChips, Tag: the small marks that annotate things. */
+@layer components {
+  /* ---- RatingBadge: a stamped seal. The letter is the meaning. ---------- */
+  .rating {
+    --rating-size: var(--size-seal);
+    --rating-fg: var(--fg-tier-c);
+    --rating-bg: var(--bg-tier-c);
+
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--rating-size);
+    block-size: var(--rating-size);
+    font: var(--type-seal);
+    color: var(--rating-fg);
+    background: var(--rating-bg);
+    border: var(--stroke-default) solid currentcolor;
+    border-radius: var(--radius-md);
+  }
+
+  .rating[data-size="sm"] {
+    --rating-size: var(--size-seal-sm);
+
+    font: var(--type-seal-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .rating[data-rating="S"] { --rating-fg: var(--fg-tier-s); --rating-bg: var(--bg-tier-s); }
+  .rating[data-rating="A"] { --rating-fg: var(--fg-tier-a); --rating-bg: var(--bg-tier-a); }
+  .rating[data-rating="B"] { --rating-fg: var(--fg-tier-b); --rating-bg: var(--bg-tier-b); }
+  .rating[data-rating="C"] { --rating-fg: var(--fg-tier-c); --rating-bg: var(--bg-tier-c); }
+  .rating[data-rating="D"] { --rating-fg: var(--fg-tier-d); --rating-bg: var(--bg-tier-d); }
+
+  /* ---- QualityPips ------------------------------------------------------ */
+  .quality {
+    --quality-pip: var(--size-pip);
+
+    display: inline-flex;
+    flex: none;
+    gap: var(--gap-hair);
+    align-items: center;
+  }
+
+  .quality__pip {
+    inline-size: var(--quality-pip);
+    block-size: var(--quality-pip);
+    background: transparent;
+    border: var(--stroke-default) solid var(--border-strong);
+    rotate: 45deg;
+  }
+
+  .quality__pip[data-on="true"] {
+    background: var(--fg-muted);
+    border-color: var(--fg-muted);
+  }
+
+  .quality[data-quality="4"] .quality__pip {
+    background: var(--fg-accent);
+    border-color: var(--fg-accent);
+  }
+
+  /* ---- StatChips -------------------------------------------------------- */
+  .stat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+    padding: var(--space-0);
+    list-style: none;
+  }
+
+  .stat-chip {
+    display: inline-flex;
+    gap: var(--gap-fused);
+    align-items: baseline;
+    padding: var(--pad-block-xs) var(--pad-inline-xs);
+    font: var(--type-label);
+    color: var(--fg-muted);
+    background: var(--bg-sunken);
+    border: var(--stroke-hairline) solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  .stat-chip__value {
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--weight-semibold);
+    color: var(--fg-success);
+  }
+
+  .stat-chip[data-tone="down"] .stat-chip__value {
+    color: var(--fg-danger);
+  }
+
+  /* ---- Tag ---------------------------------------------------------------- */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--gap-hair) var(--pad-inline-xs);
+    font: var(--type-label);
+    letter-spacing: var(--tracking-caps);
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: var(--stroke-hairline) solid var(--border-default);
+    border-radius: var(--radius-full);
+  }
+
+  .tag[data-tone="accent"] {
+    color: var(--fg-accent);
+    border-color: var(--border-accent);
+  }
+}

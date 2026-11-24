@@ -1,0 +1,1363 @@
+[
+ {
+  "id": 1,
+  "slug": "swallowed-penny",
+  "name": "Swallowed Penny",
+  "dlc": "Rebirth",
+  "effect": "Spawn 1-2 pennies on hit"
+ },
+ {
+  "id": 2,
+  "slug": "petrified-poop",
+  "name": "Petrified Poop",
+  "dlc": "Rebirth",
+  "effect": "50% chance for poops to drop rewards"
+ },
+ {
+  "id": 3,
+  "slug": "aaa-battery",
+  "name": "AAA Battery",
+  "dlc": "Rebirth",
+  "effect": "Quicker charge"
+ },
+ {
+  "id": 4,
+  "slug": "broken-remote",
+  "name": "Broken Remote",
+  "dlc": "Rebirth",
+  "effect": "Teleport on active item use"
+ },
+ {
+  "id": 5,
+  "slug": "purple-heart",
+  "name": "Purple Heart",
+  "dlc": "Rebirth",
+  "effect": "Higher chance for champions, 50% chance to drop double or special loot"
+ },
+ {
+  "id": 6,
+  "slug": "broken-magnet",
+  "name": "Broken Magnet",
+  "dlc": "Rebirth",
+  "effect": "Pulls coins toward you"
+ },
+ {
+  "id": 7,
+  "slug": "rosary-bead",
+  "name": "Rosary Bead",
+  "dlc": "Rebirth",
+  "effect": "Forces the next deal to be an Angel Room"
+ },
+ {
+  "id": 8,
+  "slug": "cartridge",
+  "name": "Cartridge",
+  "dlc": "Rebirth",
+  "effect": "5% chance to get The Gamekid effect on hit"
+ },
+ {
+  "id": 9,
+  "slug": "pulse-worm",
+  "name": "Pulse Worm",
+  "dlc": "Rebirth",
+  "effect": "Pulsing tears (only cosmetic)"
+ },
+ {
+  "id": 10,
+  "slug": "wiggle-worm",
+  "name": "Wiggle Worm",
+  "dlc": "Rebirth",
+  "effect": "Wave + spectral tears",
+  "stats": {
+   "tears": 0.4
+  }
+ },
+ {
+  "id": 11,
+  "slug": "ring-worm",
+  "name": "Ring Worm",
+  "dlc": "Rebirth",
+  "effect": "Ring + spectral tears",
+  "stats": {
+   "tears": 0.4
+  }
+ },
+ {
+  "id": 12,
+  "slug": "flat-worm",
+  "name": "Flat Worm",
+  "dlc": "Rebirth",
+  "effect": "Flat tears (only cosmetic)",
+  "stats": {
+   "tears": 0.4
+  }
+ },
+ {
+  "id": 13,
+  "slug": "store-credit",
+  "name": "Store Credit",
+  "dlc": "Rebirth",
+  "effect": "First shop item you will take while holding the trinket will be free"
+ },
+ {
+  "id": 14,
+  "slug": "callus",
+  "name": "Callus",
+  "dlc": "Rebirth",
+  "effect": "Immunity from spike and creep damage"
+ },
+ {
+  "id": 15,
+  "slug": "lucky-rock",
+  "name": "Lucky Rock",
+  "dlc": "Rebirth",
+  "effect": "33% for rocks to drop coins when broken"
+ },
+ {
+  "id": 16,
+  "slug": "moms-toenail",
+  "name": "Mom's Toenail",
+  "dlc": "Rebirth",
+  "effect": "In combat, Mom stomps on its dropped location (300 dmg)"
+ },
+ {
+  "id": 17,
+  "slug": "black-lipstick",
+  "name": "Black Lipstick",
+  "dlc": "Rebirth",
+  "effect": "+10% chance for black hearts to appear"
+ },
+ {
+  "id": 18,
+  "slug": "bible-tract",
+  "name": "Bible Tract",
+  "dlc": "Rebirth",
+  "effect": "+3% chance chance for eternal hearts to appear"
+ },
+ {
+  "id": 19,
+  "slug": "paper-clip",
+  "name": "Paper Clip",
+  "dlc": "Rebirth",
+  "effect": "Can open Golden Chests without using a key"
+ },
+ {
+  "id": 20,
+  "slug": "monkey-paw",
+  "name": "Monkey Paw",
+  "dlc": "Rebirth",
+  "effect": "Spawns a black heart when half a heart is remaining (3 times max)"
+ },
+ {
+  "id": 21,
+  "slug": "mysterious-paper",
+  "name": "Mysterious Paper",
+  "dlc": "Rebirth",
+  "effect": "Copies effect of either A Missing Page, The Polaroid, The Negative, or Missing Poster"
+ },
+ {
+  "id": 22,
+  "slug": "daemons-tail",
+  "name": "Daemon's Tail",
+  "dlc": "Rebirth",
+  "effect": "Heart drops are rerolled into a black heart, 80% to replace a heart drop with a key"
+ },
+ {
+  "id": 23,
+  "slug": "missing-poster",
+  "name": "Missing Poster",
+  "dlc": "Rebirth",
+  "effect": "+1 life (will respawn as The Lost), 33% chance to reveal the super secret room on floor enter"
+ },
+ {
+  "id": 24,
+  "slug": "butt-penny",
+  "name": "Butt Penny",
+  "dlc": "Rebirth",
+  "effect": "Farts upon picking up a coin, 20% to find a coin in a poop"
+ },
+ {
+  "id": 25,
+  "slug": "mysterious-candy",
+  "name": "Mysterious Candy",
+  "dlc": "Rebirth",
+  "effect": "Chance to randomly poop"
+ },
+ {
+  "id": 26,
+  "slug": "hook-worm",
+  "name": "Hook Worm",
+  "dlc": "Rebirth",
+  "effect": "Hook + spectral tears",
+  "stats": {
+   "tears": 0.4,
+   "range": 1.5
+  }
+ },
+ {
+  "id": 27,
+  "slug": "whip-worm",
+  "name": "Whip Worm",
+  "dlc": "Rebirth",
+  "effect": "",
+  "stats": {
+   "shotSpeed": 0.5
+  }
+ },
+ {
+  "id": 28,
+  "slug": "broken-ankh",
+  "name": "Broken Ankh",
+  "dlc": "Rebirth",
+  "effect": "22.22% chance to respawn as Blue Baby on death"
+ },
+ {
+  "id": 29,
+  "slug": "fish-head",
+  "name": "Fish Head",
+  "dlc": "Rebirth",
+  "effect": "Spawns 1-2 blue flies on hit"
+ },
+ {
+  "id": 30,
+  "slug": "pinky-eye",
+  "name": "Pinky Eye",
+  "dlc": "Rebirth",
+  "effect": "Chance to shoot poison tears"
+ },
+ {
+  "id": 31,
+  "slug": "push-pin",
+  "name": "Push Pin",
+  "dlc": "Rebirth",
+  "effect": "Chance to shoot spectral + piercing tears"
+ },
+ {
+  "id": 32,
+  "slug": "liberty-cap",
+  "name": "Liberty Cap",
+  "dlc": "Rebirth",
+  "effect": "25% to give a random mushroom effect upon entering a room"
+ },
+ {
+  "id": 33,
+  "slug": "umbilical-cord",
+  "name": "Umbilical Cord",
+  "dlc": "Rebirth",
+  "effect": "Gives Little Steven if damaged to 1/2 heart, high chance to proc a Gemini for the room when hit"
+ },
+ {
+  "id": 34,
+  "slug": "childs-heart",
+  "name": "Child's Heart",
+  "dlc": "Rebirth",
+  "effect": "Higher chance to find red hearts"
+ },
+ {
+  "id": 35,
+  "slug": "curved-horn",
+  "name": "Curved Horn",
+  "dlc": "Rebirth",
+  "effect": "",
+  "stats": {
+   "damage": 2
+  }
+ },
+ {
+  "id": 36,
+  "slug": "rusted-key",
+  "name": "Rusted Key",
+  "dlc": "Rebirth",
+  "effect": "Higher chance to find keys"
+ },
+ {
+  "id": 37,
+  "slug": "goat-hoof",
+  "name": "Goat Hoof",
+  "dlc": "Rebirth",
+  "effect": "",
+  "stats": {
+   "speed": 0.15
+  }
+ },
+ {
+  "id": 38,
+  "slug": "moms-pearl",
+  "name": "Mom's Pearl",
+  "dlc": "Rebirth",
+  "effect": "10% chance to turn heart drop into soul, black and bone hearts"
+ },
+ {
+  "id": 39,
+  "slug": "cancer",
+  "name": "Cancer",
+  "dlc": "Rebirth",
+  "effect": "",
+  "stats": {
+   "tears": 1
+  }
+ },
+ {
+  "id": 40,
+  "slug": "red-patch",
+  "name": "Red Patch",
+  "dlc": "Rebirth",
+  "effect": "Chance to temporarily gain 1.8 dmg on hit"
+ },
+ {
+  "id": 41,
+  "slug": "match-stick",
+  "name": "Match Stick",
+  "dlc": "Rebirth",
+  "effect": "Higher chance to find bombs"
+ },
+ {
+  "id": 42,
+  "slug": "lucky-toe",
+  "name": "Lucky Toe",
+  "dlc": "Rebirth",
+  "effect": "Increases chances to get a room clear drop",
+  "stats": {
+   "luck": 1
+  }
+ },
+ {
+  "id": 43,
+  "slug": "cursed-skull",
+  "name": "Cursed Skull",
+  "dlc": "Rebirth",
+  "effect": "Teleported to a random room if damaged to 1/2 heart"
+ },
+ {
+  "id": 44,
+  "slug": "safety-cap",
+  "name": "Safety Cap",
+  "dlc": "Rebirth",
+  "effect": "Higher chance to find pills"
+ },
+ {
+  "id": 45,
+  "slug": "ace-of-spades",
+  "name": "Ace of Spades",
+  "dlc": "Rebirth",
+  "effect": "Higher chance to find cards"
+ },
+ {
+  "id": 46,
+  "slug": "isaacs-fork",
+  "name": "Isaac's Fork",
+  "dlc": "Rebirth",
+  "effect": "Chance to heal for a 1/2 heart after clearing a room"
+ },
+ {
+  "id": 48,
+  "slug": "a-missing-page",
+  "name": "A Missing Page",
+  "dlc": "Rebirth",
+  "effect": "Chance to do Necronomicon effect (80 dmg) on hit"
+ },
+ {
+  "id": 49,
+  "slug": "bloody-penny",
+  "name": "Bloody Penny",
+  "dlc": "Rebirth",
+  "effect": "25% chance to spawn a 1/2 red heart upon picking up a coin"
+ },
+ {
+  "id": 50,
+  "slug": "burnt-penny",
+  "name": "Burnt Penny",
+  "dlc": "Rebirth",
+  "effect": "25% chance to spawn a bomb upon picking up a coin"
+ },
+ {
+  "id": 51,
+  "slug": "flat-penny",
+  "name": "Flat Penny",
+  "dlc": "Rebirth",
+  "effect": "25% chance to spawns a key upon picking up a coin"
+ },
+ {
+  "id": 52,
+  "slug": "counterfeit-penny",
+  "name": "Counterfeit Penny",
+  "dlc": "Rebirth",
+  "effect": "50% chance to gain an extra cent upon picking up a coin"
+ },
+ {
+  "id": 53,
+  "slug": "tick",
+  "name": "Tick",
+  "dlc": "Rebirth",
+  "effect": "Automatically deals 15% damage to each boss, heals 1 red heart, cannot drop"
+ },
+ {
+  "id": 54,
+  "slug": "isaacs-head",
+  "name": "Isaac's Head",
+  "dlc": "Rebirth",
+  "effect": "Familiar (3.5 dmg / tear, piercing)"
+ },
+ {
+  "id": 55,
+  "slug": "maggys-faith",
+  "name": "Maggy's Faith",
+  "dlc": "Rebirth",
+  "effect": "Gives an eternal heart at the beginning of every floor"
+ },
+ {
+  "id": 56,
+  "slug": "judas-tongue",
+  "name": "Judas' Tongue",
+  "dlc": "Rebirth",
+  "effect": "Devil deal items that cost 2 hearts are reduced to 1 heart"
+ },
+ {
+  "id": 57,
+  "slug": "blue-babys-soul",
+  "name": "???'s Soul",
+  "dlc": "Rebirth",
+  "effect": "Familiar that moves like DVD logo, shoots in the same direction as the player"
+ },
+ {
+  "id": 58,
+  "slug": "samsons-lock",
+  "name": "Samson's Lock",
+  "dlc": "Rebirth",
+  "effect": "6.66% chance to temporarily gain 0.5 dmg when killing an enemy"
+ },
+ {
+  "id": 59,
+  "slug": "cains-eye",
+  "name": "Cain's Eye",
+  "dlc": "Rebirth",
+  "effect": "25% chance to gain The Compass effect at the beginning of every floor"
+ },
+ {
+  "id": 60,
+  "slug": "eves-bird-foot",
+  "name": "Eve's Bird Foot",
+  "dlc": "Rebirth",
+  "effect": "Chance to spawn a Dead Bird familiar when killing an enemy (2 dmg / tick)"
+ },
+ {
+  "id": 61,
+  "slug": "the-left-hand",
+  "name": "The Left Hand",
+  "dlc": "Rebirth",
+  "effect": "All chests become Red Chests"
+ },
+ {
+  "id": 62,
+  "slug": "shiny-rock",
+  "name": "Shiny Rock",
+  "dlc": "Afterbirth",
+  "effect": "Tinted rocks and crawlspace rocks will flash white every 10 seconds"
+ },
+ {
+  "id": 63,
+  "slug": "safety-scissors",
+  "name": "Safety Scissors",
+  "dlc": "Afterbirth",
+  "effect": "Turns all troll bombs into bomb pickups"
+ },
+ {
+  "id": 64,
+  "slug": "rainbow-worm",
+  "name": "Rainbow Worm",
+  "dlc": "Afterbirth",
+  "effect": "Rainbow worm tears (a random worm effect every 3 seconds)"
+ },
+ {
+  "id": 65,
+  "slug": "tape-worm",
+  "name": "Tape Worm",
+  "dlc": "Afterbirth",
+  "effect": "",
+  "stats": {
+   "range": 3
+  }
+ },
+ {
+  "id": 66,
+  "slug": "lazy-worm",
+  "name": "Lazy Worm",
+  "dlc": "Afterbirth",
+  "effect": "",
+  "stats": {
+   "damage": 0.5,
+   "shotSpeed": -0.5
+  }
+ },
+ {
+  "id": 67,
+  "slug": "cracked-dice",
+  "name": "Cracked Dice",
+  "dlc": "Afterbirth",
+  "effect": "50% chance to randomly activate D6, D10, D20, D8, or D12 on hit"
+ },
+ {
+  "id": 68,
+  "slug": "super-magnet",
+  "name": "Super Magnet",
+  "dlc": "Afterbirth",
+  "effect": "Pickups and enemies move towards you"
+ },
+ {
+  "id": 69,
+  "slug": "faded-polaroid",
+  "name": "Faded Polaroid",
+  "dlc": "Afterbirth",
+  "effect": "Chance to gain camouflage for a few seconds (confuses all enemies)"
+ },
+ {
+  "id": 70,
+  "slug": "louse",
+  "name": "Louse",
+  "dlc": "Afterbirth",
+  "effect": "Chance to spawn a blue spider in a combat room and spawns a blue spider when completing a combat room"
+ },
+ {
+  "id": 71,
+  "slug": "bobs-bladder",
+  "name": "Bob's Bladder",
+  "dlc": "Afterbirth",
+  "effect": "Bombs make green creep",
+  "transformations": [
+   "bob"
+  ]
+ },
+ {
+  "id": 72,
+  "slug": "watch-battery",
+  "name": "Watch Battery",
+  "dlc": "Afterbirth",
+  "effect": "Increased chance to find batteries, chance to add an extra charge after clearing a room"
+ },
+ {
+  "id": 73,
+  "slug": "blasting-cap",
+  "name": "Blasting Cap",
+  "dlc": "Afterbirth",
+  "effect": "Exploding bombs have a 20% chance to drop another bomb pickup"
+ },
+ {
+  "id": 74,
+  "slug": "stud-finder",
+  "name": "Stud Finder",
+  "dlc": "Afterbirth",
+  "effect": "Increased chance to find crawlspaces when breaking rocks"
+ },
+ {
+  "id": 75,
+  "slug": "error",
+  "name": "Error",
+  "dlc": "Afterbirth",
+  "effect": "Gives a random trinket effect per room"
+ },
+ {
+  "id": 76,
+  "slug": "poker-chip",
+  "name": "Poker Chip",
+  "dlc": "Afterbirth",
+  "effect": "Chests now have a 50/50 chance to give extra pickups or have nothing"
+ },
+ {
+  "id": 77,
+  "slug": "blister",
+  "name": "Blister",
+  "dlc": "Afterbirth",
+  "effect": "Tears have extra knockback"
+ },
+ {
+  "id": 78,
+  "slug": "second-hand",
+  "name": "Second Hand",
+  "dlc": "Afterbirth",
+  "effect": "Increases the time that status effects stay on enemies"
+ },
+ {
+  "id": 79,
+  "slug": "endless-nameless",
+  "name": "Endless Nameless",
+  "dlc": "Afterbirth",
+  "effect": "25% chance to drop an extra copy of a card/pill upon use"
+ },
+ {
+  "id": 80,
+  "slug": "black-feather",
+  "name": "Black Feather",
+  "dlc": "Afterbirth",
+  "effect": "+0.5 dmg per \"evil\" item"
+ },
+ {
+  "id": 81,
+  "slug": "blind-rage",
+  "name": "Blind Rage",
+  "dlc": "Afterbirth",
+  "effect": "Extra invulnerability frames on hit"
+ },
+ {
+  "id": 82,
+  "slug": "golden-horse-shoe",
+  "name": "Golden Horse Shoe",
+  "dlc": "Afterbirth",
+  "effect": "+15% chance to get a double Treasure Room"
+ },
+ {
+  "id": 83,
+  "slug": "store-key",
+  "name": "Store Key",
+  "dlc": "Afterbirth",
+  "effect": "Shops do not require keys"
+ },
+ {
+  "id": 84,
+  "slug": "rib-of-greed",
+  "name": "Rib of Greed",
+  "dlc": "Afterbirth",
+  "effect": "Greed and Super Greed can no longer appear"
+ },
+ {
+  "id": 85,
+  "slug": "karma",
+  "name": "Karma",
+  "dlc": "Afterbirth",
+  "effect": "Reduce chances of Donation Machine jamming. Chance to heal or refund a coin when donating to a machine or a beggar"
+ },
+ {
+  "id": 86,
+  "slug": "lil-larva",
+  "name": "Lil Larva",
+  "dlc": "Afterbirth",
+  "effect": "Gives a blue fly upon destroying a poop"
+ },
+ {
+  "id": 87,
+  "slug": "moms-locket",
+  "name": "Mom's Locket",
+  "dlc": "Afterbirth",
+  "effect": "Changes all 1/2 red hearts into full hearts, heals 1/2 heart when a key is used"
+ },
+ {
+  "id": 88,
+  "slug": "no",
+  "name": "NO!",
+  "dlc": "Afterbirth",
+  "effect": "Prevents active items from appearing"
+ },
+ {
+  "id": 89,
+  "slug": "child-leash",
+  "name": "Child Leash",
+  "dlc": "Afterbirth",
+  "effect": "Familiars stay closer to you and they gain a 1.25x dmg and size multiplier"
+ },
+ {
+  "id": 90,
+  "slug": "brown-cap",
+  "name": "Brown Cap",
+  "dlc": "Afterbirth",
+  "effect": "Poop explodes when destroyed"
+ },
+ {
+  "id": 91,
+  "slug": "meconium",
+  "name": "Meconium",
+  "dlc": "Afterbirth+",
+  "effect": "Increased chance for Black Poops"
+ },
+ {
+  "id": 92,
+  "slug": "cracked-crown",
+  "name": "Cracked Crown",
+  "dlc": "Afterbirth+",
+  "effect": "Stat bonuses are increased by 20%"
+ },
+ {
+  "id": 93,
+  "slug": "used-diaper",
+  "name": "Used Diaper",
+  "dlc": "Afterbirth+",
+  "effect": "Gives Skatole effect in certain rooms, spawns a blue fly when entering a new combat room"
+ },
+ {
+  "id": 94,
+  "slug": "fish-tail",
+  "name": "Fish Tail",
+  "dlc": "Afterbirth+",
+  "effect": "2x blue fly/spider generation"
+ },
+ {
+  "id": 95,
+  "slug": "black-tooth",
+  "name": "Black Tooth",
+  "dlc": "Afterbirth+",
+  "effect": "Chance to shoot black tooth tears (2x dmg + poison)"
+ },
+ {
+  "id": 96,
+  "slug": "ouroboros-worm",
+  "name": "Ouroboros Worm",
+  "dlc": "Afterbirth+",
+  "effect": "Spiral tears",
+  "stats": {
+   "tears": 0.4,
+   "range": 1.5
+  }
+ },
+ {
+  "id": 97,
+  "slug": "tonsil",
+  "name": "Tonsil",
+  "dlc": "Afterbirth+",
+  "effect": "Chance to spawn tonsil familiar on hit"
+ },
+ {
+  "id": 98,
+  "slug": "nose-goblin",
+  "name": "Nose Goblin",
+  "dlc": "Afterbirth+",
+  "effect": "Chance to shoot booger tears (dmg over time for 60 seconds)"
+ },
+ {
+  "id": 99,
+  "slug": "super-ball",
+  "name": "Super Ball",
+  "dlc": "Afterbirth+",
+  "effect": "Chance to shoot bouncy tears (tears bounce off rocks/walls)"
+ },
+ {
+  "id": 100,
+  "slug": "vibrant-bulb",
+  "name": "Vibrant Bulb",
+  "dlc": "Afterbirth+",
+  "effect": "+0.25 speed, +0.75 range, +0.1 shot speed, +0.2 tears, +0.5 damage, +1 luck when active item is fully charged"
+ },
+ {
+  "id": 101,
+  "slug": "dim-bulb",
+  "name": "Dim Bulb",
+  "dlc": "Afterbirth+",
+  "effect": "+0.5 speed, +1.5 range, +0.3 shot speed, +0.5 tears, +1.5 damage, +2 luck when active item is completely uncharged"
+ },
+ {
+  "id": 102,
+  "slug": "fragmented-card",
+  "name": "Fragmented Card",
+  "dlc": "Afterbirth+",
+  "effect": "Generates 2 Secret Rooms per floor"
+ },
+ {
+  "id": 103,
+  "slug": "equality",
+  "name": "Equality!",
+  "dlc": "Afterbirth+",
+  "effect": "+2 tear rate when same number of coins + bombs + keys"
+ },
+ {
+  "id": 104,
+  "slug": "wish-bone",
+  "name": "Wish Bone",
+  "dlc": "Afterbirth+",
+  "effect": "5% chance to spawn pedestal item on hit"
+ },
+ {
+  "id": 105,
+  "slug": "bag-lunch",
+  "name": "Bag Lunch",
+  "dlc": "Afterbirth+",
+  "effect": "5% chance to spawn Lunch on hit"
+ },
+ {
+  "id": 106,
+  "slug": "lost-cork",
+  "name": "Lost Cork",
+  "dlc": "Afterbirth+",
+  "effect": "Increases radius of friendly creep"
+ },
+ {
+  "id": 107,
+  "slug": "crow-heart",
+  "name": "Crow Heart",
+  "dlc": "Afterbirth+",
+  "effect": "Red heart containers are depleted first"
+ },
+ {
+  "id": 108,
+  "slug": "walnut",
+  "name": "Walnut",
+  "dlc": "Afterbirth+",
+  "effect": "33% chance to break and drop random coin/heart/key/trinket on hit from explosion"
+ },
+ {
+  "id": 109,
+  "slug": "duct-tape",
+  "name": "Duct Tape",
+  "dlc": "Afterbirth+",
+  "effect": "Orbitals and familiars stop moving"
+ },
+ {
+  "id": 110,
+  "slug": "silver-dollar",
+  "name": "Silver Dollar",
+  "dlc": "Afterbirth+",
+  "effect": "Shops will appear on the Womb"
+ },
+ {
+  "id": 111,
+  "slug": "bloody-crown",
+  "name": "Bloody Crown",
+  "dlc": "Afterbirth+",
+  "effect": "Treasure Rooms will appear on the Womb"
+ },
+ {
+  "id": 112,
+  "slug": "pay-to-win",
+  "name": "Pay To Win",
+  "dlc": "Afterbirth+",
+  "effect": "Restock Machines will always spawn in Treasure Rooms"
+ },
+ {
+  "id": 113,
+  "slug": "locust-of-wrath",
+  "name": "Locust of Wrath",
+  "dlc": "Afterbirth+",
+  "effect": "Spawns a Red (exploding) Locust upon entering a room"
+ },
+ {
+  "id": 114,
+  "slug": "locust-of-pestilence",
+  "name": "Locust of Pestilence",
+  "dlc": "Afterbirth+",
+  "effect": "Spawns a Green (poison) Locust upon entering a room"
+ },
+ {
+  "id": 115,
+  "slug": "locust-of-famine",
+  "name": "Locust of Famine",
+  "dlc": "Afterbirth+",
+  "effect": "Spawns a Yellow (slowing) Locust upon entering a room"
+ },
+ {
+  "id": 116,
+  "slug": "locust-of-death",
+  "name": "Locust of Death",
+  "dlc": "Afterbirth+",
+  "effect": "Spawns a Black (4x dmg) Locust upon entering a room"
+ },
+ {
+  "id": 117,
+  "slug": "locust-of-conquest",
+  "name": "Locust of Conquest",
+  "dlc": "Afterbirth+",
+  "effect": "Spawns 2-5 White Locusts upon entering a room"
+ },
+ {
+  "id": 118,
+  "slug": "bat-wing",
+  "name": "Bat Wing",
+  "dlc": "Afterbirth+",
+  "effect": "Chance to gain flight when killing an enemy"
+ },
+ {
+  "id": 119,
+  "slug": "stem-cell",
+  "name": "Stem Cell",
+  "dlc": "Afterbirth+",
+  "effect": "Heals 50% of empty red hearts when traveling to the next floor"
+ },
+ {
+  "id": 120,
+  "slug": "hairpin",
+  "name": "Hairpin",
+  "dlc": "Booster Pack #1",
+  "effect": "Fully recharges active item at the start of each boss"
+ },
+ {
+  "id": 121,
+  "slug": "wooden-cross",
+  "name": "Wooden Cross",
+  "dlc": "Booster Pack #1",
+  "effect": "Gives 1-hit shield at the start of each floor"
+ },
+ {
+  "id": 122,
+  "slug": "butter",
+  "name": "Butter!",
+  "dlc": "Booster Pack #1",
+  "effect": "Using active items drops them on the ground, 2% chance to drop passive items on hit"
+ },
+ {
+  "id": 123,
+  "slug": "filigree-feather",
+  "name": "Filigree Feather",
+  "dlc": "Booster Pack #2",
+  "effect": "Angels will drop Angel Room items instead of key pieces"
+ },
+ {
+  "id": 124,
+  "slug": "door-stop",
+  "name": "Door Stop",
+  "dlc": "Booster Pack #3",
+  "effect": "Doors that you go through stay open"
+ },
+ {
+  "id": 125,
+  "slug": "extension-cord",
+  "name": "Extension Cord",
+  "dlc": "Booster Pack #4",
+  "effect": "Yellow laser chain flows through familiars"
+ },
+ {
+  "id": 126,
+  "slug": "rotten-penny",
+  "name": "Rotten Penny",
+  "dlc": "Booster Pack #5",
+  "effect": "+1 blue fly upon picking up a coin"
+ },
+ {
+  "id": 127,
+  "slug": "baby-bender",
+  "name": "Baby-Bender",
+  "dlc": "Booster Pack #5",
+  "effect": "Familiars have homing shots"
+ },
+ {
+  "id": 128,
+  "slug": "finger-bone",
+  "name": "Finger Bone",
+  "dlc": "Booster Pack #5",
+  "effect": "4% chance to gain a bone heart on hit"
+ },
+ {
+  "id": 129,
+  "slug": "jawbreaker",
+  "name": "Jawbreaker",
+  "dlc": "Antibirth",
+  "effect": "Tears can become a tooth"
+ },
+ {
+  "id": 130,
+  "slug": "chewed-pen",
+  "name": "Chewed Pen",
+  "dlc": "Antibirth",
+  "effect": "Tears have a chance to slow enemies"
+ },
+ {
+  "id": 131,
+  "slug": "blessed-penny",
+  "name": "Blessed Penny",
+  "dlc": "Antibirth",
+  "effect": "Chance to spawn half a soul heart when picking up a coin"
+ },
+ {
+  "id": 132,
+  "slug": "broken-syringe",
+  "name": "Broken Syringe",
+  "dlc": "Antibirth",
+  "effect": "25% chance to give you a random syringe effect on room enter"
+ },
+ {
+  "id": 133,
+  "slug": "short-fuse",
+  "name": "Short Fuse",
+  "dlc": "Antibirth",
+  "effect": "All bombs have a shorter fuse time and deal +15 more damage"
+ },
+ {
+  "id": 134,
+  "slug": "gigante-bean",
+  "name": "Gigante Bean",
+  "dlc": "Antibirth",
+  "effect": "Farts from isaac and familiars are larger"
+ },
+ {
+  "id": 135,
+  "slug": "a-lighter",
+  "name": "A Lighter",
+  "dlc": "Antibirth",
+  "effect": "Chance for enemies to burn when entering a room"
+ },
+ {
+  "id": 136,
+  "slug": "broken-padlock",
+  "name": "Broken Padlock",
+  "dlc": "Antibirth",
+  "effect": "Explosions can open locked doors"
+ },
+ {
+  "id": 137,
+  "slug": "myosotis",
+  "name": "Myosotis",
+  "dlc": "Antibirth",
+  "effect": "Get max 4 pickups from the previous floor at the beginning of the new floor"
+ },
+ {
+  "id": 138,
+  "slug": "m",
+  "name": "'M",
+  "dlc": "Antibirth",
+  "effect": "Reroll your active item upon use"
+ },
+ {
+  "id": 139,
+  "slug": "teardrop-charm",
+  "name": "Teardrop Charm",
+  "dlc": "Antibirth",
+  "effect": "Tear-based effects have an extra +4 chance of occurring"
+ },
+ {
+  "id": 140,
+  "slug": "apple-of-sodom",
+  "name": "Apple of Sodom",
+  "dlc": "Repentance",
+  "effect": "Red hearts have a chance to burst into blue spiders when touched"
+ },
+ {
+  "id": 141,
+  "slug": "forgotten-lullaby",
+  "name": "Forgotten Lullaby",
+  "dlc": "Antibirth",
+  "effect": "Double the fire rate of familiars"
+ },
+ {
+  "id": 142,
+  "slug": "beths-faith",
+  "name": "Beth's Faith",
+  "dlc": "Antibirth",
+  "effect": "Spawn 4 wisps at the start of each floor"
+ },
+ {
+  "id": 143,
+  "slug": "old-capacitor",
+  "name": "Old Capacitor",
+  "dlc": "Antibirth",
+  "effect": "Your active item don't charge but you have a chance to spawn an extra battery drop on room clear"
+ },
+ {
+  "id": 144,
+  "slug": "brain-worm",
+  "name": "Brain Worm",
+  "dlc": "Antibirth",
+  "effect": "Missed tears will redirect themselves toward enemies"
+ },
+ {
+  "id": 145,
+  "slug": "perfection",
+  "name": "Perfection",
+  "dlc": "Antibirth",
+  "effect": "+10 luck but break when hit"
+ },
+ {
+  "id": 146,
+  "slug": "devils-crown",
+  "name": "Devil's Crown",
+  "dlc": "Antibirth",
+  "effect": "Treasure rooms are replaced with Devil Deals"
+ },
+ {
+  "id": 147,
+  "slug": "charged-penny",
+  "name": "Charged Penny",
+  "dlc": "Antibirth",
+  "effect": "Chance to replenish 1 bar of charge when picking up pennies"
+ },
+ {
+  "id": 148,
+  "slug": "friendship-necklace",
+  "name": "Friendship Necklace",
+  "dlc": "Repentance",
+  "effect": "Turns follower familiars into orbitals"
+ },
+ {
+  "id": 149,
+  "slug": "panic-button",
+  "name": "Panic Button",
+  "dlc": "Repentance",
+  "effect": "Automatically uses active item when the player is about to be hit by a projectile or an enemy"
+ },
+ {
+  "id": 150,
+  "slug": "blue-key",
+  "name": "Blue Key",
+  "dlc": "Repentance",
+  "effect": "Locked doors can be opened for free but you have to go through a Blue Womb room with enemies"
+ },
+ {
+  "id": 151,
+  "slug": "flat-file",
+  "name": "Flat File",
+  "dlc": "Repentance",
+  "effect": "Removes all spikes (spiked rocks, spiked chests, curse room included)"
+ },
+ {
+  "id": 152,
+  "slug": "telescope-lens",
+  "name": "Telescope Lens",
+  "dlc": "Repentance",
+  "effect": "+9% chance of finding Planetarium + allows them to appear in chapter 4"
+ },
+ {
+  "id": 153,
+  "slug": "moms-lock",
+  "name": "Mom's Lock",
+  "dlc": "Repentance",
+  "effect": "Chance of triggering a Mom item effect every room"
+ },
+ {
+  "id": 154,
+  "slug": "dice-bag",
+  "name": "Dice Bag",
+  "dlc": "Repentance",
+  "effect": "Chance to obtain a single use dice item in your card slot that only lasts for the current room"
+ },
+ {
+  "id": 155,
+  "slug": "holy-crown",
+  "name": "Holy Crown",
+  "dlc": "Repentance",
+  "effect": "Treasure rooms and shops will appear in the Cathedral"
+ },
+ {
+  "id": 156,
+  "slug": "mothers-kiss",
+  "name": "Mother's Kiss",
+  "dlc": "Repentance",
+  "effect": "Gives one empty heart container"
+ },
+ {
+  "id": 157,
+  "slug": "torn-card",
+  "name": "Torn Card",
+  "dlc": "Repentance",
+  "effect": "Shoot an Ipecac + My Reflection tear every 15 shots"
+ },
+ {
+  "id": 158,
+  "slug": "torn-pocket",
+  "name": "Torn Pocket",
+  "dlc": "Repentance",
+  "effect": "Spawns 2 pickups you have on the ground when damaged"
+ },
+ {
+  "id": 159,
+  "slug": "gilded-key",
+  "name": "Gilded Key",
+  "dlc": "Repentance",
+  "effect": "All chests become locked chests containing mixed pickups (including cards/pills/runes/batteries)"
+ },
+ {
+  "id": 160,
+  "slug": "lucky-sack",
+  "name": "Lucky Sack",
+  "dlc": "Repentance",
+  "effect": "A sack spawns in every starting room"
+ },
+ {
+  "id": 161,
+  "slug": "wicked-crown",
+  "name": "Wicked Crown",
+  "dlc": "Repentance",
+  "effect": "Treasure rooms and shops will appear in Sheol"
+ },
+ {
+  "id": 162,
+  "slug": "azazels-stump",
+  "name": "Azazel's Stump",
+  "dlc": "Repentance",
+  "effect": "Chance to become Azazel on room clear until the next room clear"
+ },
+ {
+  "id": 163,
+  "slug": "dingle-berry",
+  "name": "Dingle Berry",
+  "dlc": "Repentance",
+  "effect": "Spawns a charmed Dip on room clear"
+ },
+ {
+  "id": 164,
+  "slug": "ring-cap",
+  "name": "Ring Cap",
+  "dlc": "Repentance",
+  "effect": "2 bombs spawn each time you place 1 bomb"
+ },
+ {
+  "id": 165,
+  "slug": "nuh-uh",
+  "name": "Nuh uh!",
+  "dlc": "Repentance",
+  "effect": "Prevents coins and keys from spawning after the Depths"
+ },
+ {
+  "id": 166,
+  "slug": "modeling-clay",
+  "name": "Modeling Clay",
+  "dlc": "Repentance",
+  "effect": "Chance of giving you a random passive item each room until room clear"
+ },
+ {
+  "id": 167,
+  "slug": "polished-bone",
+  "name": "Polished Bone",
+  "dlc": "Repentance",
+  "effect": "25% chance of spawning a charmed bony on room clear"
+ },
+ {
+  "id": 168,
+  "slug": "hollow-heart",
+  "name": "Hollow Heart",
+  "dlc": "Repentance",
+  "effect": "Gain an empty bone heart at the start of each floor"
+ },
+ {
+  "id": 169,
+  "slug": "kids-drawing",
+  "name": "Kid's Drawing",
+  "dlc": "Repentance",
+  "effect": "Counts as a Guppy item, does nothing else",
+  "transformations": [
+   "guppy"
+  ]
+ },
+ {
+  "id": 170,
+  "slug": "crystal-key",
+  "name": "Crystal Key",
+  "dlc": "Repentance",
+  "effect": "Chance of Red Key effect on room clear (33% in normal room, 12.5% in red room)"
+ },
+ {
+  "id": 171,
+  "slug": "keepers-bargain",
+  "name": "Keeper's Bargain",
+  "dlc": "Repentance",
+  "effect": "50% chance each devil deal will cost coins"
+ },
+ {
+  "id": 172,
+  "slug": "cursed-penny",
+  "name": "Cursed Penny",
+  "dlc": "Repentance",
+  "effect": "Teleports you every time you pick up a coin. Has a chance to teleport to a special room depending of the coin"
+ },
+ {
+  "id": 173,
+  "slug": "your-soul",
+  "name": "Your Soul",
+  "dlc": "Repentance",
+  "effect": "One free devil deal in exchange for the trinket"
+ },
+ {
+  "id": 174,
+  "slug": "number-magnet",
+  "name": "Number Magnet",
+  "dlc": "Repentance",
+  "effect": "Devil rooms always have at least a black heart and 2 enemies inside"
+ },
+ {
+  "id": 175,
+  "slug": "strange-key",
+  "name": "Strange Key",
+  "dlc": "Repentance",
+  "effect": "Removes the time limit for Blue Womb. Spawns 6 random items with Pandora's Box"
+ },
+ {
+  "id": 176,
+  "slug": "lil-clot",
+  "name": "Lil Clot",
+  "dlc": "Repentance",
+  "effect": "Spawns one Lil Clot which respawns in the next room if killed"
+ },
+ {
+  "id": 177,
+  "slug": "temporary-tattoo",
+  "name": "Temporary Tattoo",
+  "dlc": "Repentance",
+  "effect": "Challenge rooms drop a chest on clear, Boss Challenge rooms drop an extra boss item on clear"
+ },
+ {
+  "id": 178,
+  "slug": "swallowed-m80",
+  "name": "Swallowed M80",
+  "dlc": "Repentance",
+  "effect": "50% chance to trigger Kamikaze effect on hit"
+ },
+ {
+  "id": 179,
+  "slug": "rc-remote",
+  "name": "RC Remote",
+  "dlc": "Repentance",
+  "effect": "Familiars are now controlled like Jacob&Esau"
+ },
+ {
+  "id": 180,
+  "slug": "found-soul",
+  "name": "Found soul",
+  "dlc": "Repentance",
+  "effect": "Spawns a controllable baby Lost at the start of each floor that acts like a co-op baby"
+ },
+ {
+  "id": 181,
+  "slug": "expansion-pack",
+  "name": "Expansion Pack",
+  "dlc": "Repentance",
+  "effect": "Using an active item will also trigger the effect of a random 1-2 charge item"
+ },
+ {
+  "id": 182,
+  "slug": "beths-essence",
+  "name": "Beth's Essence",
+  "dlc": "Repentance",
+  "effect": "Enter an angel room = 5 wisps, donate to a beggar = 1 wisp"
+ },
+ {
+  "id": 183,
+  "slug": "the-twins",
+  "name": "The Twins",
+  "dlc": "Repentance",
+  "effect": "Chance of doubling one of your familiars each room, get Brother Bobby or Sister Maggy if no familiars"
+ },
+ {
+  "id": 184,
+  "slug": "adoption-papers",
+  "name": "Adoption Papers",
+  "dlc": "Repentance",
+  "effect": "Familiars now replace items in shops and are on sale"
+ },
+ {
+  "id": 185,
+  "slug": "cricket-leg",
+  "name": "Cricket Leg",
+  "dlc": "Repentance",
+  "effect": "16.6% chance of spawning a random locust per enemy killed"
+ },
+ {
+  "id": 186,
+  "slug": "apollyons-best-friend",
+  "name": "Apollyon's Best Friend",
+  "dlc": "Repentance",
+  "effect": "Spawns one of Tainted Apollyon's red locusts"
+ },
+ {
+  "id": 187,
+  "slug": "broken-glasses",
+  "name": "Broken Glasses",
+  "dlc": "Repentance",
+  "effect": "33% chance of extra blind item option on main path, reveals blind item on alt path"
+ },
+ {
+  "id": 188,
+  "slug": "ice-cube",
+  "name": "Ice Cube",
+  "dlc": "Repentance",
+  "effect": "20% chance of enemies being frozen when you enter the room"
+ },
+ {
+  "id": 189,
+  "slug": "sigil-of-baphomet",
+  "name": "Sigil of Baphomet",
+  "dlc": "Repentance",
+  "effect": "Grants a 1 second shield every time you kill an enemy"
+ }
+]

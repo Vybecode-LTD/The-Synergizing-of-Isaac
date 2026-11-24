@@ -1,0 +1,137 @@
+/* Site frame: sticky header with wordmark and nav, the main column, the footer. */
+@layer components {
+  .site-header {
+    position: sticky;
+    inset-block-start: var(--space-0);
+    z-index: var(--z-sticky);
+    background: var(--bg-canvas);
+    border-block-end: var(--stroke-hairline) solid var(--border-subtle);
+  }
+
+  .site-header__inner {
+    display: flex;
+    gap: var(--gap-grouped) var(--gap-separate);
+    align-items: center;
+    justify-content: space-between;
+    max-inline-size: var(--width-page);
+    min-block-size: var(--header-block-size);
+    padding-inline: var(--gutter-page);
+    margin-inline: auto;
+  }
+
+  /* ---- Wordmark: the domain is the logo --------------------------------------- */
+  .wordmark {
+    display: inline-flex;
+    flex: none;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-h3);
+    letter-spacing: var(--tracking-tight);
+    color: var(--fg-strong);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .wordmark:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .wordmark__mark {
+    inline-size: var(--size-mark);
+    block-size: var(--size-mark);
+    fill: var(--fg-accent);
+  }
+
+  /* One word, two tones. */
+  .wordmark__tld {
+    color: var(--fg-accent);
+  }
+
+  /* ---- Nav --------------------------------------------------------------------- */
+  .site-nav {
+    display: flex;
+    gap: var(--gap-fused);
+    align-items: center;
+    min-inline-size: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .site-nav__link {
+    padding: var(--pad-block-sm) var(--pad-inline-sm);
+    font: var(--type-ui);
+    color: var(--fg-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: var(--radius-md);
+    transition:
+      background-color var(--motion-hover),
+      color var(--motion-hover);
+  }
+
+  .site-nav__link:hover {
+    color: var(--fg-strong);
+    background: var(--bg-hover);
+  }
+
+  .site-nav__link:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: calc(var(--stroke-focus) * -1);
+  }
+
+  .site-nav__link[aria-current="page"] {
+    color: var(--fg-accent);
+    background: var(--bg-selected);
+  }
+
+  @media (max-width: 47.99rem) {
+    .site-header__inner {
+      flex-direction: column;
+      align-items: stretch;
+      padding-block: var(--pad-block-sm);
+    }
+  }
+
+  /* ---- Main and footer ------------------------------------------------------------ */
+  .site-main {
+    max-inline-size: var(--width-page);
+    min-block-size: var(--block-viewport);
+    padding: var(--space-block) var(--gutter-page) var(--space-subsection);
+    margin-inline: auto;
+  }
+
+  .site-main:focus { outline: none; }
+
+  .site-footer {
+    border-block-start: var(--stroke-hairline) solid var(--border-subtle);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-related) var(--gap-separate);
+    justify-content: space-between;
+    max-inline-size: var(--width-page);
+    padding: var(--space-block) var(--gutter-page);
+    margin-inline: auto;
+    font: var(--type-label);
+    color: var(--fg-muted);
+  }
+
+  .site-footer__inner > :first-child { max-inline-size: var(--measure-prose); }
+
+  .site-footer__link {
+    color: var(--fg-link);
+    text-decoration: underline;
+    text-underline-offset: var(--offset-underline);
+    border-radius: var(--radius-xs);
+  }
+
+  .site-footer__link:hover { color: var(--fg-strong); }
+
+  .site-footer__link:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+}

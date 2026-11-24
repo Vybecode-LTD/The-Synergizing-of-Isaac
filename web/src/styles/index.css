@@ -1,0 +1,27 @@
+/* =========================================================================
+   INDEX: the entry stylesheet, and the only file that decides the cascade.
+   Law 5: the layer order is stated once, here, before anything else.
+   ========================================================================= */
+
+@layer reset, vendor, tokens, base, layout, components, utilities, overrides;
+
+/* Each of these opens its own @layer block, so import it bare. */
+@import url("reset.css");
+@import url("tokens.css");
+@import url("base.css");
+@import url("layout.css");
+
+/* One line per component file. */
+@import url("components/sprite.css");
+@import url("components/badges.css");
+@import url("components/controls.css");
+@import url("components/picker.css");
+@import url("components/dialog.css");
+@import url("components/synergy-card.css");
+@import url("components/shell.css");
+@import url("components/builder.css");
+@import url("components/browse.css");
+@import url("components/detail.css");
+
+@import url("utilities.css");
+@import url("overrides.css");

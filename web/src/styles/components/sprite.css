@@ -1,0 +1,36 @@
+/* Sprite and Portrait: the game's pixel art, always at whole-pixel scales. */
+@layer components {
+  .sprite {
+    --sprite-scale: 1;
+    --sprite-size: calc(var(--sprite-cell) * var(--sprite-scale));
+
+    display: inline-block;
+    flex: none;
+    inline-size: var(--sprite-size);
+    block-size: var(--sprite-size);
+    background-image: url("/sprites/items.webp");
+    background-repeat: no-repeat;
+    background-size: calc(var(--sprite-columns) * var(--sprite-size)) auto;
+    background-position:
+      calc(var(--sprite-x) * var(--sprite-size) * -1)
+      calc(var(--sprite-y) * var(--sprite-size) * -1);
+    image-rendering: pixelated;
+  }
+
+  .sprite[data-kind="trinket"] {
+    background-image: url("/sprites/trinkets.webp");
+  }
+
+  .portrait {
+    --portrait-size: calc(var(--sprite-cell) * 2);
+
+    flex: none;
+    inline-size: var(--portrait-size);
+    block-size: var(--portrait-size);
+    object-fit: contain;
+    image-rendering: pixelated;
+  }
+
+  .portrait[data-size="sm"] { --portrait-size: var(--sprite-cell); }
+  .portrait[data-size="lg"] { --portrait-size: calc(var(--sprite-cell) * 4); }
+}

@@ -1,0 +1,88 @@
+/* SynergyCard: rating seal on the left, recipe and explanation on the right. */
+@layer components {
+  .synergy-card {
+    --synergy-card-edge: var(--border-default);
+
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--gap-grouped);
+    align-items: start;
+    padding: var(--pad-well);
+    background: var(--bg-surface);
+    border: var(--stroke-default) solid var(--border-subtle);
+    border-inline-start: var(--stroke-thick) solid var(--synergy-card-edge);
+    border-radius: var(--radius-lg);
+  }
+
+  .synergy-card[data-rating="S"] { --synergy-card-edge: var(--fg-tier-s); }
+  .synergy-card[data-rating="A"] { --synergy-card-edge: var(--fg-tier-a); }
+  .synergy-card[data-rating="B"] { --synergy-card-edge: var(--fg-tier-b); }
+  .synergy-card[data-rating="D"] { --synergy-card-edge: var(--fg-tier-d); }
+
+  .synergy-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    min-inline-size: 0;
+  }
+
+  .synergy-card__recipe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-fused) var(--gap-tight);
+    align-items: center;
+    font: var(--type-h4);
+    color: var(--fg-strong);
+  }
+
+  .synergy-card__plus {
+    font: var(--type-ui);
+    color: var(--fg-subtle);
+  }
+
+  .synergy-card__piece,
+  .synergy-card__character {
+    display: inline-flex;
+    gap: var(--gap-fused);
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .synergy-card__piece:hover,
+  .synergy-card__character:hover {
+    color: var(--fg-accent);
+  }
+
+  .synergy-card__piece:focus-visible,
+  .synergy-card__character:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .synergy-card__characters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-fused) var(--gap-related);
+    align-items: center;
+    font: var(--type-ui);
+    color: var(--fg-muted);
+  }
+
+  .synergy-card__character { color: var(--fg-default); }
+
+  .synergy-card__text {
+    max-inline-size: var(--measure-prose);
+    font: var(--type-body);
+    color: var(--fg-default);
+  }
+
+  .synergy-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-related);
+    align-items: center;
+    font: var(--type-ui);
+  }
+}
