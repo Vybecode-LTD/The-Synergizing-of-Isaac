@@ -84,12 +84,12 @@
 
   :where(h1) {
     font: var(--type-h1);
-    letter-spacing: var(--tracking-tighter);  /* TIER-1 REACH — see header */
+    letter-spacing: var(--tracking-display);  /* TIER-1 REACH — see header */
   }
 
   :where(h2) {
     font: var(--type-h2);
-    letter-spacing: var(--tracking-tight);
+    letter-spacing: var(--tracking-tighter);
   }
 
   :where(h3) {

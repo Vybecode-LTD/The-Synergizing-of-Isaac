@@ -25,7 +25,7 @@ log = logging.getLogger("isaac_toys")
 
 # Used when the web app has not been built (tests, API-only development).
 BARE_SHELL = (
-    '<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8" />'
+    '<!doctype html><html lang="en"><head><meta charset="utf-8" />'
     '<!--head-start--><!--head-end--></head><body><div id="root"><!--server-copy--></div></body></html>'
 )
 HEAD_START, HEAD_END, COPY = "<!--head-start-->", "<!--head-end-->", "<!--server-copy-->"

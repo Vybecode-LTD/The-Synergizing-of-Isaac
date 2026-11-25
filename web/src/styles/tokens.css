@@ -8,12 +8,12 @@
      Tier 2  SEMANTIC    a value bound to a role. --pad-card, --fg-muted
      Tier 3  COMPONENT   declared in the component's own file, from Tier 2.
 
-   The site ships one theme: dark ("the basement"). <html data-theme="dark">
-   is set in index.html. The light roles below stay valid so check_roles.py
-   passes and a light theme is a switch away, not a redesign.
-
-   Direction: warm near-black surfaces, parchment text, one accent (brass).
-   The pixel sprites are the colour; the chrome stays quiet.
+   Direction: the Toy Box (docs/decisions/0005). Chunky plastic tiles in a
+   molded tray: ink outlines, hard offset shadows, bright stickers for the
+   ratings. Light by default; the dark Toy Box follows the visitor's system
+   setting (prefers-color-scheme), and data-theme="light" or "dark" on <html>
+   pins one. The dark roles are written twice, once per way in, and a test
+   (styles/tokens.test.ts) keeps the two copies the same.
    ========================================================================= */
 
 @layer tokens {
@@ -60,13 +60,15 @@
     --pad-inline-xs:  calc(var(--space-2)  * var(--density));
     --pad-inline-sm:  calc(var(--space-3)  * var(--density));
     --pad-inline-md:  calc(var(--space-4)  * var(--density));
+    --pad-inline-lg:  calc(var(--space-6)  * var(--density));
     --pad-block-xs:   calc(var(--space-1)  * var(--density));
     --pad-block-sm:   calc(var(--space-2)  * var(--density));
     --pad-block-md:   calc(var(--space-3)  * var(--density));
+    --pad-block-lg:   calc(var(--space-5)  * var(--density));
 
     --pad-card:       calc(var(--space-6)  * var(--density));
     --pad-card-lg:    calc(var(--space-8)  * var(--density));
-    --pad-well:       calc(var(--space-4)  * var(--density));
+    --pad-well:       calc(var(--space-5)  * var(--density));
   }
 
   /* stylelint-disable-next-line no-duplicate-selectors -- one :root block per section */
@@ -83,139 +85,164 @@
     --width-form:       28rem;
 
     /* ---- 3. TYPOGRAPHY, TIER 1 ---------------------------------------- */
-    /* Inter for everything you operate; Fraunces for everything you read as
-       a title. A book face over pixel art is the look: reliquary, not arcade. */
-    --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    /* Bricolage Grotesque for everything you read as a title: chunky, a bit
+       wonky, like lettering moulded into a lid. Figtree for everything you
+       read and operate: round and plain. Both self-hosted (fontsource). */
+    --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system,
                  "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-display: "Fraunces Variable", "Iowan Old Style", "Palatino Linotype",
-                    Georgia, serif;
+    --font-display: "Bricolage Grotesque Variable", "Figtree Variable",
+                    ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
                  "Liberation Mono", monospace;
 
     --text-2xs:  0.6875rem;
-    --text-xs:   0.75rem;
+    --text-xs:   0.8125rem;
     --text-sm:   0.875rem;
+    --text-md:   0.9375rem;
     --text-base: 1rem;
     --text-lg:   1.125rem;
-    --text-xl:   1.375rem;
-    --text-2xl:  1.75rem;
-    --text-3xl:  2.1875rem;
-    --text-4xl:  2.75rem;
-    --text-5xl:  clamp(2.75rem, 2.1226rem + 2.642vw, 4.5rem);
-    --text-6xl:  clamp(3.5rem,  2.2901rem + 5.094vw, 6.875rem);
+    --text-xl:   1.4375rem;
+    --text-2xl:  1.625rem;
+    --text-3xl:  2.125rem;
+    /* Fluid steps, 380 -> 1440px anchors, as the spacing above. */
+    --text-4xl:  clamp(2.25rem, 1.9811rem + 1.132vw, 3rem);
+    --text-5xl:  clamp(2.75rem, 1.7642rem + 4.151vw, 5.5rem);
+    --text-6xl:  clamp(3.5rem,  2.2453rem + 5.283vw, 7rem);
 
+    --leading-display: 0.95;
     --leading-none:    1;
     --leading-tight:   1.15;
     --leading-snug:    1.3;
-    --leading-normal:  1.6;
-    --leading-relaxed: 1.75;
+    --leading-normal:  1.5;
+    --leading-relaxed: 1.7;
 
+    --tracking-display: -0.035em;
     --tracking-tighter: -0.03em;
-    --tracking-tight:   -0.015em;
+    --tracking-tight:   -0.01em;
     --tracking-normal:  0em;
     --tracking-wide:    0.02em;
     --tracking-caps:    0.08em;
 
-    --weight-regular:  400;
-    --weight-medium:   500;
-    --weight-semibold: 600;
-    --weight-bold:     700;
+    --weight-regular:   400;
+    --weight-medium:    500;
+    --weight-semibold:  600;
+    --weight-bold:      700;
+    --weight-extrabold: 800;
 
     /* ---- 4. TYPOGRAPHY, TIER 2 (roles) -------------------------------- */
-    --type-display:  var(--weight-semibold) var(--text-5xl)/var(--leading-tight)   var(--font-display);
-    --type-h1:       var(--weight-semibold) var(--text-4xl)/var(--leading-tight)   var(--font-display);
-    --type-h2:       var(--weight-semibold) var(--text-2xl)/var(--leading-tight)   var(--font-display);
-    --type-h3:       var(--weight-semibold) var(--text-xl)/var(--leading-snug)     var(--font-display);
-    --type-h4:       var(--weight-semibold) var(--text-base)/var(--leading-snug)   var(--font-sans);
-    --type-lead:     var(--weight-regular)  var(--text-lg)/var(--leading-normal)   var(--font-sans);
-    --type-body:     var(--weight-regular)  var(--text-base)/var(--leading-normal) var(--font-sans);
-    --type-ui:       var(--weight-medium)   var(--text-sm)/var(--leading-snug)     var(--font-sans);
-    --type-label:    var(--weight-medium)   var(--text-xs)/var(--leading-snug)     var(--font-sans);
-    --type-code:     var(--weight-regular)  var(--text-sm)/var(--leading-normal)   var(--font-mono);
+    --type-display:  var(--weight-extrabold) var(--text-6xl)/var(--leading-display) var(--font-display);
+    --type-h1:       var(--weight-extrabold) var(--text-5xl)/var(--leading-display) var(--font-display);
+    --type-h2:       var(--weight-extrabold) var(--text-4xl)/var(--leading-none)    var(--font-display);
+    --type-h3:       var(--weight-extrabold) var(--text-xl)/var(--leading-tight)    var(--font-display);
+    --type-h4:       var(--weight-bold)      var(--text-base)/var(--leading-snug)   var(--font-sans);
+    --type-subtitle: var(--weight-semibold)  var(--text-xl)/var(--leading-snug)     var(--font-sans);
+    --type-lead:     var(--weight-medium)    var(--text-lg)/var(--leading-normal)   var(--font-sans);
+    --type-body:     var(--weight-regular)   var(--text-base)/var(--leading-normal) var(--font-sans);
+    --type-ui:       var(--weight-bold)      var(--text-md)/var(--leading-snug)     var(--font-sans);
+    --type-button:   var(--weight-extrabold) var(--text-base)/var(--leading-snug)   var(--font-sans);
+    --type-label:    var(--weight-semibold)  var(--text-xs)/var(--leading-snug)     var(--font-sans);
+    --type-small:    var(--weight-regular)   var(--text-sm)/var(--leading-normal)   var(--font-sans);
+    --type-tile:     var(--weight-bold)      var(--text-lg)/var(--leading-tight)    var(--font-display);
+    --type-wordmark: var(--weight-extrabold) var(--text-3xl)/var(--leading-none)    var(--font-display);
+    --type-code:     var(--weight-regular)   var(--text-sm)/var(--leading-normal)   var(--font-mono);
 
     /* ---- 5. COLOUR, TIER 1 (OKLCH ramps) ------------------------------ */
-    /* Neutral: warm umber. Light end is parchment, dark end is the basement.
-       More chroma than the starter's graphite so text reads as paper, not grey. */
+    /* Neutral: chalk to ink, cool (hue about 270). 50 is the chalk ground,
+       100 the tray, 200 the C sticker, 600 muted ink, 900 the ink line. */
     --neutral-0:    oklch(100%  0     0);
-    --neutral-50:   oklch(97.5% 0.008 85);
-    --neutral-100:  oklch(94.0% 0.016 85);
-    --neutral-200:  oklch(89.5% 0.020 85);
-    --neutral-300:  oklch(82.5% 0.022 85);
-    --neutral-400:  oklch(70.0% 0.020 82);
-    --neutral-500:  oklch(52.0% 0.016 80);
-    --neutral-600:  oklch(47.0% 0.015 80);
-    --neutral-700:  oklch(37.0% 0.013 78);
-    --neutral-800:  oklch(27.5% 0.012 75);
-    --neutral-900:  oklch(21.0% 0.011 72);
-    --neutral-950:  oklch(16.5% 0.010 70);
-    --neutral-1000: oklch(12.0% 0.009 70);
+    --neutral-50:   oklch(95.8% 0.010 267);
+    --neutral-100:  oklch(91.2% 0.020 267);
+    --neutral-200:  oklch(85.8% 0.026 269);
+    --neutral-300:  oklch(77.0% 0.034 271);
+    --neutral-400:  oklch(68.0% 0.045 273);
+    --neutral-500:  oklch(47.0% 0.054 276);
+    --neutral-600:  oklch(42.9% 0.055 276);
+    --neutral-700:  oklch(35.0% 0.055 276);
+    --neutral-800:  oklch(30.0% 0.055 276);
+    --neutral-900:  oklch(24.7% 0.053 276);
+    --neutral-950:  oklch(19.5% 0.045 276);
+    --neutral-1000: oklch(14.5% 0.035 276);
 
-    /* Accent: brass. generate_color_ramp.py "oklch(78% 0.135 85)" --hue-shift 0 --gamut p3 */
-    --accent-50:  oklch(97% 0.014 85);
-    --accent-100: oklch(93.5% 0.030 85);
-    --accent-200: oklch(88% 0.056 85);
-    --accent-300: oklch(80.5% 0.085 85);
-    --accent-400: oklch(72% 0.113 85);
-    --accent-500: oklch(64.5% 0.135 85);
-    --accent-600: oklch(56.5% 0.126 85);
-    --accent-700: oklch(47% 0.106 85);
-    --accent-800: oklch(38% 0.085 85);
-    --accent-900: oklch(30% 0.065 85);
-    --accent-950: oklch(21% 0.045 85);
+    /* Accent: tomato. 600 is the button fill (#C93A17, 5.1:1 under white). */
+    --accent-50:  oklch(97.0% 0.015 40);
+    --accent-100: oklch(91.4% 0.046 40);
+    --accent-200: oklch(85.0% 0.080 38);
+    --accent-300: oklch(76.0% 0.130 36);
+    --accent-400: oklch(68.0% 0.170 35);
+    --accent-500: oklch(61.0% 0.190 34);
+    --accent-600: oklch(55.8% 0.185 34);
+    --accent-700: oklch(47.0% 0.160 34);
+    --accent-800: oklch(39.0% 0.130 34);
+    --accent-900: oklch(31.0% 0.100 34);
+    --accent-950: oklch(23.0% 0.070 34);
 
-    /* Status ramps: the steps the UI uses. 300/900 are the dark theme's
-       text and tint steps for rating badges. */
-    --success-100: oklch(94.0% 0.050 152);
-    --success-300: oklch(80.0% 0.120 152);
-    --success-500: oklch(62.0% 0.150 152);
-    --success-700: oklch(45.0% 0.120 152);
-    --success-900: oklch(27.0% 0.050 152);
-    --warning-100: oklch(95.5% 0.055  85);
-    --warning-500: oklch(75.0% 0.155  85);
-    --warning-700: oklch(52.0% 0.125  85);
+    /* Sticker ramps. 500 is the sticker itself; 700 and 300 are the text
+       steps for light and dark; 100 and 900 the tints. Warning is the sun
+       (#FFC21A), success the mint (#2FCB8E), info the pool (#1F5FE0), grape
+       (#6B3FD4) is D's. Danger stays red, for errors only. */
+    --warning-100: oklch(95.5% 0.060 90);
+    --warning-300: oklch(88.0% 0.140 88);
+    --warning-500: oklch(84.6% 0.169 85);
+    --warning-700: oklch(52.0% 0.110 75);
+    --warning-900: oklch(30.0% 0.060 80);
+    --success-100: oklch(94.3% 0.039 168);
+    --success-300: oklch(85.0% 0.110 163);
+    --success-500: oklch(74.9% 0.154 161);
+    --success-700: oklch(45.0% 0.100 160);
+    --success-900: oklch(28.0% 0.050 165);
+    --info-100:    oklch(94.0% 0.030 262);
+    --info-300:    oklch(78.0% 0.100 262);
+    --info-500:    oklch(52.8% 0.207 262);
+    --info-700:    oklch(43.0% 0.170 262);
+    --info-900:    oklch(27.0% 0.080 262);
+    --grape-100:   oklch(94.0% 0.035 292);
+    --grape-300:   oklch(77.0% 0.110 291);
+    --grape-500:   oklch(50.9% 0.214 290);
+    --grape-700:   oklch(42.0% 0.180 290);
+    --grape-900:   oklch(27.0% 0.090 290);
     --danger-100:  oklch(94.5% 0.038  25);
     --danger-300:  oklch(76.0% 0.130  25);
     --danger-400:  oklch(64.0% 0.190  25);
     --danger-500:  oklch(58.0% 0.205  25);
     --danger-700:  oklch(45.0% 0.170  25);
     --danger-900:  oklch(27.0% 0.060  25);
-    --info-100:    oklch(94.5% 0.035 250);
-    --info-300:    oklch(79.0% 0.090 250);
-    --info-500:    oklch(58.0% 0.160 250);
-    --info-700:    oklch(45.0% 0.140 250);
-    --info-900:    oklch(27.0% 0.050 250);
 
     /* ---- 6. COLOUR, TIER 2 (roles): light theme ----------------------- */
+    color-scheme: light;
+
     --bg-canvas:      var(--neutral-50);
     --bg-surface:     var(--neutral-0);
     --bg-raised:      var(--neutral-0);
     --bg-sunken:      var(--neutral-100);
     --bg-inverse:     var(--neutral-900);
-    --bg-scrim:       oklch(0% 0 0 / 0.5);
+    --bg-scrim:       oklch(24.7% 0.053 276 / 0.55);
 
-    --bg-hover:       oklch(0% 0 0 / 0.04);
-    --bg-active:      oklch(0% 0 0 / 0.08);
-    --bg-selected:    var(--accent-50);
+    --bg-hover:       oklch(24.7% 0.053 276 / 0.06);
+    --bg-active:      oklch(24.7% 0.053 276 / 0.12);
+    --bg-selected:    var(--warning-100);
     --bg-disabled:    var(--neutral-100);
 
     --fg-default:     var(--neutral-900);
     --fg-strong:      var(--neutral-950);
     --fg-muted:       var(--neutral-600);
     --fg-subtle:      var(--neutral-500);
-    --fg-disabled:    var(--neutral-400);
+    --fg-disabled:    var(--neutral-500);
     --fg-on-accent:   var(--neutral-0);
     --fg-on-inverse:  var(--neutral-50);
-    --fg-on-success:  var(--neutral-1000);
-    --fg-on-warning:  var(--neutral-1000);
+    --fg-on-success:  var(--neutral-900);
+    --fg-on-warning:  var(--neutral-900);
     --fg-on-danger:   var(--neutral-0);
     --fg-accent:      var(--accent-700);
-    --fg-link:        var(--accent-700);
+    --fg-link:        var(--neutral-900);
 
     --border-subtle:  var(--neutral-200);
     --border-default: var(--neutral-300);
     --border-strong:  var(--neutral-500);
-    --border-accent:  var(--accent-500);
-    --border-focus:   var(--accent-600);
+    --border-ink:     var(--neutral-900);
+    --border-accent:  var(--accent-600);
+    --bg-ink:         var(--neutral-900);
+    --fg-on-ink:      var(--neutral-0);
+    --border-focus:   var(--info-500);
     --border-invalid: var(--danger-500);
 
     --bg-accent:       var(--accent-600);
@@ -227,18 +254,47 @@
     --fg-warning:     var(--warning-700);
     --fg-danger:      var(--danger-700);
 
-    /* Rating tiers (S best, D worst). Data colours, not accents: each is a
-       text step plus a quiet tint, and the letter always carries the meaning. */
-    --fg-tier-s:      var(--accent-700);
-    --bg-tier-s:      var(--accent-100);
-    --fg-tier-a:      var(--success-700);
-    --bg-tier-a:      var(--success-100);
-    --fg-tier-b:      var(--info-700);
-    --bg-tier-b:      var(--info-100);
+    /* Soft fills: a stat that goes up or down, and the trinket's tile. */
+    --bg-up:          var(--success-100);
+    --bg-down:        var(--accent-100);
+    --bg-trinket:     var(--success-100);
+
+    /* The featured sticker: the character's tile, the item's art frame. Its
+       text pair is the same in both themes, because the fill is. */
+    --bg-feature:          var(--warning-500);
+    --fg-on-feature:       var(--neutral-900);
+    --fg-on-feature-muted: var(--neutral-600);
+
+    /* The spotlight panel (the AI read): a pool-blue sticker with white
+       text. Same in both themes. */
+    --bg-spotlight:        var(--info-500);
+    --fg-on-spotlight:     var(--neutral-0);
+    --border-on-spotlight: oklch(100% 0 0 / 0.4);
+
+    /* The ink band at the foot of the page. */
+    --bg-band:            var(--neutral-900);
+    --fg-on-band:         var(--neutral-0);
+    --fg-on-band-muted:   var(--neutral-200);
+
+    /* Rating tiers (S best, D worst). Each rating is a solid sticker with
+       its own text colour (the pair is the same in both themes), and a text
+       step for when the rating colours a word. The letter always carries
+       the meaning. */
+    --bg-tier-s:      var(--warning-500);
+    --fg-on-tier-s:   var(--neutral-900);
+    --bg-tier-a:      var(--info-500);
+    --fg-on-tier-a:   var(--neutral-0);
+    --bg-tier-b:      var(--success-500);
+    --fg-on-tier-b:   var(--neutral-900);
+    --bg-tier-c:      var(--neutral-200);
+    --fg-on-tier-c:   var(--neutral-900);
+    --bg-tier-d:      var(--grape-500);
+    --fg-on-tier-d:   var(--neutral-0);
+    --fg-tier-s:      var(--warning-700);
+    --fg-tier-a:      var(--info-700);
+    --fg-tier-b:      var(--success-700);
     --fg-tier-c:      var(--neutral-600);
-    --bg-tier-c:      var(--neutral-100);
-    --fg-tier-d:      var(--danger-700);
-    --bg-tier-d:      var(--danger-100);
+    --fg-tier-d:      var(--grape-700);
 
     /* ---- 7. RADIUS, BORDER, ELEVATION --------------------------------- */
     --radius-none: 0;
@@ -248,12 +304,19 @@
     --radius-lg:   0.75rem;
     --radius-xl:   1rem;
     --radius-2xl:  1.5rem;
+    --radius-3xl:  2rem;
     --radius-full: 9999px;
 
     --stroke-hairline: 1px;
     --stroke-default:  1px;
     --stroke-thick:    2px;
-    --stroke-focus:    2px;
+    --stroke-ink:      3px;
+    --stroke-focus:    3px;
+
+    /* The Toy Box's depth is a hard, unblurred offset in ink, never a blur. */
+    --offset-sm: 3px;
+    --offset-md: 5px;
+    --offset-lg: 8px;
 
     --shadow-none: none;
     --shadow-xs:  0 1px 2px  oklch(0% 0 0 / 0.05);
@@ -261,21 +324,35 @@
     --shadow-md:  0 2px 4px  oklch(0% 0 0 / 0.06), 0 6px 12px oklch(0% 0 0 / 0.06);
     --shadow-lg:  0 4px 8px  oklch(0% 0 0 / 0.06), 0 12px 24px oklch(0% 0 0 / 0.08);
     --shadow-xl:  0 8px 16px oklch(0% 0 0 / 0.07), 0 24px 48px oklch(0% 0 0 / 0.10);
+    /* The tray's moulded lip: a hard inset along its top edge. */
+    --shadow-inset: inset 0 6px 0 oklch(24.7% 0.053 276 / 0.08);
+
+    /* Stickers sit at a slant. */
+    --tilt-none:   0deg;
+    --tilt-left:   -5deg;
+    --tilt-right:  4deg;
+    --tilt-slight: -3deg;
 
     /* Pixel art is drawn on a 32px grid; sprites scale in whole multiples. */
     --sprite-cell: 32px;
   }
 
-  /* Theme-derived tokens: declared on every themed element, not only :root. */
+  /* Theme-derived tokens: declared on every themed element, not only :root,
+     so they pick up that element's --border-ink. */
   :root, [data-theme] {
-    --shadow-focus: 0 0 0 var(--stroke-focus) var(--bg-canvas),
-                    0 0 0 calc(var(--stroke-focus) * 2) var(--border-focus);
+    --shadow-focus: 0 0 0 var(--stroke-focus) var(--border-focus);
+
+    --shadow-offset-sm: var(--offset-sm) var(--offset-sm) 0 var(--border-ink);
+    --shadow-offset-md: var(--offset-md) var(--offset-md) 0 var(--border-ink);
+    --shadow-offset-lg: var(--offset-lg) var(--offset-lg) 0 var(--border-ink);
 
     --elevation-flat:    var(--shadow-none);
-    --elevation-card:    var(--shadow-sm);
-    --elevation-raised:  var(--shadow-md);
-    --elevation-overlay: var(--shadow-lg);
-    --elevation-modal:   var(--shadow-xl);
+    --elevation-well:    var(--shadow-inset);
+    --elevation-sticker: var(--shadow-offset-sm);
+    --elevation-card:    var(--shadow-offset-md);
+    --elevation-raised:  var(--shadow-offset-lg);
+    --elevation-overlay: var(--shadow-offset-lg);
+    --elevation-modal:   var(--shadow-offset-lg);
     --elevation-focus:   var(--shadow-focus);
   }
 
@@ -303,6 +380,15 @@
     --dur-loop:        900ms;
     --motion-loop:     var(--dur-loop) var(--ease-linear);
 
+    /* The item page's quality sticker wobbles, slowly, forever (decision
+       0005). Off under prefers-reduced-motion, in detail.css. */
+    --dur-wobble:        2800ms;
+    --motion-wobble:     var(--dur-wobble) var(--ease-in-out);
+    --tilt-wobble-from:  -8deg;
+    --tilt-wobble-to:    -2deg;
+    --scale-wobble:      1.04;
+    --scale-pop:         0.6;
+
     --motion-travel-xs: var(--space-1);
     --motion-travel-sm: var(--space-2);
     --motion-travel-md: var(--space-4);
@@ -329,52 +415,131 @@
 
     /* ---- 11. SIZES, TIER 2: how big a thing is, not how far apart ------- */
     --size-icon:         var(--space-4);    /* line icon                      */
-    --size-pip:          var(--space-2);    /* quality pip                    */
-    --size-seal:         var(--space-8);    /* rating seal                    */
-    --size-seal-sm:      var(--space-6);
+    --size-pip:          var(--space-3);    /* quality pip                    */
+    --size-seal:         calc(var(--space-10) + var(--space-1));  /* rating sticker, 44px */
+    --size-seal-sm:      calc(var(--space-6) + var(--space-1));   /* small sticker, 28px  */
     --size-mark:         var(--space-6);    /* wordmark glyph                 */
-    --size-control-sm:   var(--space-8);    /* compact button, icon button    */
-    --size-control-lg:   var(--space-12);   /* the main search box            */
+    --size-control-sm:   var(--tap-min);    /* compact button, icon button    */
+    --size-control-md:   calc(var(--space-12) + var(--space-0-5));  /* button, 50px  */
+    --size-control-lg:   calc(var(--space-12) + var(--space-3));    /* search, 60px  */
     --size-textarea:     var(--space-32);
     --size-menu-max:     calc(var(--space-48) * 2);
     --size-sprite-2x:    calc(var(--sprite-cell) * 2);
-    --size-tile:         calc(var(--sprite-cell) * 3);    /* pedestal                   */
+    --size-sprite-4x:    calc(var(--sprite-cell) * 4);
+    --size-tile:         calc(var(--space-32) + var(--space-3));  /* tray tile: eight across at 1440, two at 390 */
     --size-option:       calc(var(--sprite-cell) * 2.5);  /* character option: three across on a phone */
     --size-tile-wide:    calc(var(--sprite-cell) * 3.5);  /* browse tile                */
-    --size-art:          calc(var(--sprite-cell) * 6);    /* detail-page art frame      */
-    --size-stone:        var(--space-12);   /* pedestal slab: width, thickness, foot */
-    --size-stone-slab:   var(--space-2);
-    --size-stone-foot:   var(--space-1);
+    --size-art:          calc(var(--sprite-cell) * 11);   /* detail-page art frame      */
+    --size-sticker:      calc(var(--space-20) + var(--space-4));  /* quality sticker, 96px */
     --gap-hair:          var(--space-0-5);  /* optical gap inside one mark    */
     --indent-list:       var(--space-5);
     --offset-underline:  var(--space-1);
+    --offset-sticker:    calc(var(--space-4) * -1);  /* a sticker hangs over its card's edge */
 
-    --header-block-size: var(--space-16);
+    --header-block-size: var(--space-20);
     --width-page:        calc(var(--width-wide) + var(--gutter-page) * 2);
     --width-dialog:      min(100% - var(--gutter-page) * 2, calc(var(--width-content) * 0.6));
-    --width-build:       calc(var(--width-content) * 0.36);
-    --width-card-min:    calc(var(--width-content) / 3);
+    --width-search:      calc(var(--width-content) * 0.42);
+    --width-card-min:    calc(var(--width-content) / 2.2);
     --width-chip-min:    calc(var(--width-content) / 4);
+    --width-summary-min: calc(var(--width-content) / 4);
     --block-viewport:    calc(100dvb - var(--header-block-size));
     --block-dialog-max:  calc(100dvb - var(--gutter-page) * 2);
-    --block-sticky-max:  calc(100dvb - var(--header-block-size) - var(--gap-separate) * 2);
-    --offset-sticky:     calc(var(--header-block-size) + var(--gap-separate));
 
-    /* The rating letter: display face, set solid so it centres in its seal. */
-    --type-seal:    var(--weight-semibold) var(--text-xl)/var(--leading-none)   var(--font-display);
-    --type-seal-sm: var(--weight-semibold) var(--text-base)/var(--leading-none) var(--font-display);
+    /* The rating letter: display face, set solid so it centres in its sticker. */
+    --type-seal:    var(--weight-extrabold) var(--text-2xl)/var(--leading-none)  var(--font-display);
+    --type-seal-sm: var(--weight-extrabold) var(--text-base)/var(--leading-none) var(--font-display);
+    --type-sticker: var(--weight-extrabold) var(--text-3xl)/var(--leading-none)  var(--font-display);
   }
 
   /* On a phone the header stacks: wordmark above the nav. */
   @media (max-width: 47.99rem) {
-    :root { --header-block-size: var(--space-24); }
+    :root { --header-block-size: calc(var(--space-24) + var(--space-8)); }
   }
 
   /* =======================================================================
-     DARK THEME: the one the site ships. Re-points Tier 2 and --shadow-*.
-     Surfaces step up in lightness as they come forward: sunken 12%,
-     canvas 16.5%, surface 21%, raised 27.5%.
+     DARK TOY BOX: the toy box with the lights off. Re-points Tier 2.
+     Surfaces step up in lightness as they come forward: tray 14.5%,
+     ground 19.5%, tile 24.7%, raised 30%. The ink line turns to chalk so
+     every outline and offset still reads; the stickers keep their colours.
+
+     Written twice with the same declarations: once for the system setting,
+     once for data-theme="dark". tokens.test.ts fails if they drift.
      ======================================================================= */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+
+      --bg-canvas:      var(--neutral-950);
+      --bg-surface:     var(--neutral-900);
+      --bg-raised:      var(--neutral-800);
+      --bg-sunken:      var(--neutral-1000);
+      --bg-inverse:     var(--neutral-100);
+      --bg-scrim:       oklch(0% 0 0 / 0.66);
+
+      --bg-hover:       oklch(100% 0 0 / 0.08);
+      --bg-active:      oklch(100% 0 0 / 0.14);
+      --bg-selected:    var(--warning-900);
+      --bg-disabled:    var(--neutral-900);
+
+      --fg-default:     var(--neutral-100);
+      --fg-strong:      var(--neutral-0);
+      --fg-muted:       var(--neutral-300);
+      --fg-subtle:      var(--neutral-400);
+      --fg-disabled:    var(--neutral-400);
+      --fg-on-inverse:  var(--neutral-900);
+      --fg-accent:      var(--accent-300);
+      --fg-link:        var(--neutral-0);
+
+      --border-subtle:  var(--neutral-800);
+      --border-default: var(--neutral-700);
+      --border-strong:  var(--neutral-400);
+      --border-ink:     var(--neutral-200);
+      --border-accent:  var(--accent-400);
+      --bg-ink:         var(--neutral-200);
+      --fg-on-ink:      var(--neutral-900);
+      --border-focus:   var(--info-300);
+      --border-invalid: var(--danger-400);
+
+      --fg-success:     var(--success-300);
+      --fg-warning:     var(--warning-300);
+      --fg-danger:      var(--danger-300);
+
+      --bg-up:          var(--success-900);
+      --bg-down:        var(--accent-950);
+      --bg-trinket:     var(--success-900);
+
+      --bg-band:            var(--neutral-1000);
+      --fg-on-band:         var(--neutral-0);
+      --fg-on-band-muted:   var(--neutral-300);
+
+      --fg-tier-s:      var(--warning-300);
+      --fg-tier-a:      var(--info-300);
+      --fg-tier-b:      var(--success-300);
+      --fg-tier-c:      var(--neutral-300);
+      --fg-tier-d:      var(--grape-300);
+
+      --shadow-xs:  0 1px 2px  oklch(0% 0 0 / 0.30);
+      --shadow-sm:  0 1px 2px  oklch(0% 0 0 / 0.36), 0 2px 4px  oklch(0% 0 0 / 0.24);
+      --shadow-md:  0 2px 4px  oklch(0% 0 0 / 0.36), 0 6px 12px oklch(0% 0 0 / 0.30);
+      --shadow-lg:  0 4px 8px  oklch(0% 0 0 / 0.40), 0 12px 24px oklch(0% 0 0 / 0.36);
+      --shadow-xl:  0 8px 16px oklch(0% 0 0 / 0.44), 0 24px 48px oklch(0% 0 0 / 0.44);
+      --shadow-inset: inset 0 6px 0 oklch(0% 0 0 / 0.35);
+    }
+
+    :root:not([data-theme="light"]) .inverse {
+      --fg-default:     var(--neutral-900);
+      --fg-strong:      var(--neutral-1000);
+      --fg-muted:       var(--neutral-600);
+      --fg-subtle:      var(--neutral-600);
+      --fg-accent:      var(--accent-700);
+      --fg-link:        var(--neutral-900);
+      --border-subtle:  var(--neutral-200);
+      --border-default: var(--neutral-300);
+      --border-strong:  var(--neutral-500);
+    }
+  }
+
   [data-theme="dark"] {
     color-scheme: dark;
 
@@ -385,65 +550,68 @@
     --bg-inverse:     var(--neutral-100);
     --bg-scrim:       oklch(0% 0 0 / 0.66);
 
-    --bg-hover:       oklch(100% 0 0 / 0.06);
-    --bg-active:      oklch(100% 0 0 / 0.10);
-    --bg-selected:    var(--accent-950);
+    --bg-hover:       oklch(100% 0 0 / 0.08);
+    --bg-active:      oklch(100% 0 0 / 0.14);
+    --bg-selected:    var(--warning-900);
     --bg-disabled:    var(--neutral-900);
 
-    --fg-default:     var(--neutral-200);
-    --fg-strong:      var(--neutral-50);
+    --fg-default:     var(--neutral-100);
+    --fg-strong:      var(--neutral-0);
     --fg-muted:       var(--neutral-300);
     --fg-subtle:      var(--neutral-400);
-    --fg-disabled:    var(--neutral-600);
-    --fg-on-accent:   var(--neutral-1000);
+    --fg-disabled:    var(--neutral-400);
     --fg-on-inverse:  var(--neutral-900);
     --fg-accent:      var(--accent-300);
-    --fg-link:        var(--accent-300);
+    --fg-link:        var(--neutral-0);
 
     --border-subtle:  var(--neutral-800);
     --border-default: var(--neutral-700);
     --border-strong:  var(--neutral-400);
-    --border-accent:  var(--accent-500);
-    --border-focus:   var(--accent-300);
+    --border-ink:     var(--neutral-200);
+    --border-accent:  var(--accent-400);
+    --bg-ink:         var(--neutral-200);
+    --fg-on-ink:      var(--neutral-900);
+    --border-focus:   var(--info-300);
     --border-invalid: var(--danger-400);
 
-    --bg-accent:       var(--accent-400);
-    --bg-accent-hover: var(--accent-300);
-
     --fg-success:     var(--success-300);
-    --fg-warning:     var(--warning-500);
+    --fg-warning:     var(--warning-300);
     --fg-danger:      var(--danger-300);
 
-    --fg-tier-s:      var(--accent-300);
-    --bg-tier-s:      var(--accent-950);
-    --fg-tier-a:      var(--success-300);
-    --bg-tier-a:      var(--success-900);
-    --fg-tier-b:      var(--info-300);
-    --bg-tier-b:      var(--info-900);
+    --bg-up:          var(--success-900);
+    --bg-down:        var(--accent-950);
+    --bg-trinket:     var(--success-900);
+
+    --bg-band:            var(--neutral-1000);
+    --fg-on-band:         var(--neutral-0);
+    --fg-on-band-muted:   var(--neutral-300);
+
+    --fg-tier-s:      var(--warning-300);
+    --fg-tier-a:      var(--info-300);
+    --fg-tier-b:      var(--success-300);
     --fg-tier-c:      var(--neutral-300);
-    --bg-tier-c:      var(--neutral-800);
-    --fg-tier-d:      var(--danger-300);
-    --bg-tier-d:      var(--danger-900);
+    --fg-tier-d:      var(--grape-300);
 
     --shadow-xs:  0 1px 2px  oklch(0% 0 0 / 0.30);
     --shadow-sm:  0 1px 2px  oklch(0% 0 0 / 0.36), 0 2px 4px  oklch(0% 0 0 / 0.24);
     --shadow-md:  0 2px 4px  oklch(0% 0 0 / 0.36), 0 6px 12px oklch(0% 0 0 / 0.30);
     --shadow-lg:  0 4px 8px  oklch(0% 0 0 / 0.40), 0 12px 24px oklch(0% 0 0 / 0.36);
     --shadow-xl:  0 8px 16px oklch(0% 0 0 / 0.44), 0 24px 48px oklch(0% 0 0 / 0.44);
+    --shadow-inset: inset 0 6px 0 oklch(0% 0 0 / 0.35);
   }
 
   [data-theme="light"] {
     color-scheme: light;
   }
 
-  /* INVERSE: a light band on the dark page (or the reverse). */
+  /* INVERSE: a dark band on the light page (or the reverse). */
   .inverse {
     --fg-default:     var(--neutral-100);
     --fg-strong:      var(--neutral-50);
     --fg-muted:       var(--neutral-300);
     --fg-subtle:      var(--neutral-400);
     --fg-accent:      var(--accent-300);
-    --fg-link:        var(--accent-300);
+    --fg-link:        var(--neutral-0);
     --border-subtle:  var(--neutral-800);
     --border-default: var(--neutral-700);
     --border-strong:  var(--neutral-400);
@@ -455,7 +623,7 @@
     --fg-muted:       var(--neutral-600);
     --fg-subtle:      var(--neutral-600);
     --fg-accent:      var(--accent-700);
-    --fg-link:        var(--accent-700);
+    --fg-link:        var(--neutral-900);
     --border-subtle:  var(--neutral-200);
     --border-default: var(--neutral-300);
     --border-strong:  var(--neutral-500);
