@@ -9,8 +9,8 @@
 - **PR `Vybecode-LTD/The-Synergizing-of-Isaac#1` was merged by the owner** on 2026-11-25 at 00:14 UTC
   (`main` = `449f763`, CI green). The S and D synergy check is PR #2; its head and CI:
   `dev plans/NEXT_SESSION_PROMPT.md` section 3.
-- **Every S and D synergy was checked against the wiki** for Repentance (third session): 28 confirmed, 28
-  corrected, 17 re-rated, 4 removed; the list is 454 entries. Record: `data/synergy-checks.md`. A, B and C
+- **Every S and D synergy was checked against the wiki** for Repentance (third session): 27 confirmed, 28
+  corrected, 17 re-rated, 5 removed (one after CodeRabbit's review); the list is 453 entries. Record: `data/synergy-checks.md`. A, B and C
   entries are not checked.
 - **The whole PR was reviewed this session** (API, deploy files, the web app's logic; not the CSS, the
   generated data or the vendored design scripts) and all 15 findings were fixed with tests. Codex was then

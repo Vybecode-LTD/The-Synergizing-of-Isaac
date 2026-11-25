@@ -1913,17 +1913,6 @@
   "description": "Occasionally releases 1-3 extra knives in random directions when shooting. Free extra knives on top of your main throw."
  },
  {
-  "id": "guppys-head+soy-milk",
-  "items": [
-   "Guppy's Head",
-   "Soy Milk"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "S",
-  "description": "With Guppy transformation, each tear has a chance to spawn Blue Flies. Soy Milk's rapid fire rate generates enormous waves of flies that overwhelm everything."
- },
- {
   "id": "guppys-head+moms-knife",
   "items": [
    "Guppy's Head",
@@ -2196,7 +2185,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Restock refills the shop after each purchase and Steam Sale halves prices. In Repentance a restocked item costs more after every purchase and extra Steam Sales cannot take prices below 1 cent, so the endless free shop of older versions is gone. Still a good way to turn coins into items."
+  "description": "Restock refills the shop after each purchase and Steam Sale halves prices. In Repentance a restocked item costs more after every purchase, and extra Steam Sales only divide prices further (two make them a third), so the endless free shop of older versions is gone. Still a good way to turn coins into items."
  },
  {
   "id": "chaos+restock+steam-sale",
@@ -2340,7 +2329,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Using Diplopia on a Steam Sale gives you two. In Repentance each extra Steam Sale halves prices again but cannot take them below 1 cent, so shops become very cheap rather than free."
+  "description": "Using Diplopia on a Steam Sale gives you two. In Repentance two Steam Sales divide prices by three instead of making them free (a 15-cent item costs 5), and each further copy lowers them less."
  },
  {
   "id": "brimstone+maw-of-the-void",

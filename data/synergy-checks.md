@@ -13,9 +13,14 @@ item's own effects, and a claim neither page supports was taken out.
 **Ratings** are still the list's opinion (see the About page). A rating was changed only where the reason
 the entry gave for it is wrong in Repentance. Descriptions are written in this project's words, not copied.
 
-**Result:** 77 entries: 28 confirmed, 28 corrected,
-17 re-rated, 4 removed. The list went from 458 entries to 454.
+**Result:** 77 entries: 27 confirmed, 28 corrected,
+17 re-rated, 5 removed. The list went from 458 entries to 453.
 A, B and C entries are not checked yet.
+
+**Review:** CodeRabbit on PR #2 caught the Repentance Steam Sale formula (n copies divide prices by n + 1)
+and a two-item entry that needs a transformation (`guppys-head+soy-milk`); both are fixed below. Its point
+on Epic Fetus + Ipecac was checked and kept: the Epic Fetus page's Repentance line gives +2, while the
+Ipecac page's line has no version mark.
 
 | Entry | Members | Rating | Verdict | Why |
 |---|---|---|---|---|
@@ -30,7 +35,7 @@ A, B and C entries are not checked yet.
 | `moms-knife+proptosis` | Mom's Knife, Proptosis | S | Confirmed | The pair is on the wiki |
 | `epic-fetus+tech-x` | Tech X, Epic Fetus | S | Confirmed | The pair is on the wiki |
 | `ipecac+pyromaniac` | Ipecac, Pyromaniac | S | Confirmed | The pair is on the wiki |
-| `epic-fetus+ipecac` | Ipecac, Epic Fetus | S → B | Re-rated | Repentance gives a flat +2 here, not the large damage boost |
+| `epic-fetus+ipecac` | Ipecac, Epic Fetus | S → B | Re-rated | Repentance gives a flat +2, per the Epic Fetus page (the Ipecac page's line has no version mark) |
 | `ipecac+my-reflection` | Ipecac, My Reflection | D | Confirmed | The pair is on the wiki |
 | `libra+soy-milk` | Soy Milk, Libra | S → C | Re-rated | Repentance gives a very small all-stats up, not a large one |
 | `rock-bottom+soy-milk` | Soy Milk, Rock Bottom | S | Corrected | Added that the 0.2x damage still applies underneath |
@@ -56,16 +61,16 @@ A, B and C entries are not checked yet.
 | `kamikaze+c-the-lost` | Kamikaze, The Lost | D | Corrected | Holy Mantle absorbs the first blast, so it is not instant death |
 | `curse-of-the-tower+c-the-lost` | Curse of the Tower, The Lost | - | Removed | Removed: a Holy Mantle break does not trigger on-damage items for The Lost |
 | `brimstone+guppys-head` | Guppy's Head, Brimstone | - | Removed | Removed: needs the Guppy transformation, and the fly count had no source |
-| `guppys-head+soy-milk` | Guppy's Head, Soy Milk | S | Confirmed | From each item's own effects |
+| `guppys-head+soy-milk` | Guppy's Head, Soy Milk | - | Removed | Removed: it needs the Guppy transformation, which these two items alone do not give |
 | `almond-milk+libra` | Libra, Almond Milk | S → C | Re-rated | Repentance gives a very small all-stats up |
 | `box-of-friends+car-battery` | Car Battery, Box of Friends | S | Corrected | Two copies each, so three of each familiar, not four |
 | `car-battery+void` | Car Battery, Void | S | Confirmed | The pair is on the wiki |
-| `restock+steam-sale` | Restock, Steam Sale | S → B | Re-rated | Repentance raises restock prices and Steam Sales stop at 1 cent: no free shop |
+| `restock+steam-sale` | Restock, Steam Sale | S → B | Re-rated | Repentance raises restock prices, and n Steam Sales divide prices by n + 1: no free shop |
 | `chaos+restock+steam-sale` | Restock, Steam Sale, Chaos | S → A | Re-rated | Same Repentance price changes: no endless free shop |
 | `habit+scapular` | Habit, Scapular | S | Corrected | Scapular works once per room, so not infinite |
 | `mega-mush+void` | Void, Mega Mush | S | Corrected | Mega Mush lasts 30 seconds; Void uses it every 6 charges |
 | `blank-card+echo-chamber` | Echo Chamber, Blank Card | - | Removed | Removed: using Blank Card does not trigger Echo Chamber or join its queue |
-| `diplopia+steam-sale` | Diplopia, Steam Sale | S → B | Re-rated | Repentance prices stop at 1 cent, not free |
+| `diplopia+steam-sale` | Diplopia, Steam Sale | S → B | Re-rated | Repentance: two Steam Sales divide prices by three (price / (n + 1)), not free |
 | `holy-mantle+c-the-lost` | Holy Mantle, The Lost | S → C | Re-rated | The Lost already has the shield; the item adds one for that room only |
 | `psy-fly+c-the-lost` | Psy Fly, The Lost | S | Corrected | Psy Fly blocks shots; it does not send them back |
 | `box-of-friends+c-lilith` | Box of Friends, Lilith | S | Corrected | The copies last the room; it does not trigger every room |
