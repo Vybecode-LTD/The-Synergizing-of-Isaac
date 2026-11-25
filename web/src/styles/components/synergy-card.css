@@ -1,64 +1,85 @@
-/* SynergyCard: rating seal on the left, recipe and explanation on the right. */
+/* SynergyCard: a white card on a block of its rating's colour, the rating
+   sticker hanging over its top edge. */
 @layer components {
   .synergy-card {
-    --synergy-card-edge: var(--border-default);
+    --synergy-card-tint: var(--bg-tier-c);
+    --synergy-card-offset: var(--offset-md);
 
+    position: relative;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--gap-grouped);
-    align-items: start;
-    padding: var(--pad-well);
+    align-content: start;
+    padding: var(--pad-card) var(--pad-well) var(--pad-well);
     background: var(--bg-surface);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-inline-start: var(--stroke-thick) solid var(--synergy-card-edge);
-    border-radius: var(--radius-lg);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
+    box-shadow:
+      var(--synergy-card-offset) var(--synergy-card-offset) 0 var(--synergy-card-tint),
+      var(--synergy-card-offset) var(--synergy-card-offset) 0 var(--stroke-ink) var(--border-ink);
   }
 
-  .synergy-card[data-rating="S"] { --synergy-card-edge: var(--fg-tier-s); }
-  .synergy-card[data-rating="A"] { --synergy-card-edge: var(--fg-tier-a); }
-  .synergy-card[data-rating="B"] { --synergy-card-edge: var(--fg-tier-b); }
-  .synergy-card[data-rating="D"] { --synergy-card-edge: var(--fg-tier-d); }
+  .synergy-card[data-rating="S"] { --synergy-card-tint: var(--bg-tier-s); }
+  .synergy-card[data-rating="A"] { --synergy-card-tint: var(--bg-tier-a); }
+  .synergy-card[data-rating="B"] { --synergy-card-tint: var(--bg-tier-b); }
+  .synergy-card[data-rating="D"] { --synergy-card-tint: var(--bg-tier-d); }
+
+  /* The sticker (the card's first child, its RatingBadge): out of the flow,
+     over the top edge, each one at its own slant. */
+  .synergy-card > :first-child {
+    position: absolute;
+    inset-block-start: var(--offset-sticker);
+    inset-inline-end: var(--pad-well);
+  }
+
+  .synergy-card:nth-child(3n + 1) { --rating-tilt: var(--tilt-left); }
+  .synergy-card:nth-child(3n + 2) { --rating-tilt: var(--tilt-right); }
+  .synergy-card:nth-child(3n)     { --rating-tilt: var(--tilt-slight); }
 
   .synergy-card__body {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-tight);
+    gap: var(--gap-related);
     min-inline-size: 0;
   }
 
+  /* The recipe keeps clear of the sticker. */
   .synergy-card__recipe {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap-fused) var(--gap-tight);
+    gap: var(--gap-tight) var(--gap-related);
     align-items: center;
-    font: var(--type-h4);
+    padding-inline-end: var(--size-seal);
+    font: var(--type-h3);
     color: var(--fg-strong);
   }
 
   .synergy-card__plus {
-    font: var(--type-ui);
-    color: var(--fg-subtle);
+    font: var(--type-h3);
+    color: var(--fg-muted);
   }
 
   .synergy-card__piece,
   .synergy-card__character {
     display: inline-flex;
-    gap: var(--gap-fused);
+    gap: var(--gap-tight);
     align-items: center;
     color: inherit;
     text-decoration: none;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
   }
 
   .synergy-card__piece:hover,
   .synergy-card__character:hover {
-    color: var(--fg-accent);
+    text-decoration: underline;
+    text-decoration-thickness: var(--stroke-ink);
+    text-underline-offset: var(--offset-underline);
   }
 
   .synergy-card__piece:focus-visible,
   .synergy-card__character:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: var(--stroke-focus);
+    outline-offset: var(--stroke-thick);
   }
 
   .synergy-card__characters {
@@ -70,12 +91,12 @@
     color: var(--fg-muted);
   }
 
-  .synergy-card__character { color: var(--fg-default); }
+  .synergy-card__character { color: var(--fg-strong); }
 
   .synergy-card__text {
     max-inline-size: var(--measure-prose);
     font: var(--type-body);
-    color: var(--fg-default);
+    color: var(--fg-muted);
   }
 
   .synergy-card__footer {

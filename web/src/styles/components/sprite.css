@@ -15,6 +15,9 @@
       calc(var(--sprite-x) * var(--sprite-size) * -1)
       calc(var(--sprite-y) * var(--sprite-size) * -1);
     image-rendering: pixelated;
+    /* A parent asks for bigger art with --sprite-zoom: whole numbers only,
+       so the pixels stay square (the builder's tiles use 2). */
+    zoom: var(--sprite-zoom, 1);
   }
 
   .sprite[data-kind="trinket"] {
@@ -29,6 +32,7 @@
     block-size: var(--portrait-size);
     object-fit: contain;
     image-rendering: pixelated;
+    zoom: var(--sprite-zoom, 1);
   }
 
   .portrait[data-size="sm"] { --portrait-size: var(--sprite-cell); }

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>board harness</title>
+</head>
+<body>
+<script>
+// Local stand-in for the Design canvas runtime: fills a .dc.html board's template from its own renderVals().
+// Handles {{holes}} in text and attributes, <sc-for>, <sc-if>, <dc-import>, and <helmet>. Verification only.
+const cache = {};
+async function load(name) {
+  if (!cache[name]) {
+    const text = await (await fetch(name)).text();
+    const doc = new DOMParser().parseFromString(text, 'text/html');
+    const xdc = doc.querySelector('x-dc');
+    const helmet = xdc.querySelector('helmet');
+    const script = doc.querySelector('script[data-dc-script]').textContent;
+    class DCLogic { constructor(props) { this.props = props || {}; this.state = {}; } setState(s) { Object.assign(this.state, s); } forceUpdate() {} }
+    const Component = new Function('DCLogic', script + '\nreturn Component;')(DCLogic);
+    const vals = new Component({}).renderVals();
+    cache[name] = { xdc, helmet, vals };
+  }
+  return cache[name];
+}
+function lookup(scope, path) {
+  path = path.trim();
+  if (path === 'true') return true;
+  if (path === 'false') return false;
+  if (/^-?\d+(\.\d+)?$/.test(path)) return Number(path);
+  return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), scope);
+}
+const HOLE = /\{\{([^}]+)\}\}/g;
+function fill(str, scope) { return str.replace(HOLE, (_, p) => { const v = lookup(scope, p); return v == null ? '' : String(v); }); }
+async function expand(node, scope, out) {
+  if (node.nodeType === 3) { out.appendChild(document.createTextNode(fill(node.textContent, scope))); return; }
+  if (node.nodeType !== 1) return;
+  const tag = node.tagName.toLowerCase();
+  if (tag === 'helmet') return;
+  if (tag === 'sc-for') {
+    const list = lookup(scope, node.getAttribute('list').replace(/[{}]/g, '')) || [];
+    const as = node.getAttribute('as');
+    for (let i = 0; i < list.length; i++) {
+      for (const child of node.childNodes) await expand(child, { ...scope, [as]: list[i], $index: i }, out);
+    }
+    return;
+  }
+  if (tag === 'sc-if') {
+    if (lookup(scope, node.getAttribute('value').replace(/[{}]/g, ''))) for (const child of node.childNodes) await expand(child, scope, out);
+    return;
+  }
+  if (tag === 'dc-import') {
+    const sub = await load(node.getAttribute('name') + '.dc.html');
+    for (const child of sub.xdc.childNodes) await expand(child, sub.vals, out);
+    return;
+  }
+  const SVG = 'http://www.w3.org/2000/svg';
+  const el = node.namespaceURI === SVG ? document.createElementNS(SVG, node.localName) : document.createElement(tag);
+  for (const a of node.attributes) {
+    const whole = a.value.match(/^\{\{([^}]+)\}\}$/);
+    if (whole) { const v = lookup(scope, whole[1]); if (typeof v === 'function' || v == null) continue; el.setAttribute(a.name, String(v)); }
+    else el.setAttribute(a.name, fill(a.value, scope));
+  }
+  for (const child of node.childNodes) await expand(child, scope, el);
+  out.appendChild(el);
+}
+(async () => {
+  const name = new URLSearchParams(location.search).get('b');
+  const board = await load(name);
+  const helmets = [board.helmet];
+  for (const imp of board.xdc.querySelectorAll('dc-import')) helmets.push((await load(imp.getAttribute('name') + '.dc.html')).helmet);
+  for (const h of helmets) if (h) for (const c of h.children) document.head.appendChild(c.cloneNode(true));
+  const root = document.createElement('div');
+  for (const child of board.xdc.childNodes) await expand(child, board.vals, root);
+  document.body.appendChild(root);
+  await document.fonts.ready;
+  document.title = 'ready ' + name;
+})();
+</script>
+</body>
+</html>

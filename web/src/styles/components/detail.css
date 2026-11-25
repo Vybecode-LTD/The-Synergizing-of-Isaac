@@ -1,32 +1,48 @@
-/* Detail pages (one item, trinket or character) and the About page's prose. */
+/* Detail pages (one item, trinket or character) and the About page's prose. The
+   art sits in the featured sticker frame; the item's quality is a sticker that
+   wobbles (decision 0005), still under prefers-reduced-motion. */
 @layer components {
   .entity {
     display: grid;
-    gap: var(--gap-separate);
-    align-items: start;
-    padding: var(--pad-card);
-    background: var(--bg-surface);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-xl);
+    gap: var(--gap-distinct);
+    align-items: center;
   }
 
   @media (min-width: 48rem) {
     .entity {
       grid-template-columns: auto minmax(0, 1fr);
-      gap: var(--gap-distinct);
-      padding: var(--pad-card-lg);
+      gap: var(--space-subsection);
     }
   }
 
+  /* The frame: a sun-yellow toy with a round window cut into it. */
   .entity__art {
+    --sprite-zoom: 2;
+
+    position: relative;
     display: grid;
     place-items: center;
+    justify-self: center;
     inline-size: var(--size-art);
-    block-size: var(--size-art);
-    background: var(--bg-sunken);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    max-inline-size: 100%;
+    aspect-ratio: 1;
+    background: var(--bg-feature);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-3xl);
+    box-shadow: var(--elevation-raised);
   }
+
+  .entity__art::before {
+    position: absolute;
+    inset: var(--gap-separate);
+    content: "";
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-full);
+  }
+
+  /* The art itself, above the window. */
+  .entity__art > * { position: relative; }
 
   .entity__body {
     display: flex;
@@ -38,16 +54,44 @@
   .entity__meta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap-tight) var(--gap-related);
+    gap: var(--gap-related);
     align-items: center;
   }
 
+  /* The quality sticker: tomato, tilted, and the one thing on the site that
+     moves on its own. Its pips are recoloured for the tomato fill. */
   .entity__quality {
+    --border-strong: var(--fg-on-accent);
+
     display: inline-flex;
     gap: var(--gap-tight);
     align-items: center;
-    font: var(--type-ui);
-    color: var(--fg-default);
+    padding: var(--pad-block-sm) var(--pad-inline-md);
+    font: var(--type-button);
+    color: var(--fg-on-accent);
+    background: var(--bg-accent);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-full);
+    box-shadow: var(--elevation-sticker);
+    rotate: var(--tilt-wobble-from);
+  }
+
+  /* Its pips (the first child, QualityPips) fill white on the tomato. */
+  .entity__quality > :first-child { --quality-fill: var(--fg-on-accent); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entity__quality {
+      animation: sticker-wobble var(--motion-wobble) infinite;
+    }
+  }
+
+  @keyframes sticker-wobble {
+    0%,
+    100% { rotate: var(--tilt-wobble-from); }
+    50% {
+      rotate: var(--tilt-wobble-to);
+      scale: var(--scale-wobble);
+    }
   }
 
   .entity__aka,
@@ -59,8 +103,8 @@
 
   .entity__effect {
     max-inline-size: var(--measure-prose);
-    font: var(--type-lead);
-    color: var(--fg-strong);
+    font: var(--type-subtitle);
+    color: var(--fg-muted);
   }
 
   .entity__actions {
@@ -70,30 +114,36 @@
     align-items: center;
   }
 
-  /* ---- Facts: label and value pairs ------------------------------------------ */
+  /* ---- Facts: label and value cards ------------------------------------------ */
   .facts {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-tight);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--width-summary-min), 100%), 1fr));
+    gap: var(--gap-related);
   }
 
   .facts:empty { display: none; }
 
   .facts__row {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--gap-fused) var(--gap-related);
-    align-items: baseline;
-    font: var(--type-ui);
+    flex-direction: column;
+    gap: var(--gap-fused);
+    padding: var(--pad-block-md) var(--pad-inline-md);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-xl);
   }
 
   .facts__label {
-    flex: none;
-    min-inline-size: var(--size-tile-wide);
+    font: var(--type-label);
+    font-weight: var(--weight-bold);
     color: var(--fg-muted);
   }
 
-  .facts__value { color: var(--fg-default); }
+  .facts__value {
+    padding-inline-start: var(--space-0);
+    font: var(--type-ui);
+    color: var(--fg-strong);
+  }
 
   .inline-items {
     display: flex;
@@ -108,14 +158,16 @@
     gap: var(--gap-fused);
     align-items: center;
     color: var(--fg-link);
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: var(--stroke-thick);
+    text-underline-offset: var(--offset-underline);
     border-radius: var(--radius-sm);
   }
 
-  .inline-item:hover { color: var(--fg-strong); }
+  .inline-item:hover { text-decoration-thickness: var(--stroke-ink); }
 
   .inline-item:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: var(--stroke-focus);
+    outline-offset: var(--stroke-thick);
   }
 }

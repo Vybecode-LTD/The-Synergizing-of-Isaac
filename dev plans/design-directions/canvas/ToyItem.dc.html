@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Toy Box: Brimstone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&amp;family=Figtree:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#1A1E3A}
+@keyframes toy-wobble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(-2deg) scale(1.04)}}
+.toy-wobble{animation:toy-wobble 2.8s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.toy-wobble{animation:none}}
+</style>
+</helmet>
+<div style="min-height: 100%; background: #EEF1F8; color: #1A1E3A; font-family: 'Figtree', system-ui, sans-serif; font-size: 16px; line-height: 1.5;">
+
+<header style="max-width: 1360px; margin: 0 auto; padding: 22px clamp(16px, 4vw, 40px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px;">
+  <a href="ToyBuilder.dc.html" style="text-decoration: none; display: inline-flex; align-items: center; gap: 2px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; color: #1A1E3A; line-height: 1;">isaac<span style="display: inline-block; margin-left: 4px; padding: 3px 10px 5px; background: #C93A17; color: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 12px; transform: rotate(-3deg); box-shadow: 3px 3px 0 #1A1E3A;">.toys</span></a>
+  <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 8px;">
+    <a href="ToyBuilder.dc.html" style="height: 44px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 22px; color: #1A1E3A; text-decoration: none; font-weight: 600; font-size: 15px;">Builder</a>
+    <a href="ToyItem.dc.html" aria-current="page" style="height: 44px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 22px; background: #1A1E3A; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px;">Items</a>
+    <a href="#" style="height: 44px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 22px; color: #1A1E3A; text-decoration: none; font-weight: 600; font-size: 15px;">Trinkets</a>
+    <a href="#" style="height: 44px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 22px; color: #1A1E3A; text-decoration: none; font-weight: 600; font-size: 15px;">Characters</a>
+    <a href="ToySynergies.dc.html" style="height: 44px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 22px; color: #1A1E3A; text-decoration: none; font-weight: 600; font-size: 15px;">Synergies</a>
+    <a href="#" style="height: 44px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 22px; color: #1A1E3A; text-decoration: none; font-weight: 600; font-size: 15px;">About</a>
+  </nav>
+</header>
+
+<main style="max-width: 1360px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px) 88px;">
+  <nav aria-label="Breadcrumb" style="padding-top: 18px; font-size: 15px; font-weight: 600; color: #474D6E;"><a href="#" style="color: #474D6E;">Items</a><span aria-hidden="true" style="margin: 0 10px;">/</span><span aria-current="page" style="color: #1A1E3A;">Brimstone</span></nav>
+
+  <section style="margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 40px 64px;">
+    <figure style="margin: 0; flex: 0 1 400px; display: flex; justify-content: center;">
+      <div style="position: relative; width: 360px; max-width: 100%; padding: 64px 30px 34px; background: #FFC21A; border: 3px solid #1A1E3A; border-radius: 30px; box-shadow: 8px 8px 0 #1A1E3A; display: flex; flex-direction: column; align-items: center; gap: 18px;">
+        <span aria-hidden="true" style="position: absolute; top: 18px; left: 50%; width: 64px; height: 18px; transform: translateX(-50%); background: #EEF1F8; border: 3px solid #1A1E3A; border-radius: 9px;"></span>
+        <div style="width: 280px; max-width: 100%; height: 280px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.72); border: 3px solid #1A1E3A; border-radius: 120px; box-shadow: inset -14px -16px 0 rgba(26,30,58,0.06), inset 12px 12px 0 rgba(255,255,255,0.9);">
+          <img src="/_blob/b23bbe7f39de27e4a7a078acff0487a5" alt="Brimstone" style="width: 256px; height: 256px; image-rendering: pixelated;">
+        </div>
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 15px; font-weight: 800;">Item No. 118</span>
+        <span class="toy-wobble" style="position: absolute; top: 34px; right: -22px; width: 96px; height: 96px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: #C93A17; color: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 50%; box-shadow: 0 0 0 4px #FFFFFF; font-family: 'Bricolage Grotesque', sans-serif; line-height: 1;"><span style="font-size: 13px; font-weight: 700;">Quality</span><span style="font-size: 40px; font-weight: 800;">4</span></span>
+      </div>
+    </figure>
+    <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 22px;">
+      <div>
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(56px, 7.5vw, 112px); letter-spacing: -0.045em; line-height: 0.9; padding-bottom: 0.1em;">Brimstone</h1>
+        <p style="margin: 8px 0 0; font-size: 24px; font-weight: 600; color: #474D6E;">Tears become blood laser, hits 9 times</p>
+      </div>
+      <dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 12px;">
+        <div style="padding: 16px 18px; background: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 20px;">
+          <dt style="font-size: 14px; font-weight: 700; color: #474D6E;">Stat changes</dt>
+          <dd style="margin: 4px 0 0;"><span style="display: inline-flex; height: 34px; padding: 0 12px; align-items: center; background: #FFD9CC; border: 2px solid #1A1E3A; border-radius: 17px; font-weight: 800;">Tears ×0.33</span></dd>
+        </div>
+        <div style="padding: 16px 18px; background: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 20px;">
+          <dt style="font-size: 14px; font-weight: 700; color: #474D6E;">Item pools</dt>
+          <dd style="margin: 4px 0 0; font-size: 17px; font-weight: 700;">Devil Room, Ultra Secret Room</dd>
+        </div>
+        <div style="padding: 16px 18px; background: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 20px;">
+          <dt style="font-size: 14px; font-weight: 700; color: #474D6E;">Transformation</dt>
+          <dd style="margin: 4px 0 0; font-size: 17px; font-weight: 700;">Leviathan</dd>
+        </div>
+        <div style="padding: 16px 18px; background: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 20px;">
+          <dt style="font-size: 14px; font-weight: 700; color: #474D6E;">Type</dt>
+          <dd style="margin: 4px 0 0; font-size: 17px; font-weight: 700;">Passive, from Rebirth</dd>
+        </div>
+      </dl>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+        <a href="ToyBuilder.dc.html" style="height: 58px; padding: 0 30px; display: inline-flex; align-items: center; background: #C93A17; color: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 29px; box-shadow: 4px 4px 0 #1A1E3A; text-decoration: none; font-weight: 800; font-size: 18px;">Add to build</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="item-syn" style="margin-top: 80px; display: flex; flex-direction: column; gap: 20px;">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;">
+      <h2 id="item-syn" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 48px; letter-spacing: -0.03em; line-height: 1;">63 synergies with Brimstone</h2>
+      <ul role="list" aria-label="By rating" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px;">
+        <sc-for list="{{tally}}" as="t" hint-placeholder-count="5">
+          <li style="height: 40px; padding: 0 14px 0 6px; display: inline-flex; align-items: center; gap: 8px; background: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 20px; font-weight: 800;">
+            <span style="width: 26px; height: 26px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-size: 16px; font-weight: 800; background: {{t.bg}}; color: {{t.fg}};">{{t.r}}</span>×{{t.n}}
+          </li>
+        </sc-for>
+      </ul>
+    </header>
+    <p style="margin: 0; color: #474D6E; font-size: 18px; font-weight: 500; max-width: 70ch;">Brimstone has 63 known synergies in this list. The strongest are with Azazel, Crown of Light and Epic Fetus.</p>
+    <ul role="list" style="margin: 12px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(520px, 100%), 1fr)); gap: 20px;">
+      <sc-for list="{{cards}}" as="s" hint-placeholder-count="9">
+        <li style="position: relative; display: flex; gap: 18px; align-items: flex-start; padding: 24px 22px 22px; background: #FFFFFF; border: 3px solid #1A1E3A; border-radius: 24px; box-shadow: 6px 6px 0 #FFC21A, 6px 6px 0 3px #1A1E3A;">
+          <span role="img" aria-label="Rated S" style="position: absolute; top: -14px; right: 18px; width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 800; background: #FFC21A; border: 3px solid #1A1E3A; transform: rotate({{s.tilt}}deg); box-shadow: 0 0 0 3px #FFFFFF;">S</span>
+          <div style="flex: none; padding: 6px; background: #EEF1F8; border-radius: 16px;"><img src="{{s.src}}" alt="" style="display: block; width: 64px; height: 64px; object-fit: contain; image-rendering: pixelated;"></div>
+          <div style="flex: 1 1 auto; min-width: 0;">
+            <h3 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 23px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15;">{{s.title}}</h3>
+            <p style="margin: 6px 0 0; color: #474D6E; font-size: 16px;">{{s.description}}</p>
+          </div>
+        </li>
+      </sc-for>
+    </ul>
+    <p style="margin: 14px 0 0;"><button type="button" style="height: 50px; padding: 0 22px; background: #1A1E3A; color: #FFFFFF; border: 0; border-radius: 25px; font: inherit; font-weight: 800; cursor: pointer;">Show all 63 synergies</button></p>
+  </section>
+</main>
+
+<footer style="background: #1A1E3A; color: #C9D0E2;">
+  <div style="max-width: 1360px; margin: 0 auto; padding: 40px clamp(16px, 4vw, 40px) 56px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px 48px; font-size: 14px;">
+    <p style="margin: 0; flex: 1 1 420px; max-width: 70ch;">isaac.toys is an unofficial fan project, not affiliated with or endorsed by Edmund McMillen or Nicalis. All item, trinket and character artwork belongs to them.</p>
+    <p style="margin: 0; flex: 0 1 auto;">Data: Repentance 1.7.9b, updated 24 November 2026</p>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = { S: ['#FFC21A', '#1A1E3A'], A: ['#1F5FE0', '#FFFFFF'], B: ['#2FCB8E', '#1A1E3A'], C: ['#C9D0E2', '#1A1E3A'], D: ['#6B3FD4', '#FFFFFF'] };
+    const tally = [['S', 9], ['A', 27], ['B', 25], ['C', 1], ['D', 1]].map(([r, n]) => ({ r, n, bg: R[r][0], fg: R[r][1] }));
+    const tilts = [-6, 5, -3, 4, -5, 3, -4, 6, -2];
+    const cards = [
+      ['With Azazel', '/_blob/98f8f8866e83eb48625d620f61680060', "Upgrades Azazel's short-range Mini Brimstone into the full-length Brimstone laser. Removes Azazel's biggest weakness (short range) while keeping flight and black hearts."],
+      ['With Crown of Light', '/_blob/b8be76cf3ab3bca6001f575a2188bb08', 'Crown of Light doubles damage while all your red heart containers are full, and the 2x carries into the Brimstone beam. Taking damage switches the crown off for the rest of the room.'],
+      ['With Epic Fetus', '/_blob/fbfa9f13fabe1f6474a043a1102d9261', "Each Epic Fetus missile explosion shoots 10 Brimstone lasers in all directions. Combines the missile's massive base damage with full Brimstone beams. Absolutely devastating room clear."],
+      ['With Haemolacria', '/_blob/d5e32910f7dbff817f37aecbf1385d31', "Haemolacria takes priority: you fire arcing tears that burst into 4-7 Brimstone beams on impact, each dealing full damage per tick. Tear delay rises by 20 on top of Haemolacria's own tears down."],
+      ["With Mom's Knife", '/_blob/f788695d033f6d7f087a74ebfc8f16f0', "Mom's Knife takes priority, and Brimstone's tears down does not apply. Each throw also launches a barrage of extra knives that cross the whole screen and do not return, each dealing 2x Isaac's damage in Repentance. A longer charge adds more knives: about 2-4 uncharged, 8-10 fully charged. Does not work with Azazel's own Brimstone."],
+      ['With Rock Bottom', '/_blob/8627f4c9af1259775a480cfecdd973fb', 'Rock Bottom prevents the charge time increase, so Brimstone fires at near-normal fire rate. Dramatically increases beam DPS output.'],
+      ["With Tammy's Head", '/_blob/8a9a8bc7b77cf6b399c4e87e7a913a4d', "Using Tammy's Head fires 10 Brimstone lasers in all directions simultaneously. Each laser deals your full Brimstone damage. One of the most powerful combos in the game, capable of clearing entire rooms and melting bosses instantly."],
+      ['With Tech X', '/_blob/a45e4598f23e318271c5f08e011342ac', "Tech X takes priority and fires a Brimstone ring instead of its laser ring. The ring is larger, has a much wider hitbox, and Brimstone's tears down does not apply. One of the strongest beam builds."],
+      ['With Technology', '/_blob/93bb336fbdd0921b22a0210b77204c70', 'The Technology laser coils around the Brimstone beam and multiplies damage by 1.5, stacking with other multipliers. In Repentance the double-Brimstone upgrade (a second Brimstone, or Sulfur) replaces that 1.5x with its own 1.2x, so it can lower your damage.']
+    ].map(([title, src, description], i) => ({ title, src, description, tilt: tilts[i] }));
+    return { tally, cards };
+  }
+}
+</script>
+</body>
+</html>

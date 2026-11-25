@@ -1,0 +1,317 @@
+[
+ {
+  "fg": "--fg-on-tier-s",
+  "bg": "--bg-tier-s",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-s",
+  "bg": "--bg-canvas",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-s",
+  "bg": "--bg-surface",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-tier-a",
+  "bg": "--bg-tier-a",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-a",
+  "bg": "--bg-canvas",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-a",
+  "bg": "--bg-surface",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-tier-b",
+  "bg": "--bg-tier-b",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-b",
+  "bg": "--bg-canvas",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-b",
+  "bg": "--bg-surface",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-tier-c",
+  "bg": "--bg-tier-c",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-c",
+  "bg": "--bg-canvas",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-c",
+  "bg": "--bg-surface",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-tier-d",
+  "bg": "--bg-tier-d",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-d",
+  "bg": "--bg-canvas",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-tier-d",
+  "bg": "--bg-surface",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-feature",
+  "bg": "--bg-feature",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-feature-muted",
+  "bg": "--bg-feature",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-spotlight",
+  "bg": "--bg-spotlight",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-band",
+  "bg": "--bg-band",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-band-muted",
+  "bg": "--bg-band",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-ink",
+  "bg": "--bg-ink",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-strong",
+  "bg": "--bg-up",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-muted",
+  "bg": "--bg-up",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-strong",
+  "bg": "--bg-down",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-muted",
+  "bg": "--bg-down",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-strong",
+  "bg": "--bg-trinket",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-muted",
+  "bg": "--bg-trinket",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-strong",
+  "bg": "--bg-selected",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-muted",
+  "bg": "--bg-selected",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-disabled",
+  "bg": "--bg-disabled",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--border-ink",
+  "bg": "--bg-canvas",
+  "min": 3.0,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--border-ink",
+  "bg": "--bg-surface",
+  "min": 3.0,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--border-ink",
+  "bg": "--bg-sunken",
+  "min": 3.0,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--border-ink",
+  "bg": "--bg-raised",
+  "min": 3.0,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--border-focus",
+  "bg": "--bg-sunken",
+  "min": 3.0,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ }
+]

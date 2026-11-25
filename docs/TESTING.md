@@ -1,6 +1,6 @@
 # Testing
 
-Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
+Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the Toy Box redesign).
 
 ## Frameworks
 
@@ -11,17 +11,19 @@ Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
 | API | pytest 9, pytest-asyncio, pytest-cov, FastAPI `TestClient` | `api/pyproject.toml`, `api/tests/conftest.py` |
 | API static checks | ruff (lint and format), mypy strict | `api/pyproject.toml` |
 | Data | `scripts/gamedata.py validate`, run by `api/tests/test_core.py` | |
-| Design system | `scripts/design/audit_design.py --strict`, `check_roles.py` | from the `web-design-studio` skill |
+| Design system | `scripts/design/audit_design.py --strict`, `check_roles.py` (built-in pairs, then `toy-box-pairs.json`) | from the `web-design-studio` skill |
 | Rendered contrast | `rendered_contrast.mjs` from the `verify-real-pass` skill (axe-core, real Chrome) | run by hand, see below |
 
 ## Commands and last results
 
 | Command | Where | Result |
 |---|---|---|
-| `npm run test:coverage` | `web/` | 114 passed; lines 98.6%, statements 96.9%, branches 89.3%. Fails under 85% lines |
+| `npm run test:coverage` | `web/` | 125 passed; lines 98.6%, statements 96.9%. Fails under 85% lines |
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
-| `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 62 files |
+| `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 63 files |
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
+| same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 70 of 70 pass (stickers, feature, spotlight, band, ink, tints, outlines; light and dark) |
+| `npm run build` | `web/` | builds; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
 | `.venv\Scripts\python -m pytest --cov` | `api/` | 81 passed; 99% of `app/` |
 | `.venv\Scripts\python -m ruff check .`, `-m ruff format --check .`, `-m mypy` | `api/` | clean |
 | `.venv\Scripts\python -m app.parity --check` | `api/` | snapshot is current |
@@ -47,6 +49,10 @@ Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
   answered from the cache; a request that is not JSON never reaches the model.
 - **Store** (`api/tests/test_core.py`): a refund goes back to the day it was taken from, even when the
   call fails after midnight UTC.
+- **Stylesheet** (`web/src/styles/tokens.test.ts`): the dark roles written for the system setting equal
+  the ones written for `data-theme="dark"`, and every custom property read without a fallback is declared.
+- **Share image** (`web/scripts/og-card.test.mjs`): the card prints the counts `data/` holds (a fake data
+  folder and the real one), a changed count changes the card, and names are escaped.
 - **Pages for crawlers** (`api/tests/test_pages.py`): one `h1`, canonical, valid JSON-LD, escaped text, real
   404s, sitemap of all 947 URLs, robots rules, no path escape from the web build, a 404 (not a 500) for a
   null byte or an over-long name, and stats printed the way the app prints them.
@@ -70,6 +76,9 @@ Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
   order, cache key ignoring the prompt and the system prompt, stats unrounded). All 13 turned a test red.
   On the web, four tests failed before the fixes (build wiped by the Builder link, `/Items` rendered,
   saved synergies crashing on a non-list, a "+0" stat).
+- Toy Box gates, 2026-11-25: the extra role pairs failed a copy of the tokens with ink text on the pool
+  sticker (2.93:1); the drift test fails a copy whose dark `--bg-canvas` differs; the custom-property test
+  found the two layout sockets before it learned that a read with a fallback is optional.
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404
@@ -80,9 +89,13 @@ Last run: 2026-11-24, on the owner's Windows machine, branch `feat/web-app`.
 
 - **Rendered contrast** (every visual change): with the built site running on 8001,
   `node C:\DEV\knowledge\skills\verify-real-pass\scripts\rendered_contrast.mjs http://127.0.0.1:8001/<page> --schemes dark`,
-  plus `--click-each "<selector>"` for state controls. Results for this build are in `docs/HANDOFF.md`.
-- **Browser against server**: the snippet in `docs/HANDOFF.md` compares rendered headings and paragraphs
-  with the raw HTML for nine routes.
+  plus `--click-each "<selector>"` for state controls. Restart the site server after `npm run build`: it
+  keeps the old `index.html`, which then points at deleted assets and the gate measures an unstyled page.
+  The Toy Box run (2026-11-25) and its two extra checks (the dialog in a tall viewport, the AI answer with a
+  faked response) are in `docs/HANDOFF.md`.
+- **Browser against server** is not a by-hand step: the parity tests (`web/src/parity.test.ts`,
+  `api/tests/test_core.py`) compare both sides with `data/tests/parity.json` on every run. The first session
+  also compared the browser's titles with the server's on nine routes by hand, once, with no script kept.
 
 ## Known gaps
 

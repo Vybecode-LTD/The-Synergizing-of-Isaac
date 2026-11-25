@@ -1,0 +1,32 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-11-25T04:20:00Z" },
+  "title": "isaac.toys directions",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1440, "h": 3090, "title": "A Pedestal: builder", "expand": "fill" },
+    "PedestalPhone.dc.html": { "x": 1520, "y": 0, "w": 390, "h": 6850, "title": "A Pedestal: builder on a phone" },
+    "PedestalItem.dc.html": { "x": 1990, "y": 0, "w": 1440, "h": 2200, "title": "A Pedestal: item page", "expand": "fill" },
+    "PedestalSynergies.dc.html": { "x": 3510, "y": 0, "w": 1440, "h": 2490, "title": "A Pedestal: synergy list", "expand": "fill" },
+    "ToyBuilder.dc.html": { "x": 0, "y": 7500, "w": 1440, "h": 2930, "title": "B Toy Box: builder", "expand": "fill" },
+    "ToyPhone.dc.html": { "x": 1520, "y": 7500, "w": 390, "h": 6450, "title": "B Toy Box: builder on a phone" },
+    "ToyItem.dc.html": { "x": 1990, "y": 7500, "w": 1440, "h": 2100, "title": "B Toy Box: item page", "expand": "fill" },
+    "ToySynergies.dc.html": { "x": 3510, "y": 7500, "w": 1440, "h": 2650, "title": "B Toy Box: synergy list", "expand": "fill" },
+    "AlmanacBuilder.dc.html": { "x": 0, "y": 15000, "w": 1440, "h": 3040, "title": "C Almanac: builder", "expand": "fill" },
+    "AlmanacPhone.dc.html": { "x": 1520, "y": 15000, "w": 390, "h": 6580, "title": "C Almanac: builder on a phone" },
+    "AlmanacItem.dc.html": { "x": 1990, "y": 15000, "w": 1440, "h": 2220, "title": "C Almanac: item page", "expand": "fill" },
+    "AlmanacSynergies.dc.html": { "x": 3510, "y": 15000, "w": 1440, "h": 2880, "title": "C Almanac: synergy list", "expand": "fill" }
+  },
+  "order": [
+    "Main.dc.html", "PedestalPhone.dc.html", "PedestalItem.dc.html", "PedestalSynergies.dc.html",
+    "ToyBuilder.dc.html", "ToyPhone.dc.html", "ToyItem.dc.html", "ToySynergies.dc.html",
+    "AlmanacBuilder.dc.html", "AlmanacPhone.dc.html", "AlmanacItem.dc.html", "AlmanacSynergies.dc.html"
+  ],
+  "notes": {
+    "rowA": { "x": 0, "y": -300, "text": "A. Pedestal: dark and candlelit, pickups as relics", "kind": "title1", "maxW": 4950 },
+    "rowB": { "x": 0, "y": 7200, "text": "B. Toy Box: bright and chunky, pickups as plastic tiles", "kind": "title1", "maxW": 4950 },
+    "rowC": { "x": 0, "y": 14700, "text": "C. Almanac: light and type-led, a printed field guide", "kind": "title1", "maxW": 4950 }
+  },
+  "designSystems": []
+}

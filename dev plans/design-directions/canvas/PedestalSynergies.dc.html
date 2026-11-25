@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pedestal: all synergies</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#100D0B}
+</style>
+</helmet>
+<div style="min-height: 100%; background: #15110E; color: #EFE6D6; font-family: 'Manrope', system-ui, sans-serif; font-size: 16px; line-height: 1.55;">
+
+<header style="border-bottom: 1px solid #2B231D;">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 22px clamp(20px, 4vw, 40px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 32px;">
+    <a href="Main.dc.html" style="text-decoration: none; font-family: 'Cormorant', serif; font-size: 32px; font-weight: 700; color: #EFE6D6; line-height: 1;">isaac<span style="color: #F0A43A;">.toys</span></a>
+    <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 6px 26px; font-size: 15px; font-weight: 500;">
+      <a href="Main.dc.html" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Builder</a>
+      <a href="PedestalItem.dc.html" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Items</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Trinkets</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Characters</a>
+      <a href="PedestalSynergies.dc.html" aria-current="page" style="color: #F0A43A; text-decoration: none; padding: 6px 0; border-bottom: 2px solid #F0A43A;">Synergies</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">About</a>
+    </nav>
+  </div>
+</header>
+
+<main style="max-width: 1240px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) clamp(20px, 4vw, 40px) 88px;">
+  <h1 style="margin: 0; font-family: 'Cormorant', serif; font-weight: 600; font-size: clamp(42px, 5.6vw, 72px); line-height: 1.02; padding-bottom: 0.08em;">All Repentance synergies</h1>
+  <p style="margin: 14px 0 0; font-size: 18px; color: #B3A692; max-width: 62ch;">The whole list, strongest first. S is run-defining, A strong, B good, C minor, and D means the items work against each other.</p>
+
+  <div style="margin-top: 36px; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 18px 28px; padding: 22px; background: #1D1713; border: 1px solid #33291F; border-radius: 4px;">
+    <div role="search" style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 8px;">
+      <label for="syn-q" style="font-size: 14px; font-weight: 600;">Search by item, trinket or character</label>
+      <div style="display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 16px; background: #0E0B09; border: 1px solid #4A3D33; border-radius: 4px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.55);">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+        <input id="syn-q" type="text" placeholder="Brimstone, The Lost, Perfection…" style="flex: 1; min-width: 0; height: 100%; background: transparent; border: 0; outline: none; color: #EFE6D6; font: inherit; font-size: 17px;">
+      </div>
+    </div>
+    <fieldset style="flex: 1 1 420px; min-width: 0; margin: 0; padding: 0; border: 0;">
+      <legend style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Rating</legend>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <sc-for list="{{filters}}" as="f" hint-placeholder-count="6">
+          <button type="button" aria-pressed="{{f.pressed}}" style="height: 44px; padding: 0 14px; display: inline-flex; align-items: center; gap: 8px; border-radius: 22px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; background: {{f.bg}}; color: {{f.fg}}; border: 1px solid {{f.border}};">{{f.label}}<span style="font-weight: 500; opacity: 0.85;">{{f.n}}</span></button>
+        </sc-for>
+      </div>
+    </fieldset>
+  </div>
+
+  <p role="status" style="margin: 28px 0 14px; font-size: 15px; color: #B3A692;">Showing 1 to 40 of 454 synergies</p>
+
+  <ol role="list" style="margin: 0; padding: 0; list-style: none; border-top: 1px solid #33291F;">
+    <sc-for list="{{rows}}" as="s" hint-placeholder-count="14">
+      <li style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; padding: 20px 4px; border-bottom: 1px solid #33291F;">
+        <span role="img" aria-label="Rated S" style="flex: none; width: 42px; height: 42px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant', serif; font-size: 25px; font-weight: 700; background: #F0A43A; color: #15110E; box-shadow: 0 0 0 3px #15110E, 0 0 0 4px #F0A43A;">S</span>
+        <div style="flex: 0 0 204px; display: flex; align-items: center; gap: 4px;">
+          <sc-for list="{{s.sprites}}" as="sp" hint-placeholder-count="2">
+            <img src="{{sp.src}}" alt="" style="width: 64px; height: 64px; object-fit: contain; image-rendering: pixelated;">
+          </sc-for>
+        </div>
+        <div style="flex: 1 1 380px; min-width: 0;">
+          <h2 style="margin: 0; font-family: 'Cormorant', serif; font-size: 24px; font-weight: 600; line-height: 1.15;">{{s.title}}</h2>
+          <p style="margin: 4px 0 0; color: #B3A692; font-size: 15px;">{{s.description}}</p>
+        </div>
+        <a href="Main.dc.html" style="flex: none; height: 44px; padding: 0 16px; display: inline-flex; align-items: center; color: #F0A43A; border: 1px solid #5A4630; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 600;">Open in builder</a>
+      </li>
+    </sc-for>
+  </ol>
+
+  <nav aria-label="Pages" style="margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+    <span style="font-size: 15px; color: #B3A692;">Page 1 of 12</span>
+    <div style="display: flex; gap: 10px;">
+      <button type="button" disabled="disabled" style="height: 46px; padding: 0 18px; background: transparent; color: #7D7264; border: 1px solid #33291F; border-radius: 4px; font: inherit; font-weight: 600;">Previous</button>
+      <button type="button" style="height: 46px; padding: 0 18px; background: transparent; color: #F0A43A; border: 1px solid #F0A43A; border-radius: 4px; font: inherit; font-weight: 600; cursor: pointer;">Next</button>
+    </div>
+  </nav>
+</main>
+
+<footer style="background: #100D0B; border-top: 1px solid #2B231D;">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 40px clamp(20px, 4vw, 40px) 56px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px 48px; font-size: 14px; color: #B3A692;">
+    <p style="margin: 0; flex: 1 1 420px; max-width: 70ch;">isaac.toys is an unofficial fan project, not affiliated with or endorsed by Edmund McMillen or Nicalis. All item, trinket and character artwork belongs to them.</p>
+    <p style="margin: 0; flex: 0 1 auto;">Data: Repentance 1.7.9b, updated 24 November 2026</p>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2490}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const B = {
+      guphead: '/_blob/c44bda023f23f976eb6eff725344fe4c', collar: '/_blob/ce4b16fb388676de8647fbc5fc0110ac',
+      deadcat: '/_blob/c5db645757ffc1b3f463b3060c6917a2', paw: '/_blob/2dacfff9cd75453e4b57211bd06136f4',
+      tail: '/_blob/3892422f28194438db067faa776f2e0f', birth: '/_blob/99e4812084f14866de98545bd61e2764',
+      lost: '/_blob/b1b02e0e1dd1711b50e0b4a8b40d0660', virtues: '/_blob/ada255821b62750173fa98e34a66091d',
+      beth: '/_blob/3a29ab7d9b76407b3fcaaeaa74da3d1e', box: '/_blob/606a3c6e26a73c97a8a9567264717abd',
+      lilith: '/_blob/360a20fb5f3bc477009baff3230b900a', battery: '/_blob/db0829ad0314a524bab9e60ad385252b',
+      brim: '/_blob/b23bbe7f39de27e4a7a078acff0487a5', azazel: '/_blob/98f8f8866e83eb48625d620f61680060',
+      crown: '/_blob/b8be76cf3ab3bca6001f575a2188bb08', epic: '/_blob/fbfa9f13fabe1f6474a043a1102d9261',
+      haemo: '/_blob/d5e32910f7dbff817f37aecbf1385d31', knife: '/_blob/f788695d033f6d7f087a74ebfc8f16f0',
+      rock: '/_blob/8627f4c9af1259775a480cfecdd973fb', tammy: '/_blob/8a9a8bc7b77cf6b399c4e87e7a913a4d'
+    };
+    const F = [['All', 454], ['S', 45], ['A', 225], ['B', 159], ['C', 14], ['D', 11]];
+    const filters = F.map(([label, n], i) => ({
+      label, n, pressed: i === 0 ? 'true' : 'false',
+      bg: i === 0 ? '#F0A43A' : 'transparent', fg: i === 0 ? '#15110E' : '#EFE6D6', border: i === 0 ? '#F0A43A' : '#4A3D33'
+    }));
+    const row = (title, sprites, description) => ({ title, description, sprites: sprites.map((src) => ({ src })) });
+    const rows = [
+      row("Guppy's Head + Guppy's Collar + Dead Cat", [B.guphead, B.collar, B.deadcat], 'Any three Guppy items complete the Guppy transformation: flight, and in Repentance a 66% chance of a Blue Fly each time a tear hits. Dead Cat sets your red heart containers to one but gives nine extra lives, and the transformation makes up for the lost health.'),
+      row("Guppy's Head + Guppy's Tail + Guppy's Paw", [B.guphead, B.tail, B.paw], 'Any three Guppy items complete the Guppy transformation: flight, and in Repentance a 66% chance to spawn a Blue Fly each time a tear from Isaac or one of his familiars hits an enemy. With a high fire rate the flies pile up fast.'),
+      row('Birthright + The Lost', [B.birth, B.lost], "Prevents unhelpful items (those with the nolostbr tag) from appearing and automatically re-rolls them. Ensures every item you see is useful for The Lost's build."),
+      row('Book of Virtues + Bethany', [B.virtues, B.beth], 'Bethany starts with Book of Virtues and can use soul hearts as active item charges. She generates wisps from every active use, building a massive orbital army of firing, shot-blocking wisps over the run.'),
+      row('Box of Friends + Lilith', [B.box, B.lilith], 'Lilith starts with Box of Friends and Incubus. Each use adds a copy of every familiar for the room, doubling her Incubus damage. More familiars, BFFS! and battery items make it stronger.'),
+      row('Car Battery + Box of Friends', [B.battery, B.box], 'Car Battery makes Box of Friends add two copies of each familiar for the room instead of one, so you have three of each. With strong familiars like Incubus or Twisted Pair the damage adds up fast.'),
+      row('Brimstone + Azazel', [B.brim, B.azazel], "Upgrades Azazel's short-range Mini Brimstone into the full-length Brimstone laser. Removes Azazel's biggest weakness (short range) while keeping flight and black hearts."),
+      row('Crown of Light + Brimstone', [B.crown, B.brim], 'Crown of Light doubles damage while all your red heart containers are full, and the 2x carries into the Brimstone beam. Taking damage switches the crown off for the rest of the room.'),
+      row('Brimstone + Epic Fetus', [B.brim, B.epic], "Each Epic Fetus missile explosion shoots 10 Brimstone lasers in all directions. Combines the missile's massive base damage with full Brimstone beams. Absolutely devastating room clear."),
+      row('Haemolacria + Brimstone', [B.haemo, B.brim], "Haemolacria takes priority: you fire arcing tears that burst into 4-7 Brimstone beams on impact, each dealing full damage per tick. Tear delay rises by 20 on top of Haemolacria's own tears down."),
+      row("Brimstone + Mom's Knife", [B.brim, B.knife], "Mom's Knife takes priority, and Brimstone's tears down does not apply. Each throw also launches a barrage of extra knives that cross the whole screen and do not return, each dealing 2x Isaac's damage in Repentance. A longer charge adds more knives: about 2-4 uncharged, 8-10 fully charged. Does not work with Azazel's own Brimstone."),
+      row('Rock Bottom + Brimstone', [B.rock, B.brim], 'Rock Bottom prevents the charge time increase, so Brimstone fires at near-normal fire rate. Dramatically increases beam DPS output.'),
+      row("Brimstone + Tammy's Head", [B.brim, B.tammy], "Using Tammy's Head fires 10 Brimstone lasers in all directions simultaneously. Each laser deals your full Brimstone damage. One of the most powerful combos in the game, capable of clearing entire rooms and melting bosses instantly.")
+    ];
+    return { filters, rows };
+  }
+}
+</script>
+</body>
+</html>
