@@ -13,11 +13,12 @@ character also has its own page. Unofficial fan project.
 It replaced a desktop app (Avalonia, .NET 9) that still lives under `src/` and still builds, but is frozen:
 it reads its own old data and gets no new work unless the owner asks.
 
-## Current state (2026-11-24)
+## Current state (2026-11-25)
 
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Nothing is deployed yet.**
-- S and D synergies checked against the wiki (`data/synergy-checks.md`); A, B and C are not. See
-  `docs/HANDOFF.md` for open PRs and what is next.
+- S and D synergies checked against the wiki (`data/synergy-checks.md`, PR #2); A, B and C are not.
+- The Toy Box look (decision 0005) is built on `feat/toy-box` (PR #3, stacked on #2): light by default, a
+  dark Toy Box by system setting. See `docs/HANDOFF.md` for open PRs and what is next.
 - Owner decisions on record: `docs/decisions/`. Open questions for the owner: `docs/HANDOFF.md`.
 
 ## Map
@@ -38,6 +39,7 @@ it reads its own old data and gets no new work unless the owner asks.
 | Layer | Technology |
 |---|---|
 | Web | React 19, React Router 8, TypeScript 6 (strict), Vite 8, plain CSS with design tokens |
+| Fonts | Bricolage Grotesque and Figtree, self-hosted from `@fontsource-variable` |
 | Web tests | Vitest 5, React Testing Library, jsdom |
 | API | Python 3.12, FastAPI, Uvicorn, Anthropic SDK 2.x, SQLite (standard library) |
 | API tests | pytest, pytest-asyncio, pytest-cov, ruff, mypy (strict) |
@@ -53,6 +55,8 @@ the machine's global Python 3.14 lacks wheels for some packages).
 |---|---|
 | Web dev server (port 5273, proxies `/api` to 8001) | `npm run dev` |
 | Web checks | `npm run lint`, `npm run typecheck`, `npm run test`, `npm run design:audit` |
+| Role-pair contrast (repo root) | `python scripts/design/check_roles.py web/src/styles/tokens.css`, again with `--pairs scripts/design/toy-box-pairs.json` |
+| Share image (needs Chrome) | `npm run og -- isaac.toys` |
 | Web production build | `npm run build` |
 | API tests, lint, types | `.venv\Scripts\python -m pytest --cov`, `-m ruff check .`, `-m mypy` |
 | Run the built site locally | `.venv\Scripts\python -m uvicorn app.server:app --port 8001` (after `npm run build`) |
@@ -76,7 +80,8 @@ the machine's global Python 3.14 lacks wheels for some packages).
 5. **The AI endpoint takes ids only.** `/api/analyze` builds its prompt from server data. Never let text
    from the browser reach the model; that is what keeps the paid key from being used as a free proxy.
 6. **The site's name is one setting per side:** `web/src/site.ts` (`SITE.domain`) and the API's `SITE_URL`.
-   `web/public/og.png` is drawn with the name in it: rerun `npm run og -- <domain>` if it changes.
+   `web/public/og.png` is drawn with the name and `data/`'s counts in it: rerun `npm run og -- <domain>`
+   when either changes.
 7. **Push and merge:** no project-specific grant. Push a branch once its work and local suites are done,
    open a PR, and ask the owner before merging (`C:\DEV\knowledge\owner.md`).
 8. **Deploying, Railway variables and the Anthropic key are the owner's to approve.** Steps: `docs/DEPLOY.md`.
@@ -91,3 +96,5 @@ the machine's global Python 3.14 lacks wheels for some packages).
 - `python -I` hides pytest; run tests with the venv's interpreter. Write patch scripts with the Write tool,
   never a heredoc: backslashes do not survive it.
 - Docker is not installed here, so the `Dockerfile` has not been built locally.
+- `tokens.css` writes the dark roles twice (system setting, `data-theme="dark"`); edit both, and
+  `src/styles/tokens.test.ts` fails if they differ. `check_roles.py` reads only the `[data-theme="dark"]` copy.
