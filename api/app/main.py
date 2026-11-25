@@ -42,6 +42,17 @@ CSP = (
     "font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 )
 
+# The type of every kind of file the web build writes. Python's own list depends on the host: 3.12 knows
+# neither .webp nor .woff2, and the slim image has no system list, so those went out as octet-stream.
+BUILT_TYPES = {
+    ".js": "text/javascript",
+    ".css": "text/css",
+    ".woff2": "font/woff2",
+    ".webp": "image/webp",
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
+}
+
 
 class AnalyzeRequest(BaseModel):
     character: str | None = Field(default=None, max_length=40)
@@ -221,7 +232,8 @@ def create_app(
         if found is not None:
             # Vite puts a content hash in everything under /assets, so those never change.
             cache = "public, max-age=31536000, immutable" if path.startswith("assets/") else "public, max-age=3600"
-            media_type = mimetypes.guess_type(found.name)[0] or "application/octet-stream"
+            guessed = mimetypes.guess_type(found.name)[0]
+            media_type = BUILT_TYPES.get(found.suffix.lower()) or guessed or "application/octet-stream"
             return FileResponse(found, media_type=media_type, headers={"Cache-Control": cache})
         if "." in path.rsplit("/", 1)[-1]:
             # Looks like a file and is not one we have: a plain 404, not a page.

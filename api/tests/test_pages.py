@@ -207,3 +207,39 @@ def test_stats_are_written_the_way_the_app_writes_them(client: TestClient) -> No
     # Controls: values that need no rounding are untouched.
     assert "<li>Tears \N{MULTIPLICATION SIGN}0.33</li>" in client.get("/items/brimstone").text
     assert "<li>Tears +1</li>" in client.get("/trinkets/cancer").text
+
+
+# ---------------------------------------------------------------- before the first deploy (2026-11-25)
+
+# Every kind of file `npm run build` writes into web/dist, and the type it must be served as.
+BUILT_TYPES = {
+    "assets/app.js": "text/javascript",
+    "assets/app.css": "text/css",
+    "assets/font.woff2": "font/woff2",
+    "sprites/items.webp": "image/webp",
+    "sprites/characters/isaac.png": "image/png",
+    "favicon.svg": "image/svg+xml",
+}
+
+
+def test_built_files_are_served_with_their_type_on_any_host(
+    make_client: Callable[..., TestClient], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Python 3.12 knows neither .webp nor .woff2, and the slim image has no system list to fill the gap,
+    so the sprite sheets and fonts went out as application/octet-stream. The host's list is removed here
+    to stand in for the image: the type must come from the app, not the machine."""
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "index.html").write_text(
+        "<html><head><!--head-start--><!--head-end--></head>"
+        "<body><div id='root'><!--server-copy--></div></body></html>",
+        encoding="utf-8",
+    )
+    for name in BUILT_TYPES:
+        (dist / name).parent.mkdir(parents=True, exist_ok=True)
+        (dist / name).write_bytes(b"x")
+    monkeypatch.setattr("mimetypes.guess_type", lambda *_args, **_kwargs: (None, None))
+    client = make_client(web_dist=dist)
+
+    served = {name: client.get("/" + name).headers["content-type"].split(";")[0] for name in BUILT_TYPES}
+    assert served == BUILT_TYPES

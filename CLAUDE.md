@@ -17,9 +17,10 @@ it reads its own old data and gets no new work unless the owner asks.
 
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Nothing is deployed yet.**
 - Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B
-  and C on branch `data/check-abc-synergies` (PR #4, not merged yet). The list is 442.
+  and C in PR #4 (merged 2026-11-25). The list is 442.
 - The Toy Box look (decision 0005, PR #3) is on `main`: light by default, a dark Toy Box by system
   setting. PRs #2 and #3 were merged on 2026-11-25. See `docs/HANDOFF.md` for what is next.
+- PR #5 (open): CI builds and smoke-tests the Docker image; the owner said to deploy once it is green.
 - Owner decisions on record: `docs/decisions/`. Open questions for the owner: `docs/HANDOFF.md`.
 
 ## Map
@@ -63,6 +64,7 @@ the machine's global Python 3.14 lacks wheels for some packages).
 | Run the built site locally | `.venv\Scripts\python -m uvicorn app.server:app --port 8001` (after `npm run build`) |
 | Rebuild data from sources | `python scripts/gamedata.py build` then `validate` (repo root) |
 | Refresh the browser/server snapshot | `.venv\Scripts\python -m app.parity` (in `api/`) |
+| Smoke-test a running site (local, CI's image, live) | `.venv\Scripts\python -m app.smoke <url> --ai on\|off\|skip` (in `api/`; `--indexable` for production) |
 
 ## Rules that are specific to this project
 
@@ -96,6 +98,9 @@ the machine's global Python 3.14 lacks wheels for some packages).
   at once races (regression test: "removes a pickup and clears the build").
 - `python -I` hides pytest; run tests with the venv's interpreter. Write patch scripts with the Write tool,
   never a heredoc: backslashes do not survive it.
-- Docker is not installed here, so the `Dockerfile` has not been built locally.
+- Docker is not installed here. CI's `docker` job builds the `Dockerfile`, runs it as Railway does and
+  smoke-tests it; that job is the only proof the image works.
+- Served file types come from `BUILT_TYPES` in `api/app/main.py`, not the host: Python 3.12 and the slim
+  image know neither `.webp` nor `.woff2`. A new kind of file in `web/dist` needs a row there.
 - `tokens.css` writes the dark roles twice (system setting, `data-theme="dark"`); edit both, and
   `src/styles/tokens.test.ts` fails if they differ. `check_roles.py` reads only the `[data-theme="dark"]` copy.

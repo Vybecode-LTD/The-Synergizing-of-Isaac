@@ -65,3 +65,41 @@ jobs:
       - name: Browser and server snapshot is current
         run: python -m app.parity --check
       - run: python -m pytest --cov --cov-fail-under=85
+
+  docker:
+    # Docker is not installed on the owner's machine, so this is where the image Railway builds is proven.
+    name: Docker image (build, run as Railway does, smoke test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build the image from the Dockerfile Railway uses
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: isaac-toys:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Run it as Railway does (PORT injected, a volume at /data, no key)
+        run: |
+          docker volume create isaac-data
+          docker run -d --name site -p 8080:8080 -e PORT=8080 -e ENVIRONMENT=ci -v isaac-data:/data isaac-toys:ci
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://localhost:8080/api/health; then exit 0; fi
+            sleep 2
+          done
+          echo "The container never answered /api/health"
+          exit 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Smoke test (standard library only, nothing to install)
+        working-directory: api
+        run: python -m app.smoke http://localhost:8080 --ai off
+      - name: The database file is on the volume
+        run: docker exec site test -f /data/isaac-toys.sqlite3
+      - name: Container log
+        if: always()
+        run: docker logs site

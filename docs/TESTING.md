@@ -1,6 +1,7 @@
 # Testing
 
-Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the Toy Box redesign).
+Last run: 2026-11-25, on the owner's Windows machine, branch `ci/docker-smoke` (the Docker check before the
+first deploy).
 
 ## Frameworks
 
@@ -24,7 +25,9 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
 | same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 70 of 70 pass (stickers, feature, spotlight, band, ink, tints, outlines; light and dark) |
 | `npm run build` | `web/` | builds; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
-| `.venv\Scripts\python -m pytest --cov` | `api/` | 81 passed; 99% of `app/` |
+| `.venv\Scripts\python -m pytest --cov` | `api/` | 113 passed; 99% of `app/` |
+| `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
+| CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off` | GitHub Actions | first run on PR #5 |
 | `.venv\Scripts\python -m ruff check .`, `-m ruff format --check .`, `-m mypy` | `api/` | clean |
 | `.venv\Scripts\python -m app.parity --check` | `api/` | snapshot is current |
 | `python scripts/gamedata.py validate` | repo root | 0 problems |
@@ -55,7 +58,14 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the
   folder and the real one), a changed count changes the card, and names are escaped.
 - **Pages for crawlers** (`api/tests/test_pages.py`): one `h1`, canonical, valid JSON-LD, escaped text, real
   404s, sitemap of all 947 URLs, robots rules, no path escape from the web build, a 404 (not a 500) for a
-  null byte or an over-long name, and stats printed the way the app prints them.
+  null byte or an over-long name, and stats printed the way the app prints them. Every kind of file the
+  build writes goes out with its own type on any host (`.webp` and `.woff2` are unknown to Python 3.12).
+- **A running copy of the site** (`api/app/smoke.py`, tested by `api/tests/test_smoke.py`): 13 checks over
+  HTTP, standard library only. Health and its counts, the home page, every script and stylesheet it links
+  (type, not empty, cached as immutable), every font the stylesheets load (WOFF2 bytes), both sprite sheets
+  (WebP bytes), Brimstone's page, real 404s for a page, a file and an endpoint, robots and sitemap for the
+  environment, security headers, and AI switched off (skipped when AI is on: it would be paid for). CI runs
+  it against the image; after a deploy it runs against the live site.
 
 ## Checks that tests can fail
 
@@ -79,6 +89,12 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the
 - Toy Box gates, 2026-11-25: the extra role pairs failed a copy of the tokens with ink text on the pool
   sticker (2.93:1); the drift test fails a copy whose dark `--bg-canvas` differs; the custom-property test
   found the two layout sockets before it learned that a read with a fallback is optional.
+- Smoke checker, 2026-11-25: 23 deliberate breaks (wrong type, wrong bytes, a soft 404, a missing header,
+  an analysis that answers with AI off, and others) each turn exactly the checks they name red, and a site
+  that does not answer fails all 13 without crashing. Against the real build, with the file-type fix taken
+  out, it failed fonts (`application/octet-stream`), sprite sheets (the same) and the built app
+  (`application/javascript` from the Windows registry); with the fix back, 12 of 12 passed. The type test
+  was red before the fix.
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404
@@ -106,5 +122,6 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the
 - No browser end-to-end suite in CI yet. Playwright cannot download browsers on the owner's machine; the
   interface is covered in jsdom and checked by hand in the preview browser.
 - jsdom does not lay anything out: clipping, overflow and sticky behaviour are only checked by eye.
-- The `Dockerfile` has not been built locally (no Docker on this machine). CI does not build it either.
+- The `Dockerfile` cannot be built locally (no Docker on this machine). CI's `docker` job builds and runs it
+  on every pull request and push to `main`.
 - `ClaudeAnalyzer` is tested against a stubbed client. No real model call has been made.
