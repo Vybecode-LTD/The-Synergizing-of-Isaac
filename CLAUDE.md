@@ -16,9 +16,10 @@ it reads its own old data and gets no new work unless the owner asks.
 ## Current state (2026-11-25)
 
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Nothing is deployed yet.**
-- S and D synergies checked against the wiki (`data/synergy-checks.md`, PR #2); A, B and C are not.
-- The Toy Box look (decision 0005) is built on `feat/toy-box` (PR #3, stacked on #2): light by default, a
-  dark Toy Box by system setting. See `docs/HANDOFF.md` for open PRs and what is next.
+- Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B
+  and C on branch `data/check-abc-synergies` (PR #4, not merged yet). The list is 442.
+- The Toy Box look (decision 0005, PR #3) is on `main`: light by default, a dark Toy Box by system
+  setting. PRs #2 and #3 were merged on 2026-11-25. See `docs/HANDOFF.md` for what is next.
 - Owner decisions on record: `docs/decisions/`. Open questions for the owner: `docs/HANDOFF.md`.
 
 ## Map

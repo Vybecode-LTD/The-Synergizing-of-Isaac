@@ -96,6 +96,10 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the
 - **Browser against server** is not a by-hand step: the parity tests (`web/src/parity.test.ts`,
   `api/tests/test_core.py`) compare both sides with `data/tests/parity.json` on every run. The first session
   also compared the browser's titles with the server's on nine routes by hand, once, with no script kept.
+- **Synergy facts** against the wiki for Repentance: method and every verdict in `data/synergy-checks.md`
+  (S and D on 2026-11-24, A, B and C on 2026-11-25; all 442 entries checked once). After a check,
+  `python scripts/gamedata.py validate`, then `python -m app.parity` (in `api/`) and `npm run og -- isaac.toys`
+  when the count changes, then both suites. The 2026-11-25 extraction scripts were scratch work, not kept.
 
 ## Known gaps
 
