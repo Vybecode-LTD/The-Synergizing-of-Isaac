@@ -465,9 +465,10 @@ def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict])
             problems.append(f"transformations: duplicate {field}: {', '.join(dupes)}")
     for t in sets:
         where = f"transformation {t.get('id', '?')!r}"
-        if not isinstance(t.get("needs"), int) or t["needs"] < 1:
+        # type() is int, not isinstance: a JSON true is an int to Python and would pass.
+        if type(t.get("needs")) is not int or t["needs"] < 1:
             problems.append(f"{where}: needs must be a whole number above 0")
-        if not t.get("page") or not isinstance(t.get("revision"), int):
+        if not t.get("page") or type(t.get("revision")) is not int:
             problems.append(f"{where}: no wiki page and revision to source it")
         if not any(t.get(f) for fields in TRANSFORMATION_FIELDS.values() for f, _ in fields):
             problems.append(f"{where}: counts nothing")

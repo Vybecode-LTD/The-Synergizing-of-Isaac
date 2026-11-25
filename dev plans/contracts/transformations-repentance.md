@@ -50,7 +50,8 @@ The synergy check's reading of the wiki's version marks: `data/synergy-checks.md
 - `python scripts/gamedata.py validate` clean; the validator's positive control reports a broken
   transformation file.
 - Web `summary.test.ts`: Infestation adds to Repentance+ only; Kid's Drawing counts for Guppy; Skatole counts
-  for Oh Crap; Necromancer shows as Repentance+ only; Guardian Angel counts for nothing.
+  for Oh Crap; Necromancer shows as Repentance+ only; Guardian Angel does not count toward Seraphim (it
+  still counts toward Conjoined).
 - Both sides print the same "Counts toward" line, checked through `data/tests/parity.json`.
 - Live: `/items/infestation` says "Beelzebub (Repentance+ only)" after the deploy.
 

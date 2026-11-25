@@ -325,6 +325,8 @@ def test_the_validator_catches_a_broken_transformation_file(tmp_path: Path) -> N
     sets["guppy"]["trinkets"].append(9999)
     sets["bob"]["needs"] = 0
     del sets["stompy"]["revision"]
+    sets["fun-guy"]["needs"] = True  # a JSON true is an int to Python (CodeRabbit, PR #6)
+    sets["bookworm"]["revision"] = True
     sets["spun"]["items"].append(sets["spun"]["items"][0])
     sets["super-bum"].update(items=[], trinkets=[], plusItems=[], plusTrinkets=[])
     doc["transformations"].append(dict(sets["leviathan"]))
@@ -336,6 +338,8 @@ def test_the_validator_catches_a_broken_transformation_file(tmp_path: Path) -> N
         "transformation 'guppy': unknown trinket id 9999 in trinkets",
         "transformation 'bob': needs must be a whole number above 0",
         "transformation 'stompy': no wiki page and revision",
+        "transformation 'fun-guy': needs must be a whole number above 0",
+        "transformation 'bookworm': no wiki page and revision",
         "transformation 'spun': repeated id in items",
         "transformation 'super-bum': counts nothing",
         "transformations: duplicate id: leviathan",
