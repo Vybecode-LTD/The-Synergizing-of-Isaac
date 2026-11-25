@@ -8,7 +8,7 @@ import { SynergyCard } from "../components/SynergyCard";
 import { MAX_ITEMS, addItem } from "../engine/buildCodec";
 import { gameData } from "../engine/data";
 import { matchScore } from "../engine/search";
-import { TRANSFORMATION_NAMES, poolNames, statLines } from "../engine/summary";
+import { poolNames, statLines, transformationNames } from "../engine/summary";
 import { synergiesFor } from "../engine/synergy";
 import { useBuildStore } from "../hooks/BuildStore";
 import { usePage } from "../hooks/usePage";
@@ -87,7 +87,11 @@ export function ItemPage() {
   const inBuild = build.items.includes(item.id);
   const buildFull = build.items.length >= MAX_ITEMS;
   const pools = poolNames(item.pools);
-  const transformations = (item.transformations ?? []).map((t) => TRANSFORMATION_NAMES[t] ?? t);
+  const transformations = transformationNames(
+    item,
+    gameData.transformations,
+    pageContent.copy.repentancePlusOnly,
+  );
 
   return (
     <div className="page">
@@ -111,10 +115,10 @@ export function ItemPage() {
           </p>
           <StatChips lines={statLines(item.stats)} />
           <dl className="facts">
-            {transformations.length > 0 && (
+            {transformations && (
               <div className="facts__row">
-                <dt className="facts__label">Counts toward</dt>
-                <dd className="facts__value">{transformations.join(", ")}</dd>
+                <dt className="facts__label">{pageContent.copy.countsToward}</dt>
+                <dd className="facts__value">{transformations}</dd>
               </div>
             )}
             {pools.length > 0 && (

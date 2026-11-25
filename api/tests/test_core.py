@@ -312,6 +312,40 @@ def test_the_validator_catches_what_it_exists_for(tmp_path: Path) -> None:
         assert expected in problems
 
 
+def test_the_validator_catches_a_broken_transformation_file(tmp_path: Path) -> None:
+    """Positive control for data/transformations.json (decision 0006): a clean copy passes, each break is named."""
+    script = load_gamedata_script()
+    copy = tmp_path / "data"
+    shutil.copytree(REPO / "data", copy)
+    assert script.validate(copy) == []
+
+    doc = json.loads((copy / "transformations.json").read_text(encoding="utf-8"))
+    sets = {t["id"]: t for t in doc["transformations"]}
+    sets["beelzebub"]["items"].append(148)  # Infestation, already Repentance+ only
+    sets["guppy"]["trinkets"].append(9999)
+    sets["bob"]["needs"] = 0
+    del sets["stompy"]["revision"]
+    sets["spun"]["items"].append(sets["spun"]["items"][0])
+    sets["super-bum"].update(items=[], trinkets=[], plusItems=[], plusTrinkets=[])
+    doc["transformations"].append(dict(sets["leviathan"]))
+    (copy / "transformations.json").write_text(json.dumps(doc), encoding="utf-8")
+
+    problems = "\n".join(script.validate(copy))
+    for expected in (
+        "transformation 'beelzebub': [148] in both items and plusItems",
+        "transformation 'guppy': unknown trinket id 9999 in trinkets",
+        "transformation 'bob': needs must be a whole number above 0",
+        "transformation 'stompy': no wiki page and revision",
+        "transformation 'spun': repeated id in items",
+        "transformation 'super-bum': counts nothing",
+        "transformations: duplicate id: leviathan",
+        # The built tags no longer match the file: build was not run.
+        "item 'Infestation': transformations differs from transformations.json (run build)",
+        "item 'Bum Friend': transformations differs from transformations.json (run build)",
+    ):
+        assert expected in problems
+
+
 def test_slugs_and_text_repair() -> None:
     script = load_gamedata_script()
     assert script.slugify("Mom's Knife") == "moms-knife"

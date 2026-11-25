@@ -9,6 +9,7 @@ Plans, contracts, design sources and starting prompts for this project.
 | `design-directions/canvas/` | The canvas's board sources (`.dc.html`) and `canvas.json`, copied from what was published |
 | `design-directions/tools/` | `sample_build.py` (pulls the boards' real content from `data/`), `contrast.py` (palette contrast) |
 | `NEXT_SESSION_PROMPT.md` | The starting prompt for the next agent. Overwritten at the end of every session |
+| `contracts/transformations-repentance.md` | Contract for counting transformations as Repentance does, Repentance+ marked (decision 0006). Approved 2026-11-25; PR #6 |
 | `contracts/web-app-seams.md` | Contract for the web app's seams: build-link format, `/api/analyze`, the SQLite tables, public URLs, environment variables. Status: draft, with open questions for the owner |
 
 Decisions are in `docs/decisions/`, the current state in `docs/HANDOFF.md`.

@@ -1,9 +1,10 @@
 import parityJson from "@data/tests/parity.json";
 import { describe, expect, it } from "vitest";
 import { gameData } from "./engine/data";
+import { transformationNames } from "./engine/summary";
 import { awaitingCharacter, findSynergies, suggestAdditions } from "./engine/synergy";
 import type { Build } from "./engine/types";
-import { clamp, describePage, fitTitle, joinNames, longDate } from "./seo";
+import { clamp, describePage, fitTitle, joinNames, longDate, pageContent } from "./seo";
 
 /**
  * data/tests/parity.json is written by the API (`python -m app.parity`). These tests compute the same
@@ -14,7 +15,19 @@ describe("the browser agrees with the server", () => {
   it("has cases to check", () => {
     expect(parityJson.pages.length).toBeGreaterThanOrEqual(12);
     expect(parityJson.builds.length).toBeGreaterThanOrEqual(8);
+    expect(parityJson.countsToward.length).toBeGreaterThanOrEqual(9);
   });
+
+  it.each(parityJson.countsToward.map((c) => [`${c.kind} ${c.id}`, c] as const))(
+    "writes what %s counts toward the same way",
+    (_, expected) => {
+      const record =
+        expected.kind === "item" ? gameData.itemById.get(expected.id) : gameData.trinketById.get(expected.id);
+      expect(transformationNames(record!, gameData.transformations, pageContent.copy.repentancePlusOnly)).toBe(
+        expected.names,
+      );
+    },
+  );
 
   it.each(parityJson.pages.map((p) => [p.path, p] as const))("describes %s the same way", (path, expected) => {
     const page = describePage(path, gameData, parityJson.domain);

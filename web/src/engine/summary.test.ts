@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { ITEMS, TRINKETS } from "../test/fixtures";
-import { formatStat, poolNames, statLines, totalStats, transformationProgress } from "./summary";
+import { gameData } from "./data";
+import {
+  type TransformationProgress,
+  formatStat,
+  poolNames,
+  progressText,
+  statLines,
+  totalStats,
+  transformationNames,
+  transformationProgress,
+} from "./summary";
+import type { Item, Trinket } from "./types";
 
 const pick = (...ids: number[]) => ITEMS.filter((i) => ids.includes(i.id));
 
@@ -49,15 +60,85 @@ describe("totalStats", () => {
   });
 });
 
+// The real data: these facts are the wiki's Repentance lists (data/transformations.json, decision 0006).
+const item = (name: string) => {
+  const found = gameData.items.find((i) => i.name === name);
+  if (!found) throw new Error(`no item ${name}`);
+  return found;
+};
+const trinket = (name: string) => {
+  const found = gameData.trinkets.find((t) => t.name === name);
+  if (!found) throw new Error(`no trinket ${name}`);
+  return found;
+};
+const progress = (...entries: (Item | Trinket)[]) => transformationProgress(entries, gameData.transformations);
+const row = (rows: TransformationProgress[], id: string) => rows.find((r) => r.id === id);
+
 describe("transformationProgress", () => {
-  it("counts toward each transformation and marks three as done", () => {
-    expect(transformationProgress(pick(1, 8))).toEqual([
-      { id: "leviathan", name: "Leviathan", count: 2, needs: 3, done: false },
+  it("counts as Repentance does and keeps what Repentance+ adds apart", () => {
+    // Infestation counts toward Beelzebub only in Repentance+ (the tracker counted it everywhere).
+    const beelzebub = row(progress(item("Halo of Flies"), item("Skatole"), item("Infestation")), "beelzebub")!;
+    expect(beelzebub).toMatchObject({ count: 2, plus: 1, needs: 3, done: false, doneInPlus: true, plusOnly: false });
+    expect(progressText(beelzebub)).toBe("2 of 3; 3 of 3 in Repentance+");
+  });
+
+  it("counts Skatole toward Oh Crap, which the tracker left out", () => {
+    const rows = progress(item("Skatole"));
+    expect(rows.map((r) => [r.id, r.count])).toEqual([
+      ["beelzebub", 1],
+      ["oh-crap", 1],
     ]);
-    expect(transformationProgress(pick(1, 3, 8, 9))).toEqual([
-      { id: "leviathan", name: "Leviathan", count: 3, needs: 3, done: true },
-      { id: "yes-mother", name: "Yes Mother?", count: 1, needs: 3, done: false },
+  });
+
+  it("counts a trinket where the game does: Kid's Drawing toward Guppy", () => {
+    const guppy = row(progress(item("Guppy's Head"), item("Guppy's Tail"), trinket("Kid's Drawing")), "guppy")!;
+    expect(guppy).toMatchObject({ count: 3, done: true });
+    expect(progressText(guppy)).toBe("3 of 3, transformed");
+  });
+
+  it("shows Necromancer as a Repentance+ transformation", () => {
+    const rows = progress(item("The Necronomicon"), item("Missing Page 2"), trinket("A Missing Page"));
+    const necromancer = row(rows, "necromancer")!;
+    expect(necromancer).toMatchObject({ count: 0, plus: 3, plusOnly: true, done: false, doneInPlus: true });
+    expect(progressText(necromancer)).toBe("Repentance+ only: 3 of 3, transformed");
+    expect(progressText({ ...necromancer, plus: 1, doneInPlus: false })).toBe("Repentance+ only: 1 of 3");
+    // The Necronomicon still counts toward Bookworm in Repentance.
+    expect(row(rows, "bookworm")).toMatchObject({ count: 1, plus: 0 });
+  });
+
+  it("no longer counts Guardian Angel toward Seraphim", () => {
+    expect(progress(item("Guardian Angel")).map((r) => r.id)).toEqual(["conjoined"]);
+  });
+
+  it("carries a note where pills count too (Stompy)", () => {
+    expect(row(progress(item("Leo")), "stompy")).toMatchObject({ count: 1, note: "One Makes You Larger pills count too." });
+  });
+
+  it("lists the closest first and stops counting past three", () => {
+    const rows = progress(item("Brimstone"), item("Abaddon"), item("The Pact"), item("The Mark"), item("Mom's Knife"));
+    expect(rows.map((r) => [r.id, r.count])).toEqual([
+      ["leviathan", 4],
+      ["yes-mother", 1],
     ]);
+    expect(progressText(rows[0]!)).toBe("3 of 3, transformed");
+    expect(progressText(rows[1]!)).toBe("1 of 3");
+  });
+
+  it("counts nothing for pickups that count toward nothing", () => {
+    expect(progress(item("The Sad Onion"))).toEqual([]);
+  });
+});
+
+describe("transformationNames", () => {
+  const names = (record: Item | Trinket) => transformationNames(record, gameData.transformations, "{name} (Repentance+ only)");
+  it("writes the Repentance ones first, then those that count only in Repentance+", () => {
+    expect(names(item("Seraphim"))).toBe("Conjoined, Seraphim (Repentance+ only)");
+    expect(names(trinket("Bob's Bladder"))).toBe("Bob (Repentance+ only)");
+    expect(names(item("Brimstone"))).toBe("Leviathan");
+  });
+  it("is empty for a pickup that counts toward nothing, and keeps an unknown id visible", () => {
+    expect(names(item("The Sad Onion"))).toBe("");
+    expect(transformationNames({ transformations: ["mystery"] }, [], "{name}+")).toBe("mystery");
   });
 });
 

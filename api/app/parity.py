@@ -50,6 +50,20 @@ BUILDS: list[dict[str, Any]] = [
     {"character": "tainted-cain", "items": [114, 168, 52, 149, 169], "trinkets": [39, 1]},
 ]
 
+# Pickups whose "Counts toward" line both sides must write the same way (decision 0006): Repentance only,
+# Repentance+ only, both at once, one dropped (Guardian Angel), and the trinkets that count.
+PICKUPS: list[tuple[str, int]] = [
+    ("item", 118),  # Brimstone: Leviathan
+    ("item", 148),  # Infestation: Beelzebub in Repentance+ only
+    ("item", 390),  # Seraphim: Conjoined, and Seraphim in Repentance+ only
+    ("item", 9),  # Skatole: Beelzebub and Oh Crap
+    ("item", 35),  # The Necronomicon: Bookworm, and Necromancer in Repentance+ only
+    ("item", 302),  # Leo: Stompy
+    ("item", 112),  # Guardian Angel: Conjoined only (it stopped counting toward Seraphim in Repentance)
+    ("trinket", 169),  # Kid's Drawing: Guppy
+    ("trinket", 71),  # Bob's Bladder: Bob in Repentance+ only
+]
+
 
 def snapshot(data: GameData) -> dict[str, Any]:
     pages = []
@@ -80,7 +94,12 @@ def snapshot(data: GameData) -> dict[str, Any]:
                 ],
             }
         )
-    return {"domain": DOMAIN, "pages": pages, "builds": builds}
+    lookup = {"item": data.item_by_id, "trinket": data.trinket_by_id}
+    counts_toward = [
+        {"kind": kind, "id": pickup, "names": data.transformation_names(lookup[kind][pickup])}
+        for kind, pickup in PICKUPS
+    ]
+    return {"domain": DOMAIN, "pages": pages, "builds": builds, "countsToward": counts_toward}
 
 
 def main() -> int:

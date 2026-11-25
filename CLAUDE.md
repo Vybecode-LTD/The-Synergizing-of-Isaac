@@ -15,12 +15,14 @@ it reads its own old data and gets no new work unless the owner asks.
 
 ## Current state (2026-11-25)
 
-- Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Nothing is deployed yet.**
+- Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Deployed on Railway
+  2026-11-25** (`docs/DEPLOY.md` has the ids); `isaac.toys` waits on the owner's DNS and AI on the key.
 - Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B
   and C in PR #4 (merged 2026-11-25). The list is 442.
 - The Toy Box look (decision 0005, PR #3) is on `main`: light by default, a dark Toy Box by system
   setting. PRs #2 and #3 were merged on 2026-11-25. See `docs/HANDOFF.md` for what is next.
-- PR #5 (open): CI builds and smoke-tests the Docker image; the owner said to deploy once it is green.
+- PR #5 (merged): CI builds and smoke-tests the Docker image. Transformations follow Repentance with the
+  Repentance+ differences marked (decision 0006, PR #6).
 - Owner decisions on record: `docs/decisions/`. Open questions for the owner: `docs/HANDOFF.md`.
 
 ## Map
@@ -69,8 +71,9 @@ the machine's global Python 3.14 lacks wheels for some packages).
 ## Rules that are specific to this project
 
 1. **Game data has one home.** `data/items.json`, `trinkets.json`, `characters.json` and `meta.json` are
-   generated: change `data/sources/` or `scripts/gamedata.py`, never the output. `data/synergies.json` and
-   `data/content/*.json` are edited by hand. Run `validate` after any change.
+   generated: change `data/sources/` or `scripts/gamedata.py`, never the output. `data/synergies.json`,
+   `data/transformations.json` and `data/content/*.json` are edited by hand. After a change to
+   `transformations.json`, run `build`; run `validate` after any change.
 2. **A fact needs a source.** Item facts come from the sources listed in `data/README.md`. Do not add
    numbers, effects or quotes from memory; an honest gap beats a confident guess.
 3. **The browser and the server must say the same thing.** Page titles, descriptions, headings and the

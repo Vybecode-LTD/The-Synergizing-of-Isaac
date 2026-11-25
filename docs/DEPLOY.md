@@ -1,8 +1,19 @@
 # Deploying isaac.toys
 
-**Status: never deployed.** There is no Docker on the owner's machine, so CI's `docker` job is where the
-image is built: it runs it as Railway does (`PORT` injected, a volume at `/data`, no key) and smoke-tests it.
-Deploying and every Railway change need the owner's go-ahead. Background: the `railway-deploy-playbook` skill.
+**Status: deployed 2026-11-25** (6:07 pm EST, 23:07 UTC) from `main` at `1c536f2`, set up through the
+Railway connector on the owner's go-ahead. There is no Docker on the owner's machine, so CI's `docker` job
+is where the image is proven first: it runs it as Railway does and smoke-tests it. Deploying and every
+Railway change need the owner's go-ahead. Background: the `railway-deploy-playbook` skill.
+
+| What | Value |
+|---|---|
+| Project | `isaac.toys` (`8ec4eafd-f306-4a04-910a-cf447d4d76a5`), workspace "color8's Projects" |
+| Environment | `production` (`ff6e1dca-db14-4b66-9b49-95d5286b70c9`) |
+| Service | `web` (`9ebca5b6-092c-49ee-a8e4-777ff30cc12a`), source `Vybecode-LTD/The-Synergizing-of-Isaac` on `main` |
+| Build and health | Dockerfile (`dockerfilePath` set on the service; the deploy log shows both stages), healthcheck `/api/health` with 100 s, restart on failure up to 5. Set on the service itself: a service created now cannot opt into `railway.toml` |
+| Volume | `isaac-data` at `/data` |
+| Domains | `web-production-6d147b3c.up.railway.app` and `isaac.toys`, both to port 8080 (the `PORT` Railway injects) |
+| DNS at Spaceship | `@` CNAME `gc4twalz.up.railway.app` (Spaceship serves a root CNAME as an ALIAS), and TXT `_railway-verify` with the value Railway shows |
 
 ## Shape
 

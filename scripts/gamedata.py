@@ -27,21 +27,11 @@ LEGACY = ROOT / "src" / "TheSynergizingOfIsaac" / "Assets"
 
 RATINGS = ("S", "A", "B", "C", "D")
 
-# Tracker flag -> transformation id. Each needs three of its items.
-TRANSFORMATIONS = {
-    "guppy": "guppy",
-    "beelzebub": "beelzebub",
-    "funguy": "fun-guy",
-    "seraphim": "seraphim",
-    "bob": "bob",
-    "spun": "spun",
-    "yesmother": "yes-mother",
-    "conjoined": "conjoined",
-    "leviathan": "leviathan",
-    "ohcrap": "oh-crap",
-    "bookworm": "bookworm",
-    "spiderbaby": "spider-baby",
-    "superbum": "super-bum",
+# Transformation tags come from data/transformations.json (the wiki's Repentance lists), not the tracker's
+# flags, which follow Repentance+ in places (decision 0006). Each list field -> the record key it fills.
+TRANSFORMATION_FIELDS = {
+    "item": (("items", "transformations"), ("plusItems", "transformationsPlus")),
+    "trinket": (("trinkets", "transformations"), ("plusTrinkets", "transformationsPlus")),
 }
 
 # Tracker stat key -> our key.
@@ -229,18 +219,30 @@ def import_sources(tracker: Path, facts: Path) -> None:
 # ---------------------------------------------------------------- build
 
 
-def build_record(n: int, raw: dict, facts: dict | None, pools: list[str]) -> dict:
+def transformation_tags(sets: list[dict]) -> dict[tuple[str, str], dict[int, list[str]]]:
+    """(kind, record key) -> id -> the transformations it counts toward, from data/transformations.json."""
+    tags: dict[tuple[str, str], dict[int, list[str]]] = {}
+    for kind, fields in TRANSFORMATION_FIELDS.items():
+        for field, key in fields:
+            by_id = tags.setdefault((kind, key), {})
+            for t in sets:
+                for n in t.get(field, []):
+                    by_id.setdefault(n, []).append(t["id"])
+    return {k: {n: sorted(ids) for n, ids in v.items()} for k, v in tags.items()}
+
+
+def build_record(n: int, raw: dict, facts: dict | None, pools: list[str], kind: str, tags: dict) -> dict:
     rec: dict = {"id": n, "slug": "", "name": raw["name"].strip()}
     stats = {ours: number(raw[theirs]) for theirs, ours in STATS.items() if raw.get(theirs) not in (None, "")}
-    transformations = sorted({ours for theirs, ours in TRANSFORMATIONS.items() if raw.get(theirs)})
     rec["dlc"] = raw.get("introduced_in") or "Unknown"
     rec["effect"] = sentence(raw.get("text", ""))
     if facts and "quality" in facts:
         rec["quality"] = facts["quality"]
     if stats:
         rec["stats"] = stats
-    if transformations:
-        rec["transformations"] = transformations
+    for _, key in TRANSFORMATION_FIELDS[kind]:
+        if n in tags[(kind, key)]:
+            rec[key] = tags[(kind, key)][n]
     if pools:
         rec["pools"] = pools
     return rec
@@ -263,6 +265,7 @@ def build() -> None:
     facts = read_json(SOURCES / "game-facts.json")
     quality = facts["quality"]
     pools_by_id = facts["pools"]["pools"]
+    tags = transformation_tags(read_json(DATA / "transformations.json")["transformations"])
 
     items: list[dict] = []
     trinkets: list[dict] = []
@@ -273,14 +276,14 @@ def build() -> None:
             if n in ITEM_HIDDEN or not raw.get("shown", True):
                 continue
             pools = [p for p in pools_by_id.get(key, []) if not p.startswith(SKIP_POOL_PREFIX)]
-            rec = build_record(n, raw, quality["items"].get(key), sorted(set(pools)))
+            rec = build_record(n, raw, quality["items"].get(key), sorted(set(pools)), "item", tags)
             rec["name"] = ITEM_NAME_OVERRIDES.get(n, rec["name"])
             rec["type"] = "active" if raw.get("space") else "passive"
             items.append(rec)
         elif 2000 < n < 3000:
             if not raw.get("shown", True):
                 continue
-            trinkets.append(build_record(n - 2000, raw, None, []))
+            trinkets.append(build_record(n - 2000, raw, None, [], "trinket", tags))
 
     assign_slugs(items, ITEM_SLUG_OVERRIDES)
     assign_slugs(trinkets, {})
@@ -445,6 +448,47 @@ def validate(data_dir: Path = DATA) -> list[str]:
         if key in seen_keys:
             problems.append(f"{where}: same combination as {seen_keys[key]}")
         seen_keys[key] = s.get("id", "?")
+
+    problems += validate_transformations(read_json(data_dir / "transformations.json"), items, trinkets)
+    return problems
+
+
+def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict]) -> list[str]:
+    """data/transformations.json is well formed, names real pickups, and the built tags agree with it."""
+    problems: list[str] = []
+    sets = doc.get("transformations", [])
+    known = {"item": {i["id"] for i in items}, "trinket": {t["id"] for t in trinkets}}
+    for field in ("id", "name"):
+        values = [t.get(field) for t in sets]
+        dupes = sorted({str(v) for v in values if values.count(v) > 1})
+        if dupes:
+            problems.append(f"transformations: duplicate {field}: {', '.join(dupes)}")
+    for t in sets:
+        where = f"transformation {t.get('id', '?')!r}"
+        if not isinstance(t.get("needs"), int) or t["needs"] < 1:
+            problems.append(f"{where}: needs must be a whole number above 0")
+        if not t.get("page") or not isinstance(t.get("revision"), int):
+            problems.append(f"{where}: no wiki page and revision to source it")
+        if not any(t.get(f) for fields in TRANSFORMATION_FIELDS.values() for f, _ in fields):
+            problems.append(f"{where}: counts nothing")
+        for kind, ((rep, _), (plus, _)) in TRANSFORMATION_FIELDS.items():
+            both = set(t.get(rep, [])) & set(t.get(plus, []))
+            if both:
+                problems.append(f"{where}: {sorted(both)} in both {rep} and {plus}")
+            for field in (rep, plus):
+                values = t.get(field, [])
+                if len(set(values)) != len(values):
+                    problems.append(f"{where}: repeated id in {field}")
+                for n in values:
+                    if n not in known[kind]:
+                        problems.append(f"{where}: unknown {kind} id {n} in {field}")
+
+    tags = transformation_tags(sets)
+    for kind, records in (("item", items), ("trinket", trinkets)):
+        for r in records:
+            for _, key in TRANSFORMATION_FIELDS[kind]:
+                if r.get(key, []) != tags[(kind, key)].get(r["id"], []):
+                    problems.append(f"{kind} {r['name']!r}: {key} differs from transformations.json (run build)")
     return problems
 
 

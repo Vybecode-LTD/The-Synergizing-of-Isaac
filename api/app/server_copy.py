@@ -36,21 +36,6 @@ STAT_LABELS = {
     "blackHearts": "Black hearts",
     "boneHearts": "Bone hearts",
 }
-TRANSFORMATIONS = {
-    "guppy": "Guppy",
-    "beelzebub": "Beelzebub",
-    "fun-guy": "Fun Guy",
-    "seraphim": "Seraphim",
-    "bob": "Bob",
-    "spun": "Spun",
-    "yes-mother": "Yes Mother?",
-    "conjoined": "Conjoined",
-    "leviathan": "Leviathan",
-    "oh-crap": "Oh Crap",
-    "bookworm": "Bookworm",
-    "spider-baby": "Spider Baby",
-    "super-bum": "Super Bum",
-}
 AI_CRAWLERS = ("GPTBot", "ChatGPT-User", "PerplexityBot", "Google-Extended", "ClaudeBot", "anthropic-ai")
 
 
@@ -172,9 +157,9 @@ def render_copy(page: Page, data: GameData, domain: str) -> str:
             out.append(
                 "<ul>" + "".join(f"<li>{escape(_stat(k, v))}</li>" for k, v in record["stats"].items()) + "</ul>"
             )
-        if record.get("transformations"):
-            names = ", ".join(TRANSFORMATIONS.get(t, t) for t in record["transformations"])
-            out.append(f"<p>Counts toward: {escape(names)}.</p>")
+        names = data.transformation_names(record)
+        if names:
+            out.append(f"<p>{escape(pages['copy']['countsToward'])}: {escape(names)}.</p>")
         key = record["id"]
         synergies = data.synergies_for(page.kind, key)
         heading = _count_heading(len(synergies), f"with {record['name']}", "No synergies written down yet")

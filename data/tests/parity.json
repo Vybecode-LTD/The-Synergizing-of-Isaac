@@ -2464,5 +2464,52 @@
     }
    ]
   }
+ ],
+ "countsToward": [
+  {
+   "kind": "item",
+   "id": 118,
+   "names": "Leviathan"
+  },
+  {
+   "kind": "item",
+   "id": 148,
+   "names": "Beelzebub (Repentance+ only)"
+  },
+  {
+   "kind": "item",
+   "id": 390,
+   "names": "Conjoined, Seraphim (Repentance+ only)"
+  },
+  {
+   "kind": "item",
+   "id": 9,
+   "names": "Beelzebub, Oh Crap"
+  },
+  {
+   "kind": "item",
+   "id": 35,
+   "names": "Bookworm, Necromancer (Repentance+ only)"
+  },
+  {
+   "kind": "item",
+   "id": 302,
+   "names": "Stompy"
+  },
+  {
+   "kind": "item",
+   "id": 112,
+   "names": "Conjoined"
+  },
+  {
+   "kind": "trinket",
+   "id": 169,
+   "names": "Guppy"
+  },
+  {
+   "kind": "trinket",
+   "id": 71,
+   "names": "Bob (Repentance+ only)"
+  }
  ]
 }

@@ -1,14 +1,16 @@
 import charactersJson from "@data/characters.json";
 import itemsJson from "@data/items.json";
 import synergiesJson from "@data/synergies.json";
+import transformationsJson from "@data/transformations.json";
 import trinketsJson from "@data/trinkets.json";
-import type { Character, Item, Synergy, SynergyRecord, Trinket } from "./types";
+import type { Character, Item, Synergy, SynergyRecord, Transformation, Trinket } from "./types";
 
 export interface GameData {
   items: Item[];
   trinkets: Trinket[];
   characters: Character[];
   synergies: Synergy[];
+  transformations: Transformation[];
   itemById: Map<number, Item>;
   itemBySlug: Map<string, Item>;
   itemIndex: Map<number, number>;
@@ -66,6 +68,7 @@ export function createGameData(
   trinkets: Trinket[],
   characters: Character[],
   records: SynergyRecord[],
+  transformations: Transformation[] = [],
 ): GameData {
   const { synergies } = resolveSynergies(records, items, trinkets, characters);
   return {
@@ -73,6 +76,7 @@ export function createGameData(
     trinkets,
     characters,
     synergies,
+    transformations,
     itemById: new Map(items.map((i) => [i.id, i])),
     itemBySlug: new Map(items.map((i) => [i.slug, i])),
     itemIndex: new Map(items.map((i, index) => [i.id, index])),
@@ -88,4 +92,5 @@ export const gameData: GameData = createGameData(
   trinketsJson as Trinket[],
   charactersJson as Character[],
   synergiesJson as SynergyRecord[],
+  transformationsJson.transformations as Transformation[],
 );
