@@ -205,7 +205,7 @@ def test_without_a_key_it_says_ai_is_off(make_client: Callable[..., TestClient])
 
 
 def test_health(client: TestClient) -> None:
-    assert client.get("/api/health").json() == {"status": "ok", "ai": True, "items": 719, "synergies": 453}
+    assert client.get("/api/health").json() == {"status": "ok", "ai": True, "items": 719, "synergies": 442}
 
 
 def test_a_forged_cloudflare_header_does_not_dodge_the_limit(make_client: Callable[..., TestClient]) -> None:

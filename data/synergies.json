@@ -51,8 +51,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "The Brimstone beam poisons enemies and creates explosions on contact. The +40 damage from Ipecac applies to each tick of the beam, massively increasing total output. Self-damage from explosions is possible."
+  "rating": "B",
+  "description": "In Repentance the beam poisons and explodes on the first enemy or obstacle it hits every other tick, for 10 plus twice Isaac's damage; without Soy Milk or Almond Milk that is two blasts per shot. Ipecac adds only +2 flat damage and no tears down. The blasts can hurt Isaac up close."
  },
  {
   "id": "brimstone+epic-fetus",
@@ -74,7 +74,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Every bomb explosion fires 10 Brimstone lasers in all directions. Turns every bomb into a room-clearing event. Works with any source of bombs."
+  "description": "Isaac's bombs release ten Brimstone beams in all directions when they explode. In Repentance the beams do not get Sad Bombs' flat +25 damage."
  },
  {
   "id": "brimstone+spoon-bender",
@@ -96,7 +96,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 2 Brimstone beams in a slight spread. 20/20 doesn't apply a fire rate penalty, so you get double beams at normal charge speed. Clean double damage."
+  "description": "Fires a spread of two Brimstone beams with no extra charge time. In Repentance 20/20 also brings a 0.8x damage multiplier, so it is not quite double damage."
  },
  {
   "id": "brimstone+the-inner-eye",
@@ -107,7 +107,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 3 Brimstone beams in a spread. The fire rate penalty from Inner Eye increases charge time, but triple beams still massively increase DPS."
+  "description": "Fires 3 Brimstone beams in a spread. The Inner Eye's fire rate penalty makes the charge slower, but the gain in damage per second is still larger than 20/20's."
  },
  {
   "id": "brimstone+mutant-spider",
@@ -173,7 +173,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The Brimstone laser travels through walls and reappears from the opposite side. Lets you hit enemies through obstacles and in rooms with complex layouts."
+  "description": "In Repentance the beam goes through the wall and comes back in from the opposite side once, so one blast can hit the same enemies twice."
  },
  {
   "id": "brimstone+strange-attractor",
@@ -184,7 +184,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Enemies are pulled toward the beam while it fires. Keeps enemies in the beam's path for more damage ticks and prevents them from dodging. Also moves pickups."
+  "description": "Enemies and pickups are pulled toward the beam while it fires, so more enemies stay in its path."
  },
  {
   "id": "brimstone+crickets-body",
@@ -239,7 +239,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Similar to Soy Milk — fires automatically at full charge with indefinite beam duration. Gains random worm trinket visual effects. Tears stat boosts damage and width."
+  "description": "Like Soy Milk: the beam fires by itself at full charge, lasts as long as fire is held and can be aimed in any direction. It also gains random worm trinket effects, shuffling quickly, and a higher tears stat raises its damage and width."
  },
  {
   "id": "brimstone+eye-of-the-occult",
@@ -250,7 +250,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Creates a controllable crosshair. Brimstone fires automatically at full charge and curves toward the crosshair, letting you steer the beam after firing."
+  "description": "In Repentance Eye of the Occult gives a crosshair you move, and Brimstone fires by itself at full charge. The beam leaves in a straight cardinal direction and bends toward the crosshair rather than aiming straight at it."
  },
  {
   "id": "brimstone+marked",
@@ -350,7 +350,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Isaac holds one knife but shoots multiple at their typical spread. Double knives without a fire rate penalty. Clean DPS increase."
+  "description": "Isaac holds one knife but throws two in 20/20's usual spread, with no fire rate penalty. In Repentance 20/20's 0.8x damage multiplier applies, so each knife hits a little softer."
  },
  {
   "id": "moms-knife+the-inner-eye",
@@ -361,7 +361,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Throws 3 knives in a spread. The fire rate penalty increases charge time but triple knives devastate rooms."
+  "description": "Isaac holds one knife but throws three at once in The Inner Eye's spread, covering much more of the room."
  },
  {
   "id": "moms-knife+proptosis",
@@ -373,17 +373,6 @@
   "characters": [],
   "rating": "S",
   "description": "The knife deals triple damage regardless of range. Proptosis's distance penalty doesn't apply to the knife, making this a pure 3x damage multiplier."
- },
- {
-  "id": "dead-eye+moms-knife",
-  "items": [
-   "Mom's Knife",
-   "Dead Eye"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "Dead Eye's damage multiplier increases with consecutive hits. Since the knife almost never misses (it returns through enemies), you maintain max stacks permanently for a consistent 2x multiplier."
  },
  {
   "id": "moms-knife+the-ludovico-technique",
@@ -408,17 +397,6 @@
   "description": "Enemies are pulled toward the knife, both while held and while thrown. Keeps targets in the knife's path for maximum hit count."
  },
  {
-  "id": "lost-contact+moms-knife",
-  "items": [
-   "Mom's Knife",
-   "Lost Contact"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "B",
-  "description": "The knife blocks enemy projectiles even while held in front of Isaac. Acts as a permanent shield against bullets while you charge."
- },
- {
   "id": "compound-fracture+moms-knife",
   "items": [
    "Mom's Knife",
@@ -427,7 +405,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The knife creates bone shards while in contact with an enemy, adding splash damage around each hit."
+  "description": "In Repentance the knife sometimes throws off bone shards while it touches an enemy, each shard dealing half of Isaac's damage."
  },
  {
   "id": "moms-knife+technology",
@@ -437,8 +415,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Both fire normally — the knife throws alongside a laser beam connected to it. Double attack methods with full damage on each."
+  "rating": "B",
+  "description": "In Repentance Technology no longer fires a laser of its own: when the knife is thrown, a laser links its tip to Isaac, like The Forgotten's club throw or Technology Zero."
  },
  {
   "id": "moms-knife+tech-x",
@@ -471,7 +449,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 2 Tech X rings instead of one. Slight damage reduction per ring but nearly doubles total output."
+  "description": "Fires two Tech X rings instead of one, each at 20/20's 0.8x damage multiplier in Repentance."
  },
  {
   "id": "crickets-body+tech-x",
@@ -493,7 +471,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Tech X rings block enemy projectiles as they travel across the room. Provides offensive and defensive capability simultaneously."
+  "description": "Tech X rings can block enemy shots as they cross the room, but in Repentance only some of the time; the wiki marks this as needing more testing."
  },
  {
   "id": "rubber-cement+tech-x",
@@ -504,7 +482,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The rings bounce off walls once, extending their travel distance and allowing them to hit enemies behind obstacles."
+  "description": "In Repentance the rings bounce off walls once, so each ring crosses the room a second time."
  },
  {
   "id": "spoon-bender+tech-x",
@@ -526,7 +504,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 3-5 extra rings in a 30-degree spread alongside the main ring. Massive area coverage though each ring has reduced damage."
+  "description": "Fires 3-5 extra rings in a 30-degree spread with the main ring, each extra ring dealing 50-100% of the main ring's damage. In Repentance fire rate is divided by 3.1, so it charges more slowly."
  },
  {
   "id": "dr-fetus+ipecac",
@@ -537,7 +515,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Dr. Fetus bombs explode on contact, become poison clouds, and deal massive combined damage. Isaac gains immunity to his own bomb shots. One of the safest Ipecac combos."
+  "description": "Dr. Fetus bombs explode on contact, poison and leave a poison cloud, and Isaac is immune to his own bomb shots (not placed bombs). In Repentance Ipecac adds only +2 flat damage and no tears down, so the old huge damage boost is gone."
  },
  {
   "id": "ipecac+pyromaniac",
@@ -581,7 +559,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires a barrage of Ipecac shots in a spread. Each deals +40 damage and poisons. Overlapping explosions devastate everything nearby. Extreme self-damage risk — stay far from enemies."
+  "description": "Monstro's Lung fires its 14-tear barrage as Ipecac shots, each with +40 damage and poison. In Repentance Ipecac's tears down applies, so the charge takes about three times as long. The explosions can hurt Isaac, so keep your distance."
  },
  {
   "id": "crickets-body+ipecac",
@@ -592,7 +570,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The main Ipecac tear splits into 4 explosive splash tears on hit. Each split tear deals full explosive damage, multiplying the total output."
+  "description": "When an Ipecac tear lands it splits into four smaller explosive tears, each dealing half of Isaac's damage. The split explosions can still hurt Isaac, so Host Hat or Pyromaniac is a good partner."
  },
  {
   "id": "ipecac+the-parasite",
@@ -603,7 +581,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Ipecac tear spawns 2 smaller explosive tears on collision with walls or enemies. The split tears chain-explode for massive area damage."
+  "description": "An Ipecac tear that hits a wall or obstacle, but not an enemy, splits into two smaller explosive tears, and those can split again into chain reactions. The blasts can hurt Isaac, so Host Hat or Pyromaniac is a good partner."
  },
  {
   "id": "ipecac+the-ludovico-technique",
@@ -613,8 +591,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "The controllable tear gains Ipecac's +40 damage, explodes when killing an enemy, and returns to Isaac after each kill. High damage with good control."
+  "rating": "C",
+  "description": "In Repentance the Ludovico tear does not explode and does not get Ipecac's +40; it gets only a small flat damage bonus (+2 on the Ipecac page, +4 on the Ludovico page)."
  },
  {
   "id": "ipecac+technology",
@@ -625,7 +603,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Creates a poisonous laser that explodes on enemy or obstacle contact. High damage but explosions can hurt Isaac if enemies are too close."
+  "description": "In Repentance the laser poisons and explodes where it hits an enemy or obstacle, for 10 plus twice Isaac's damage. Ipecac adds only +2 flat damage, and its 1/3 fire rate still applies. The blasts can hurt Isaac up close."
  },
  {
   "id": "ipecac+my-reflection",
@@ -647,7 +625,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Very fast fire rate fills the screen with low-damage Ipecac explosions. Damage per shot is heavily reduced but the sheer volume compensates. Self-damage risk is extreme."
+  "description": "Soy Milk's fire rate fills the screen with weak Ipecac explosions. Its 0.2x damage multiplier cuts Ipecac's +40 too, but you fire 5.5 times as often, so damage per second ends up close to Ipecac alone. The explosions can still hurt Isaac."
  },
  {
   "id": "libra+soy-milk",
@@ -679,8 +657,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "The continuous Technology 2 laser ticks much faster due to Soy Milk's tears up, dramatically increasing laser DPS while also firing rapid soy shots."
+  "rating": "C",
+  "description": "Technology 2's laser takes the place of half of Soy Milk's tears. The laser ticks a fixed 15 times a second, so Soy Milk's fire rate does not speed it up; in Repentance the two items' damage downs no longer compound on it."
  },
  {
   "id": "lost-contact+soy-milk",
@@ -701,8 +679,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "B",
-  "description": "Enemies get constantly pulled toward the stream of rapid-fire tears, improving accuracy and preventing them from dodging."
+  "rating": "C",
+  "description": "Enemies are pulled toward the stream of tears, which helps accuracy and makes up for Soy Milk's low knockback. But the rapid tears can also drag enemies erratically around the room, and the Strange Attractor page advises against the pair."
  },
  {
   "id": "a-lump-of-coal+soy-milk",
@@ -724,7 +702,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The extra tear cluster from Lead Pencil fires very frequently due to the high fire rate, adding bursts of full-damage tears between the rapid soy shots."
+  "description": "Lead Pencil fires a 12-tear burst after every 15 tears, so with Soy Milk's fire rate the bursts come very often."
  },
  {
   "id": "rock-bottom+soy-milk",
@@ -745,8 +723,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Each missile triggers Sad Bombs on explosion, releasing a burst of tears in all directions. The tears inherit your damage and tear effects, adding massive extra damage per strike."
+  "rating": "B",
+  "description": "Missile explosions can fire ten Sad Bombs tears in all directions, each dealing a flat 25 plus Isaac's damage, without Epic Fetus's multiplier. In Repentance this is only a chance that rises with luck, reaching 100% at 30 luck."
  },
  {
   "id": "epic-fetus+pyromaniac",
@@ -812,7 +790,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Both fire normally — you get missiles AND a Technology laser. Explosions also shoot 10 Technology beams in all directions."
+  "description": "In Repentance only the Epic Fetus crosshair fires, with no separate Technology laser, but every missile explosion shoots ten Technology lasers in all directions."
  },
  {
   "id": "20-20+polyphemus",
@@ -823,7 +801,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Fires two tears with no fire rate penalty, but the damage bonus becomes a flat +5 instead of multiplicative. Still a net positive for double shots."
+  "description": "In Repentance 20/20 removes Polyphemus's fire rate penalty and fires two tears per shot. What the pair does to damage is unclear: the wiki gives both a +5 flat bonus and a damage drop for it."
  },
  {
   "id": "polyphemus+rock-bottom",
@@ -845,7 +823,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Bombs grow in size and damage. After the first bomb explodes, a second bomb appears at the explosion point dealing half damage. Double the explosions."
+  "description": "Dr. Fetus bombs grow and hit harder, becoming Mr. Mega bombs, and each leaves a regular bomb behind; in Repentance that second bomb deals a flat 100 damage. Polyphemus's fire rate down still applies."
  },
  {
   "id": "godhead+sacred-heart",
@@ -859,17 +837,6 @@
   "description": "No special interaction: both already give homing tears, so the pair adds Sacred Heart's 2.3x damage multiplier (and +1 damage) to Godhead's damaging aura. In Repentance the aura deals a flat 2 damage 30 times a second, so it does not grow with your damage."
  },
  {
-  "id": "sacred-heart+spoon-bender",
-  "items": [
-   "Sacred Heart",
-   "Spoon Bender"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "Both grant homing — Sacred Heart's homing stacks with Spoon Bender for even more aggressive tracking. The 2.3x damage multiplier from Sacred Heart makes every homing tear devastating."
- },
- {
   "id": "godhead+the-ludovico-technique",
   "items": [
    "Godhead",
@@ -878,7 +845,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The controllable tear increases in size and gains Godhead's damaging aura. Park it on enemies for continuous aura + contact damage. Also gains homing in Repentance."
+  "description": "The Ludovico tear grows and gains Godhead's damaging aura, and in Repentance it also homes, which can leave it stuck near enemies. The aura cannot hurt an enemy the tear itself is touching, so hold the aura over enemies rather than the tear."
  },
  {
   "id": "a-lump-of-coal+godhead",
@@ -888,8 +855,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "The damaging aura increases in size and damage the longer the tear is airborne. Long-range tears gain massive auras that shred anything nearby."
+  "rating": "B",
+  "description": "In Repentance each tear's aura grows the farther the tear travels, but the aura's damage does not; Coal's distance bonus adds only to the tear itself."
  },
  {
   "id": "godhead+soy-milk",
@@ -900,7 +867,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Soy Milk's damage penalty doesn't affect Godhead's aura damage. The rapid stream of homing tears each carry damaging auras, filling the room with overlapping damage zones."
+  "description": "In Repentance Soy Milk's 0.2x damage multiplier does not touch the aura, which deals a flat 2 damage 30 times a second, and Soy Milk puts far more homing, aura-carrying tears on screen. Soy Milk's smaller tears do shrink each aura."
  },
  {
   "id": "chocolate-milk+monstros-lung",
@@ -910,8 +877,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Reduces tear delay by 20% and each tear in the barrage becomes a charged shot. Greatly increased fire rate with higher damage per tear. Very strong synergy."
+  "rating": "D",
+  "description": "In Repentance the barrage scales with charge: half a charge fires the full barrage at normal damage and a full charge doubles tear damage, but charging takes longer, so damage per second falls to about 80% of Monstro's Lung alone."
  },
  {
   "id": "monstros-lung+technology",
@@ -922,7 +889,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 12 Technology lasers in a 30-degree spread that arc across the room. No tear delay penalty applied. Room-clearing laser fan."
+  "description": "Monstro's Lung fires 12 Technology lasers in a 30-degree spread that arc 3 to 4 times and can hit an enemy more than once. Its tears down is not applied, but the charge takes just as long. Each multi-shot item adds 12 more lasers."
  },
  {
   "id": "dr-fetus+monstros-lung",
@@ -933,7 +900,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 6 bombs simultaneously that detonate together. Multi-shot items add extra bombs. Carpet-bombs the room."
+  "description": "Monstro's Lung takes over: each charged shot fires 6 mini-bombs that go off at different times, without Dr. Fetus's tears down. Each multi-shot item adds one bomb, up to 21."
  },
  {
   "id": "dr-fetus+pyromaniac",
@@ -976,8 +943,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Each bomb shot releases tears in all directions when it explodes. Adds significant splash damage to every shot."
+  "rating": "B",
+  "description": "In Repentance each fired bomb only has a chance to burst into Sad Bombs' 10 tears: 11% at 0 luck, plus 3% per point of luck, reaching 100% near 30 luck. Each tear deals 25 plus Isaac's damage."
  },
  {
   "id": "crickets-body+dr-fetus",
@@ -988,7 +955,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Bombs split into 4 tiny bombs on explosion that detonate almost immediately. Quadruples the explosive coverage."
+  "description": "Each bomb splits outward into 4 tiny bombs that go off almost at once, each dealing a flat 35 damage in Repentance."
  },
  {
   "id": "dr-fetus+the-parasite",
@@ -1000,17 +967,6 @@
   "characters": [],
   "rating": "A",
   "description": "Bombs split into 2 additional bombs on explosion that detonate almost instantly. Creates chain-explosion effects."
- },
- {
-  "id": "chocolate-milk+kidney-stone",
-  "items": [
-   "Chocolate Milk",
-   "Kidney Stone"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "Kidney Stone periodically fires a high-damage stone with a burst of tears. With Chocolate Milk, the stone shot gains the charge damage bonus for even more damage."
  },
  {
   "id": "chocolate-milk+polyphemus",
@@ -1031,8 +987,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Charging increases the Godhead aura size and damage. Fully charged shots carry huge damaging auras that melt enemies on contact."
+  "rating": "B",
+  "description": "Charging makes Godhead's aura bigger but, in Repentance, not stronger: it still deals 2 damage 30 times a second. Chocolate Milk's charged tears themselves still hit for up to 4x damage."
  },
  {
   "id": "strange-attractor+the-ludovico-technique",
@@ -1043,7 +999,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The controllable tear pulls all enemies toward it magnetically. Drag enemies into hazards or hold them in place for continuous contact damage."
+  "description": "Enemies, pickups and most bosses are pulled onto the floating tear, which keeps dealing damage while Isaac stays well away from them. A few immobile enemies are not moved."
  },
  {
   "id": "brimstone+the-ludovico-technique",
@@ -1075,19 +1031,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "When Isaac takes damage, troll bombs spawn. With Pyromaniac, those bombs heal Isaac, negating the initial damage and providing extra healing. Self-sustaining defense."
- },
- {
-  "id": "blood-rights+isaacs-heart",
-  "items": [
-   "Isaac's Heart",
-   "Blood Rights"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "Blood Rights costs half a red heart per use, but Isaac's Heart makes you invulnerable to self-damage. Free full-room damage dealer with zero cost every use."
+  "rating": "B",
+  "description": "Taking a hit spawns six troll bombs, and Pyromaniac turns their explosions into healing. In Repentance each explosion heals only half a red heart, so past Chapter 3 it no longer keeps up without The Wafer."
  },
  {
   "id": "daddy-longlegs+gnawed-leaf",
@@ -1098,7 +1043,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Stand still to become invulnerable via Gnawed Leaf. Daddy Longlegs stomps enemies automatically. Slow but completely safe — you can AFK every room and boss."
+  "description": "In statue form Isaac cannot be hurt while Daddy Longlegs stomps enemies, so most rooms and bosses can be cleared safely, if slowly. It cannot hurt bosses like The Shell and ignores enemies far from Isaac."
  },
  {
   "id": "cube-of-meat+gnawed-leaf",
@@ -1123,17 +1068,6 @@
   "description": "Become invulnerable while stationary. Ball of Bandages orbits and deals contact damage. Same principle as Cube of Meat — safe but slow."
  },
  {
-  "id": "gnawed-leaf+incubus",
-  "items": [
-   "Gnawed Leaf",
-   "Incubus"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "B",
-  "description": "Incubus fires tears independently of Isaac. While in Gnawed Leaf statue form, Incubus still shoots, providing offense while you're invulnerable."
- },
- {
   "id": "crickets-body+the-parasite",
   "items": [
    "Cricket's Body",
@@ -1142,7 +1076,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Tears split on hit AND on collision with obstacles. Each split tear then splits again, creating a cascade of projectiles that fills the room. Combined with any tears up, this becomes screen-clearing."
+  "description": "Each tear that lands or hits something releases eight small tears instead of four: two sets of Cricket's Body's split."
  },
  {
   "id": "compound-fracture+crickets-body",
@@ -1153,7 +1087,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Both items create split tears on impact. The splits stack, creating even more projectile spread. Excellent crowd control in dense rooms."
+  "description": "Bone tears shatter into shards on hitting an enemy or obstacle, and each shard then splits into 4 smaller shards when it hits the ground."
  },
  {
   "id": "dead-eye+the-ludovico-technique",
@@ -1198,7 +1132,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Blank Card activates your held card/rune twice instead of once. Doubles the effect of powerful cards like Jera (infinite pickups), Perthro (double rerolls), or Algiz (extended invulnerability)."
+  "description": "Blank Card uses the held card twice, so a Two of Hearts, Diamonds and the like quadruple what Isaac has instead of doubling it. In Repentance Blank Card copies cards only, not runes."
  },
  {
   "id": "car-battery+placebo",
@@ -1209,7 +1143,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Placebo activates your held pill twice. Doubles the effect of stat-up pills like Tears Up, Damage Up, etc. Strong for snowballing stats."
+  "description": "Car Battery upgrades the pill effect Placebo copies. With 48 Hour Energy, for example, both batteries it drops are Lil' Batteries, enough for unlimited uses."
  },
  {
   "id": "20-20+the-inner-eye",
@@ -1219,8 +1153,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "B",
-  "description": "Fires 6 tears at once (2x3). While the tears down from Inner Eye applies, the sheer number of projectiles makes this very strong, especially with piercing or spectral tears."
+  "rating": "A",
+  "description": "In Repentance 20/20 removes The Inner Eye's fire rate penalty, at the cost of a 0.8x damage multiplier. Each further copy of either item adds one more tear, with no further change to damage or fire rate."
  },
  {
   "id": "20-20+mutant-spider",
@@ -1230,8 +1164,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "B",
-  "description": "Fires 8 tears at once (2x4). Massive projectile count covers a huge area. Fire rate penalty from Mutant Spider is noticeable but compensated by volume."
+  "rating": "A",
+  "description": "In Repentance 20/20 removes Mutant Spider's fire rate penalty, at the cost of a 0.8x damage multiplier. Each further copy of either item adds one more tear, with no further change to damage or fire rate."
  },
  {
   "id": "brimstone+lead-pencil",
@@ -1242,7 +1176,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Lead Pencil triggers approximately every 2 seconds while firing the Brimstone beam. Adds bursts of full-damage tears alongside the continuous laser."
+  "description": "In Repentance Lead Pencil's 12-tear burst fires alongside the Brimstone beam every 4th blast, about every 2 seconds of beam time. Before Repentance, Brimstone overrode Lead Pencil."
  },
  {
   "id": "lead-pencil+the-ludovico-technique",
@@ -1264,7 +1198,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Eve's Mascara doubles damage and halves fire rate. 20/20 doubles shots without a fire rate penalty. Net result: double damage with double shots at half speed — 2x total DPS increase."
+  "description": "Eve's Mascara gives 2x damage at 0.66x fire rate, and 20/20 adds a second tear at 0.8x damage without slowing fire. The multipliers stack, so each volley hits far harder than with either item alone."
  },
  {
   "id": "brimstone+proptosis",
@@ -1275,7 +1209,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The Brimstone beam starts at 3x damage up close but decreases with distance. In Repentance, the penalty is capped at a minimum. Still very strong for close-range fights."
+  "description": "In Repentance the beam deals 6x damage at point-blank range, then loses 13.3% per tile of distance, down to almost nothing at 7.5 tiles. Very strong up close."
  },
  {
   "id": "dr-fetus+proptosis",
@@ -1308,7 +1242,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Revelation's holy laser gains poison damage and explodes multiple times along its path. Adds significant extra damage to an already powerful attack."
+  "description": "With Ipecac, Revelation's holy laser poisons and sets off 8 explosions where it first hits an enemy or obstacle, each dealing 10 plus twice the laser's damage. The laser itself gets only +2 damage, not Ipecac's +40."
  },
  {
   "id": "brimstone+c-section",
@@ -1377,7 +1311,7 @@
    "Judas"
   ],
   "rating": "A",
-  "description": "Book of Belial becomes a passive item that sits beneath your active item. Damage bonus scales with active item charges. Permanent damage up that frees the active slot."
+  "description": "The Book of Belial becomes a passive held beneath another active item, and its damage boost scales with that item's charges. It may not work with single-use, unlimited-use or timed-recharge actives."
  },
  {
   "id": "birthright+c-eve",
@@ -1461,7 +1395,7 @@
    "Eden"
   ],
   "rating": "A",
-  "description": "Creates 3 random items from random item pools — you can only take one. A free high-quality item choice that can define or save a run."
+  "description": "Spawns 3 random items from random item pools, and only one can be taken. It ignores item weight and can even offer items already taken this run."
  },
  {
   "id": "birthright+c-cain",
@@ -1569,7 +1503,7 @@
    "The Lost"
   ],
   "rating": "A",
-  "description": "Mom's Knife's high damage-per-hit is ideal for The Lost's glass-cannon playstyle. Kill enemies before they can threaten you. The knife's hitbox while held also blocks projectiles."
+  "description": "Mom's Knife pierces enemies and passes through obstacles, hitting 20 times a second at 2x damage while held and 6x at about a third of a charge. Killing that fast suits a character who dies in one hit."
  },
  {
   "id": "ipecac+c-the-lost",
@@ -1629,7 +1563,7 @@
    "Azazel"
   ],
   "rating": "B",
-  "description": "Technology fires a continuous laser alongside Azazel's Mini Brimstone. The laser fires while Brimstone charges, giving constant DPS. Good complement to Azazel's kit."
+  "description": "Technology works as it does with Brimstone: its laser wraps around Azazel's short beam and adds the 1.5x damage multiplier, without making the beam longer."
  },
  {
   "id": "chocolate-milk+c-azazel",
@@ -1661,7 +1595,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Perfection grants +10 Luck while held, destroyed on damage. Maximizes luck-based tear effects like Tough Love, Holy Light, and Parasitoid. Keep it safe for massive DPS boost."
+  "description": "Perfection gives +10 Luck and is destroyed if Isaac takes damage that isn't self-inflicted. That much luck maxes out effects such as Tough Love and Knockout Drops and takes Holy Light to its 50% cap."
  },
  {
   "id": "t-cancer",
@@ -1671,7 +1605,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Cancer reduces tear delay by 2, equivalent to a significant tears up. Benefits every build but especially strong with already-fast fire rates or charge-based items."
+  "description": "Cancer gives +1.0 fire rate, a solid tears up for any build."
  },
  {
   "id": "t-cracked-crown",
@@ -1681,7 +1615,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Multiplies the bonus from the highest stat up by 0.2 for other stats. Most powerful when you have one very high stat, spreading 20% of that bonus across all other stats."
+  "description": "Every stat above Isaac's base (speed, range, shot speed, damage and, in Repentance, tears) gets 20% more of its excess: 4.5 damage becomes 4.7. The more stat ups a build has, the more it gains."
  },
  {
   "id": "t-forgotten-lullaby",
@@ -1691,7 +1625,7 @@
   ],
   "characters": [],
   "rating": "B",
-  "description": "Increases the fire rate of all familiars. Strongest with familiar-heavy builds (Incubus, Lil Brimstone, etc.) where the fire rate boost applies to multiple damage sources."
+  "description": "Doubles the fire rate of Isaac's familiars and halves the charge time of those with charged shots, such as Lil' Brimstone. Wisps are not affected, and Incubus and Twisted Pair gain less above about 10 fire rate."
  },
  {
   "id": "t-baby-bender",
@@ -1713,7 +1647,7 @@
   ],
   "characters": [],
   "rating": "B",
-  "description": "Forgotten Lullaby boosts Incubus's fire rate, making it shoot faster. Incubus copies your tear effects, so faster Incubus shots means faster delivery of all your tear modifiers."
+  "description": "Forgotten Lullaby doubles Incubus's fire rate, so it fires and charges faster than Isaac. The gain shrinks above about 10 fire rate, is gone by 27.5 and turns into a loss beyond that."
  },
  {
   "id": "incubus+t-baby-bender",
@@ -1725,7 +1659,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Incubus tears gain homing from Baby-Bender. Since Incubus copies your damage and tear effects, homing Incubus tears are essentially a second set of homing shots."
+  "description": "Baby-Bender gives familiars homing shots, so Incubus's copies of Isaac's tears home in as well. In Repentance they deal 75% of Isaac's damage unless he is playing Lilith."
  },
  {
   "id": "incubus",
@@ -1735,7 +1669,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Incubus fires tears that copy Isaac's damage and most tear effects. With Brimstone, it fires its own mini Brimstone. With Mom's Knife, it throws its own knife. Doubles your attack power."
+  "description": "Incubus follows Isaac and fires smaller copies of his tears, including some special attacks such as a Brimstone beam of its own. In Repentance it deals 75% of Isaac's damage unless he is playing Lilith."
  },
  {
   "id": "polyphemus+soy-milk",
@@ -1756,8 +1690,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "In Repentance, Isaac continuously fires bombs while charging Brimstone. You get both weapons active simultaneously — bombs during charge, beam on release."
+  "rating": "D",
+  "description": "In Repentance Dr. Fetus overrides Brimstone: Isaac fires only bombs and the beam is lost. Firing bombs while charging the beam was Afterbirth and Afterbirth+ only."
  },
  {
   "id": "anti-gravity+brimstone",
@@ -1824,7 +1758,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Doubles the effect of most tarot cards and suit cards. Extremely powerful with cards like The Sun (full heal + map), Strength (double stat boost), or The Stars (double Treasure Room teleport)."
+  "description": "In Repentance Tarot Cloth boosts only certain tarot cards; suit cards and runes no longer count. Strength doubles its stat ups (the damage multiplier once), The Empress quadruples its damage up, The Sun deals 400 damage to the room and The Stars gives a two-item Treasure Room."
  },
  {
   "id": "blank-card",
@@ -1833,8 +1767,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Re-activates your held card or rune on use. Combined with powerful cards like Jera (double all pickups), Perthro (infinite rerolls), or Algiz (invulnerability), this is game-breaking."
+  "rating": "B",
+  "description": "Copies the effect of the card you are holding without using it up. It copies cards only, not runes, and its recharge depends on the card, from 1 room to 12."
  },
  {
   "id": "placebo",
@@ -1844,7 +1778,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Re-activates your held pill on use. With stat-up pills (Tears Up, Damage Up), you can stack the same pill repeatedly for massive stat gains over a run."
+  "description": "Copies the effect of the pill you are holding without using it up, so a good pill can be taken again and again. In Repentance the recharge depends on the pill: stat-up pills take 6 rooms, and 48 Hour Energy, Balls of Steel and Full Health take 12."
  },
  {
   "id": "almond-milk+the-ludovico-technique",
@@ -1855,7 +1789,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "C",
-  "description": "The controllable Ludovico tear jitters wildly with random worm effects from Almond Milk, making it very hard to control. The rapid damage ticks compensate somewhat."
+  "description": "With Almond Milk the Ludovico tear keeps teleporting around a small area, which makes it hard to aim. It hits more often, since the tear's hits per second follow your fire rate (up to 30), which offsets Almond Milk's 0.3x damage."
  },
  {
   "id": "epic-fetus+marked",
@@ -1866,7 +1800,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The targeting crosshair from Marked controls Epic Fetus missile targeting. Allows you to aim missiles independently of movement. Good for dodging while attacking."
+  "description": "Epic Fetus keeps dropping missiles on Marked's crosshair on its own, while you move freely. In Repentance, if you dismiss the crosshair before the next missile drops, it still lands where the crosshair last was."
  },
  {
   "id": "brimstone+lokis-horns",
@@ -1913,17 +1847,6 @@
   "description": "Occasionally releases 1-3 extra knives in random directions when shooting. Free extra knives on top of your main throw."
  },
  {
-  "id": "guppys-head+moms-knife",
-  "items": [
-   "Guppy's Head",
-   "Mom's Knife"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "With Guppy transformation, the knife spawns Blue Flies frequently while contacting enemies. The knife's multi-hit nature generates flies rapidly."
- },
- {
   "id": "almond-milk+libra",
   "items": [
    "Libra",
@@ -1943,7 +1866,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "C",
-  "description": "The technology laser curves back toward Isaac like a boomerang. Can hit enemies multiple times as the beam curves. Unique but inconsistent."
+  "description": "The laser makes a thin loop in front of Isaac and also fires a normal laser backwards."
  },
  {
   "id": "moms-knife+my-reflection",
@@ -1954,7 +1877,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "C",
-  "description": "The knife returns to Isaac faster and has a tighter orbit. In practice, this concentrates the knife's damage at close range. Stat effects only, mostly neutral."
+  "description": "In Repentance the knife's path does not change, but My Reflection's stat changes still apply: +1.5 damage, more range, 1.6x shot speed and -1 luck."
  },
  {
   "id": "epic-fetus+strange-attractor",
@@ -1975,8 +1898,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "The Technology laser ticks much faster due to Soy Milk's fire rate boost. Combined with Soy Milk's own rapid tears, total DPS is significantly higher than either alone."
+  "rating": "C",
+  "description": "Soy Milk makes Technology fire 5.5 times as often, but every laser deals 0.2x damage, so damage per second ends up about where it was, spread over many weak lasers."
  },
  {
   "id": "polyphemus+technology",
@@ -1987,7 +1910,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The Technology laser deals Polyphemus-boosted damage per tick. Slower tick rate from the fire rate penalty, but each tick hits much harder."
+  "description": "Each Technology laser hits with Polyphemus's damage, (damage + 4) x 2, and pierces everything in its line. You fire 0.42x as often in Repentance, since the laser's rate follows your tears stat."
  },
  {
   "id": "proptosis+technology",
@@ -1998,7 +1921,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The laser deals 3x damage at point-blank range, decreasing with distance. Makes Technology devastating at close range but weaker at a distance."
+  "description": "In Repentance the laser deals 6x damage at point-blank range, falling to 0.1 damage by about 8 tiles away. Very strong up close and close to useless across a large room."
  },
  {
   "id": "moms-knife+sad-bombs",
@@ -2009,7 +1932,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Bombs release 10 knives in all directions when they explode. Each knife deals full damage. Turns every bomb into a knife nova."
+  "description": "When a bomb explodes, its 10 tears become knives that fly out in every direction and do not come back. Turns every bomb into a knife burst."
  },
  {
   "id": "sad-bombs+tech-x",
@@ -2030,8 +1953,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "D6 rerolls pedestal items twice per use. Doubles your chances of finding an ideal item from any pedestal without spending extra charges."
+  "rating": "D",
+  "description": "Car Battery makes The D6 reroll twice in a row, which gives no better pick and uses up the item pools twice as fast."
  },
  {
   "id": "box-of-friends+car-battery",
@@ -2053,7 +1976,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Grants two soul hearts per use instead of one. Doubles the survivability benefit of each activation while still guaranteeing the Horseman boss fight."
+  "description": "Each use gives two soul hearts instead of one. Using the book still brings a Harbinger in place of the floor's boss, as long as one can appear there and has not been met yet."
  },
  {
   "id": "car-battery+the-satanic-bible",
@@ -2064,7 +1987,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Grants two black hearts per use instead of one. In Repentance, also replaces the boss room item with a devil deal, so double activation gives even more value."
+  "description": "Each use gives two black hearts instead of one. Using it still makes the floor's boss drop a Devil Deal instead of its item, as it does in Repentance."
  },
  {
   "id": "car-battery+guppys-head",
@@ -2075,7 +1998,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Spawns double the blue flies per use (4-8 instead of 2-4). With Guppy transformation active, generates a massive fly swarm on demand."
+  "description": "Each use spawns roughly twice as many blue flies: at least 4 instead of 2-4."
  },
  {
   "id": "car-battery+moms-box",
@@ -2086,7 +2009,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Mom's Box activates twice, spawning two trinkets. The trinket-doubling passive effect makes powerful trinkets like Curved Horn or Cancer even more impactful."
+  "description": "Car Battery makes each use of Mom's Box drop two trinkets instead of one, and holding the box still doubles the effects of many trinkets (72 of 188 in Repentance)."
  },
  {
   "id": "car-battery+sulfur",
@@ -2119,7 +2042,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "BFFS! doubles Incubus's tear damage. Since Incubus copies all your tear effects, a doubled Incubus is essentially a second you firing at 2x your damage."
+  "description": "BFFS! doubles Incubus's damage. In Repentance Incubus deals 0.75x your damage unless you are Lilith, so with BFFS! its copies of your tears hit for 1.5x (2x as Lilith)."
  },
  {
   "id": "bffs+twisted-pair",
@@ -2130,7 +2053,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Doubles the damage of both Twisted Pair familiars. They fire diagonally in front of you and copy your tear effects, creating massive supplemental DPS from three firing angles."
+  "description": "BFFS! doubles Twisted Pair's tear damage, so each of the two familiars hits for 0.75x your damage, with your fire rate, range, shot speed and tear effects."
  },
  {
   "id": "bffs+lil-brimstone",
@@ -2141,7 +2064,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Doubles Lil Brimstone's mini laser damage. The familiar's Brimstone beam becomes a serious secondary attack that can clear weaker enemies on its own."
+  "description": "BFFS! doubles the damage of Lil' Brimstone's thin beam: in Repentance 3 per tick becomes 6, for up to 48 damage per beam instead of 24."
  },
  {
   "id": "bffs+succubus",
@@ -2163,7 +2086,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Blue spiders from Infestation 2 deal doubled damage with Hive Mind. Each enemy killed spawns a powerful spider that chain-kills more enemies, snowballing through rooms."
+  "description": "Hive Mind makes Infestation 2's blue spiders bigger and doubles their damage. Every enemy that dies, whatever kills it, leaves another spider, so they keep coming."
  },
  {
   "id": "hive-mind+the-mulligan",
@@ -2174,7 +2097,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Blue flies spawned by The Mulligan deal double damage with Hive Mind. High fire rate builds spawn many powerful flies that overwhelm rooms."
+  "description": "Hive Mind makes The Mulligan's blue flies bigger and doubles their damage. Each tear that hits has a 16.67% chance to spawn one, so a build that hits often makes more of them."
  },
  {
   "id": "restock+steam-sale",
@@ -2200,17 +2123,6 @@
   "description": "With Chaos, Restock can restock the shop with otherwise rare items, and Steam Sale cuts their base price. In Repentance, outside Greed Mode, each restock adds to the price and the discount does not cover that increase, so the endless free shop of older versions no longer happens."
  },
  {
-  "id": "sharp-plug+the-wafer",
-  "items": [
-   "Sharp Plug",
-   "The Wafer"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "Sharp Plug fully charges your active item at the cost of health. The Wafer reduces all damage to half a heart. Net cost: half a heart per full charge, enabling repeated active item abuse."
- },
- {
   "id": "habit+scapular",
   "items": [
    "Habit",
@@ -2230,7 +2142,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Brimstone's rapid damage ticks recharge your active item through 4.5 Volt. A single beam through multiple enemies can fully recharge even high-cost actives instantly."
+  "description": "4.5 Volt charges your active from the damage you deal, and Brimstone's piercing beam hits everything in its line many times per shot, so charges come fast. Still only one charge at a time, at 60 damage per charge on the first floor and more on each later stage."
  },
  {
   "id": "4-5-volt+tech-x",
@@ -2241,7 +2153,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Tech X rings hit enemies multiple times as they travel, generating rapid active item charges via 4.5 Volt. Keeps powerful actives available nearly every room."
+  "description": "Tech X's rings damage everything they pass through, 15 times a second, and 4.5 Volt turns that damage into active charges: 60 damage per charge on the first floor, more on later stages, one charge at a time."
  },
  {
   "id": "4-5-volt+the-ludovico-technique",
@@ -2252,7 +2164,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The controllable Ludovico tear deals continuous contact damage, rapidly generating charges through 4.5 Volt. Park it on a boss for near-instant active item recharges."
+  "description": "The Ludovico tear deals constant damage while you hold it on an enemy, and 4.5 Volt turns that damage into active charges. Parked on a boss it keeps charging, one charge at a time, at 60 damage per charge on the first floor and more later."
  },
  {
   "id": "book-of-virtues+the-book-of-belial",
@@ -2263,7 +2175,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Book of Belial spawns special wisps that grant a damage bonus while alive. The wisps fire tears and block shots, providing offense and defense alongside the damage up."
+  "description": "Each use of The Book of Belial also spawns a black and red wisp in the middle ring that deals double a normal wisp's damage. Like other wisps it fires tears and blocks shots, on top of the book's +2 damage for the room."
  },
  {
   "id": "book-of-virtues+the-satanic-bible",
@@ -2274,7 +2186,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Satanic Bible creates special dark wisps that deal contact damage to enemies. Combined with the black heart from each use, provides both offensive wisps and survivability."
+  "description": "Each use of The Satanic Bible also spawns a black wisp in the middle ring, shaped like an inverted cross, and each one raises the chance of a Devil Room by 10%. The black heart from the book still comes too."
  },
  {
   "id": "the-d6+void",
@@ -2284,8 +2196,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Absorbing D6 into Void gives you an on-demand reroll alongside any other absorbed effects. Using Void now rerolls all pedestal items in the room as a bonus."
+  "rating": "C",
+  "description": "In Repentance, absorbing The D6 into Void rerolls nothing that time. Later Void uses reroll the room's items before absorbing them, so the free pedestals are rerolled and then eaten, never kept as a reroll."
  },
  {
   "id": "mega-mush+void",
@@ -2340,7 +2252,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Both are charge-based attacks. At full Brimstone charge, Maw of the Void also triggers its black damage ring around Isaac. You get the beam plus an automatic close-range ring attack every charge."
+  "description": "Holding fire for 2.35 seconds charges Maw of the Void, and letting go releases its black ring, which ticks 30 times at your damage, along with the charged Brimstone beam. It needs that full 2.35-second hold, not just a full Brimstone charge."
  },
  {
   "id": "holy-mantle+c-the-lost",
@@ -2376,7 +2288,7 @@
    "The Forgotten"
   ],
   "rating": "B",
-  "description": "Dead Cat sets health to 1 heart. The Forgotten has bone hearts that count differently, and The Soul (his ghost form) still retains soul hearts. Less punishing than on most characters."
+  "description": "Dead Cat only cuts the form you pick it up as: as The Forgotten his bone hearts drop to 1 and The Soul keeps its soul hearts, and the other way round. After each death both come back with one bone heart and one soul heart."
  },
  {
   "id": "blood-oath+c-eve",
@@ -2388,7 +2300,7 @@
    "Eve"
   ],
   "rating": "A",
-  "description": "Blood Oath drains red hearts at the start of each floor, giving damage and speed. This triggers Whore of Babylon and Dead Bird automatically, stacking Eve's damage bonuses for the entire floor."
+  "description": "Blood Oath drains Eve's red health at the start of each floor for damage and speed that last the floor, and leaves her low enough to switch on Whore of Babylon. The stab counts as damage, so Dead Bird's bird comes out too, for that first room."
  },
  {
   "id": "money-power+c-keeper",
@@ -2399,8 +2311,8 @@
   "characters": [
    "Keeper"
   ],
-  "rating": "A",
-  "description": "Money = Power adds damage based on coin count. Keeper naturally accumulates coins through his coin tears and Wooden Nickel. With 99 coins, this grants +3.96 damage."
+  "rating": "C",
+  "description": "Money = Power gives +0.04 damage per coin, up to +3.96 at 99. Keeper uses coins as health: a coin that heals him is spent, and in Repentance he pays for devil deals in coins, so his bonus drops whenever he heals or buys one."
  },
  {
   "id": "deep-pockets+c-keeper",
@@ -2412,7 +2324,7 @@
    "Keeper"
   ],
   "rating": "B",
-  "description": "Deep Pockets raises the coin cap to 999 and spawns coins in rooms with no other pickups. For Keeper, this means more potential healing pickups and higher Money = Power damage if also held."
+  "description": "Deep Pockets raises the coin cap to 999, and a room that would give no reward drops 1-3 coins instead. Keeper heals by picking up coins, so that means more healing."
  },
  {
   "id": "keepers-sack+c-keeper",
@@ -2424,7 +2336,7 @@
    "Keeper"
   ],
   "rating": "B",
-  "description": "Buying shop items grants random stat boosts. Keeper's coin-based economy makes frequent shop purchases natural, snowballing stats over the run."
+  "description": "Every 3 coins spent gives, in turn, +0.5 damage, +0.25 range and +0.03 speed. Keeper pays for devil deals and Black Market items in coins, so those count toward it too."
  },
  {
   "id": "iv-bag+c-keeper",
@@ -2435,8 +2347,8 @@
   "characters": [
    "Keeper"
   ],
-  "rating": "B",
-  "description": "IV Bag damages Keeper for a coin heart but drops coins. Each coin on the ground is a potential heal. With Swallowed Penny trinket, this becomes a free coin generator and heal loop."
+  "rating": "D",
+  "description": "As Keeper, each use of IV Bag costs a Coin Heart and pays only 0-1 coins, and a coin that heals him is spent doing it, so the bag at best breaks even."
  },
  {
   "id": "box-of-friends+c-lilith",
@@ -2460,7 +2372,7 @@
    "Lilith"
   ],
   "rating": "A",
-  "description": "Lilith frequently takes damage to charge Incubus. Cambion Conception spawns powerful demon familiars (Incubus, Dark Bum, Succubus) after taking enough hits, naturally synergizing with Lilith's playstyle."
+  "description": "Lilith starts with Cambion Conception, so the hits she takes earn demon familiars: one each after 15 hits for the first two, then one after each further 30 hits for two more. A second Incubus is one of the possible results."
  },
  {
   "id": "dark-bum+c-blue-baby",
@@ -2472,7 +2384,7 @@
    "Blue Baby"
   ],
   "rating": "A",
-  "description": "Blue Baby cannot use red hearts. Dark Bum picks up red hearts and converts them to soul hearts, spiders, or other pickups. Turns useless red hearts into actual healing for Blue Baby."
+  "description": "Blue Baby can't use red hearts, and Dark Bum collects them: every 1.5 red hearts gives a black heart 40% of the time, otherwise a card, rune, pill or spider. Hearts that were useless to him turn into health and pickups."
  },
  {
   "id": "abaddon+c-blue-baby",
@@ -2508,7 +2420,7 @@
    "Lilith"
   ],
   "rating": "A",
-  "description": "Incubus is permanently attached to Lilith at close range, firing from her position. Removes the familiar delay and makes Incubus shots perfectly synchronized with your movement."
+  "description": "Incubus and most other familiars that follow Lilith stay stacked in front of her, facing the way she last shot, instead of trailing behind."
  },
  {
   "id": "birthright+c-bethany",
@@ -2520,7 +2432,7 @@
    "Bethany"
   ],
   "rating": "A",
-  "description": "Book of Virtues wisps deal more damage and last longer. Strengthens Bethany's core mechanic, making her wisp army more durable and lethal."
+  "description": "When Bethany spends soul charges to use her active item, half the time it costs her nothing."
  },
  {
   "id": "birthright+c-jacob-and-esau",
@@ -2544,7 +2456,7 @@
    "Lilith"
   ],
   "rating": "A",
-  "description": "Gello fires tears from Lilith's body using her stats. Combined with Incubus and Box of Friends, Lilith can have multiple familiar clones all firing her tears simultaneously."
+  "description": "As Lilith, Gello's tears deal her full damage instead of 0.75x. For the room it is used in, it fires alongside her Incubus with her damage, fire rate, range, shot speed and tear effects."
  },
  {
   "id": "brimstone+c-lilith",
@@ -2556,7 +2468,7 @@
    "Lilith"
   ],
   "rating": "A",
-  "description": "Incubus fires its own mini Brimstone beam alongside Lilith's blindfolded Brimstone. Two beams fire simultaneously, one from Lilith and one from Incubus. Box of Friends adds more beams."
+  "description": "Lilith is blindfolded and fires nothing herself, but her Incubus copies her attack, so it fires the Brimstone beam at her full damage. Box of Friends, which she starts with, adds another Incubus and so another beam for the room."
  },
  {
   "id": "abaddon+c-keeper",
@@ -2580,7 +2492,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Beelzebub transformation: collecting 3 fly-related items grants flight and converts enemy flies into blue flies. Any 3 fly items work — includes BBF, Smart Fly, Jar of Flies, The Mulligan, Infestation 2, and others."
+  "description": "Only in Repentance+, where Infestation counts as a fly item, do these three complete Beelzebub: flight, small enemy flies turn into blue flies, and larger ones become friendly. In Repentance itself Infestation does not count."
  },
  {
   "id": "the-bible+the-book-of-belial+the-necronomicon",
@@ -2592,7 +2504,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Bookworm transformation: collecting 3 book items grants a chance to fire double tears with each shot. Any 3 books work — includes Book of Shadows, Book of Revelations, Satanic Bible, Book of Secrets, Book of Virtues, and others."
+  "description": "These three books complete Bookworm: 25% of the time you fire an extra tear, at full damage in Repentance. Any three book items count, among them Book of Shadows, Book of Revelations, The Satanic Bible, Book of Secrets and Book of Virtues."
  },
  {
   "id": "dead-dove+holy-grail+sacred-heart",
@@ -2604,7 +2516,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Seraphim transformation: collecting 3 angel room items grants flight and 3 soul hearts. Any 3 angel items work — includes The Halo, Guardian Angel, Sworn Protector, Holy Mantle, Seraphim familiar, and others."
+  "description": "These three complete Seraphim: flight and 3 soul hearts. Other items that count include The Halo, Holy Mantle, The Bible, Rosary and Mitre; Guardian Angel and Sworn Protector no longer do in Repentance."
  },
  {
   "id": "brimstone+lord-of-the-pit+the-pact",
@@ -2616,7 +2528,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Leviathan transformation: collecting 3 devil room items grants flight and 2 black hearts. Any 3 devil items work — includes The Mark, Spirit of the Night, Whore of Babylon, Abaddon, Maw of the Void, and others."
+  "description": "These three complete Leviathan, with Lord of the Pit counting from Repentance on: flight and 2 black hearts. Other items that count include The Mark, Spirit of the Night, Abaddon, Pentagram and Maw of the Void; Whore of Babylon does not."
  },
  {
   "id": "roid-rage+speed-ball+synthoil",
@@ -2640,7 +2552,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Conjoined transformation: collecting 3 specific familiar items causes Isaac to fire tears in 3 directions (forward and 2 diagonals). Applies a small damage penalty but triples coverage."
+  "description": "These three complete Conjoined: two tumor faces fire diagonally while you keep shooting forward, for -0.3 damage and -0.3 tears. In Repentance many other baby familiars count too."
  },
  {
   "id": "magic-mushroom+mini-mush+odd-mushroom-thin",
@@ -2652,7 +2564,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Fun Guy transformation: collecting 3 mushroom items grants +1 red heart container. Any 3 mushroom items work — includes Odd Mushroom (Large), 1up!, and other mushroom-themed items."
+  "description": "These three complete Fun Guy, which gives one full red heart container. Any three mushroom items count, among them Odd Mushroom (Thick), 1UP, Blue Cap and Mega Mush."
  },
  {
   "id": "butt-bombs+e-coli+the-poop",
@@ -2664,7 +2576,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "C",
-  "description": "Oh Crap transformation: collecting 3 poop-related items causes destroying poop to heal half a red heart. Situational but provides consistent healing in many rooms."
+  "description": "These three complete Oh Crap, with Butt Bombs counting from Repentance on: each pile of poop destroyed heals half a red heart. In Repentance poop made by E. Coli heals too."
  },
  {
   "id": "bum-friend+dark-bum+key-bum",
@@ -2676,7 +2588,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Super Bum transformation: collecting all 3 bum familiars merges them into Super Bum. Super Bum collects all pickup types and gives high-value random rewards including cards, runes, and chests."
+  "description": "Holding all three bums turns them into one Super Bum, which picks up coins, red hearts and keys and drops twice the rewards the regular bums would. In Repentance its item drops come as two copies."
  },
  {
   "id": "t-swallowed-penny+c-keeper",
@@ -2700,7 +2612,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Mom's Box doubles trinket effects while held. Curved Horn's +2 damage becomes +4 damage — a massive flat bonus that benefits rapid-fire builds enormously."
+  "description": "Mom's Box doubles certain trinkets while held, Curved Horn among them: its +2 flat damage becomes +4, and +6 if the horn is also golden. A big flat damage boost for any build."
  },
  {
   "id": "moms-box+t-cancer",
@@ -2712,7 +2624,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Mom's Box doubles Cancer trinket's tear delay reduction from -2 to -4. This is equivalent to a very large tears up, dramatically increasing fire rate on any build."
+  "description": "Mom's Box doubles the Cancer trinket's +1.0 fire rate to +2.0, and a golden Cancer with Mom's Box gives +3.0: a large flat tears up on any build."
  },
  {
   "id": "moms-box+t-cracked-crown",
@@ -2724,7 +2636,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Mom's Box doubles Cracked Crown's stat multiplication bonus. The 20% stat spread becomes 40%, making your highest stat boost all other stats significantly."
+  "description": "In Repentance Cracked Crown adds 20% of the amount by which your speed, range, shot speed, damage and tears are above base, each stat on its own. Mom's Box doubles that bonus to 40%."
  },
  {
   "id": "t-perfection+c-the-lost",
@@ -2748,7 +2660,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Perfection's +10 Luck makes Tough Love's tooth tears fire on nearly every shot. Each tooth deals 3.2x damage, turning normal tears into a devastating rapid-fire assault."
+  "description": "Perfection's +10 luck lifts Tough Love to its cap: from 9 luck every tear is a tooth that deals 3.2x Isaac's damage. Perfection breaks the first time you take damage that is not self-inflicted."
  },
  {
   "id": "holy-light+t-perfection",
@@ -2760,7 +2672,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Perfection's +10 Luck causes Holy Light's beam-of-light tears to trigger on nearly every shot. Each beam deals 3x your damage, turning every tear into a holy explosion."
+  "description": "Perfection's +10 luck takes Holy Light to its cap, which is half your tears (50% from 8.89 luck). Each holy tear calls a beam of light dealing 3x the tear's damage to enemies in a small area. Perfection breaks the first time you take non-self damage."
  },
  {
   "id": "t-forgotten-lullaby+c-lilith",
@@ -2772,7 +2684,7 @@
    "Lilith"
   ],
   "rating": "A",
-  "description": "Forgotten Lullaby boosts all familiar fire rates. Lilith relies entirely on familiars (Incubus, plus any from Box of Friends). Faster familiar fire rate directly multiplies Lilith's DPS."
+  "description": "Lilith attacks only through her Incubus, and Forgotten Lullaby doubles familiars' fire rate, so it works as a tears up for her whole offense and for any other familiars. The gain fades at high fire rates: none at about 27.5, and a loss beyond that."
  },
  {
   "id": "t-baby-bender+c-lilith",
@@ -2796,7 +2708,7 @@
   ],
   "characters": [],
   "rating": "B",
-  "description": "Forgotten Lullaby increases Twisted Pair's fire rate. Both familiars shoot faster, dramatically increasing the DPS from these powerful tear-copying familiars."
+  "description": "Forgotten Lullaby doubles familiars' fire rate, so both Twisted Pair demons shoot faster at normal fire rates. They follow Isaac's fire rate, so the gain fades above about 10, is gone at 27.5 and turns into a loss beyond that."
  },
  {
   "id": "twisted-pair+t-baby-bender",
@@ -2808,7 +2720,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Baby-Bender grants homing to both Twisted Pair familiars. Their diagonal tears now track enemies, massively improving consistency and allowing them to hit targets Isaac's own tears might miss."
+  "description": "Baby-Bender gives familiars homing shots, so both Twisted Pair demons' tears track enemies. The demons float at Isaac's sides and fire with his tears, range, shot speed and tear effects at 0.375x damage each, and homing lets more of those shots land."
  },
  {
   "id": "moms-purse+t-cancer+t-curved-horn",
@@ -2821,7 +2733,7 @@
   ],
   "characters": [],
   "rating": "A",
-  "description": "Mom's Purse lets you hold two trinkets. Curved Horn (+2 damage) and Cancer (-2 tear delay) together give a significant damage and fire rate boost. Other strong pairings work too."
+  "description": "Mom's Purse lets you carry two different trinkets, so Curved Horn (+2 flat damage) and Cancer (+1.0 fire rate in Repentance) can be held together. In Repentance Mom's Purse also spawns a random trinket. Other strong pairings work too."
  },
  {
   "id": "cursed-eye+c-the-lost",
@@ -2887,7 +2799,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "C",
-  "description": "WARNING: Dead Eye's damage bonus resets on any miss. 20/20 fires two tears in a spread, making it easier for one tear to miss. The constant resets reduce Dead Eye's average damage boost."
+  "description": "Both 20/20 tears count toward Dead Eye's multiplier when they hit (up to 2x after 4 hits), so it builds faster. A missed tear has a 20-50% chance to reset it, and 20/20 has a 0.8x damage multiplier in Repentance."
  },
  {
   "id": "dead-eye+the-wiz",
@@ -2931,7 +2843,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Black Candle removes all curses, including Cursed Eye's teleportation effect when hit during charge. You keep the 4-tear charged burst with zero risk."
+  "description": "Black Candle removes Cursed Eye's teleport when you are hit mid-charge, so you keep the charged burst of five tears (in Repentance) with no risk. It also gives curse immunity, a Black Heart and a better Devil or Angel Room chance."
  },
  {
   "id": "deaths-touch+moms-knife",
@@ -2942,7 +2854,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Death's Touch's +1.5 damage and piercing apply to Mom's Knife. The knife gains the damage boost and tears down doesn't matter since the knife has its own charge mechanic."
+  "description": "Mom's Knife replaces Death's Touch's scythes, but its +1.5 damage still feeds the knife, which deals 2x Isaac's damage when held and up to 6x when thrown. The -0.3 tears comes along too, and the knife already pierces on its own."
  },
  {
   "id": "brimstone+deaths-touch",
@@ -2953,7 +2865,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Death's Touch's +1.5 damage is added to Brimstone's beam damage. The tears down penalty doesn't affect Brimstone's charge speed. Pure damage upgrade."
+  "description": "Brimstone overrides the scythes and only Death's Touch's stats apply: +1.5 damage on every tick of the beam, but also -0.3 tears, which makes the beam charge a little slower since Brimstone's charge time follows fire rate."
  },
  {
   "id": "crickets-head+magic-mushroom",
@@ -2964,7 +2876,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "C",
-  "description": "Both grant a 1.5x damage multiplier, but they share the same multiplier and don't stack. You get the +3 flat damage from Magic Mushroom and all stats up, but only one 1.5x multiplier total."
+  "description": "Their x1.5 damage multipliers do not stack, so you get only one. The flat parts still add up: +0.5 damage from Cricket's Head, and +0.3 damage, +0.3 speed, +2.5 range and a heart container from Magic Mushroom."
  },
  {
   "id": "brimstone+immaculate-heart",
@@ -2996,7 +2908,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Star of Bethlehem is a familiar that slowly moves toward the boss room. While near it, Isaac gains a significant damage multiplier, tears up, and increased speed. Staying close to the star is key."
+  "description": "The star familiar slowly travels to the Boss Room and stays there for the floor. Standing in its aura gives 1.8x damage (1.2x in Repentance+), 2.5x fire rate, homing tears and a 50% chance to ignore damage; it gives no speed."
  },
  {
   "id": "damocles+c-the-lost",
@@ -3018,7 +2930,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "WARNING: Damocles gives double items from every pedestal but creates a sword above you. After you take ANY damage, the sword has an increasing chance to fall and instantly kill you each half-second. High risk, high reward."
+  "description": "While Damocles' sword hangs over you, item pedestals get a free extra item (not priced items or most chest items). Once you take damage that is not self-damage, the sword has a 1/10000 chance every 0.133 seconds to fall and kill you; that chance never grows. High risk, high reward."
  },
  {
   "id": "stop-watch",
@@ -3028,7 +2940,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Stop Watch permanently slows all enemies and their projectiles. One of the strongest defensive items in the game. Makes every room and boss significantly easier to handle."
+  "description": "In Repentance Stop Watch slows every enemy to 80% of its movement and attack speed, separate from and stacking with the slow status. Enemy shots are slowed too (and so are your tears), and it gives +0.3 speed."
  },
  {
   "id": "sacred-orb",
@@ -3079,7 +2991,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Magic Mushroom's 1.5x damage multiplier stacks with Polyphemus's massive damage. All stats up compensates somewhat for Polyphemus's fire rate penalty. Huge per-tear damage."
+  "description": "Magic Mushroom's +0.3 damage and x1.5 multiplier stack with Polyphemus's (damage + 4) x 2, so each tear hits very hard. Magic Mushroom adds no fire rate, so Polyphemus's 0.42x fire rate stays as it is."
  },
  {
   "id": "crickets-head+polyphemus",
@@ -3090,7 +3002,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Cricket's Head's 1.5x damage multiplier applies on top of Polyphemus's damage formula. Combined, tears deal enormous damage that one-shots most non-boss enemies."
+  "description": "Cricket's Head's +0.5 damage and x1.5 multiplier stack with Polyphemus's (damage + 4) x 2, so each tear hits very hard, and a Polyphemus tear that kills carries its leftover damage on to the next enemy."
  },
  {
   "id": "blood-of-the-martyr+the-book-of-belial",
@@ -3101,7 +3013,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "When both are held, Blood of the Martyr gains a hidden 1.5x damage multiplier that stacks with Book of Belial's damage boost. The combination provides much more damage than either alone."
+  "description": "With Blood of the Martyr held, using The Book of Belial adds a x1.5 damage multiplier on top of its +2 damage for the room. That multiplier does not stack with Cricket's Head or Magic Mushroom."
  },
  {
   "id": "brimstone-bombs",
@@ -3111,7 +3023,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "All bombs fire 4 Brimstone lasers in cardinal directions on explosion. Every bomb placed or fired becomes a cross-shaped laser attack. Exceptionally strong with extra bomb items."
+  "description": "Brimstone bombs gives +5 bombs, and each of your bombs fires four Brimstone lasers in the cardinal directions when it explodes, dealing 8 damage per tick for up to 19 hits. The lasers cannot hurt you."
  },
  {
   "id": "brimstone-bombs+dr-fetus",
@@ -3143,7 +3055,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Psy Fly orbits Isaac and homes in on enemy projectiles, deflecting them back as homing tears. Provides near-complete projectile immunity. One of the strongest defensive items in the game."
+  "description": "Psy Fly is an orbital fly that chases and blocks enemy shots; after blocking a number of them it rests briefly, still blocking but no longer chasing. It does not send shots back and is not full immunity. It also deals 15 contact damage per second."
  },
  {
   "id": "bffs+psy-fly",
@@ -3153,8 +3065,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "BFFS! increases Psy Fly's deflection damage. The deflected tears hit harder while maintaining the same excellent projectile blocking. Strong defensive and offensive combination."
+  "rating": "C",
+  "description": "BFFS! doubles familiars' contact damage, so Psy Fly deals 30 instead of 15 damage per second. Its blocking is unchanged: Psy Fly does not deflect shots, and BFFS!'s bigger size is only cosmetic."
  },
  {
   "id": "9-volt+the-book-of-belial",
@@ -3164,8 +3076,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "9 Volt partially charges active items when entering a new room. Book of Belial is a 1-charge active, so it's available every single room — permanent +2 damage boost."
+  "rating": "B",
+  "description": "The Book of Belial takes 3 charges, so 9 Volt gives one back each time you use it: its +2 damage for the room comes about every other room instead of every third. 9 Volt also fully charges the book when first picked up."
  },
  {
   "id": "9-volt+guppys-head",
@@ -3176,7 +3088,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Guppy's Head is a 1-charge active, and 9 Volt grants 1 charge on room entry. This means infinite blue fly generation every room, even without clearing it."
+  "description": "Guppy's Head takes one charge, so 9 Volt turns it into a 15-second timed recharge that runs while enemies are in the room. In a long fight you can call its 2-4 blue flies again and again instead of once per clear."
  },
  {
   "id": "blank-card+the-battery",
@@ -3187,7 +3099,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The Battery lets active items double-charge. Blank Card with a double charge can activate your card twice in quick succession. With Jera, this quadruples all pickups."
+  "description": "The Battery lets Blank Card store one extra charge, so you can copy the card you hold twice in a row. In Repentance Blank Card copies cards only, not runes, so Jera is out, and its recharge depends on the card copied."
  },
  {
   "id": "d1+rune-bag",
@@ -3197,8 +3109,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "D1 duplicates a random pickup in the room. Rune Bag drops runes every few rooms. Use D1 to duplicate powerful runes like Jera (doubling pickups) or Perthro (rerolling items) indefinitely."
+  "rating": "C",
+  "description": "Rune Bag drops a random rune every 7 or 8 rooms in Repentance, and D1 copies one random pickup in the room, runes included. The copy may be a different rune, and D1 must recharge, so there is no endless duplication."
  },
  {
   "id": "daddy-longlegs+gnawed-leaf+succubus",
@@ -3210,7 +3122,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Stand still for Gnawed Leaf invulnerability while Daddy Longlegs stomps enemies and Succubus's damage aura kills nearby enemies. Multiple auto-damage sources speed up the otherwise slow AFK strategy."
+  "description": "Gnawed Leaf makes you an invulnerable statue after a second of standing still, while Daddy Longlegs keeps stomping (up to 40 damage about every 4 seconds) and Succubus's aura hurts enemies it bounces near (7.5-10 damage per second). A slow but safe clear, a bit faster with both."
  },
  {
   "id": "brimstone+haemolacria",
@@ -3231,8 +3143,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Fires arcing knives that split into smaller knives on impact. The split knives inherit Mom's Knife damage. Creates a knife shower on each hit."
+  "rating": "C",
+  "description": "In Repentance Mom's Knife overrides Haemolacria, so there are no bursting knives. Its stats still apply: +1 damage and a x1.5 multiplier for the knife, but its fire rate penalty becomes +10 tear delay."
  },
  {
   "id": "haemolacria+ipecac",
@@ -3243,7 +3155,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires arcing explosive tears that split into more explosive tears on impact. Each split tear also explodes. Chain explosions across the room. Extreme self-damage risk."
+  "description": "You fire arcing Ipecac shots that explode and then burst into poisonous, high-damage split tears; the split tears do not explode. Tear delay is a third longer than with either item alone, and in Repentance the two 0.8x range multipliers do not stack."
  },
  {
   "id": "crickets-body+haemolacria",
@@ -3254,7 +3166,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The main tear bursts into split tears on impact, and each split tear also splits again from Cricket's Body. Creates a cascade of projectiles that fills the room."
+  "description": "When a Haemolacria tear bursts, it also splits into Cricket's Body's four tears, and those can burst again. The burst tears themselves do not split. The two 0.8x range multipliers do not stack."
  },
  {
   "id": "haemolacria+the-ludovico-technique",
@@ -3264,8 +3176,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "B",
-  "description": "The controllable Ludovico tear periodically bursts and respawns, scattering smaller tears around it. Provides area damage around your controlled tear."
+  "rating": "C",
+  "description": "Haemolacria overrides The Ludovico Technique, so there is no controlled tear: you fire normal Haemolacria tears, which gain piercing."
  },
  {
   "id": "godhead+trisagion",
@@ -3287,18 +3199,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Trisagion's piercing light beams gain homing, curving toward enemies. The beams can hit the same enemy multiple times as they arc back, multiplying damage."
- },
- {
-  "id": "a-lump-of-coal+trisagion",
-  "items": [
-   "Trisagion",
-   "A Lump of Coal"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "Trisagion beams increase in size and damage the further they travel. Since beams pierce and multi-hit, long-range Trisagion tears deal massive cumulative damage."
+  "description": "With Spoon Bender's homing, Trisagion's blasts slow down and stay on top of an enemy, hitting it again and again (each blast can hit up to 15 times per second) instead of passing through."
  },
  {
   "id": "brimstone+jacobs-ladder",
@@ -3331,7 +3232,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The Technology laser generates constant electric arcs that jump to nearby enemies. Since the laser fires continuously, the lightning chains are constant, hitting groups of enemies."
+  "description": "In Repentance Technology's lasers set off Jacob's Ladder sparks, which deal half the shot's damage and chain from enemy to enemy up to four times, so groups take extra hits."
  },
  {
   "id": "brimstone+holy-light",
@@ -3375,7 +3276,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Each beam tick has a 25% chance to spawn a spore on enemies. Spores burst and chain to nearby enemies, adding splash damage alongside the beam."
+  "description": "Every other tick of the beam has a 25% chance to stick a spore on an enemy. Each spore bursts 2.5 seconds later for 5 damage, poisons nearby enemies and fires four homing spores in a cross."
  },
  {
   "id": "brimstone+mysterious-liquid",
@@ -3386,7 +3287,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Leaves creep for each enemy or obstacle hit every other tick. Creates large pools of damaging creep that persist after the beam ends."
+  "description": "The beam leaves a pool of creep at each enemy and obstacle it hits, every other tick. The pools are small and short-lived (30 damage per second, at most 25 each in Repentance), but several can hurt one enemy at once."
  },
  {
   "id": "brimstone+ocular-rift",
@@ -3408,7 +3309,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The beam has a chance to destroy rocks on each tick. Useful for opening paths and secret rooms while dealing damage."
+  "description": "The beam has a chance to break rocks on every tick and gains extra knockback, and Terra adds +1 damage. It does not open Secret Room entrances or doors (Repentance+ lets lasers open doors)."
  },
  {
   "id": "brimstone+uranus",
@@ -3430,7 +3331,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The beam gains occasional damage multiplier procs from Apple!, applying to the whole beam. Luck-dependent but adds notable damage spikes."
+  "description": "In Repentance each tick of the beam has its own chance to deal Apple!'s 4x damage, rather than the whole beam getting it. The chance rises with luck (6.66% at 0, every tick at 14), and Apple! adds +0.3 tears."
  },
  {
   "id": "brimstone+tough-love",
@@ -3496,7 +3397,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Holy Light can trigger on both the held knife (contact damage) and the thrown knife. Constant contact damage means frequent holy beam procs."
+  "description": "Holy Light can trigger from both the held and the thrown knife. Each holy hit calls a beam of light that deals 3x your tear damage to enemies in a small area in Repentance."
  },
  {
   "id": "moms-knife+mysterious-liquid",
@@ -3507,7 +3408,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The knife leaves creep trails while thrown. Creates damaging paths that persist after the knife returns."
+  "description": "A thrown knife leaves a line of creep behind it, laid at random intervals. The pools are small and short-lived (30 damage per second, at most 25 each in Repentance), but several can hurt one enemy at once."
  },
  {
   "id": "moms-knife+the-parasite",
@@ -3540,7 +3441,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The knife fires toward the crosshair, charging automatically. Frees up movement controls for dodging while the knife auto-targets."
+  "description": "The knife flies toward Marked's crosshair and charges by itself. The farther the crosshair, the longer the charge and the throw; closer means shorter charges but faster throws."
  },
  {
   "id": "ipecac+moms-knife",
@@ -3551,7 +3452,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The knife turns green, poisons enemies, and can explode on enemy contact in Repentance. Adds explosive and poison damage to the knife."
+  "description": "The knife turns green and poisons, and a thrown knife explodes once per throw on contact on its way out, for 10 + 2.1x to 10 + 6x damage by charge. Ipecac's +40 damage becomes a flat +2."
  },
  {
   "id": "diplopia+moms-knife",
@@ -3562,7 +3463,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Extra copies create additional knives firing at angles, stacking up to 16 maximum. Each Diplopia use adds another simultaneous knife."
+  "description": "Diplopia copies the Mom's Knife pedestal, and with two copies Isaac throws two knives at once, the second slightly angled. Each further copy adds a knife, up to 16."
  },
  {
   "id": "moms-knife+spirit-sword",
@@ -3573,7 +3474,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Spin attack throws the sword a short distance while it spins. The sword gains a ranged component from the knife's charging mechanic."
+  "description": "Charging Spirit Sword's spin attack throws the sword a short distance, spinning as it flies, so the spin can hit enemies away from Isaac."
  },
  {
   "id": "dr-fetus+tech-x",
@@ -3584,7 +3485,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Shoots a bomb surrounded by a laser ring. The ring deals Isaac's base damage while the bomb adds explosion damage. Double damage sources per shot."
+  "description": "Dr. Fetus takes priority: each bomb flies inside a Tech X ring, and no charging is needed. The ring deals Isaac's damage and the bomb still explodes, so every shot hits two ways."
  },
  {
   "id": "haemolacria+tech-x",
@@ -3628,7 +3529,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Chance to fire 4 laser rings simultaneously in all cardinal directions. At high luck, triggers frequently for massive room coverage."
+  "description": "Loki's Horns' chance (25% plus 5% per luck) fires four rings at once, but only forward and backward, two stacked in each direction, not in all four directions."
  },
  {
   "id": "moms-eye+tech-x",
@@ -3672,7 +3573,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Auto-charges and fires fully charged rings continuously. Creates a constant stream of full-size laser rings for sustained DPS."
+  "description": "Tech X charges and fires full rings by itself, giving a steady stream of full-size rings. Soy Milk's 0.2x damage multiplier still applies, and a partial ring is hard to fire on purpose."
  },
  {
   "id": "ipecac+tech-x",
@@ -3683,7 +3584,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Ring becomes poisonous and explodes every other tick on contact. Adds explosive damage to every tick of the ring for massive output."
+  "description": "The ring poisons and explodes every other tick it touches an enemy, each blast dealing 10 plus twice the ring's damage, and the knockback pushes enemies along the ring. Ipecac's +40 drops to +2."
  },
  {
   "id": "a-lump-of-coal+tech-x",
@@ -3693,8 +3594,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "B",
-  "description": "Ring damage and size increase with distance. At maximum range deals approximately 1.5x damage, rewarding long-range play."
+  "rating": "C",
+  "description": "Tech X rings grow and gain damage the farther they get from Isaac. In Repentance they start at normal damage up close, but gain much less damage per tile."
  },
  {
   "id": "dead-eye+tech-x",
@@ -3705,7 +3606,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Damage multiplier from Dead Eye is preserved permanently. Missing shots don't remove it, making it a free damage boost."
+  "description": "Pick up Dead Eye before Tech X and its multiplier freezes where it was, up to 2x after four hits: misses no longer reset it, but it cannot grow. Taken after Tech X it does nothing, and saving and quitting clears it."
  },
  {
   "id": "tech-x+technology-2",
@@ -3760,7 +3661,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Exploding bombs leave large pools of damaging creep. The creep persists and stacks, creating hazardous zones."
+  "description": "Each bomb explosion leaves a large pool of Mysterious Liquid's damaging creep, and overlapping pools can hurt an enemy at the same time."
  },
  {
   "id": "dr-fetus+remote-detonator",
@@ -3782,7 +3683,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Bombs split into tiny bombs dealing half damage on detonation. Massively increases area coverage per shot."
+  "description": "Each bomb has a luck-based chance, 34% at 0 luck and certain from 8.25 luck, to split into 4-5 tiny bombs that deal half damage, spreading the blast wider."
  },
  {
   "id": "dr-fetus+haemolacria",
@@ -3804,7 +3705,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Bombs gain homing, seeking enemies before detonating. Removes the main challenge of landing bomb shots accurately."
+  "description": "The bombs home in on enemies, making them far easier to land, but they do not get Godhead's damaging aura."
  },
  {
   "id": "dr-fetus+the-ludovico-technique",
@@ -3815,7 +3716,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Fires a controllable bomb that detonates on command. Enables precise bomb placement at the cost of fire rate."
+  "description": "You steer one bomb before it explodes, much as with Epic Fetus, and cannot fire another until it goes off. In Repentance the shot acts like Epic Fetus and gets Epic Fetus's synergies."
  },
  {
   "id": "dr-fetus+eye-of-belial",
@@ -3826,7 +3727,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Bombs gain piercing and deal 2.5x piercing damage in Repentance+. Significantly increases damage against clustered enemies."
+  "description": "The bombs pierce and deal 2.5x Isaac's damage to each enemy they pass through. Eye of Belial's homing and doubled damage do not apply."
  },
  {
   "id": "dr-fetus+fire-mind",
@@ -3837,7 +3738,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Bombs leave behind damaging fire on explosion. Adds persistent area denial to each bomb shot."
+  "description": "Every bomb leaves a fire behind after it explodes, as Hot Bombs do, which hurts enemies that touch it."
  },
  {
   "id": "dr-fetus+little-horn",
@@ -3848,7 +3749,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Black-tinted bombs summon Big Horn's hand to instantly kill non-boss enemies in Repentance+. Every bomb becomes a potential instant-kill."
+  "description": "Little Horn's chance shots become black-tinted bombs that summon Big Horn's hand, killing a non-boss enemy outright or damaging a boss. Any bomb can be the instant kill."
  },
  {
   "id": "dr-fetus+rocket-in-a-jar",
@@ -3859,7 +3760,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Shoots rockets instead of bombs. With Polyphemus, rockets bounce off obstacles and detonate twice for double damage."
+  "description": "Dr. Fetus fires Rocket in a Jar's fast rockets instead of bombs. They still explode on impact, and every synergy that would apply to the bombs carries over to the rockets."
  },
  {
   "id": "dr-fetus+sticky-bombs",
@@ -3870,7 +3771,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Shot bombs stick to enemies on contact, guaranteeing direct hits. In Repentance+, always spawns slowing white creep after exploding."
+  "description": "Fired bombs stick to the enemies they touch, so they go off on target, and each explosion leaves slowing white creep. Kills from these bombs do not spawn Sticky Bombs' blue spiders."
  },
  {
   "id": "20-20+epic-fetus",
@@ -3881,7 +3782,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 2 missiles per shot, doubling explosive output without any downside."
+  "description": "Each strike becomes a barrage of two missiles in a row. 20/20's 0.8x damage multiplier weakens each missile, so it is less than double."
  },
  {
   "id": "epic-fetus+the-inner-eye",
@@ -3892,7 +3793,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 3 missiles per shot with reduced fire rate. Triple explosive coverage per volley for devastating room clears."
+  "description": "Each strike becomes a barrage of three missiles in a row, but The Inner Eye's 0.51x fire rate also slows how soon the next strike can be called."
  },
  {
   "id": "epic-fetus+mutant-spider",
@@ -3903,7 +3804,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires 4 missiles per shot. Quadruple explosive coverage blankets entire rooms with reduced fire rate."
+  "description": "Each strike becomes a barrage of four missiles in a row, but Mutant Spider's 0.42x fire rate also slows how soon the next strike can be called."
  },
  {
   "id": "epic-fetus+incubus",
@@ -3914,7 +3815,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Incubus fires a missile alongside Isaac's, effectively doubling output. Two independent cursors for complete room coverage."
+  "description": "Incubus drops its own missile alongside each of Isaac's. Incubus deals 25% less damage for most characters, so the extra strike is weaker than Isaac's."
  },
  {
   "id": "epic-fetus+twisted-pair",
@@ -3924,8 +3825,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "A",
-  "description": "Each familiar fires missiles from additional crosshairs, tripling the missile output. Extra crosshairs move slower than Isaac's."
+  "rating": "D",
+  "description": "Each familiar calls a missile on its own crosshair, but those crosshairs are not synced with Isaac's and move much slower, so they stay near him and self-damage becomes much more likely."
  },
  {
   "id": "epic-fetus+lokis-horns",
@@ -3936,7 +3837,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Luck-dependent chance to spawn four cardinal crosshairs mirroring the main position. At high luck, fires 5 missiles per shot."
+  "description": "Loki's Horns' chance (25% plus 5% per luck) spawns four crosshairs in the cardinal directions: Isaac steers one and the other three mirror it at a fixed spacing."
  },
  {
   "id": "epic-fetus+glitter-bombs",
@@ -3947,7 +3848,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Missile explosions have a chance of spawning pickups. Every room clear has potential for free resources."
+  "description": "Missile explosions can spawn a pickup or trinket. In Repentance the chance falls by 1% with each spawn until the next floor, so a floor gives at most 63."
  },
  {
   "id": "blood-bombs+epic-fetus",
@@ -3980,7 +3881,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Smaller tears orbit the main controllable tear. Orbiting tears deal additional damage to enemies near the main tear."
+  "description": "One smaller tear orbits the controlled tear and deals the same damage as it. 20/20's 0.8x damage multiplier applies to both."
  },
  {
   "id": "compound-fracture+the-ludovico-technique",
@@ -3991,7 +3892,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Turns the tear into a large bone that shoots spectral piercing tears when touching enemies. Adds splash damage to the controlled tear."
+  "description": "The tear becomes a large spinning bone that sprays smaller spectral, piercing bone shots whenever it touches an enemy."
  },
  {
   "id": "technology+the-ludovico-technique",
@@ -4046,7 +3947,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Creep continuously oozes from underneath the tear wherever it moves. Creates permanent damage trails across the room."
+  "description": "The tear leaves a trail of creep pools at a steady interval as it moves. Mysterious Liquid's pools are small and short-lived, so the trail fades rather than staying."
  },
  {
   "id": "monstros-lung+the-ludovico-technique",
@@ -4068,7 +3969,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Shot speed multiplier causes the tear to move significantly faster. Makes it easier to pursue fleeing enemies with the controlled tear."
+  "description": "My Reflection's 1.6x shot speed lets you move the controlled tear much faster and catch quick enemies. The tear also drifts slowly back toward Isaac."
  },
  {
   "id": "the-ludovico-technique+tough-love",
@@ -4079,7 +3980,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The tear transforms into a tooth dealing 3.2x damage. At 9+ luck becomes permanent, making the controlled tear massively more powerful."
+  "description": "The tear now and then flicks into a tooth that deals 3.2x damage before turning back. Higher luck makes it happen more often, and from 9 luck it stays a tooth."
  },
  {
   "id": "flat-stone+the-ludovico-technique",
@@ -4090,7 +3991,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The tear bounces dealing splash damage per bounce. With Ipecac, each bounce causes a poisonous explosion."
+  "description": "The controlled tear bounces nonstop, a little slower than Isaac's fire rate, and each bounce splashes nearby enemies for 25% of Isaac's tear damage."
  },
  {
   "id": "eye-of-the-occult+the-ludovico-technique",
@@ -4112,7 +4013,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Bouncing shots create full-damage explosions instead of splash damage. Each bounce is a full Ipecac explosion for dramatically increased area damage."
+  "description": "Each time an Ipecac shot bounces it also explodes for half Isaac's damage on top of Flat Stone's splash, in a slightly wider radius. The bounce blasts can hurt Isaac."
  },
  {
   "id": "ipecac+trisagion",
@@ -4123,7 +4024,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Trisagion blasts become poisonous and explode on impact, dealing 10 plus twice the blast's damage. Excellent with Pyromaniac for self-healing."
+  "description": "Trisagion's blasts keep Ipecac's stats, poison, and explode on contact with enemies and obstacles, then keep exploding every tick against anything the first tick did not kill."
  },
  {
   "id": "ipecac+maw-of-the-void",
@@ -4134,7 +4035,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "The Maw ring becomes poisonous and explodes every other tick on contact. Adds Ipecac's explosive damage to the ring attack."
+  "description": "Maw of the Void's black ring hits far harder with Ipecac, poisons enemies, and explodes when it touches an enemy or obstacle."
  },
  {
   "id": "ipecac+tiny-planet",
@@ -4144,8 +4045,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "B",
-  "description": "Tears orbit around Isaac before landing far enough away to avoid self-damage. One of the few modifiers that makes Ipecac safer to use."
+  "rating": "C",
+  "description": "Ipecac shots orbit Isaac for a long time. They land far enough away to spare him only if he stands still and they hit no enemy, so the blasts can still go off close to him."
  },
  {
   "id": "kidney-stone+rock-bottom",
@@ -4200,7 +4101,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Repeated D8 use only keeps the highest roll for each stat, yielding 1.5-2x higher values. Guaranteed improvement with each reroll."
+  "description": "Rock Bottom keeps each stat at its best D8 roll, so bad rolls cost nothing and repeated rerolls push damage, tears, range and speed toward 1.5-2x. A reroll only helps when it beats the best so far."
  },
  {
   "id": "eves-mascara+rock-bottom",
@@ -4211,7 +4112,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Gets the 2x damage multiplier without fire rate or shot speed penalties. Pure damage boost with no downside."
+  "description": "Eve's Mascara doubles damage while Rock Bottom holds fire rate and shot speed at their best. The 0.66x fire rate and -0.5 shot speed still count underneath, so later ups to those take longer to show."
  },
  {
   "id": "false-phd+rock-bottom",
@@ -4222,7 +4123,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Pills only apply damage increases, never the stat downsides. Turns every stat-down pill into a free damage up."
+  "description": "Stat-down pills give False PHD's +0.6 damage (+1.2 for horse pills) while Rock Bottom keeps the lowered stat where it was. The drop still counts underneath, so that stat is harder to raise later."
  },
  {
   "id": "binge-eater+rock-bottom",
@@ -4233,7 +4134,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Speed penalties negated and all temporary stat boosts from Binge Eater become permanent. Free stats from every item pedestal."
+  "description": "Food items' speed downs no longer show, and every temporary boost, such as each food's +3.6 damage, stays at its peak. Each food taken from a cycling pedestal is a lasting gain, in place of the item."
  },
  {
   "id": "brimstone+rock-bottom",
@@ -4245,17 +4146,6 @@
   "characters": [],
   "rating": "S",
   "description": "Rock Bottom prevents the charge time increase, so Brimstone fires at near-normal fire rate. Dramatically increases beam DPS output."
- },
- {
-  "id": "chocolate-milk+rock-bottom",
-  "items": [
-   "Rock Bottom",
-   "Chocolate Milk"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "A",
-  "description": "Charged shots fire at normal rate since Rock Bottom prevents charge time increases. Full-power shots with rapid fire."
  },
  {
   "id": "dataminer+rock-bottom",
@@ -4277,7 +4167,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Multiple tears without any stat downgrades. Pure multi-shot with zero penalties."
+  "description": "Rock Bottom stops 20/20's 0.8x damage multiplier from lowering damage, so the double shot comes without the drop. The multiplier still counts underneath, so later damage ups show less."
  },
  {
   "id": "spirit-sword+technology",
@@ -4354,7 +4244,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "The fired sword projectile bursts into multiple smaller swords on impact. Adds splash coverage to the ranged attack."
+  "description": "The sword's projectile bursts into several swords. A normal swing fires that projectile only at full red health, but the charged spin attack always launches one."
  },
  {
   "id": "lokis-horns+spirit-sword",
@@ -4365,7 +4255,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Random chance to swing swords in all 4 cardinal directions. At high luck, creates devastating 4-way melee sweeps."
+  "description": "Each swing has Loki's Horns' chance to swing swords in all four directions, and a spin attack at that moment spins four ways. In Repentance the chance is 25% plus 5% per luck, reaching 100% at 15 luck."
  },
  {
   "id": "spirit-sword+trisagion",
@@ -4410,7 +4300,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "A Technology laser connects Isaac to the thrown sword while in flight. The laser deals continuous damage along its entire path."
+  "description": "With Mom's Knife the spin attack throws the sword a short way, spinning as it goes, and Technology adds a laser that joins the thrown sword to Isaac while it is in the air."
  },
  {
   "id": "brimstone+moms-knife+spirit-sword",
@@ -4444,7 +4334,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Charged shots and burst tears become larger with higher damage. Enables rapid low-damage bursts or devastating fully-charged explosive tears."
+  "description": "Fully charged shots and the tears they burst into are larger and deal more damage, and low-charge Haemolacria shots can be fired rapidly."
  },
  {
   "id": "compound-fracture+haemolacria",
@@ -4499,7 +4389,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires a burst of 4-7 Haemolacria tears, all bursting on impact. Creates a screen-filling cascade of projectiles."
+  "description": "Monstro's Lung takes priority: its charged shot fires 8 Haemolacria tears instead of 14, and every one of them bursts. Fire rate falls further than with Haemolacria alone."
  },
  {
   "id": "haemolacria+proptosis",
@@ -4532,7 +4422,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fully charged blasts deal 4x more damage. High-reward charged piercing blasts that cut through entire rooms."
+  "description": "Fully charged Trisagion blasts deal four times their normal damage, more than Isaac's usual tear damage, so the charge turns each piercing blast into a heavy hit."
  },
  {
   "id": "mysterious-liquid+trisagion",
@@ -4598,7 +4488,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Small electric arcs generate from the blast every tick. Constant electricity throughout the beam's path."
+  "description": "In Repentance the blast throws off Jacob's Ladder sparks on every tick it hits an enemy, not only when it meets an obstacle. Each spark can chain on to nearby enemies."
  },
  {
   "id": "mucormycosis+trisagion",
@@ -4642,7 +4532,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Massive tear barrage greatly increases coin drop chance. Generates significant income from every room clear."
+  "description": "Each tear hit keeps its 5% chance to drop a penny, and Soy Milk's fire rate lands far more hits than usual, so many more coins drop."
  },
  {
   "id": "soy-milk+the-mulligan",
@@ -4653,7 +4543,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Generates enormous blue fly swarms from high tear volume. With Guppy transformation, creates a screen-filling army of flies."
+  "description": "Every tear that hits an enemy has a 1 in 6 chance to spawn a blue fly, and Soy Milk's stream of tears lands so many hits that the flies arrive in a huge wave."
  },
  {
   "id": "mysterious-liquid+soy-milk",
@@ -4664,7 +4554,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Creates stacking creep damage pools with each rapid-fire shot. Quickly fills rooms with overlapping damage zones."
+  "description": "Every Soy Milk tear leaves its own creep pool, and the pools stack, so an enemy standing in the stream takes heavy damage even though each tear is weak."
  },
  {
   "id": "pisces+soy-milk",
@@ -4697,7 +4587,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Fetuses drop four short-ranged tears on enemy contact. Adds area splash to each fetus's attack."
+  "description": "Each fetus drops four short-ranged tears when it hits the ground, so every C Section shot ends in a small spread of tears."
  },
  {
   "id": "c-section+dr-fetus",
@@ -4708,7 +4598,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fetuses drop small bombs on enemy contact dealing half fetus damage. Combines homing with explosive area damage."
+  "description": "C Section takes priority and Dr. Fetus' tears down does not apply. Each fetus drops one small bomb when it touches an enemy, its damage worked out with Dr. Fetus' formula from half the fetus' damage."
  },
  {
   "id": "c-section+jacobs-ladder",
@@ -4730,7 +4620,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Grants +5 flat damage per fetus without fire rate penalty. Pure damage boost with no downside."
+  "description": "With C Section, Polyphemus's damage formula becomes a flat +5 damage and its fire rate down does not apply, so the fetuses hit harder at no cost."
  },
  {
   "id": "c-section+technology",
@@ -4785,7 +4675,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Split tears maintain all Godhead effects. Perpendicular splits create additional aura damage zones."
+  "description": "Every split tear keeps all of Godhead's effects, so each split adds another homing tear with its own damaging aura."
  },
  {
   "id": "glass-cannon+godhead",
@@ -4829,7 +4719,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "All tears follow the beam without spreading. Much easier for the entire burst to hit a single target."
+  "description": "The tears of the burst all follow the beam, at different heights, instead of spreading out, so many more of them hit the same target."
  },
  {
   "id": "blood-clot+monstros-lung",
@@ -4840,7 +4730,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "All tears are larger with increased damage instead of alternating. In Afterbirth+, 50% chance per tear for Blood Clot bonus."
+  "description": "Instead of only the left eye's tears, each tear in Monstro's Lung's burst has a 50% chance to be a Blood Clot tear: larger, with +1 damage and more range."
  },
  {
   "id": "immaculate-heart+monstros-lung",
@@ -4851,7 +4741,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Fires many extra tears alongside the burst that begin orbiting Isaac. Creates both a projectile burst and an orbital shield."
+  "description": "The charged shot also throws out a large number of extra Immaculate Heart tears, which start orbiting Isaac once they reach orbit range."
  },
  {
   "id": "lokis-horns+monstros-lung",
@@ -4862,7 +4752,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "In Repentance+, chance to fire full barrages in all cardinal directions. At high luck, fires 4 simultaneous bursts."
+  "description": "In Repentance, when Loki's Horns triggers, the charged shot fires a full 14-tear barrage in each of the four directions. The chance is 25% plus 5% per luck, 100% at 15 luck."
  },
  {
   "id": "moms-eye+monstros-lung",
@@ -4873,7 +4763,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "In Repentance+, chance to fire a full barrage from the back of Isaac's head. Doubles output when triggered."
+  "description": "Mom's Eye gives the charged shot a chance to fire backward as well, 50% plus 10% per luck in Repentance. In Repentance that backward shot is a whole barrage, not a single tear."
  },
  {
   "id": "almond-milk+monstros-lung",
@@ -4895,7 +4785,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Lasers bounce off walls once, creating a second beam from the impact point. Doubles room coverage in enclosed spaces."
+  "description": "Technology's laser bounces off walls, and the rebound is a second beam that deals half damage."
  },
  {
   "id": "continuum+technology",
@@ -4906,7 +4796,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "In Repentance+, the laser wraps through walls with momentum retained. Allows hitting enemies through any wall."
+  "description": "In Repentance the laser wraps around the screen like Continuum's tears, keeping its momentum and coming back from behind Isaac, so one blast can hit an enemy twice."
  },
  {
   "id": "eye-of-the-occult+technology",
@@ -4917,7 +4807,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Laser becomes dark purple with a controllable crosshair. Allows precise directional control of the beam."
+  "description": "The laser turns dark purple and fires on its own at a crosshair Isaac steers. The beam still leaves in a cardinal direction and bends toward the crosshair instead of aiming straight at it."
  },
  {
   "id": "a-lump-of-coal+continuum",
@@ -4928,7 +4818,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Tears that wrap through walls keep accumulating distance-based damage. Tears travel nearly endlessly, gaining massive damage bonuses."
+  "description": "Tears that loop through the walls keep gaining A Lump of Coal's distance bonus, about +0.5 to 0.6 damage per tile with no cap, for as long as they keep wrapping."
  },
  {
   "id": "polyphemus+toxic-shock",
@@ -4939,7 +4829,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Toxic Shock poisons all enemies on room entry. With Polyphemus damage, the poison kills nearly all non-boss enemies instantly upon entering."
+  "description": "Toxic Shock poisons every enemy as Isaac enters a room: 4 ticks on normal enemies and 2 on bosses in Repentance. Its page notes that high tear damage lets that poison kill enemies outright, and Polyphemus raises damage to (damage + 4) x 2."
  },
  {
   "id": "gnawed-leaf+sacrificial-dagger",
@@ -4950,18 +4840,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Sacrificial Dagger orbits dealing high contact damage while Gnawed Leaf provides invincibility. One of the best AFK combos due to Dagger's damage."
- },
- {
-  "id": "dull-razor+gnawed-leaf",
-  "items": [
-   "Gnawed Leaf",
-   "Dull Razor"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "B",
-  "description": "Activate Dull Razor at room start to trigger on-hit effects without damage, then go invincible. Works with Bloody Lust, Smart Fly, and other on-hit synergies."
+  "description": "While Isaac stands still as Gnawed Leaf's invulnerable statue, Sacrificial Dagger keeps orbiting, blocking shots and dealing 15 damage every 8 frames (112.5 per second in Repentance). Gnawed Leaf's page names it as stronger than most orbitals for this."
  },
  {
   "id": "box-of-friends+twisted-pair",
@@ -4972,7 +4851,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "Box of Friends duplicates both Twisted Pair familiars. Each use spawns two more at greater orbit distances, quadrupling familiar tear output."
+  "description": "Each use of Box of Friends adds another Twisted Pair for the room: two more familiars with Isaac's tear effects, floating farther out and lined up beside the first pair to cover a wider area."
  },
  {
   "id": "tractor-beam+twisted-pair",
@@ -4983,7 +4862,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Familiars' tears follow the beam's trajectory. Focuses all familiar fire into a single devastating line of damage."
+  "description": "Twisted Pair's tears start from Isaac and follow Tractor Beam's beam, so both familiars' shots (0.375x damage each) join Isaac's own line of fire."
  },
  {
   "id": "bobs-rotten-head+godhead",
@@ -5027,7 +4906,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "In Repentance+, laser creates 4-way tear spreads on wall or enemy hits. Adds splash projectiles to the piercing beam."
+  "description": "In Repentance the laser releases a four-way spread of Cricket's Body tears whenever it hits a wall or an enemy, adding splash to the piercing beam."
  },
  {
   "id": "technology+the-parasite",
@@ -5038,6 +4917,6 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "In Repentance+, laser splits into perpendicular beams on obstacle hits. Creates T-shaped laser patterns for wider coverage."
+  "description": "In Repentance the laser splits into two perpendicular beams that deal full damage when it hits an obstacle or enemy. Repentance+ also adds small split tears."
  }
 ]

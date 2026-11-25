@@ -112,8 +112,8 @@
   {
    "path": "/synergies",
    "kind": "synergies",
-   "title": "All 453 Binding of Isaac: Repentance Synergies | isaac.toys",
-   "description": "453 hand-written item, trinket and character synergies for The Binding of Isaac: Repentance, rated S to D. Search by item and open any in the builder.",
+   "title": "All 442 Binding of Isaac: Repentance Synergies | isaac.toys",
+   "description": "442 hand-written item, trinket and character synergies for The Binding of Isaac: Repentance, rated S to D. Search by item and open any in the builder.",
    "h1": "All Repentance synergies",
    "lede": "The whole list, strongest first. S is run-defining, A strong, B good, C minor, and D means the items work against each other.",
    "answer": ""
@@ -254,14 +254,6 @@
     },
     {
      "kind": "item",
-     "id": 52,
-     "best": "A",
-     "completes": [
-      "brimstone+dr-fetus"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 69,
      "best": "A",
      "completes": [
@@ -282,14 +274,6 @@
      "best": "A",
      "completes": [
       "a-lump-of-coal+brimstone"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 149,
-     "best": "A",
-     "completes": [
-      "brimstone+ipecac"
      ]
     },
     {
@@ -434,6 +418,14 @@
      "best": "B",
      "completes": [
       "brimstone+the-parasite"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 149,
+     "best": "B",
+     "completes": [
+      "brimstone+ipecac"
      ]
     },
     {
@@ -626,6 +618,14 @@
      "best": "C",
      "completes": [
       "brimstone+tiny-planet"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 52,
+     "best": "D",
+     "completes": [
+      "brimstone+dr-fetus"
      ]
     },
     {
@@ -730,14 +730,6 @@
     },
     {
      "kind": "item",
-     "id": 52,
-     "best": "A",
-     "completes": [
-      "brimstone+dr-fetus"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 69,
      "best": "A",
      "completes": [
@@ -758,14 +750,6 @@
      "best": "A",
      "completes": [
       "a-lump-of-coal+brimstone"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 149,
-     "best": "A",
-     "completes": [
-      "brimstone+ipecac"
      ]
     },
     {
@@ -910,6 +894,14 @@
      "best": "B",
      "completes": [
       "brimstone+the-parasite"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 149,
+     "best": "B",
+     "completes": [
+      "brimstone+ipecac"
      ]
     },
     {
@@ -1106,6 +1098,14 @@
     },
     {
      "kind": "item",
+     "id": 52,
+     "best": "D",
+     "completes": [
+      "brimstone+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
      "id": 579,
      "best": "D",
      "completes": [
@@ -1132,8 +1132,8 @@
     "brimstone+moms-knife",
     "brimstone+tammys-head",
     "brimstone+technology",
-    "moms-knife+technology",
     "t-cancer",
+    "moms-knife+technology",
     "technology+c-azazel"
    ],
    "awaitingCharacter": [],
@@ -1164,8 +1164,8 @@
      "best": "S",
      "completes": [
       "brimstone+haemolacria",
-      "haemolacria+moms-knife",
-      "haemolacria+technology"
+      "haemolacria+technology",
+      "haemolacria+moms-knife"
      ]
     },
     {
@@ -1219,9 +1219,9 @@
      "id": 149,
      "best": "A",
      "completes": [
-      "brimstone+ipecac",
       "ipecac+moms-knife",
-      "ipecac+technology"
+      "ipecac+technology",
+      "brimstone+ipecac"
      ]
     },
     {
@@ -1310,15 +1310,6 @@
     },
     {
      "kind": "item",
-     "id": 373,
-     "best": "A",
-     "completes": [
-      "dead-eye+moms-knife",
-      "brimstone+dead-eye"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 374,
      "best": "A",
      "completes": [
@@ -1354,14 +1345,6 @@
     },
     {
      "kind": "item",
-     "id": 52,
-     "best": "A",
-     "completes": [
-      "brimstone+dr-fetus"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 87,
      "best": "A",
      "completes": [
@@ -1374,14 +1357,6 @@
      "best": "A",
      "completes": [
       "a-lump-of-coal+brimstone"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 145,
-     "best": "A",
-     "completes": [
-      "guppys-head+moms-knife"
      ]
     },
     {
@@ -1465,15 +1440,6 @@
      "completes": [
       "brimstone+moms-eye",
       "moms-eye+moms-knife"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 213,
-     "best": "B",
-     "completes": [
-      "brimstone+lost-contact",
-      "lost-contact+moms-knife"
      ]
     },
     {
@@ -1566,6 +1532,14 @@
     },
     {
      "kind": "item",
+     "id": 213,
+     "best": "B",
+     "completes": [
+      "brimstone+lost-contact"
+     ]
+    },
+    {
+     "kind": "item",
      "id": 222,
      "best": "B",
      "completes": [
@@ -1594,6 +1568,14 @@
      "best": "B",
      "completes": [
       "moms-knife+the-wiz"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 373,
+     "best": "B",
+     "completes": [
+      "brimstone+dead-eye"
      ]
     },
     {
@@ -1703,6 +1685,14 @@
     },
     {
      "kind": "item",
+     "id": 52,
+     "best": "D",
+     "completes": [
+      "brimstone+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
      "id": 397,
      "best": "D",
      "completes": [
@@ -1784,14 +1774,6 @@
     },
     {
      "kind": "item",
-     "id": 581,
-     "best": "A",
-     "completes": [
-      "bffs+psy-fly"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 619,
      "best": "A",
      "completes": [
@@ -1820,6 +1802,14 @@
      "best": "B",
      "completes": [
       "bffs+succubus"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 581,
+     "best": "C",
+     "completes": [
+      "bffs+psy-fly"
      ]
     }
    ]
@@ -1941,8 +1931,8 @@
      "completes": [
       "brimstone+epic-fetus",
       "brimstone+moms-knife",
-      "brimstone+dr-fetus",
-      "brimstone+ipecac"
+      "brimstone+ipecac",
+      "brimstone+dr-fetus"
      ]
     },
     {
@@ -1991,8 +1981,8 @@
      "completes": [
       "epic-fetus+technology",
       "ipecac+technology",
-      "moms-knife+technology",
-      "polyphemus+technology"
+      "polyphemus+technology",
+      "moms-knife+technology"
      ]
     },
     {
@@ -2032,9 +2022,9 @@
      "id": 220,
      "best": "A",
      "completes": [
+      "moms-knife+sad-bombs",
       "dr-fetus+sad-bombs",
-      "epic-fetus+sad-bombs",
-      "moms-knife+sad-bombs"
+      "epic-fetus+sad-bombs"
      ]
     },
     {
@@ -2052,9 +2042,9 @@
      "id": 329,
      "best": "A",
      "completes": [
-      "ipecac+the-ludovico-technique",
       "moms-knife+the-ludovico-technique",
-      "dr-fetus+the-ludovico-technique"
+      "dr-fetus+the-ludovico-technique",
+      "ipecac+the-ludovico-technique"
      ]
     },
     {
@@ -2155,14 +2145,6 @@
     },
     {
      "kind": "item",
-     "id": 145,
-     "best": "A",
-     "completes": [
-      "guppys-head+moms-knife"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 153,
      "best": "A",
      "completes": [
@@ -2199,14 +2181,6 @@
      "best": "A",
      "completes": [
       "epic-fetus+incubus"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 373,
-     "best": "A",
-     "completes": [
-      "dead-eye+moms-knife"
      ]
     },
     {
@@ -2259,14 +2233,6 @@
     },
     {
      "kind": "item",
-     "id": 698,
-     "best": "A",
-     "completes": [
-      "epic-fetus+twisted-pair"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 330,
      "best": "B",
      "completes": [
@@ -2277,20 +2243,11 @@
     },
     {
      "kind": "item",
-     "id": 213,
-     "best": "B",
-     "completes": [
-      "lost-contact+moms-knife",
-      "lost-contact+polyphemus"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 233,
      "best": "B",
      "completes": [
-      "ipecac+tiny-planet",
-      "moms-knife+tiny-planet"
+      "moms-knife+tiny-planet",
+      "ipecac+tiny-planet"
      ]
     },
     {
@@ -2358,6 +2315,14 @@
      "best": "B",
      "completes": [
       "dr-fetus+remote-detonator"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 213,
+     "best": "B",
+     "completes": [
+      "lost-contact+polyphemus"
      ]
     },
     {
@@ -2487,6 +2452,14 @@
      "best": "D",
      "completes": [
       "moms-knife+tractor-beam"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 698,
+     "best": "D",
+     "completes": [
+      "epic-fetus+twisted-pair"
      ]
     }
    ]

@@ -39,7 +39,7 @@ describe("the shipped data", () => {
     const { unresolved } = resolveSynergies(records, gameData.items, gameData.trinkets, gameData.characters);
     expect(unresolved).toEqual([]);
     expect(gameData.synergies).toHaveLength(records.length);
-    expect(records.length).toBeGreaterThanOrEqual(453);
+    expect(records.length).toBeGreaterThanOrEqual(442);
   });
 
   it("uses the game's own ids", () => {

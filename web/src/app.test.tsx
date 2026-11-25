@@ -304,13 +304,13 @@ describe("browse and detail pages", () => {
 
   it("searches and filters the full synergy list and pages through it", async () => {
     const user = open("/synergies");
-    expect(screen.getByRole("status")).toHaveTextContent("453 synergies");
+    expect(screen.getByRole("status")).toHaveTextContent("442 synergies");
     expect(screen.getAllByRole("article")).toHaveLength(40);
     await user.click(screen.getByRole("button", { name: "Show 40 more" }));
     expect(screen.getAllByRole("article")).toHaveLength(80);
 
     await user.type(screen.getByRole("searchbox", { name: "Search synergies" }), "tammy brimstone");
-    expect(screen.getByRole("status")).toHaveTextContent(/of 453 synergies/);
+    expect(screen.getByRole("status")).toHaveTextContent(/of 442 synergies/);
     expect(screen.getByRole("link", { name: "Open in builder" })).toHaveAttribute("href", "/?i=118.38");
     await user.click(screen.getByRole("button", { name: "D tier" }));
     expect(screen.getByText(/Nothing in the list matches/)).toBeInTheDocument();
