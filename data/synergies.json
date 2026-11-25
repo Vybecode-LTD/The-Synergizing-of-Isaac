@@ -2329,7 +2329,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Using Diplopia on a Steam Sale gives you two. In Repentance two Steam Sales divide prices by three instead of making them free (a 15-cent item costs 5), and each further copy lowers them less."
+  "description": "Using Diplopia on a Steam Sale gives you two. In Repentance n Steam Sales divide prices by n + 1, never below 1 cent, so two make a 15-cent item cost 5 instead of making shops free, and each further copy lowers prices less."
  },
  {
   "id": "brimstone+maw-of-the-void",
