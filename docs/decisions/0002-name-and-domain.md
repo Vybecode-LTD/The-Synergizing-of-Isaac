@@ -11,10 +11,11 @@ Claude flagged the same day that the game is "Isaac" and that `isaac.toys` was u
 second session, the owner chose the game's spelling. The public registry still showed `isaac.toys` as
 unregistered then (RDAP answered 404 for it and 200 for `issac.toys`).
 
-**It now requires, from the owner.** Register `isaac.toys`. Until that is done the name in the code points
-at a domain nobody holds, which only matters at deploy. Then set a permanent redirect from `issac.toys` to
-`https://isaac.toys` at its registrar (`docs/DEPLOY.md`, step 5). Registrars usually refund a domain within
-five days of registration, if the owner would rather drop the first one.
+**Registered.** The owner bought `isaac.toys` on 2026-11-24 and keeps both domains (owner, in chat: "we can
+host it on the right one and then redirect from the wrong one"). The registry answered 200 for both when
+checked that night (before 04:00 UTC on 2026-11-25); `isaac.toys` had no DNS yet. Still to do at deploy: point `isaac.toys` at Railway,
+and set a permanent (301) redirect from `issac.toys` to `https://isaac.toys`, keeping the path, at its
+registrar (`docs/DEPLOY.md`, step 5).
 
 **What changed with the name:** `SITE.domain` in `web/src/site.ts`, the API's default `SITE_URL`, the share
 image (`npm run og -- isaac.toys` in `web/`), the snapshot (`python -m app.parity`), the tests that name the

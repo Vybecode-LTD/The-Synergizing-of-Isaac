@@ -15,8 +15,9 @@ it reads its own old data and gets no new work unless the owner asks.
 
 ## Current state (2026-11-24)
 
-- Web app, API, data pipeline, tests and CI are built and green locally. **Nothing is deployed yet.**
-- Branch `feat/web-app` carries all of it; see `docs/HANDOFF.md` for the PR and what is next.
+- Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Nothing is deployed yet.**
+- S and D synergies checked against the wiki (`data/synergy-checks.md`); A, B and C are not. See
+  `docs/HANDOFF.md` for open PRs and what is next.
 - Owner decisions on record: `docs/decisions/`. Open questions for the owner: `docs/HANDOFF.md`.
 
 ## Map

@@ -59,13 +59,13 @@ def test_an_item_page_carries_the_same_words_the_app_shows(client: TestClient, d
     html = client.get("/items/brimstone").text
     brimstone = data.item_by_slug["brimstone"]
     synergies = data.synergies_for("item", brimstone["id"])
-    assert len(synergies) == 64
-    assert "<h2>64 synergies with Brimstone</h2>" in html
+    assert len(synergies) == 63
+    assert "<h2>63 synergies with Brimstone</h2>" in html
     assert "Tears become blood laser, hits 9 times" in html
     assert "The strongest are with Azazel, Crown of Light and Epic Fetus." in html
     for s in synergies:
         assert escape(s.description) in html
-    assert html.count("<article>") == 64
+    assert html.count("<article>") == 63
     assert '<a href="/?i=118.38">Open in builder</a>' in html
 
 
@@ -133,7 +133,7 @@ def test_everything_but_production_is_kept_out_of_search(make_client: Callable[.
 
 def test_llms_txt_summarises_the_site(client: TestClient) -> None:
     text = client.get("/llms.txt").text
-    assert text.startswith("# isaac.toys\n\n> isaac.toys checks your character, items and trinkets against 458")
+    assert text.startswith("# isaac.toys\n\n> isaac.toys checks your character, items and trinkets against 453")
     assert "- [All items](https://isaac.toys/items)" in text
     assert "## Strongest synergies" in text
 

@@ -23,10 +23,10 @@
    "path": "/items/brimstone",
    "kind": "item",
    "title": "Brimstone Synergies in The Binding of Isaac | isaac.toys",
-   "description": "Brimstone in The Binding of Isaac: Repentance: Tears become blood laser, hits 9 times. Quality 4, 64 known synergies. Add it to your build.",
+   "description": "Brimstone in The Binding of Isaac: Repentance: Tears become blood laser, hits 9 times. Quality 4, 63 known synergies. Add it to your build.",
    "h1": "Brimstone",
    "lede": "",
-   "answer": "Brimstone has 64 known synergies in this list. The strongest are with Azazel, Crown of Light and Epic Fetus."
+   "answer": "Brimstone has 63 known synergies in this list. The strongest are with Azazel, Crown of Light and Epic Fetus."
   },
   {
    "path": "/items/the-sad-onion",
@@ -95,10 +95,10 @@
    "path": "/characters/azazel",
    "kind": "character",
    "title": "Azazel Synergies | Binding of Isaac | isaac.toys",
-   "description": "Azazel in The Binding of Isaac: Repentance: starting items and 5 character-only synergies. Start a build as Azazel to see what your items do.",
+   "description": "Azazel in The Binding of Isaac: Repentance: starting items and 4 character-only synergies. Start a build as Azazel to see what your items do.",
    "h1": "Azazel",
    "lede": "",
-   "answer": "Azazel has 5 character-only synergies in this list. The strongest are with Brimstone, Birthright and Chocolate Milk."
+   "answer": "Azazel has 4 character-only synergies in this list. The strongest are with Brimstone, Birthright and Chocolate Milk."
   },
   {
    "path": "/characters/tainted-lost",
@@ -112,8 +112,8 @@
   {
    "path": "/synergies",
    "kind": "synergies",
-   "title": "All 458 Binding of Isaac: Repentance Synergies | isaac.toys",
-   "description": "458 hand-written item, trinket and character synergies for The Binding of Isaac: Repentance, rated S to D. Search by item and open any in the builder.",
+   "title": "All 453 Binding of Isaac: Repentance Synergies | isaac.toys",
+   "description": "453 hand-written item, trinket and character synergies for The Binding of Isaac: Repentance, rated S to D. Search by item and open any in the builder.",
    "h1": "All Repentance synergies",
    "lede": "The whole list, strongest first. S is run-defining, A strong, B good, C minor, and D means the items work against each other.",
    "answer": ""
@@ -194,14 +194,6 @@
      "best": "S",
      "completes": [
       "brimstone+moms-knife"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 145,
-     "best": "S",
-     "completes": [
-      "brimstone+guppys-head"
      ]
     },
     {
@@ -678,14 +670,6 @@
      "best": "S",
      "completes": [
       "brimstone+moms-knife"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 145,
-     "best": "S",
-     "completes": [
-      "brimstone+guppys-head"
      ]
     },
     {
@@ -1186,15 +1170,6 @@
     },
     {
      "kind": "item",
-     "id": 145,
-     "best": "S",
-     "completes": [
-      "brimstone+guppys-head",
-      "guppys-head+moms-knife"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 169,
      "best": "S",
      "completes": [
@@ -1403,6 +1378,14 @@
     },
     {
      "kind": "item",
+     "id": 145,
+     "best": "A",
+     "completes": [
+      "guppys-head+moms-knife"
+     ]
+    },
+    {
+     "kind": "item",
      "id": 153,
      "best": "A",
      "completes": [
@@ -1509,6 +1492,15 @@
      "completes": [
       "brimstone+crickets-body",
       "crickets-body+technology"
+     ]
+    },
+    {
+     "kind": "item",
+     "id": 233,
+     "best": "B",
+     "completes": [
+      "moms-knife+tiny-planet",
+      "brimstone+tiny-planet"
      ]
     },
     {
@@ -1711,23 +1703,6 @@
     },
     {
      "kind": "item",
-     "id": 233,
-     "best": "C",
-     "completes": [
-      "brimstone+tiny-planet",
-      "moms-knife+tiny-planet"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 276,
-     "best": "D",
-     "completes": [
-      "isaacs-heart+c-azazel"
-     ]
-    },
-    {
-     "kind": "item",
      "id": 397,
      "best": "D",
      "completes": [
@@ -1859,7 +1834,6 @@
    },
    "matched": [],
    "awaitingCharacter": [
-    "birthright+c-jacob-and-esau",
     "birthright+c-the-lost",
     "birthright+c-azazel",
     "birthright+c-bethany",
@@ -1867,6 +1841,7 @@
     "birthright+c-eden",
     "birthright+c-eve",
     "birthright+c-isaac",
+    "birthright+c-jacob-and-esau",
     "birthright+c-judas",
     "birthright+c-lilith",
     "birthright+c-samson",
@@ -1948,14 +1923,14 @@
     ]
    },
    "matched": [
-    "epic-fetus+ipecac",
     "epic-fetus+moms-knife",
     "moms-knife+polyphemus",
     "dr-fetus+ipecac",
     "dr-fetus+polyphemus",
     "epic-fetus+polyphemus",
     "ipecac+moms-knife",
-    "t-cancer"
+    "t-cancer",
+    "epic-fetus+ipecac"
    ],
    "awaitingCharacter": [],
    "suggestions": [
@@ -2007,14 +1982,6 @@
      "completes": [
       "ipecac+rock-bottom",
       "polyphemus+rock-bottom"
-     ]
-    },
-    {
-     "kind": "item",
-     "id": 646,
-     "best": "S",
-     "completes": [
-      "brimstone-bombs+dr-fetus"
      ]
     },
     {
@@ -2491,6 +2458,14 @@
     },
     {
      "kind": "item",
+     "id": 646,
+     "best": "B",
+     "completes": [
+      "brimstone-bombs+dr-fetus"
+     ]
+    },
+    {
+     "kind": "item",
      "id": 5,
      "best": "C",
      "completes": [
@@ -2501,7 +2476,7 @@
     {
      "kind": "item",
      "id": 310,
-     "best": "D",
+     "best": "C",
      "completes": [
       "eves-mascara+polyphemus"
      ]

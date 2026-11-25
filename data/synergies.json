@@ -19,7 +19,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "The Technology laser coils around the Brimstone beam, granting a 1.5x damage multiplier. The Tech laser also fires continuously while Brimstone charges, giving you damage output during the charge phase."
+  "description": "The Technology laser coils around the Brimstone beam and multiplies damage by 1.5, stacking with other multipliers. In Repentance the double-Brimstone upgrade (a second Brimstone, or Sulfur) replaces that 1.5x with its own 1.2x, so it can lower your damage."
  },
  {
   "id": "brimstone+tech-x",
@@ -30,7 +30,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Fires a large Brimstone ring instead of the normal Tech X laser ring. The ring has a wider hitbox and deals Brimstone's full damage. One of the highest DPS combinations in the game."
+  "description": "Tech X takes priority and fires a Brimstone ring instead of its laser ring. The ring is larger, has a much wider hitbox, and Brimstone's tears down does not apply. One of the strongest beam builds."
  },
  {
   "id": "brimstone+moms-knife",
@@ -41,7 +41,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "The knife gains a Brimstone charge. Releasing fires the main knife plus a barrage of smaller knives that cross the entire screen, each dealing 2x Isaac's damage. Devastating at any range."
+  "description": "Mom's Knife takes priority, and Brimstone's tears down does not apply. Each throw also launches a barrage of extra knives that cross the whole screen and do not return, each dealing 2x Isaac's damage in Repentance. A longer charge adds more knives: about 2-4 uncharged, 8-10 fully charged. Does not work with Azazel's own Brimstone."
  },
  {
   "id": "brimstone+ipecac",
@@ -317,7 +317,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "The knife deals Polyphemus-boosted damage (damage x2 + 4). Since the knife already has high base damage and hits multiple times per throw, this creates absurd single-target DPS."
+  "description": "Mom's Knife deals a multiple of Isaac's damage (2x while held, up to 6x on a charged throw in Repentance), so Polyphemus's (damage + 4) x 2 carries straight into every knife hit."
  },
  {
   "id": "epic-fetus+moms-knife",
@@ -328,7 +328,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Each missile explosion shoots 10 knives in a circle from the impact point. Combines massive missile damage with a ring of full-damage knives."
+  "description": "Each missile explosion shoots a ring of 10 knives out from the point of impact, on top of the missile's own blast."
  },
  {
   "id": "moms-knife+monstros-lung",
@@ -569,8 +569,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Missiles become green and poisonous with drastically increased damage and larger blast radius. Poison gas clouds linger on impact. Devastating area denial."
+  "rating": "B",
+  "description": "Missiles turn green and poison what they hit, and in Repentance every explosion leaves a cloud of poison gas. Repentance cut Ipecac's bonus here to a flat +2 damage, so the huge damage boost of older versions is gone."
  },
  {
   "id": "ipecac+monstros-lung",
@@ -657,8 +657,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Libra rebalances stats after Soy Milk's tears up / damage down. The massive fire rate gets redistributed across all stats, resulting in high damage, speed, and range while keeping very high fire rate."
+  "rating": "C",
+  "description": "Libra evens out your stats, and in Repentance it counts Soy Milk's trade (much faster tears, far less damage) as only a small gain, so you end up with all stats slightly above base. The large all-stats boost was older versions' behaviour."
  },
  {
   "id": "monstros-lung+soy-milk",
@@ -735,7 +735,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Rock Bottom locks in the high fire rate before Soy Milk's damage penalty applies. Results in massive fire rate with no damage loss. Game-breaking if found before Soy Milk."
+  "description": "Rock Bottom keeps your damage from dropping, so Soy Milk's huge fire rate up arrives without the visible damage loss. Soy Milk's 0.2x damage multiplier still applies underneath, which makes later damage ups very hard to show. Take Rock Bottom first."
  },
  {
   "id": "epic-fetus+sad-bombs",
@@ -855,8 +855,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Tears gain both Sacred Heart's homing and Godhead's damaging aura. Homing ensures tears track enemies while the aura deals continuous damage. Both damage multipliers stack multiplicatively."
+  "rating": "A",
+  "description": "No special interaction: both already give homing tears, so the pair adds Sacred Heart's 2.3x damage multiplier (and +1 damage) to Godhead's damaging aura. In Repentance the aura deals a flat 2 damage 30 times a second, so it does not grow with your damage."
  },
  {
   "id": "sacred-heart+spoon-bender",
@@ -1065,7 +1065,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Kamikaze provides unlimited explosions. With Pyromaniac, each explosion heals Isaac instead of dealing damage. Infinite healing on demand."
+  "description": "Kamikaze! gives an unlimited source of explosions, and Pyromaniac turns each one into healing instead of damage: half a red heart per use in Repentance."
  },
  {
   "id": "curse-of-the-tower+pyromaniac",
@@ -1175,7 +1175,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Crown of Light's 2x damage multiplier applies to Brimstone's already high damage. As long as you haven't taken damage this room, the beam deals double damage."
+  "description": "Crown of Light doubles damage while all your red heart containers are full, and the 2x carries into the Brimstone beam. Taking damage switches the crown off for the rest of the room."
  },
  {
   "id": "crown-of-light+c-the-lost",
@@ -1187,7 +1187,7 @@
    "The Lost"
   ],
   "rating": "S",
-  "description": "The Lost has no red hearts, so Crown of Light's 2x damage multiplier is always active as long as Holy Mantle hasn't broken this room. Permanent double damage in most rooms."
+  "description": "Crown of Light counts having no red heart containers as full health, so it is always on for The Lost: 2x damage. A hit that Holy Mantle absorbs does not switch it off."
  },
  {
   "id": "blank-card+car-battery",
@@ -1297,7 +1297,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "D",
-  "description": "Spirit Sword overrides Brimstone. Brimstone's stats apply but you swing the sword instead of firing a laser. Generally considered a downgrade."
+  "description": "Spirit Sword overrides Brimstone: you swing the sword and fire its projectiles instead of a beam. Generally considered a downgrade."
  },
  {
   "id": "ipecac+revelation",
@@ -1497,7 +1497,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Any 3 Guppy items trigger the Guppy transformation: grants flight and spawns Blue Flies on every tear hit. With high fire rate, you generate a massive army of flies that deal your damage."
+  "description": "Any three Guppy items complete the Guppy transformation: flight, and in Repentance a 66% chance to spawn a Blue Fly each time a tear from Isaac or one of his familiars hits an enemy. With a high fire rate the flies pile up fast."
  },
  {
   "id": "dead-cat+guppys-collar+guppys-head",
@@ -1509,7 +1509,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Any 3 Guppy items trigger the transformation. Dead Cat + Guppy's Collar + Guppy's Head is a common path. The fly generation from Guppy far outweighs the health loss from Dead Cat."
+  "description": "Any three Guppy items complete the Guppy transformation: flight, and in Repentance a 66% chance of a Blue Fly each time a tear hits. Dead Cat sets your red heart containers to one but gives nine extra lives, and the transformation makes up for the lost health."
  },
  {
   "id": "guppys-paw+c-blue-baby",
@@ -1521,7 +1521,7 @@
    "Blue Baby"
   ],
   "rating": "D",
-  "description": "Guppy's Paw converts red heart containers to Soul Hearts. Blue Baby has no red hearts, so the paw has no effect. Useless pickup for this character."
+  "description": "Guppy's Paw converts red heart containers to Soul Hearts. Blue Baby has no red hearts, so the paw has no effect. It still counts toward the Guppy transformation if you pick it up."
  },
  {
   "id": "dead-cat+c-the-lost",
@@ -1745,8 +1745,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "D",
-  "description": "WARNING: Soy Milk's damage multiplier stacks badly with Polyphemus. You get rapid fire but the damage penalty significantly undercuts Polyphemus's damage bonus. Generally a downgrade."
+  "rating": "C",
+  "description": "Soy Milk undoes what makes Polyphemus special: its 0.2x damage cuts the huge (damage + 4) x 2 tears, and its 5.5x fire rate undoes Polyphemus's slow tears. You get many medium tears, about as strong overall as Polyphemus alone."
  },
  {
   "id": "brimstone+dr-fetus",
@@ -1789,8 +1789,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "D",
-  "description": "WARNING: Creates a spiraling knife pattern that's very difficult to control. In some versions this makes Mom's Knife nearly unusable. Avoid this combination."
+  "rating": "B",
+  "description": "In Repentance a thrown knife orbits Isaac very fast with a much larger hitbox, dealing steady damage on every side of him. In older versions this made the knife almost impossible to aim; that is no longer the case."
  },
  {
   "id": "bobs-brain+c-the-lost",
@@ -1814,19 +1814,7 @@
    "The Lost"
   ],
   "rating": "D",
-  "description": "WARNING: Kamikaze deals self-damage, which is instant death for The Lost. Completely useless and actively dangerous."
- },
- {
-  "id": "curse-of-the-tower+c-the-lost",
-  "items": [
-   "Curse of the Tower"
-  ],
-  "trinkets": [],
-  "characters": [
-   "The Lost"
-  ],
-  "rating": "D",
-  "description": "WARNING: Troll bombs spawn when The Lost takes damage (breaking Holy Mantle). Since The Lost is already in a vulnerable state, the bombs just add more danger to an already bad situation."
+  "description": "WARNING: Kamikaze!'s explosion hurts Isaac. Holy Mantle absorbs the first blast, and the next one kills The Lost. Useless and actively dangerous."
  },
  {
   "id": "tarot-cloth",
@@ -1925,28 +1913,6 @@
   "description": "Occasionally releases 1-3 extra knives in random directions when shooting. Free extra knives on top of your main throw."
  },
  {
-  "id": "brimstone+guppys-head",
-  "items": [
-   "Guppy's Head",
-   "Brimstone"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "S",
-  "description": "With the Guppy transformation active, Brimstone generates approximately one Blue Fly per tick per enemy hit, up to 13 flies. A single beam through multiple enemies creates an instant fly army."
- },
- {
-  "id": "guppys-head+soy-milk",
-  "items": [
-   "Guppy's Head",
-   "Soy Milk"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "S",
-  "description": "With Guppy transformation, each tear has a chance to spawn Blue Flies. Soy Milk's rapid fire rate generates enormous waves of flies that overwhelm everything."
- },
- {
   "id": "guppys-head+moms-knife",
   "items": [
    "Guppy's Head",
@@ -1965,8 +1931,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Same principle as Soy Milk + Libra. Libra redistributes the tears bonus across all stats. The random worm effects from Almond Milk become less relevant when your stats are all boosted."
+  "rating": "C",
+  "description": "As with Soy Milk, Libra counts Almond Milk as only a minor damage-per-second gain in Repentance, so the pair gives a very small all-stats up."
  },
  {
   "id": "my-reflection+technology",
@@ -2076,7 +2042,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Box of Friends activates twice, quadrupling all familiars for the room instead of doubling. With powerful familiars like Incubus or Twisted Pair, the damage output is absurd."
+  "description": "Car Battery makes Box of Friends add two copies of each familiar for the room instead of one, so you have three of each. With strong familiars like Incubus or Twisted Pair the damage adds up fast."
  },
  {
   "id": "book-of-revelations+car-battery",
@@ -2218,8 +2184,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Shop items restock after purchase at half price. With two Steam Sales, items become completely free — infinite items from the shop. Even one Steam Sale makes shops extremely efficient with restocking."
+  "rating": "B",
+  "description": "Restock refills the shop after each purchase and Steam Sale halves prices. In Repentance, outside Greed Mode, each restock adds to the price (+2, then +4, +6 and so on for items), and Steam Sale discounts only the base price, not that increase. Extra Steam Sales only divide the base price further (two make it a third), so the endless free shop of older versions is gone. Still a good way to turn coins into items."
  },
  {
   "id": "chaos+restock+steam-sale",
@@ -2230,8 +2196,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Chaos merges all item pools into shops. With Restock keeping the shop stocked and Steam Sale(s) reducing prices, you can theoretically obtain every item in the game from the shop."
+  "rating": "A",
+  "description": "With Chaos, Restock can restock the shop with otherwise rare items, and Steam Sale cuts their base price. In Repentance, outside Greed Mode, each restock adds to the price and the discount does not cover that increase, so the endless free shop of older versions no longer happens."
  },
  {
   "id": "sharp-plug+the-wafer",
@@ -2253,7 +2219,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "At half a red heart, Scapular grants a soul heart. Taking damage breaks the soul heart and charges Habit, dropping you to half a heart again — re-triggering Scapular. Infinite active item charges from any damage source."
+  "description": "Once per room, Scapular gives you a soul heart when you drop to your last half heart. Getting hit charges Habit, so running into a hazard at low health charges your active item at little real cost. Leave and re-enter a room to reset Scapular."
  },
  {
   "id": "4-5-volt+brimstone",
@@ -2330,7 +2296,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Absorbing Mega Mush into Void adds its invincibility and size-up effect to every Void use. Repeatable room-long invulnerability with massive contact damage."
+  "description": "Void can use an absorbed Mega Mush every 6 charges instead of Mega Mush's 12 (every 4 in Repentance+). Each use makes you giant for 30 seconds: 4x damage, no damage taken, and you crush obstacles and break through doors."
  },
  {
   "id": "bloody-lust+dull-razor",
@@ -2355,17 +2321,6 @@
   "description": "Dull Razor counts as taking damage for Cambion Conception without losing health. Repeatedly use it to spawn demon familiars (Incubus, Succubus, etc.) for free."
  },
  {
-  "id": "blank-card+echo-chamber",
-  "items": [
-   "Echo Chamber",
-   "Blank Card"
-  ],
-  "trinkets": [],
-  "characters": [],
-  "rating": "S",
-  "description": "Echo Chamber replays the last 3 cards used whenever you use a card. Combined with Blank Card, each activation cascades into multiple card effects. With powerful cards like Jera or The Sun, this breaks the game."
- },
- {
   "id": "diplopia+steam-sale",
   "items": [
    "Diplopia",
@@ -2373,8 +2328,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Using Diplopia in a shop that has Steam Sale duplicates it, giving you two Steam Sales. Two Steam Sales make all shop items free. Combine with Restock for infinite items."
+  "rating": "B",
+  "description": "Using Diplopia on a Steam Sale gives you two. In Repentance n Steam Sales divide prices by n + 1, never below 1 cent, so two make a 15-cent item cost 5 instead of making shops free, and each further copy lowers prices less."
  },
  {
   "id": "brimstone+maw-of-the-void",
@@ -2396,8 +2351,8 @@
   "characters": [
    "The Lost"
   ],
-  "rating": "S",
-  "description": "Holy Mantle negates the first hit per room, giving The Lost an effective second chance in every room. This is The Lost's starting item in Repentance and the foundation of all Lost runs."
+  "rating": "C",
+  "description": "The Lost already has Holy Mantle's shield built in once it is unlocked. Picking up the item as The Lost in Repentance only adds one extra shield in the room where it was found; it is gone when you leave and does not come back."
  },
  {
   "id": "psy-fly+c-the-lost",
@@ -2409,7 +2364,7 @@
    "The Lost"
   ],
   "rating": "S",
-  "description": "Psy Fly orbits Isaac and deflects enemy projectiles back at enemies. For The Lost, this provides a massive defensive layer on top of Holy Mantle, blocking most incoming shots."
+  "description": "Psy Fly orbits Isaac, chasing and blocking enemy shots, with a short cooldown after it blocks several. For The Lost that is a useful layer on top of Holy Mantle, though not immunity."
  },
  {
   "id": "dead-cat+c-the-forgotten",
@@ -2493,7 +2448,7 @@
    "Lilith"
   ],
   "rating": "S",
-  "description": "Lilith starts with Incubus and Box of Friends. Each use doubles all familiars. With BFFS! or additional familiars, Box of Friends creates an army of high-damage copies every room."
+  "description": "Lilith starts with Box of Friends and Incubus. Each use adds a copy of every familiar for the room, doubling her Incubus damage. More familiars, BFFS! and battery items make it stronger."
  },
  {
   "id": "cambion-conception+c-lilith",
@@ -2576,8 +2531,8 @@
   "characters": [
    "Jacob and Esau"
   ],
-  "rating": "S",
-  "description": "Both brothers fuse together into a single body with combined stats. Eliminates the main weakness of controlling two characters and simplifies movement in tight rooms."
+  "rating": "A",
+  "description": "Whichever brother picks up Birthright gains copies of the other brother's three most recently picked-up passive items."
  },
  {
   "id": "gello+c-lilith",
@@ -2613,7 +2568,7 @@
    "Keeper"
   ],
   "rating": "D",
-  "description": "WARNING: Abaddon converts all red heart containers to black hearts. Keeper uses coin hearts which count as red hearts — Abaddon removes ALL of Keeper's health, potentially killing him instantly."
+  "description": "WARNING: Abaddon replaces red heart containers with black hearts, which Keeper cannot use. In Repentance it no longer kills him outright, but it cuts his Coin Hearts down to one."
  },
  {
   "id": "halo-of-flies+infestation+skatole",
@@ -2732,8 +2687,8 @@
   "characters": [
    "Keeper"
   ],
-  "rating": "S",
-  "description": "Swallowed Penny drops a coin whenever Keeper takes damage. Since coins heal Keeper, this effectively negates every hit — take damage, pick up the dropped coin to heal. Makes Keeper nearly unkillable."
+  "rating": "B",
+  "description": "Swallowed Penny drops a coin when you take damage, and coins heal Keeper. In Repentance it drops 0 or 1 coins for Keeper, so it only sometimes refunds a hit."
  },
  {
   "id": "moms-box+t-curved-horn",
@@ -2877,8 +2832,8 @@
   "characters": [
    "The Lost"
   ],
-  "rating": "D",
-  "description": "WARNING: Cursed Eye teleports you to a random room when hit mid-charge. For The Lost, any hit is lethal anyway, but the teleport can send you to dangerous rooms. Avoid unless you have Black Candle."
+  "rating": "B",
+  "description": "Cursed Eye fires a charged burst of five tears, but taking damage mid-charge teleports you to another room. The Lost dies to any real hit anyway, so the downside barely matters."
  },
  {
   "id": "missing-no",
@@ -2899,7 +2854,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "D",
-  "description": "WARNING: Eve's Mascara doubles damage but halves fire rate. Soy Milk massively increases fire rate but reduces damage. They partially cancel out, leaving you with mediocre damage and mediocre fire rate."
+  "description": "WARNING: Eve's Mascara doubles damage and cuts fire rate to 0.66x; Soy Milk multiplies fire rate by 5.5 and cuts damage to 0.2x. Together they mostly cancel out: fast tears that each hit for less than half your base damage."
  },
  {
   "id": "eves-mascara+polyphemus",
@@ -2909,8 +2864,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "D",
-  "description": "WARNING: Both items drastically reduce fire rate. The combined fire rate penalty is so severe that despite enormous per-tear damage, total DPS is often lower than base tears."
+  "rating": "C",
+  "description": "Both multiply damage (Eve's Mascara 2x, Polyphemus (damage + 4) x 2) and both slow your tears (0.66x and 0.42x in Repentance). Together you fire about a quarter as often with huge tears: damage per second still rises, but crowds and fast enemies get harder."
  },
  {
   "id": "dr-fetus+soy-milk",
@@ -2920,20 +2875,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "D",
-  "description": "WARNING: Fires bombs at extremely high speed with drastically reduced damage per bomb. The rapid bombs fill the screen with low-damage explosions that can easily self-damage you."
- },
- {
-  "id": "isaacs-heart+c-azazel",
-  "items": [
-   "Isaac's Heart"
-  ],
-  "trinkets": [],
-  "characters": [
-   "Azazel"
-  ],
-  "rating": "D",
-  "description": "WARNING: Isaac's Heart makes Azazel's body invulnerable but the heart familiar takes damage. Azazel's short-range Brimstone forces you close to enemies where the trailing heart is most vulnerable."
+  "rating": "C",
+  "description": "In Repentance Dr. Fetus with Soy Milk rapidly fires low-damage mini-bombs, and the bombs no longer knock each other back as they did in older versions."
  },
  {
   "id": "20-20+dead-eye",
@@ -2955,7 +2898,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "D",
-  "description": "WARNING: The Wiz fires tears diagonally, making it very hard to consistently hit targets. Dead Eye resets on every miss, so the diagonal spread keeps your damage multiplier permanently low."
+  "description": "WARNING: The Wiz fires both tears diagonally outward, which makes them easier to miss. Each miss gives Dead Eye a chance to reset its multiplier (20% on the first miss, rising to 50%), so it rarely builds to its 2x."
  },
  {
   "id": "brimstone+cursed-eye",
@@ -3043,7 +2986,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Both damage multipliers stack multiplicatively (2.3x from Sacred Heart, 1.2x from Immaculate Heart = 2.76x total). Combined with homing tears and orbital tears, this is devastating."
+  "description": "Sacred Heart's 2.3x and Immaculate Heart's 1.2x come from different groups, so they multiply to about 2.76x. Add Sacred Heart's homing and Immaculate Heart's orbiting spectral tears."
  },
  {
   "id": "star-of-bethlehem",
@@ -3125,7 +3068,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Teleports to a special area containing every item in the game — pick any one for free. Choose the single most powerful item you're missing (Sacred Heart, Godhead, R Key, etc.)."
+  "description": "Takes you to a special floor with one copy of almost every item you have unlocked. Take one and you return to the room you used it in. Pick the strongest item your run is missing."
  },
  {
   "id": "magic-mushroom+polyphemus",
@@ -3178,8 +3121,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Dr. Fetus bomb shots each fire 4 Brimstone lasers in cardinal directions on detonation. Every shot creates a cross of lasers in addition to the explosion damage."
+  "rating": "B",
+  "description": "With Dr. Fetus, each bomb shot only has a small chance to fire Brimstone Bombs' four lasers: 11% at 0 luck, reaching 100% at about 30 luck. The lasers can push your fired bombs around, so it is powerful but hazardous."
  },
  {
   "id": "brimstone-bombs+sad-bombs",
@@ -3190,7 +3133,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Bombs fire both 4 Brimstone lasers in cardinal directions AND 10 tears in all directions on explosion. Every bomb becomes an extreme room-clearing event."
+  "description": "Each bomb you place fires Brimstone Bombs' four lasers in the cardinal directions (8 damage per tick) and Sad Bombs' ring of 10 tears (25 plus your damage each). Every bomb clears much of the room."
  },
  {
   "id": "psy-fly",
@@ -3278,7 +3221,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Fires arcing Brimstone balls that explode into multiple smaller Brimstone lasers on impact. Each laser deals full tick damage. Devastating area coverage."
+  "description": "Haemolacria takes priority: you fire arcing tears that burst into 4-7 Brimstone beams on impact, each dealing full damage per tick. Tear delay rises by 20 on top of Haemolacria's own tears down."
  },
  {
   "id": "haemolacria+moms-knife",
@@ -3332,8 +3275,8 @@
   ],
   "trinkets": [],
   "characters": [],
-  "rating": "S",
-  "description": "Trisagion beams gain Godhead's damaging aura. Since multiple beams can overlap on a single enemy, the aura damage stacks, dealing tremendous DPS at close range."
+  "rating": "A",
+  "description": "Trisagion hides Godhead's aura, but the aura is still there and is not reduced by Trisagion's damage penalty. Godhead's homing carries over too."
  },
  {
   "id": "spoon-bender+trisagion",
@@ -4246,7 +4189,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Keeps Ipecac's massive +40 damage boost without the fire rate penalty. Combined with Brimstone or Tech X, damage becomes absurd."
+  "description": "Rock Bottom keeps Ipecac's +40 damage without its fire rate cut. With Brimstone or Tech X, take Ipecac first: in the other order Ipecac adds only +2 to the beam or ring."
  },
  {
   "id": "d8+rock-bottom",
@@ -4323,7 +4266,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "S",
-  "description": "Tear rate overflow from Dataminer's random stat shuffles stays permanent. Can lock in 120+ fire rate forever."
+  "description": "If Dataminer's random stat changes push your tear rate to 120 before you take Rock Bottom, it stays at 120. The stat Dataminer lowered becomes harder to raise."
  },
  {
   "id": "20-20+rock-bottom",
