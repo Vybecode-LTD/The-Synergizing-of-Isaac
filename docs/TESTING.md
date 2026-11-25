@@ -93,8 +93,9 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `feat/toy-box` (the
   keeps the old `index.html`, which then points at deleted assets and the gate measures an unstyled page.
   The Toy Box run (2026-11-25) and its two extra checks (the dialog in a tall viewport, the AI answer with a
   faked response) are in `docs/HANDOFF.md`.
-- **Browser against server**: the snippet in `docs/HANDOFF.md` compares rendered headings and paragraphs
-  with the raw HTML for nine routes.
+- **Browser against server** is not a by-hand step: the parity tests (`web/src/parity.test.ts`,
+  `api/tests/test_core.py`) compare both sides with `data/tests/parity.json` on every run. The first session
+  also compared the browser's titles with the server's on nine routes by hand, once, with no script kept.
 
 ## Known gaps
 

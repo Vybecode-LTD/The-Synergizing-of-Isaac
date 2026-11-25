@@ -95,3 +95,5 @@ Made while building, 2026-11-25. None changes a route, a prop, the data or what 
 9. **Two fixes from the rendered-contrast gate:** the dialog's panel carries its own ground (its words spilled
    onto the footer when the gate unclipped its scroll), and the nav pads itself so the focus ring, now
    outside the pill, is not clipped by its sideways scroll box.
+10. **Pressed toggles are filled in ink** (`.segmented__option[aria-pressed|aria-checked="true"]`), after
+    CodeRabbit's review asked for a state that reads without the offset shadow.

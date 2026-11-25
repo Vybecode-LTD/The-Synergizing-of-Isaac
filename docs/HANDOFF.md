@@ -41,6 +41,11 @@
   calls the Tainted row "undecided", because it unclips the dialog below a 900px viewport; in a 3200px
   viewport, where the dialog does not scroll and all 34 options are in view, it passes 8 of 8 states.
   The AI answer state (response faked in the test browser) passes in all four views; a broken colour fails.
+- After CodeRabbit's review: pressed toggles are now filled in ink (the synergy list passes 24 states,
+  hovered in every state). The search dropdown (typed, then an option picked by arrow key) and the
+  add-your-own-synergy dialog (open, then a rating chosen) pass in 16 states; what axe left undecided
+  (an ellipsis-cut effect line, the nav's last link at 390, the dialog's text box) measures 10.6:1 or
+  better from its real colours, and a broken colour fails the same script.
 - Focus rings checked on the tile, remove button, search box, AI button and nav, light and dark.
 
 ## Not verified

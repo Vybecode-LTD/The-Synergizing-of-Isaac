@@ -40,7 +40,7 @@ PAIRS = {
         ("ink on mint (B)", "#1A1E3A", "#2FCB8E", 4.5),
         ("ink on cloud (C)", "#1A1E3A", "#C9D0E2", 4.5),
         ("white on grape (D)", "#FFFFFF", "#6B3FD4", 4.5),
-        ("white on tomato button", "#FFFFFF", "#D9431F", 4.5),
+        ("white on tomato button", "#FFFFFF", "#C93A17", 4.5),
         ("ink on tomato-soft", "#1A1E3A", "#FFD9CC", 4.5),
         ("white on ink", "#FFFFFF", "#1A1E3A", 4.5),
     ],

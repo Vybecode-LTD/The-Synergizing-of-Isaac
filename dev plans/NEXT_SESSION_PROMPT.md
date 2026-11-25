@@ -34,7 +34,7 @@ says what to do next; those say what exists.
 - Merge #2, then #3? Deploy (said "not yet" on 2026-11-24)? The 301 from `issac.toys` is theirs at Spaceship.
 
 ## 6. Environment and traps
-- Start: `cd web; npm run check`, then `cd api; .venv\Scripts\python -m pytest --cov`.
+- Start, from the repo root: `cd web; npm run check`, then `cd ../api; .venv\Scripts\python -m pytest --cov`.
 - Gates from the repo root: `npm run design:audit` (in `web/`), `python scripts/design/check_roles.py
   web/src/styles/tokens.css`, and again with `--pairs scripts/design/toy-box-pairs.json`.
 - Rendered contrast: `node C:\DEV\knowledge\skills\verify-real-pass\scripts\rendered_contrast.mjs <url>`.

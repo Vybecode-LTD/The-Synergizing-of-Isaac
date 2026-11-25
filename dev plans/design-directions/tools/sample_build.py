@@ -45,10 +45,13 @@ def main() -> int:
                 e["best"] = s["rating"]
     away_list = sorted(away.values(), key=lambda e: (ORDER.index(e["best"]), -len(e["completes"]), e["name"]))
     for e in away_list:
-        e["id"] = by_name[e["name"]]["id"] if e["name"] in by_name else None
-        e["kind"] = "item" if e["name"] in by_name else "trinket"
-        if e["kind"] == "trinket":
-            e["id"] = t_by_name[e["name"]]["id"]
+        if e["name"] in by_name:
+            e["kind"], e["id"] = "item", by_name[e["name"]]["id"]
+        elif e["name"] in t_by_name:
+            e["kind"], e["id"] = "trinket", t_by_name[e["name"]]["id"]
+        else:
+            print(f"unknown synergy member: {e['name']} (run scripts/gamedata.py validate)", file=sys.stderr)
+            return 1
 
     stats: Counter = Counter()
     if missing:

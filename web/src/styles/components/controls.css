@@ -251,11 +251,12 @@
     outline-offset: var(--stroke-thick);
   }
 
-  /* Pressed: lifted, filled with the sun tint. The pressed state is also in
-     aria-pressed, which assistive tech reads; the shadow repeats it. */
+  /* Pressed: filled in ink and lifted, so the state reads without the shadow
+     or a colour cue. Written after :hover, so it holds while hovered. */
   .segmented__option[aria-pressed="true"],
   .segmented__option[aria-checked="true"] {
-    background: var(--bg-selected);
+    color: var(--fg-on-ink);
+    background: var(--bg-ink);
     box-shadow: var(--elevation-sticker);
   }
 }
