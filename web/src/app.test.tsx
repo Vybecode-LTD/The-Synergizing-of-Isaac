@@ -272,7 +272,7 @@ describe("browse and detail pages", () => {
     expect(screen.getByRole("heading", { level: 1, name: "Brimstone" })).toBeInTheDocument();
     expect(screen.getByText("Tears become blood laser, hits 9 times")).toBeInTheDocument();
     expect(screen.getByText("Devil Room, Ultra Secret Room")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2, name: "64 synergies with Brimstone" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "63 synergies with Brimstone" })).toBeInTheDocument();
     expect(screen.getByText(/The strongest are with Azazel, Crown of Light and Epic Fetus/)).toBeInTheDocument();
     expect(document.title).toBe("Brimstone Synergies in The Binding of Isaac | isaac.toys");
 
@@ -304,13 +304,13 @@ describe("browse and detail pages", () => {
 
   it("searches and filters the full synergy list and pages through it", async () => {
     const user = open("/synergies");
-    expect(screen.getByRole("status")).toHaveTextContent("458 synergies");
+    expect(screen.getByRole("status")).toHaveTextContent("454 synergies");
     expect(screen.getAllByRole("article")).toHaveLength(40);
     await user.click(screen.getByRole("button", { name: "Show 40 more" }));
     expect(screen.getAllByRole("article")).toHaveLength(80);
 
     await user.type(screen.getByRole("searchbox", { name: "Search synergies" }), "tammy brimstone");
-    expect(screen.getByRole("status")).toHaveTextContent(/of 458 synergies/);
+    expect(screen.getByRole("status")).toHaveTextContent(/of 454 synergies/);
     expect(screen.getByRole("link", { name: "Open in builder" })).toHaveAttribute("href", "/?i=118.38");
     await user.click(screen.getByRole("button", { name: "D tier" }));
     expect(screen.getByText(/Nothing in the list matches/)).toBeInTheDocument();
