@@ -102,8 +102,23 @@ def typed(reply: Reply, kind: str) -> Reply:
 
 
 BREAKS: list[tuple[set[str], str, Callable[[Reply], Reply]]] = [
-    ({"health"}, "/api/health", lambda r: replace(r, body=b'{"status": "down", "items": 1, "synergies": 1}')),
-    ({"health"}, "/api/health", lambda r: replace(r, body=b'{"status": "ok", "items": 0, "synergies": 1}')),
+    (
+        {"health"},
+        "/api/health",
+        lambda r: replace(r, body=b'{"status": "down", "items": 1, "synergies": 1, "ai": false}'),
+    ),
+    (
+        {"health"},
+        "/api/health",
+        lambda r: replace(r, body=b'{"status": "ok", "items": 0, "synergies": 1, "ai": false}'),
+    ),
+    # A health reply that says nothing about AI stops the paid check too.
+    (
+        {"health", "analyze is off"},
+        "/api/health",
+        lambda r: replace(r, body=b'{"status": "ok", "items": 1, "synergies": 1}'),
+    ),
+    ({"health", "analyze is off"}, "/api/health", lambda r: replace(r, body=b"<html>not json</html>")),
     ({"home"}, "/", lambda r: replace(r, body=r.body.replace(b"</h1>", b"</h1><h1>again</h1>", 1))),
     ({"built app"}, "/assets/app.js", lambda r: replace(r, status=404)),
     ({"built app"}, "/assets/app.js", lambda r: typed(r, "application/octet-stream")),
@@ -143,6 +158,43 @@ def test_each_break_turns_exactly_its_checks_red(
     assert failures(smoke.run(fetch, CI)) == broken
 
 
+def test_a_combined_robots_header_still_counts_as_noindex(make_client: Callable[..., TestClient], dist: Path) -> None:
+    """Review finding (CodeRabbit, PR #5): "noindex, nofollow" was read as indexable."""
+    live = client_fetch(make_client(with_ai=True, web_dist=dist, environment="production"))
+    ci = client_fetch(make_client(with_ai=False, web_dist=dist, environment="ci"))
+
+    def with_header(site: Fetch, value: str) -> Fetch:
+        def fetch(method: str, path: str, body: bytes | None) -> Reply:
+            reply = site(method, path, body)
+            return replace(reply, headers={**reply.headers, "x-robots-tag": value}) if path == "/" else reply
+
+        return fetch
+
+    for value in ("NoIndex, nofollow", "googlebot: noindex", "none"):
+        assert failures(smoke.run(with_header(live, value), LIVE)) == {"headers"}, value
+    # Control: outside production the same combined value is what is wanted.
+    assert failures(smoke.run(with_header(ci, "noindex, nofollow"), CI)) == set()
+
+
+def test_analyze_is_never_asked_of_a_site_whose_health_says_ai_is_on(
+    make_client: Callable[..., TestClient], dist: Path
+) -> None:
+    """Review finding (CodeRabbit, PR #5): with --ai off against a site that has a key, the check posted a
+    build to /api/analyze and paid for one analysis. It must ask only a site that says AI is off."""
+    site = client_fetch(make_client(with_ai=True, web_dist=dist, environment="ci"))
+    posts: list[str] = []
+
+    def fetch(method: str, path: str, body: bytes | None) -> Reply:
+        if method == "POST":
+            posts.append(path)
+        return site(method, path, body)
+
+    results = dict(smoke.run(fetch, CI))
+    assert posts == []
+    assert results["health"] is not None
+    assert results["analyze is off"] == "not sent: /api/health does not say AI is off (ai is True)"
+
+
 def test_a_site_that_does_not_answer_fails_every_check_without_crashing() -> None:
     def down(method: str, path: str, body: bytes | None) -> Reply:
         raise ConnectionRefusedError("nothing is listening")
@@ -171,8 +223,8 @@ def test_the_command_reports_each_check_and_exits_by_the_result(
     monkeypatch.setattr(smoke, "http_fetch", lambda base, timeout=20.0: broken)
     assert smoke.main(["http://site", "--ai", "off"]) == 1
     out = capsys.readouterr().out
-    # The headers check reads /api/health too, so it fails alongside.
-    assert "FAIL  health: /api/health answered 500, expected 200" in out and "11 of 13 checks passed" in out
+    # The headers check reads /api/health too, and the analyze check will not ask without it.
+    assert "FAIL  health: /api/health answered 500, expected 200" in out and "10 of 13 checks passed" in out
 
 
 def test_the_command_refuses_an_address_that_is_not_http() -> None:

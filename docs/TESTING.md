@@ -25,7 +25,7 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
 | same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 70 of 70 pass (stickers, feature, spotlight, band, ink, tints, outlines; light and dark) |
 | `npm run build` | `web/` | builds; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
-| `.venv\Scripts\python -m pytest --cov` | `api/` | 119 passed; 99% of `app/` |
+| `.venv\Scripts\python -m pytest --cov` | `api/` | 123 passed; 99% of `app/` |
 | `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
 | CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off` | GitHub Actions | 13 of 13 on PR #5 (log read: health answered with 719 items) |
 | `app.smoke https://web-production-6d147b3c.up.railway.app --ai off --indexable --site-url https://isaac.toys` | `api/`, the live site | 13 of 13, 2026-11-25, before the key was set |
@@ -101,6 +101,10 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
   Drawing and Guardian Angel tests passed, as the old data already had those right. Before `build`,
   `validate` reported the stale tags on exactly the 14 pickups the wiki comparison found. Rendered
   contrast on the builder (a build showing every case) and on a trinket page: 0 failing in 4 states each.
+- CodeRabbit's review of PR #5 (after its merge), two real findings, both red before the fix: a combined
+  `X-Robots-Tag: noindex, nofollow` read as indexable; and `--ai off` against a site with a key posted a
+  build to `/api/analyze`, a paid analysis. The analyze check now asks only a site whose health says AI is
+  off, and a test counts the POSTs (none).
 - Smoke checker, 2026-11-25: 23 deliberate breaks (wrong type, wrong bytes, a soft 404, a missing header,
   an analysis that answers with AI off, and others) each turn exactly the checks they name red, and a site
   that does not answer fails all 13 without crashing. Against the real build, with the file-type fix taken
