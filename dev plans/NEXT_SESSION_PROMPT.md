@@ -24,9 +24,9 @@ says what to do next; those say what exists.
 ## 4. First job, then the order
 1. If the key is in (`/api/health` says `"ai": true`): from `api/`,
    `.venv\Scripts\python -m app.smoke https://web-production-6d147b3c.up.railway.app --ai on --indexable --site-url https://isaac.toys`,
-   then `docs/DEPLOY.md` checks 3 (limit behind the edge, with builds nobody has asked for; five paid
-   analyses) and 4 (cache after a redeploy, which needs the owner's OK). Both run on the Railway address
-   above until `isaac.toys` verifies.
+   then **ask the owner** before `docs/DEPLOY.md` check 3 (limit behind the edge, with builds nobody has
+   asked for; five paid analyses) and check 4 (a redeploy, then a cached answer). Both run on the Railway
+   address above until `isaac.toys` verifies.
 2. PR #6: green CI and CodeRabbit read, then ask the owner to merge. After the deploy, `/items/infestation`
    must say "Beelzebub (Repentance+ only)".
 3. When `isaac.toys` verifies: `app.smoke https://isaac.toys ...`, then the owner submits the sitemap
