@@ -1,0 +1,146 @@
+/* Browse pages: page head, filters, and the grid of tiles. */
+@layer components {
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-separate);
+  }
+
+  .page-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+  }
+
+  .page-head__title {
+    font: var(--type-h1);
+    letter-spacing: var(--tracking-tighter);
+    color: var(--fg-strong);
+  }
+
+  .page-head__lede {
+    max-inline-size: var(--measure-prose);
+    font: var(--type-lead);
+    color: var(--fg-muted);
+  }
+
+  .breadcrumb {
+    display: flex;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-ui);
+    color: var(--fg-muted);
+  }
+
+  /* ---- Filters ------------------------------------------------------------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-grouped) var(--gap-separate);
+    align-items: center;
+  }
+
+  .search-field {
+    display: flex;
+    flex: 1 1 var(--width-form);
+    gap: var(--gap-tight);
+    align-items: center;
+    max-inline-size: var(--width-form);
+    min-block-size: var(--tap-min);
+    padding-inline: var(--pad-inline-sm);
+    color: var(--fg-muted);
+    background: var(--bg-sunken);
+    border: var(--stroke-default) solid var(--border-strong);
+    border-radius: var(--radius-md);
+    transition: border-color var(--motion-hover);
+  }
+
+  .search-field:hover { border-color: var(--fg-muted); }
+
+  .search-field:focus-within {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .search-field__input {
+    flex: 1;
+    min-inline-size: 0;
+    align-self: stretch;
+    padding: var(--space-0);
+    font: var(--type-body);
+    color: var(--fg-strong);
+    background: transparent;
+    border: 0;
+    /* The ring is drawn by .search-field:focus-within, around the whole box. */
+    outline: var(--stroke-focus) solid transparent;
+  }
+
+  .search-field__input::placeholder { color: var(--fg-subtle); }
+
+  .toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight) var(--gap-related);
+    align-items: center;
+  }
+
+  .count {
+    font: var(--type-ui);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-muted);
+  }
+
+  .empty-note {
+    max-inline-size: var(--measure-prose);
+    padding: var(--pad-card);
+    font: var(--type-body);
+    color: var(--fg-muted);
+    border: var(--stroke-default) dashed var(--border-default);
+    border-radius: var(--radius-lg);
+  }
+
+  /* ---- Tile grid ------------------------------------------------------------- */
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--size-tile-wide), 1fr));
+    gap: var(--gap-tight);
+    padding: var(--space-0);
+    list-style: none;
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    align-items: center;
+    block-size: 100%;
+    padding: var(--pad-block-md) var(--pad-inline-xs);
+    font: var(--type-label);
+    color: var(--fg-default);
+    text-align: center;
+    text-decoration: none;
+    background: var(--bg-surface);
+    border: var(--stroke-default) solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    transition:
+      background-color var(--motion-hover),
+      border-color var(--motion-hover),
+      color var(--motion-hover);
+  }
+
+  .tile:hover {
+    color: var(--fg-strong);
+    background: var(--bg-raised);
+    border-color: var(--border-accent);
+  }
+
+  .tile:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .tile__name {
+    flex: 1;
+    overflow-wrap: anywhere;
+  }
+}

@@ -1,0 +1,478 @@
+/* =========================================================================
+   TOKENS — the single source of truth for every value in the product.
+   =========================================================================
+   Adapted from the web-design-studio starter (same three tiers, same closed
+   scales). The one file where literal values may appear.
+
+     Tier 1  PRIMITIVE   raw values.              --space-6, --neutral-800
+     Tier 2  SEMANTIC    a value bound to a role. --pad-card, --fg-muted
+     Tier 3  COMPONENT   declared in the component's own file, from Tier 2.
+
+   The site ships one theme: dark ("the basement"). <html data-theme="dark">
+   is set in index.html. The light roles below stay valid so check_roles.py
+   passes and a light theme is a switch away, not a redesign.
+
+   Direction: warm near-black surfaces, parchment text, one accent (brass).
+   The pixel sprites are the colour; the chrome stays quiet.
+   ========================================================================= */
+
+@layer tokens {
+
+  :root {
+    /* ---- 1. SPACING, TIER 1: 4px base, closed scale -------------------- */
+    --space-0:    0;
+    --space-px:   1px;
+    --space-0-5:  0.125rem;
+    --space-1:    0.25rem;
+    --space-2:    0.5rem;
+    --space-3:    0.75rem;
+    --space-4:    1rem;
+    --space-5:    1.25rem;
+    --space-6:    1.5rem;
+    --space-8:    2rem;
+    --space-10:   2.5rem;
+    --space-12:   3rem;
+    --space-16:   4rem;
+    --space-20:   5rem;
+    --space-24:   6rem;
+    --space-32:   8rem;
+    --space-40:  10rem;
+    --space-48:  12rem;
+
+    /* Fluid steps, 380 -> 1440px anchors (generate_type_scale.py --fluid-space). */
+    --space-fluid-sm:  clamp(1rem,    0.8208rem + 0.755vw, 1.5rem);
+    --space-fluid-md:  clamp(1.5rem,  0.9623rem + 2.264vw, 3rem);
+    --space-fluid-lg:  clamp(2.5rem,  1.4245rem + 4.528vw, 5.5rem);
+    --space-fluid-xl:  clamp(4rem,    2.2075rem + 7.547vw, 9rem);
+
+    --density: 1;
+  }
+
+  /* ---- 2. SPACING, TIER 2 (roles). Components read these. -------------- */
+  :root, [data-density], .region-compact {
+    --gap-fused:      calc(var(--space-1)  * var(--density));
+    --gap-tight:      calc(var(--space-2)  * var(--density));
+    --gap-related:    calc(var(--space-3)  * var(--density));
+    --gap-grouped:    calc(var(--space-4)  * var(--density));
+    --gap-separate:   calc(var(--space-6)  * var(--density));
+    --gap-distinct:   calc(var(--space-10) * var(--density));
+
+    --pad-inline-xs:  calc(var(--space-2)  * var(--density));
+    --pad-inline-sm:  calc(var(--space-3)  * var(--density));
+    --pad-inline-md:  calc(var(--space-4)  * var(--density));
+    --pad-block-xs:   calc(var(--space-1)  * var(--density));
+    --pad-block-sm:   calc(var(--space-2)  * var(--density));
+    --pad-block-md:   calc(var(--space-3)  * var(--density));
+
+    --pad-card:       calc(var(--space-6)  * var(--density));
+    --pad-card-lg:    calc(var(--space-8)  * var(--density));
+    --pad-well:       calc(var(--space-4)  * var(--density));
+  }
+
+  /* stylelint-disable-next-line no-duplicate-selectors -- one :root block per section */
+  :root {
+    --space-section:    var(--space-fluid-xl);
+    --space-subsection: var(--space-fluid-lg);
+    --space-block:      var(--space-fluid-md);
+    --gutter-page:      var(--space-fluid-sm);
+
+    --measure-prose:    68ch;
+    --measure-narrow:   48ch;
+    --width-content:    72rem;
+    --width-wide:       90rem;
+    --width-form:       28rem;
+
+    /* ---- 3. TYPOGRAPHY, TIER 1 ---------------------------------------- */
+    /* Inter for everything you operate; Fraunces for everything you read as
+       a title. A book face over pixel art is the look: reliquary, not arcade. */
+    --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+                 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-display: "Fraunces Variable", "Iowan Old Style", "Palatino Linotype",
+                    Georgia, serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+                 "Liberation Mono", monospace;
+
+    --text-2xs:  0.6875rem;
+    --text-xs:   0.75rem;
+    --text-sm:   0.875rem;
+    --text-base: 1rem;
+    --text-lg:   1.125rem;
+    --text-xl:   1.375rem;
+    --text-2xl:  1.75rem;
+    --text-3xl:  2.1875rem;
+    --text-4xl:  2.75rem;
+    --text-5xl:  clamp(2.75rem, 2.1226rem + 2.642vw, 4.5rem);
+    --text-6xl:  clamp(3.5rem,  2.2901rem + 5.094vw, 6.875rem);
+
+    --leading-none:    1;
+    --leading-tight:   1.15;
+    --leading-snug:    1.3;
+    --leading-normal:  1.6;
+    --leading-relaxed: 1.75;
+
+    --tracking-tighter: -0.03em;
+    --tracking-tight:   -0.015em;
+    --tracking-normal:  0em;
+    --tracking-wide:    0.02em;
+    --tracking-caps:    0.08em;
+
+    --weight-regular:  400;
+    --weight-medium:   500;
+    --weight-semibold: 600;
+    --weight-bold:     700;
+
+    /* ---- 4. TYPOGRAPHY, TIER 2 (roles) -------------------------------- */
+    --type-display:  var(--weight-semibold) var(--text-5xl)/var(--leading-tight)   var(--font-display);
+    --type-h1:       var(--weight-semibold) var(--text-4xl)/var(--leading-tight)   var(--font-display);
+    --type-h2:       var(--weight-semibold) var(--text-2xl)/var(--leading-tight)   var(--font-display);
+    --type-h3:       var(--weight-semibold) var(--text-xl)/var(--leading-snug)     var(--font-display);
+    --type-h4:       var(--weight-semibold) var(--text-base)/var(--leading-snug)   var(--font-sans);
+    --type-lead:     var(--weight-regular)  var(--text-lg)/var(--leading-normal)   var(--font-sans);
+    --type-body:     var(--weight-regular)  var(--text-base)/var(--leading-normal) var(--font-sans);
+    --type-ui:       var(--weight-medium)   var(--text-sm)/var(--leading-snug)     var(--font-sans);
+    --type-label:    var(--weight-medium)   var(--text-xs)/var(--leading-snug)     var(--font-sans);
+    --type-code:     var(--weight-regular)  var(--text-sm)/var(--leading-normal)   var(--font-mono);
+
+    /* ---- 5. COLOUR, TIER 1 (OKLCH ramps) ------------------------------ */
+    /* Neutral: warm umber. Light end is parchment, dark end is the basement.
+       More chroma than the starter's graphite so text reads as paper, not grey. */
+    --neutral-0:    oklch(100%  0     0);
+    --neutral-50:   oklch(97.5% 0.008 85);
+    --neutral-100:  oklch(94.0% 0.016 85);
+    --neutral-200:  oklch(89.5% 0.020 85);
+    --neutral-300:  oklch(82.5% 0.022 85);
+    --neutral-400:  oklch(70.0% 0.020 82);
+    --neutral-500:  oklch(52.0% 0.016 80);
+    --neutral-600:  oklch(47.0% 0.015 80);
+    --neutral-700:  oklch(37.0% 0.013 78);
+    --neutral-800:  oklch(27.5% 0.012 75);
+    --neutral-900:  oklch(21.0% 0.011 72);
+    --neutral-950:  oklch(16.5% 0.010 70);
+    --neutral-1000: oklch(12.0% 0.009 70);
+
+    /* Accent: brass. generate_color_ramp.py "oklch(78% 0.135 85)" --hue-shift 0 --gamut p3 */
+    --accent-50:  oklch(97% 0.014 85);
+    --accent-100: oklch(93.5% 0.030 85);
+    --accent-200: oklch(88% 0.056 85);
+    --accent-300: oklch(80.5% 0.085 85);
+    --accent-400: oklch(72% 0.113 85);
+    --accent-500: oklch(64.5% 0.135 85);
+    --accent-600: oklch(56.5% 0.126 85);
+    --accent-700: oklch(47% 0.106 85);
+    --accent-800: oklch(38% 0.085 85);
+    --accent-900: oklch(30% 0.065 85);
+    --accent-950: oklch(21% 0.045 85);
+
+    /* Status ramps: the steps the UI uses. 300/900 are the dark theme's
+       text and tint steps for rating badges. */
+    --success-100: oklch(94.0% 0.050 152);
+    --success-300: oklch(80.0% 0.120 152);
+    --success-500: oklch(62.0% 0.150 152);
+    --success-700: oklch(45.0% 0.120 152);
+    --success-900: oklch(27.0% 0.050 152);
+    --warning-100: oklch(95.5% 0.055  85);
+    --warning-500: oklch(75.0% 0.155  85);
+    --warning-700: oklch(52.0% 0.125  85);
+    --danger-100:  oklch(94.5% 0.038  25);
+    --danger-300:  oklch(76.0% 0.130  25);
+    --danger-400:  oklch(64.0% 0.190  25);
+    --danger-500:  oklch(58.0% 0.205  25);
+    --danger-700:  oklch(45.0% 0.170  25);
+    --danger-900:  oklch(27.0% 0.060  25);
+    --info-100:    oklch(94.5% 0.035 250);
+    --info-300:    oklch(79.0% 0.090 250);
+    --info-500:    oklch(58.0% 0.160 250);
+    --info-700:    oklch(45.0% 0.140 250);
+    --info-900:    oklch(27.0% 0.050 250);
+
+    /* ---- 6. COLOUR, TIER 2 (roles): light theme ----------------------- */
+    --bg-canvas:      var(--neutral-50);
+    --bg-surface:     var(--neutral-0);
+    --bg-raised:      var(--neutral-0);
+    --bg-sunken:      var(--neutral-100);
+    --bg-inverse:     var(--neutral-900);
+    --bg-scrim:       oklch(0% 0 0 / 0.5);
+
+    --bg-hover:       oklch(0% 0 0 / 0.04);
+    --bg-active:      oklch(0% 0 0 / 0.08);
+    --bg-selected:    var(--accent-50);
+    --bg-disabled:    var(--neutral-100);
+
+    --fg-default:     var(--neutral-900);
+    --fg-strong:      var(--neutral-950);
+    --fg-muted:       var(--neutral-600);
+    --fg-subtle:      var(--neutral-500);
+    --fg-disabled:    var(--neutral-400);
+    --fg-on-accent:   var(--neutral-0);
+    --fg-on-inverse:  var(--neutral-50);
+    --fg-on-success:  var(--neutral-1000);
+    --fg-on-warning:  var(--neutral-1000);
+    --fg-on-danger:   var(--neutral-0);
+    --fg-accent:      var(--accent-700);
+    --fg-link:        var(--accent-700);
+
+    --border-subtle:  var(--neutral-200);
+    --border-default: var(--neutral-300);
+    --border-strong:  var(--neutral-500);
+    --border-accent:  var(--accent-500);
+    --border-focus:   var(--accent-600);
+    --border-invalid: var(--danger-500);
+
+    --bg-accent:       var(--accent-600);
+    --bg-accent-hover: var(--accent-700);
+    --bg-success:     var(--success-500);
+    --bg-warning:     var(--warning-500);
+    --bg-danger:      var(--danger-500);
+    --fg-success:     var(--success-700);
+    --fg-warning:     var(--warning-700);
+    --fg-danger:      var(--danger-700);
+
+    /* Rating tiers (S best, D worst). Data colours, not accents: each is a
+       text step plus a quiet tint, and the letter always carries the meaning. */
+    --fg-tier-s:      var(--accent-700);
+    --bg-tier-s:      var(--accent-100);
+    --fg-tier-a:      var(--success-700);
+    --bg-tier-a:      var(--success-100);
+    --fg-tier-b:      var(--info-700);
+    --bg-tier-b:      var(--info-100);
+    --fg-tier-c:      var(--neutral-600);
+    --bg-tier-c:      var(--neutral-100);
+    --fg-tier-d:      var(--danger-700);
+    --bg-tier-d:      var(--danger-100);
+
+    /* ---- 7. RADIUS, BORDER, ELEVATION --------------------------------- */
+    --radius-none: 0;
+    --radius-xs:   0.125rem;
+    --radius-sm:   0.25rem;
+    --radius-md:   0.5rem;
+    --radius-lg:   0.75rem;
+    --radius-xl:   1rem;
+    --radius-2xl:  1.5rem;
+    --radius-full: 9999px;
+
+    --stroke-hairline: 1px;
+    --stroke-default:  1px;
+    --stroke-thick:    2px;
+    --stroke-focus:    2px;
+
+    --shadow-none: none;
+    --shadow-xs:  0 1px 2px  oklch(0% 0 0 / 0.05);
+    --shadow-sm:  0 1px 2px  oklch(0% 0 0 / 0.06), 0 2px 4px  oklch(0% 0 0 / 0.04);
+    --shadow-md:  0 2px 4px  oklch(0% 0 0 / 0.06), 0 6px 12px oklch(0% 0 0 / 0.06);
+    --shadow-lg:  0 4px 8px  oklch(0% 0 0 / 0.06), 0 12px 24px oklch(0% 0 0 / 0.08);
+    --shadow-xl:  0 8px 16px oklch(0% 0 0 / 0.07), 0 24px 48px oklch(0% 0 0 / 0.10);
+
+    /* Pixel art is drawn on a 32px grid; sprites scale in whole multiples. */
+    --sprite-cell: 32px;
+  }
+
+  /* Theme-derived tokens: declared on every themed element, not only :root. */
+  :root, [data-theme] {
+    --shadow-focus: 0 0 0 var(--stroke-focus) var(--bg-canvas),
+                    0 0 0 calc(var(--stroke-focus) * 2) var(--border-focus);
+
+    --elevation-flat:    var(--shadow-none);
+    --elevation-card:    var(--shadow-sm);
+    --elevation-raised:  var(--shadow-md);
+    --elevation-overlay: var(--shadow-lg);
+    --elevation-modal:   var(--shadow-xl);
+    --elevation-focus:   var(--shadow-focus);
+  }
+
+  /* stylelint-disable-next-line no-duplicate-selectors -- one :root block per section */
+  :root {
+    /* ---- 8. MOTION ----------------------------------------------------- */
+    --dur-instant: 80ms;
+    --dur-fast:    140ms;
+    --dur-base:    220ms;
+    --dur-slow:    320ms;
+    --dur-slower:  480ms;
+
+    --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in:      cubic-bezier(0.64, 0, 0.78, 0);
+    --ease-in-out:  cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-linear:  linear;
+
+    --motion-hover:    var(--dur-fast)    var(--ease-out);
+    --motion-enter:    var(--dur-base)    var(--ease-out);
+    --motion-exit:     var(--dur-fast)    var(--ease-in);
+    --motion-expand:   var(--dur-slow)    var(--ease-in-out);
+    --motion-emphasis: var(--dur-slow)    var(--ease-spring);
+    --motion-instant:  var(--dur-instant) var(--ease-out);
+    --dur-loop:        900ms;
+    --motion-loop:     var(--dur-loop) var(--ease-linear);
+
+    --motion-travel-xs: var(--space-1);
+    --motion-travel-sm: var(--space-2);
+    --motion-travel-md: var(--space-4);
+
+    /* ---- 9. Z-INDEX ---------------------------------------------------- */
+    --z-base:      0;
+    --z-raised:    10;
+    --z-sticky:    100;
+    --z-dropdown:  200;
+    --z-overlay:   300;
+    --z-modal:     400;
+    --z-toast:     500;
+    --z-tooltip:   600;
+
+    /* ---- 10. LAYOUT & BREAKPOINTS -------------------------------------- */
+    --bp-sm:  30rem;
+    --bp-md:  48rem;
+    --bp-lg:  64rem;
+    --bp-xl:  80rem;
+    --bp-2xl: 96rem;
+
+    --tap-min: 2.75rem;
+    --grid-columns: 12;
+
+    /* ---- 11. SIZES, TIER 2: how big a thing is, not how far apart ------- */
+    --size-icon:         var(--space-4);    /* line icon                      */
+    --size-pip:          var(--space-2);    /* quality pip                    */
+    --size-seal:         var(--space-8);    /* rating seal                    */
+    --size-seal-sm:      var(--space-6);
+    --size-mark:         var(--space-6);    /* wordmark glyph                 */
+    --size-control-sm:   var(--space-8);    /* compact button, icon button    */
+    --size-control-lg:   var(--space-12);   /* the main search box            */
+    --size-textarea:     var(--space-32);
+    --size-menu-max:     calc(var(--space-48) * 2);
+    --size-sprite-2x:    calc(var(--sprite-cell) * 2);
+    --size-tile:         calc(var(--sprite-cell) * 3);    /* pedestal                   */
+    --size-option:       calc(var(--sprite-cell) * 2.5);  /* character option: three across on a phone */
+    --size-tile-wide:    calc(var(--sprite-cell) * 3.5);  /* browse tile                */
+    --size-art:          calc(var(--sprite-cell) * 6);    /* detail-page art frame      */
+    --size-stone:        var(--space-12);   /* pedestal slab: width, thickness, foot */
+    --size-stone-slab:   var(--space-2);
+    --size-stone-foot:   var(--space-1);
+    --gap-hair:          var(--space-0-5);  /* optical gap inside one mark    */
+    --indent-list:       var(--space-5);
+    --offset-underline:  var(--space-1);
+
+    --header-block-size: var(--space-16);
+    --width-page:        calc(var(--width-wide) + var(--gutter-page) * 2);
+    --width-dialog:      min(100% - var(--gutter-page) * 2, calc(var(--width-content) * 0.6));
+    --width-build:       calc(var(--width-content) * 0.36);
+    --width-card-min:    calc(var(--width-content) / 3);
+    --width-chip-min:    calc(var(--width-content) / 4);
+    --block-viewport:    calc(100dvb - var(--header-block-size));
+    --block-dialog-max:  calc(100dvb - var(--gutter-page) * 2);
+    --block-sticky-max:  calc(100dvb - var(--header-block-size) - var(--gap-separate) * 2);
+    --offset-sticky:     calc(var(--header-block-size) + var(--gap-separate));
+
+    /* The rating letter: display face, set solid so it centres in its seal. */
+    --type-seal:    var(--weight-semibold) var(--text-xl)/var(--leading-none)   var(--font-display);
+    --type-seal-sm: var(--weight-semibold) var(--text-base)/var(--leading-none) var(--font-display);
+  }
+
+  /* On a phone the header stacks: wordmark above the nav. */
+  @media (max-width: 47.99rem) {
+    :root { --header-block-size: var(--space-24); }
+  }
+
+  /* =======================================================================
+     DARK THEME: the one the site ships. Re-points Tier 2 and --shadow-*.
+     Surfaces step up in lightness as they come forward: sunken 12%,
+     canvas 16.5%, surface 21%, raised 27.5%.
+     ======================================================================= */
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    --bg-canvas:      var(--neutral-950);
+    --bg-surface:     var(--neutral-900);
+    --bg-raised:      var(--neutral-800);
+    --bg-sunken:      var(--neutral-1000);
+    --bg-inverse:     var(--neutral-100);
+    --bg-scrim:       oklch(0% 0 0 / 0.66);
+
+    --bg-hover:       oklch(100% 0 0 / 0.06);
+    --bg-active:      oklch(100% 0 0 / 0.10);
+    --bg-selected:    var(--accent-950);
+    --bg-disabled:    var(--neutral-900);
+
+    --fg-default:     var(--neutral-200);
+    --fg-strong:      var(--neutral-50);
+    --fg-muted:       var(--neutral-300);
+    --fg-subtle:      var(--neutral-400);
+    --fg-disabled:    var(--neutral-600);
+    --fg-on-accent:   var(--neutral-1000);
+    --fg-on-inverse:  var(--neutral-900);
+    --fg-accent:      var(--accent-300);
+    --fg-link:        var(--accent-300);
+
+    --border-subtle:  var(--neutral-800);
+    --border-default: var(--neutral-700);
+    --border-strong:  var(--neutral-400);
+    --border-accent:  var(--accent-500);
+    --border-focus:   var(--accent-300);
+    --border-invalid: var(--danger-400);
+
+    --bg-accent:       var(--accent-400);
+    --bg-accent-hover: var(--accent-300);
+
+    --fg-success:     var(--success-300);
+    --fg-warning:     var(--warning-500);
+    --fg-danger:      var(--danger-300);
+
+    --fg-tier-s:      var(--accent-300);
+    --bg-tier-s:      var(--accent-950);
+    --fg-tier-a:      var(--success-300);
+    --bg-tier-a:      var(--success-900);
+    --fg-tier-b:      var(--info-300);
+    --bg-tier-b:      var(--info-900);
+    --fg-tier-c:      var(--neutral-300);
+    --bg-tier-c:      var(--neutral-800);
+    --fg-tier-d:      var(--danger-300);
+    --bg-tier-d:      var(--danger-900);
+
+    --shadow-xs:  0 1px 2px  oklch(0% 0 0 / 0.30);
+    --shadow-sm:  0 1px 2px  oklch(0% 0 0 / 0.36), 0 2px 4px  oklch(0% 0 0 / 0.24);
+    --shadow-md:  0 2px 4px  oklch(0% 0 0 / 0.36), 0 6px 12px oklch(0% 0 0 / 0.30);
+    --shadow-lg:  0 4px 8px  oklch(0% 0 0 / 0.40), 0 12px 24px oklch(0% 0 0 / 0.36);
+    --shadow-xl:  0 8px 16px oklch(0% 0 0 / 0.44), 0 24px 48px oklch(0% 0 0 / 0.44);
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+  }
+
+  /* INVERSE: a light band on the dark page (or the reverse). */
+  .inverse {
+    --fg-default:     var(--neutral-100);
+    --fg-strong:      var(--neutral-50);
+    --fg-muted:       var(--neutral-300);
+    --fg-subtle:      var(--neutral-400);
+    --fg-accent:      var(--accent-300);
+    --fg-link:        var(--accent-300);
+    --border-subtle:  var(--neutral-800);
+    --border-default: var(--neutral-700);
+    --border-strong:  var(--neutral-400);
+  }
+
+  [data-theme="dark"] .inverse {
+    --fg-default:     var(--neutral-900);
+    --fg-strong:      var(--neutral-1000);
+    --fg-muted:       var(--neutral-600);
+    --fg-subtle:      var(--neutral-600);
+    --fg-accent:      var(--accent-700);
+    --fg-link:        var(--accent-700);
+    --border-subtle:  var(--neutral-200);
+    --border-default: var(--neutral-300);
+    --border-strong:  var(--neutral-500);
+  }
+
+  [data-density="compact"]     { --density: 0.875; }
+  [data-density="comfortable"] { --density: 1; }
+  [data-density="spacious"]    { --density: 1.125; }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-instant: 1ms;
+      --dur-fast:    1ms;
+      --dur-base:    1ms;
+      --dur-slow:    1ms;
+      --dur-slower:  1ms;
+      --ease-spring: var(--ease-out);
+    }
+  }
+}

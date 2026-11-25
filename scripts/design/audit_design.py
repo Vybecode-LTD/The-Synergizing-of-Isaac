@@ -1,0 +1,3031 @@
+#!/usr/bin/env python3
+"""
+audit_design.py — the enforcement gate for the web-design-studio skill.
+
+This script is Law 9. Nothing ships until it is clean.
+
+It exists because every rule in this skill is the kind of rule that people
+agree with and then violate at 6pm on a Thursday. Code review catches maybe
+half; a script catches all of it, in a second, for free, forever.
+
+What it checks
+--------------
+  L1  Tokens or nothing        raw lengths, colors, durations, z-indexes,
+                               shadows, font sizes and weights outside the
+                               token file
+  L2  Parents own the gaps     outer margins on children in component files
+  L3  The scale is closed      values that are not on the spacing/type scale
+  L4  One home per component   inline styles that set visual properties (JSX,
+                               style="", and a framework's bound style),
+                               plus a CROSS-FILE pass: a class styled from
+                               two files, or the same property owned twice
+  L5  Layers, not specificity  !important, IDs, nesting depth, unlayered CSS,
+                               layer-statement order
+  L6  Semantic before primitive  Tier-1 tokens read from component code
+
+Usage
+-----
+    python -m scripts.audit_design src/
+    python -m scripts.audit_design src/ --json
+    python -m scripts.audit_design src/ --strict          # warnings fail too
+    python -m scripts.audit_design $(git diff --cached --name-only)
+    git diff --name-only -z origin/main... | python -m scripts.audit_design --files-from -
+    python -m scripts.audit_design src/ --sarif > design.sarif   # for a code-scanning upload
+
+What it reads
+-------------
+    .css .scss .less .pcss              every declaration
+    .js .jsx .ts .tsx .mjs .cjs         inline styles, class strings, colours
+    .html .htm .vue .svelte .astro      <style> blocks, style="" attributes, bound
+                                        styles (:style, style:x, [style.x], [ngStyle]),
+                                        class attributes (HTML email is left
+                                        to email-template-system's lint_email)
+
+A file named explicitly with any other extension is skipped and listed, never
+guessed at. So is indented Sass (.sass): it has no braces for the scanner to
+follow, and reading it would pass it as clean. A folder with nothing auditable
+in it is an error, not "clean".
+
+Adopting it on a legacy codebase
+--------------------------------
+    python -m scripts.audit_design src/ --write-baseline .design-baseline.json
+    python -m scripts.audit_design src/                   # only NEW findings fail
+
+The baseline records existing violations so the gate can be turned on today
+and the debt paid down deliberately, instead of the gate being turned off.
+Its keys are paths relative to the baseline file, so `src/`, `./src` and the
+absolute path all match, from any working directory.
+
+The project's own tokens (P24)
+------------------------------
+    python -m scripts.audit_design src/ --tokens src/design/system.css
+
+A project's `.design-suite.json` (found by walking up from the working
+directory to the repository root) names its token files, component globs and
+baseline once; `--tokens` and `--baseline` beat it. A token file it names is a
+token file wherever it sits, its `components` globs add to the component
+files, and the colour ramps its token files declare (`--brand-500`, from a
+tokens.css or a contract.json) are Tier-1 colours with a role, like the
+starter's (Law 6).
+
+Escape hatches (use sparingly, they are visible in review)
+---------------------------------------------------------
+    /* design-audit-ignore-next-line: L2 -- CMS flow container, see ADR-014 */
+    /* design-audit-ignore-file: L1 -- generated, do not hand-edit */
+
+Exit codes: 0 clean · 1 violations found · 2 bad invocation.
+"""
+
+from __future__ import annotations
+
+import argparse
+import bisect
+import json
+import os
+import re
+import sys
+from dataclasses import dataclass, field, asdict
+from pathlib import Path
+from typing import Iterable, Iterator
+
+# A sibling import would otherwise leave __pycache__ inside the installed
+# plugin. project_config.py is a copy of the plugin's shared/ master (P24). A
+# project that vendored audit_design.py alone, before 3.5.0, has no copy: the
+# audit then runs as it did, and only --tokens needs one.
+sys.dont_write_bytecode = True
+try:                                              # python -m scripts.audit_design
+    from .project_config import ConfigError, ProjectConfig, project_config, read_tokens
+except ImportError:                               # python scripts/audit_design.py, or loaded by path
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    try:
+        from project_config import ConfigError, ProjectConfig, project_config, read_tokens  # type: ignore[no-redef]
+    except ImportError:
+        project_config = None                     # type: ignore[assignment]
+
+# ---------------------------------------------------------------------------
+# Configuration — the vocabulary this skill enforces.
+# ---------------------------------------------------------------------------
+
+CSS_EXT = {".css", ".scss", ".sass", ".less", ".pcss"}
+JS_EXT = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"}
+# Markup that carries CSS: <style> blocks, style="" attributes, class lists.
+TEMPLATE_EXT = {".html", ".htm", ".vue", ".svelte", ".astro"}
+# Files whose CSS is plain CSS, where `//` is not a comment (line_comments).
+PLAIN_CSS_EXT = {".css", ".pcss", ".html", ".htm"}
+KEYFRAMES_AT = re.compile(r"@(-[a-z]+-)?keyframes\b", re.I)
+# Law 5's order (design-rules.json: layers; `theme` is Tailwind v4's), the
+# nesting allowed below the top-level rule (nesting), and the colour functions
+# that write a colour by hand (values.colour_functions).
+# BEGIN design-rules: written by tools/sync_rules.py from assets/rules/design-rules.json; edit the spec, then rerun it
+LAYER_ORDER = [
+    "reset", "vendor", "tokens", "theme", "base", "layout", "components", "utilities", "overrides",
+]
+LAYER_STATEMENT = "@layer reset, vendor, tokens, base, layout, components, utilities, overrides;"
+MAX_NESTING = 2
+MAX_SPECIFICITY = "0,3,1"
+MAX_COMPOUNDS = 3
+SYSTEM_COLOR_NAMES = [
+    "accentcolor", "accentcolortext", "activetext", "buttonborder", "buttonface", "buttontext",
+    "canvas", "canvastext", "field", "fieldtext", "graytext", "highlight", "highlighttext",
+    "linktext", "mark", "marktext", "selecteditem", "selecteditemtext", "visitedtext",
+]
+SYSTEM_COLOR_PROPERTY = re.compile(r"^(?:color|fill|stroke|stop-color|flood-color|lighting-color|accent-color|caret-color|background(?:-color)?|border(?:-[a-z]+)*|outline(?:-color)?|text-decoration(?:-color)?|text-emphasis(?:-color)?|column-rule(?:-color)?|box-shadow|text-shadow)$", re.I)
+KEYWORDS = ["inherit", "initial", "unset", "revert", "revert-layer"]
+COLOUR_FUNCTIONS = [
+    "rgb", "rgba", "hsl", "hsla", "hwb", "lab", "lch", "oklab", "oklch", "color", "color-mix",
+    "light-dark",
+]
+LITERAL_UNITS = [
+    "px", "rem", "em", "ch", "ex", "vw", "vh", "vmin", "vmax", "cqi", "cqb", "cqw", "cqh", "cqmin",
+    "cqmax", "%", "deg", "s", "ms",
+]
+GEOMETRY_PROPERTIES = [
+    "top", "right", "bottom", "left", "inset", "inset-block", "inset-block-start",
+    "inset-block-end", "inset-inline", "inset-inline-start", "inset-inline-end",
+]
+COLOUR_WORDS = re.compile("^(?:" + "|".join(["currentcolor", "transparent", *SYSTEM_COLOR_NAMES]) + ")$", re.I)
+VAR_SEQ = re.compile(r"^(?:var\(--[a-z0-9-]+\)|0)(?:\s+(?:var\(--[a-z0-9-]+\)|0))*$")
+VAR_ONE = re.compile(r"^var\(--[a-z0-9-]+(\s*,\s*.+)?\)$")
+VAR_CALC = re.compile(r"^calc\(\s*var\(--[a-z0-9-]+\)\s*[-+]\s*var\(--[a-z0-9-]+\)\s*\)$")
+CANCEL = re.compile(r"^calc\(\s*(?:var\(--[a-z0-9-]+\)\s*\*\s*-1|-1\s*\*\s*var\(--[a-z0-9-]+\))\s*\)$")
+ALIGN = re.compile(r"^(?:0|auto)(?:\s+(?:0|auto)){0,3}$")
+STROKE = re.compile(r"^(?:var\(--[a-z0-9-]+\)|0|none|solid|dashed|dotted|double|currentColor|currentcolor|transparent)(?:\s+(?:var\(--[a-z0-9-]+\)|0|none|solid|dashed|dotted|double|currentColor|currentcolor|transparent))*$")
+MOTION_LIST = re.compile(r"^(?:(?:var\(--[a-z0-9-]+\)|0s|\d+|(?!(?:ease(?:-in|-out|-in-out)?|linear|step-start|step-end)(?![\w-]))[a-z_-][a-z0-9_-]*)(?:\s*,\s*|\s+))*(?:var\(--[a-z0-9-]+\)|0s|\d+|(?!(?:ease(?:-in|-out|-in-out)?|linear|step-start|step-end)(?![\w-]))[a-z_-][a-z0-9_-]*)$")
+BREAKPOINT = re.compile(r"^\d+(?:\.\d+)?rem$")
+RATIO = re.compile(r"^\d+(?:\.\d+)?\s*/\s*\d+(?:\.\d+)?$")
+SPACING_VALUES = {
+    "padding": (VAR_SEQ, VAR_CALC, "0", *KEYWORDS),
+    "padding-inline": (VAR_SEQ, VAR_CALC, "0", *KEYWORDS),
+    "padding-block": (VAR_SEQ, VAR_CALC, "0", *KEYWORDS),
+    "padding-top": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "padding-right": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "padding-bottom": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "padding-left": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "padding-inline-start": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "padding-inline-end": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "padding-block-start": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "padding-block-end": (VAR_ONE, VAR_CALC, "0", *KEYWORDS),
+    "gap": (VAR_SEQ, "0", *KEYWORDS),
+    "grid-gap": (VAR_SEQ, "0", *KEYWORDS),
+    "row-gap": (VAR_ONE, "0", *KEYWORDS),
+    "column-gap": (VAR_ONE, "0", *KEYWORDS),
+    "margin": (VAR_SEQ, VAR_CALC, CANCEL, ALIGN, *KEYWORDS),
+    "margin-inline": (VAR_SEQ, VAR_CALC, CANCEL, ALIGN, *KEYWORDS),
+    "margin-block": (VAR_SEQ, VAR_CALC, CANCEL, ALIGN, *KEYWORDS),
+    "margin-top": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+    "margin-right": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+    "margin-bottom": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+    "margin-left": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+    "margin-inline-start": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+    "margin-inline-end": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+    "margin-block-start": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+    "margin-block-end": (VAR_ONE, VAR_CALC, CANCEL, "0", "auto", *KEYWORDS),
+}
+STROKE_VALUES = {
+    "border-width": (VAR_SEQ, "0", *KEYWORDS),
+    "border-block-width": (VAR_SEQ, "0", *KEYWORDS),
+    "border-inline-width": (VAR_SEQ, "0", *KEYWORDS),
+    "border-top-width": (VAR_ONE, "0", *KEYWORDS),
+    "border-right-width": (VAR_ONE, "0", *KEYWORDS),
+    "border-bottom-width": (VAR_ONE, "0", *KEYWORDS),
+    "border-left-width": (VAR_ONE, "0", *KEYWORDS),
+    "border-block-start-width": (VAR_ONE, "0", *KEYWORDS),
+    "border-block-end-width": (VAR_ONE, "0", *KEYWORDS),
+    "border-inline-start-width": (VAR_ONE, "0", *KEYWORDS),
+    "border-inline-end-width": (VAR_ONE, "0", *KEYWORDS),
+    "outline-width": (VAR_ONE, "0", *KEYWORDS),
+    "outline-offset": (VAR_ONE, CANCEL, "0", *KEYWORDS),
+    "border": (STROKE, *KEYWORDS),
+    "border-top": (STROKE, *KEYWORDS),
+    "border-right": (STROKE, *KEYWORDS),
+    "border-bottom": (STROKE, *KEYWORDS),
+    "border-left": (STROKE, *KEYWORDS),
+    "border-block": (STROKE, *KEYWORDS),
+    "border-block-start": (STROKE, *KEYWORDS),
+    "border-block-end": (STROKE, *KEYWORDS),
+    "border-inline": (STROKE, *KEYWORDS),
+    "border-inline-start": (STROKE, *KEYWORDS),
+    "border-inline-end": (STROKE, *KEYWORDS),
+    "outline": (STROKE, *KEYWORDS),
+}
+MOTION_VALUES = {
+    "transition-duration": (VAR_SEQ, "0s", *KEYWORDS),
+    "animation-duration": (VAR_SEQ, "0s", "auto", *KEYWORDS),
+    "transition-timing-function": (VAR_SEQ, *KEYWORDS),
+    "animation-timing-function": (VAR_SEQ, *KEYWORDS),
+    "transition": (MOTION_LIST, *KEYWORDS),
+    "animation": (MOTION_LIST, *KEYWORDS),
+}
+SIZING_VALUES = {
+    "max-inline-size": (VAR_ONE, "none", "100%", "max-content", "min-content", "fit-content", *KEYWORDS),
+    "max-width": (VAR_ONE, "none", "100%", "max-content", "min-content", "fit-content", *KEYWORDS),
+    "max-block-size": (VAR_ONE, "none", "100%", "100dvh", "100dvb", "100svh", "100svb", "max-content", "min-content", "fit-content", *KEYWORDS),
+    "max-height": (VAR_ONE, "none", "100%", "100dvh", "100dvb", "100svh", "100svb", "max-content", "min-content", "fit-content", *KEYWORDS),
+    "min-block-size": (VAR_ONE, "0", "100%", "100dvh", "100dvb", "100svh", "100svb", "auto", *KEYWORDS),
+    "min-height": (VAR_ONE, "0", "100%", "100dvh", "100dvb", "100svh", "100svb", "auto", *KEYWORDS),
+    "min-inline-size": (VAR_ONE, "0", "100%", "auto", "max-content", "min-content", "fit-content", *KEYWORDS),
+    "min-width": (VAR_ONE, "0", "100%", "auto", "max-content", "min-content", "fit-content", *KEYWORDS),
+    "inline-size": (VAR_ONE, "0", "100%", "auto", "max-content", "min-content", "fit-content", "1em", *KEYWORDS),
+    "width": (VAR_ONE, "0", "100%", "auto", "max-content", "min-content", "fit-content", "1em", *KEYWORDS),
+    "block-size": (VAR_ONE, "0", "100%", "100dvh", "100dvb", "100svh", "100svb", "auto", "max-content", "min-content", "fit-content", "1em", *KEYWORDS),
+    "height": (VAR_ONE, "0", "100%", "100dvh", "100dvb", "100svh", "100svb", "auto", "max-content", "min-content", "fit-content", "1em", *KEYWORDS),
+}
+MARGIN_VALUES = (ALIGN, CANCEL, *KEYWORDS)
+BINDING_VALUES = (
+    (re.compile(r"^--breakpoint-"), (BREAKPOINT, *KEYWORDS)),
+    (re.compile(r"^--aspect-"), (RATIO, VAR_ONE, *KEYWORDS)),
+    (re.compile(r"^--animate-"), (MOTION_LIST,)),
+    (re.compile(r"^--(?!breakpoint-|aspect-|animate-)"), (VAR_ONE, COLOUR_WORDS, *KEYWORDS)),
+)
+TIER1_WITH_ROLE = {
+    "space-": "a proximity/inset role (--gap-related, --pad-card, --space-section)",
+    "neutral-": "a color role (--bg-surface, --fg-muted, --border-default)",
+    "accent-": "a color role (--bg-accent, --fg-accent, --border-accent)",
+    "success-": "a color role (--bg-success, --fg-success)",
+    "warning-": "a color role (--bg-warning, --fg-warning)",
+    "danger-": "a color role (--bg-danger, --fg-danger)",
+    "info-": "a color role",
+    "text-": "a type role (--type-body, --type-h2, --type-ui)",
+    "leading-": "a type role (--type-*), which carries leading in its shorthand",
+    "shadow-": "an elevation role (--elevation-card, --elevation-modal)",
+}
+TIER2_EXCEPTIONS = [
+    "--space-section", "--space-subsection", "--space-block", "--space-fluid-sm",
+    "--space-fluid-md", "--space-fluid-lg", "--space-fluid-xl",
+]
+TIER1_NULLS = ["--space-0", "--radius-none", "--shadow-none"]
+PROJECT_RAMP_ADVICE = "a color role (--bg-*, --fg-*, --border-*)"
+# END design-rules
+IMPORT_LAYER = re.compile(r"@import\b.*?\blayer\(\s*([\w.-]+)\s*\)", re.I | re.S)
+# Sass (design-rules.json: sass). A @mixin or @function body emits nothing
+# where it is written. A variable holding a literal is a literal; a breakpoint
+# has to be one, because a media query condition cannot read a custom property.
+SASS_DEFINITION_AT = re.compile(r"@(mixin|function)\b", re.I)
+SASS_FUNCTION_AT = re.compile(r"@function\b", re.I)
+SASS_VARIABLE = re.compile(r"^([\w-]+\.)?\$[\w-]+$")
+SASS_BREAKPOINT = re.compile(r"\$(?:bp(?:[-_][\w-]*)?|breakpoint[\w-]*)$", re.I)
+SASS_MIXIN_NAME = re.compile(r"@mixin\s+([\w-]+)", re.I)
+SASS_INCLUDE_NAME = re.compile(r"@include\s+([\w-]+)(?![\w.-])", re.I)
+SASS_STRING = re.compile(r"""(['"])(?:\\.|(?!\1).)*\1""", re.S)
+# A Sass variable or interpolation in a value: the audit cannot resolve it, so
+# the value allowlists read it as the CSS it stands for (sass_as_css).
+SASS_VARIABLE_REF = re.compile(r"(?<![\w-])(?:[\w-]+\.)?\$[\w-]+")      # $space, tokens.$space
+SASS_INTERPOLATION = re.compile(r"#\{([^{}]*)\}")
+
+
+def _read_text(path: Path) -> str:
+    """A project's text file in the encoding json.detect_encoding() finds: a
+    UTF-16 file (PowerShell 5.1's `>`) read as UTF-8 was garbage (class 4).
+    project_config.read_text(), kept here so this script runs on its own."""
+    raw = Path(path).read_bytes()
+    return raw.decode(json.detect_encoding(raw), errors="replace")
+
+
+def sass_as_css(value: str) -> str:
+    """`value` as the CSS it stands for, as far as the audit can tell: each
+    Sass variable read as a token, and each interpolation as the expression
+    it emits, so `#{$gutter}` is a token and `#{5%}` a literal."""
+    return SASS_INTERPOLATION.sub(lambda m: m.group(1).strip(), SASS_VARIABLE_REF.sub("var(--sass)", value))
+
+SKIP_DIRS = {
+    "node_modules", ".git", "dist", "build", ".next", ".nuxt", ".svelte-kit",
+    "coverage", "__pycache__", ".venv", "venv", "vendor", ".turbo", "out",
+    # Generated HTML reports and static exports, now that HTML is read.
+    "storybook-static", "playwright-report", "test-results", "htmlcov", "_site",
+}
+
+# Files where literal values are not merely allowed but required: this is the
+# one place a raw value is a design decision rather than a leak.
+TOKEN_FILE_PAT = re.compile(
+    # tokens.css, brand-tokens.css, deck-tokens.css, design.tokens.css, any
+    # file in a tokens/ folder, theme.css, dark-theme.css — the file classes
+    # in assets/rules/design-rules.json. A separator before "tokens" and
+    # "theme" is required, so "mytokens.css" and "theming.css" are not waved
+    # through, and the spec's globs are plural: "brand-token.css" is not.
+    r"(^|[/\\])([\w.-]*[-.])?tokens\.(css|scss)$"
+    r"|(^|[/\\])tokens[/\\][\w.-]+\.(css|scss)$"
+    r"|(^|[/\\])([\w.-]*[-.])?theme\.(css|scss)$"
+)
+COMPONENT_FILE_PAT = re.compile(
+    # A components/ or ui/ folder at any depth, the project root included (the
+    # common Next.js layout, SB-A9), a CSS module, and components.css itself,
+    # not mycomponents.css: the component file class in design-rules.json.
+    # Matched against a lower-case path with forward slashes.
+    r"\.module\.|(^|/)(components|ui)/|(^|/)components\.s?css$"
+)
+
+
+def pseudo_classes_only(selector: str) -> bool:
+    """`:hover`, `:is(a, b):focus` — every list item starts with a
+    pseudo-class (not `&`, and not a `::pseudo-element`)."""
+    parts = [p.strip() for p in selector.split(",")]
+    return all(p.startswith(":") and not p.startswith("::") for p in parts if p)
+
+# Generated files are audited against their source, not by hand.
+CONFIG_FILE_PAT = re.compile(
+    r"(^|[/\\])[\w.-]*\.(config|conf|rc)\.(m|c)?[jt]s$"
+    r"|(^|[/\\])(eslint|stylelint|prettier|vite|rollup|webpack|next|tailwind)[\w.-]*\.(m|c)?[jt]s$"
+)
+
+GENERATED_MARKERS = ("@generated", "DO NOT EDIT", "AUTO-GENERATED", "Auto-generated")
+
+# The spacing properties take the spacing family's values (SPACING_VALUES);
+# positions are geometry (GEOMETRY_PROPERTIES). Both come from the spec.
+GEOMETRY_PROPS = set(GEOMETRY_PROPERTIES)
+
+# Outer margins — the Law 2 set. Padding is inset and is fine.
+OUTER_MARGIN_PROPS = {p for p in SPACING_VALUES if p.startswith("margin")}
+
+COLOR_PROPS = {
+    "color", "background", "background-color", "border-color", "outline-color",
+    "border-top-color", "border-right-color", "border-bottom-color",
+    "border-left-color", "border-block-color", "border-inline-color",
+    "fill", "stroke", "caret-color", "text-decoration-color", "accent-color",
+    "column-rule-color", "text-emphasis-color",
+}
+# Shorthands whose value can carry a colour among widths and styles.
+COLOR_SHORTHANDS = {
+    "border", "border-top", "border-right", "border-bottom", "border-left",
+    "border-block", "border-block-start", "border-block-end",
+    "border-inline", "border-inline-start", "border-inline-end",
+    "outline", "column-rule", "text-decoration",
+}
+
+TYPE_PROPS = {"font-size", "line-height", "letter-spacing", "font-weight", "font"}
+MOTION_SHORTHANDS = {"transition", "animation"}
+RADIUS_PROPS = {"border-radius", "border-start-start-radius",
+                "border-start-end-radius", "border-end-start-radius",
+                "border-end-end-radius", "border-top-left-radius",
+                "border-top-right-radius", "border-bottom-left-radius",
+                "border-bottom-right-radius"}
+SHADOW_PROPS = {"box-shadow", "text-shadow"}
+
+# Tier-1 primitives that HAVE a Tier-2 role (TIER1_WITH_ROLE), the roles that
+# start with a Tier-1 prefix (TIER2_EXCEPTIONS: page rhythm lives under
+# --space-* because it reads better there) and the null-outs (TIER1_NULLS) are
+# the spec's `tiers`, in the design-rules block above. design-system-docs'
+# extract_system.py reads the same three, so its tier1-leak gap and L6 agree.
+# Prefixes without a semantic equivalent (--radius-*, --stroke-*, --weight-*,
+# --z-*, --bp-*, --font-*, --measure-*, --width-*, --tap-min) are absent: they
+# are primitives with no role layer, and using them directly is correct.
+# Softer: sometimes you genuinely need one half of a motion pair.
+TIER1_MOTION = {"dur-", "ease-"}
+
+
+@dataclass
+class Project:
+    """What a project's `.design-suite.json` and token files add (P24): its
+    token files, wherever they sit, its component globs, and the ramp steps
+    its tokens declare, which are Tier-1 colours with a role."""
+    config: ProjectConfig | None = None
+    token_files: set[Path] = field(default_factory=set)
+    ramp_steps: set[str] = field(default_factory=set)
+
+
+PROJECT = Project()      # its ramp steps draw PROJECT_RAMP_ADVICE (design-rules.json: tiers)
+
+
+def use_project(config: ProjectConfig | None, sources: list[Path]) -> None:
+    """Audit against a project: `config` (or None) and its token files."""
+    tokens = read_tokens(sources)
+    for problem in getattr(tokens, "problems", []):     # what a DTCG file could not give (S2)
+        print(f"audit_design: warning: {problem}", file=sys.stderr)
+    PROJECT.config = config
+    PROJECT.token_files = {Path(p).resolve() for p in sources}
+    raw = {f"--{ramp}-{step}" for ramp, steps in tokens.ramps.items() for step in steps}
+    # The steps as the grammar reads them, through the project's `names`: a
+    # prefix comes off, and a renamed step is what it is renamed to, so no
+    # longer a step (CodeRabbit on #107).
+    rename = config.rename if config else {}
+    PROJECT.ramp_steps = {config.grammar_name(s) if config else s for s in raw if s not in rename}
+
+
+def tier1_advice(ref: str) -> str | None:
+    """The role to use instead of `ref` when it is a Tier-1 primitive that has
+    one (Law 6), else None. stylelint's design/tier1-primitive and the ESLint
+    config's TIER1_SHORTHAND and inline-style check read the same lists."""
+    name = PROJECT.config.grammar_name(ref) if PROJECT.config else ref    # its `names` (P31 part 5)
+    if name in TIER2_EXCEPTIONS or name in TIER1_NULLS:
+        return None         # a role, or zero, which is zero
+    if name in PROJECT.ramp_steps:
+        return PROJECT_RAMP_ADVICE
+    bare = name[2:]
+    return next((advice for pfx, advice in TIER1_WITH_ROLE.items() if bare.startswith(pfx)), None)
+
+
+# Specificity over the spec's cap is built to win a fight that layers already
+# settled; stylelint's selector-max-specificity reads the same cap (N32).
+SPECIFICITY_CAP = tuple(int(n) for n in MAX_SPECIFICITY.split(","))
+
+# Non-tokenizable units. Viewport and container units express a relationship to
+# the viewport, not a spacing decision; % is relational; ch/ex are typographic.
+RELATIONAL_UNIT = re.compile(
+    r"^-?\d*\.?\d+(%|ch|ex|fr|dvh|svh|lvh|dvw|svw|lvw|vh|vw|vmin|vmax|cqw|cqh|cqi|cqb|cqmin|cqmax)$"
+)
+LENGTH_LITERAL = re.compile(r"(?<![\w.#-])-?\d*\.?\d+(px|rem|em|pt|pc|in|cm|mm|q)\b", re.I)
+HEX_COLOR = re.compile(r"#[0-9a-fA-F]{3,8}\b")
+FUNC_COLOR = re.compile(r"\b(" + "|".join(COLOUR_FUNCTIONS) + r")\s*\(", re.I)
+SYSTEM_COLOR_SET = set(SYSTEM_COLOR_NAMES)
+# A design literal in an inline custom property, as ESLint's
+# style-prop-custom-properties-only reads one (design-rules.json: inline_styles).
+DESIGN_LITERAL = re.compile(r"^-?\d*\.?\d+(?:" + "|".join(map(re.escape, LITERAL_UNITS)) + r")$"
+                            r"|^#[0-9a-fA-F]{3,8}$|^(?:" + "|".join(COLOUR_FUNCTIONS) + r")\(")
+CUSTOM_PROPERTY_STRING = re.compile(r"""(['"])(--[\w-]+)\1\s*:\s*(['"`])((?:(?!\3).)*)\3""")
+NAMED_COLOR = re.compile(
+    r"\b(red|blue|green|black|white|gray|grey|yellow|orange|purple|pink|brown|"
+    r"cyan|magenta|silver|gold|navy|teal|olive|maroon|lime|aqua|fuchsia)\b", re.I
+)
+TIME_LITERAL = re.compile(r"(?<![\w.-])\d*\.?\d+m?s\b", re.I)
+BEZIER_LITERAL = re.compile(r"\bcubic-bezier\s*\(|\bsteps\s*\(", re.I)
+EASING_WORD = re.compile(r"(?<![\w-])(?:ease(?:-in|-out|-in-out)?|linear|step-start|step-end)(?![\w-])", re.I)
+VAR_REF = re.compile(r"var\(\s*(--[\w-]+)")
+ID_SELECTOR = re.compile(r"(?<![\w\\\[\"'=])#[a-zA-Z_][\w-]*")
+
+# JSX / Tailwind
+TW_ARBITRARY = re.compile(r"(?<![\w])(?:[a-z][\w-]*?)-\[[^\]\s]+\]")
+TW_IMPORTANT = re.compile(r"(?<![\w-])!(?:[a-z][\w-]*-)+[\w./\[\]-]+")
+TW_SPACE_XY = re.compile(r"(?<![\w-])(?:[a-z]{2}:)*space-[xy]-[\w(][\w().-]*")
+# Literal values Tailwind generates whatever the theme says (`--*: initial`
+# does not remove them): durations, delays, z-indexes, stroke widths, offsets.
+TW_LITERAL = re.compile(
+    r"(?<![-\w])(?:duration|delay|-?z|border(?:-[xytrblse])?|ring|ring-offset|outline"
+    r"|outline-offset|underline-offset)-\d+(?:\.\d+)?(?![\w./-])")
+TW_OPACITY = re.compile(
+    r"(?<![-\w])(?:bg|text|border|ring|fill|stroke|outline|shadow|decoration|from|via|to"
+    r"|placeholder|accent|caret|divide)-[a-z][\w-]*/\d+(?!\w)")
+# v4's `(--name)` shorthand, with or without a type hint (`text-(length:--x)`);
+# tier1_advice decides whether the name is a primitive that has a role.
+TW_VAR_SHORTHAND = re.compile(r"\((?:[a-z-]+:)?(--[\w-]+)\)")
+JSX_STYLE = re.compile(r"\bstyle\s*=\s*\{\{")
+CLASS_ATTR = re.compile(r"""(?:className|class)\s*=\s*(?:\{?\s*)?["'`]([^"'`]*)["'`]""")
+# Arbitrary VARIANTS select a state and carry no value; an image URL and a
+# pseudo-element's content string cannot be tokens. Every other arbitrary
+# value is off the scale, as the ESLint config also rules.
+TW_ARBITRARY_OK = re.compile(
+    r"^(?:data|aria|group|peer|has|not|in|supports|nth|nth-last)-\["
+    r"|^(?:bg|mask)-\[url\([^()\]]*\)\]$|^content-\[['\"]")     # the url alone (Codex on #145)
+TW_ARBITRARY_PROPERTY = re.compile(r"(?<![-\w])\[-{0,2}[a-zA-Z][\w-]*:[^\]\s]+\]")
+TW_IMPORTANT_SUFFIX = re.compile(r"(?<![\w!\[:-])[a-z][\w:./\[\]()-]*[\w\])]!(?=\s|$)")
+# Class strings also arrive as arguments of the class helpers (the ESLint
+# config reads the same list), including cva/tv variant maps.
+CLASS_HELPER = re.compile(r"\b(?:cn|clsx|classNames|classnames|cva|tv|twMerge|twJoin|cx)\s*\(")
+JS_STRING = re.compile(r"""(['"`])((?:\\.|(?!\1)[^\\])*?)\1""", re.S)
+# styled-components / emotion templates: their bodies are CSS. A tag is a name
+# of its own, or a member of one (`emotion.css`), never the end of a file name:
+# `${file}.css`, `./theme.css` and `my-theme.css` are extensions (P36, #126).
+CSS_IN_JS = re.compile(
+    r"(?<![\w$./`'\"-])(?:styled(?:\.[A-Za-z]\w*|\s*\([^()]*\))(?:\s*\.attrs\s*\([^()]*\))?"
+    r"|(?:[A-Za-z_$][\w$]*\.)?css)\s*`")
+
+# Templates
+STYLE_BLOCK = re.compile(r"<style\b[^>]*>(.*?)</style\s*>", re.I | re.S)
+SCRIPT_BLOCK = re.compile(r"<script\b[^>]*>(.*?)</script\s*>", re.I | re.S)
+TAG_STYLE_ATTR = re.compile(r"""<[a-zA-Z][\w:-]*\b[^>]*?\sstyle\s*=\s*(["'])(.*?)\1""", re.S)
+# HTML email cannot use custom properties or layers, so this script's laws do
+# not fit it; email-template-system's lint_email is its gate.
+EMAIL_MARKERS = ("<!--[if mso", "<!--[if gte mso", "urn:schemas-microsoft-com")
+# A React Email template is email too: its inline styles are the medium's,
+# and lint_email reads the HTML it renders (DL-B4). Only a declaration counts,
+# read with the comments blanked: a commented-out import, or one quoted in a
+# string, leaves a component audited (Codex on #198).
+REACT_EMAIL_IMPORT = re.compile(
+    r"""^[ \t]*(?:(?:import|export)\b[^;'"`]*?\bfrom\s*|import\s*|(?:const|let|var)\b[^;=]*=\s*require\s*\(\s*)"""
+    r"""["'](?:react-email|@react-email/[\w.-]+)["']""", re.M)
+# Commented-out markup never renders: the census blanks it too (template_of).
+HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
+
+IGNORE_LINE = re.compile(r"design-audit-ignore-next-line\s*:?\s*([\w,\s]*)")
+IGNORE_FILE = re.compile(r"design-audit-ignore-file\s*:?\s*([\w,\s]*)")
+
+# Escape hatches with a named reason, for the genuinely-legitimate exceptions.
+OPTICAL_PROP = re.compile(r"--[\w-]*(nudge|optical)[\w-]*")
+
+SEVERITY_ORDER = {"error": 0, "warning": 1}
+
+
+# ---------------------------------------------------------------------------
+# Findings
+# ---------------------------------------------------------------------------
+
+@dataclass
+class Finding:
+    file: str
+    line: int
+    law: str
+    rule: str
+    severity: str
+    message: str
+    fix: str
+    snippet: str = ""
+
+    def key(self, root: Path | None = None) -> str:
+        """Stable identity for baselining. Deliberately excludes the line
+        number so that unrelated edits above a violation do not resurrect it.
+
+        With `root` (the baseline file's folder) the path is made relative to
+        it, so `src/`, `./src`, `/abs/path/src` and `../src` from a subfolder
+        all produce the same key. Keys written before 3.1.0 were relative to
+        the working directory, which is where the default baseline lives, so
+        they keep matching."""
+        path = self.file
+        if root is not None and not path.startswith("<"):
+            try:
+                path = os.path.relpath(Path(path).resolve(), root)
+            except ValueError:                    # another drive on Windows
+                path = str(Path(path).resolve())
+        return portable_key(f"{path}|{self.rule}|{self.snippet.strip()[:120]}")
+
+
+def portable_key(key: str) -> str:
+    """Baseline keys use `/` in the path, so a baseline written on Windows still
+    matches on Linux CI and the reverse — including baselines written before
+    keys were normalised."""
+    path, sep, rest = key.partition("|")
+    return path.replace("\\", "/") + sep + rest
+
+
+# ---------------------------------------------------------------------------
+# CSS scanning
+# ---------------------------------------------------------------------------
+
+def line_comments(path: Path) -> bool:
+    """`//` starts a comment in Sass, Less, a styled template and a single-file
+    component's style block, which may be Sass; never in CSS itself, where it
+    is part of a value (`--terms: https://…`)."""
+    return path.suffix.lower() not in PLAIN_CSS_EXT
+
+
+def unquoted_url_end(text: str, j: int) -> int | None:
+    """The index of the `)` that closes an unquoted address starting at `j`,
+    just after `url(`; None when the argument is not one. An unquoted address
+    is a single token: no quote, no `(` and no inner whitespace, and an
+    escaped character (`\\)`) is part of it."""
+    n = len(text)
+    while j < n and text[j] in " \t\r\n":
+        j += 1
+    while j < n:
+        c = text[j]
+        if c == "\\":
+            j += 2
+        elif c == ")":
+            return j
+        elif c in "\"'(":
+            return None
+        elif c in " \t\r\n":
+            while j < n and text[j] in " \t\r\n":
+                j += 1
+            return j if j < n and text[j] == ")" else None
+        else:
+            j += 1
+    return None
+
+
+def strip_css_comments(text: str, slash_comments: bool = True) -> tuple[str, dict[int, str]]:
+    """Blank out comments while preserving line numbers and offsets.
+
+    Returns the blanked text plus a map of line number -> original comment
+    text, so ignore-pragmas remain readable. `//` comments count only with
+    `slash_comments`, and an unquoted `url(…)` is one token either way: the
+    `//` in `url(https://cdn…)` is the address, not a comment.
+    """
+    out = list(text)
+    comments: dict[int, str] = {}
+    i, n, line = 0, len(text), 1
+    while i < n:
+        ch = text[i]
+        if ch == "\n":
+            line += 1
+            i += 1
+            continue
+        if (ch in "uU" and text[i:i + 4].lower() == "url("
+                and not (i and (text[i - 1].isalnum() or text[i - 1] in "-_"))):
+            end = unquoted_url_end(text, i + 4)
+            if end is not None:
+                line += text.count("\n", i, end)
+                i = end
+                continue
+            # Otherwise a quoted address, read as a string below, or a Sass
+            # expression (`url($asset)`), whose comments are still comments.
+        if ch in "\"'":
+            quote, i = ch, i + 1
+            while i < n and text[i] != quote:
+                if text[i] == "\\":
+                    i += 1
+                elif text[i] == "\n":
+                    line += 1
+                i += 1
+            i += 1
+            continue
+        if ch == "/" and i + 1 < n and text[i + 1] == "*":
+            start, start_line = i, line
+            i += 2
+            while i + 1 < n and not (text[i] == "*" and text[i + 1] == "/"):
+                if text[i] == "\n":
+                    line += 1
+                i += 1
+            i = min(i + 2, n)
+            body = text[start:i]
+            # Keyed by the line the comment ENDS on: a pragma wrapped over two
+            # lines covers the declaration after it, not its own second line.
+            comments[line] = comments.get(line, "") + body
+            for j in range(start, i):
+                if out[j] != "\n":
+                    out[j] = " "
+            continue
+        if slash_comments and ch == "/" and i + 1 < n and text[i + 1] == "/":
+            start, start_line = i, line
+            while i < n and text[i] != "\n":
+                i += 1
+            comments[start_line] = comments.get(start_line, "") + text[start:i]
+            for j in range(start, i):
+                out[j] = " "
+            continue
+        i += 1
+    return "".join(out), comments
+
+
+@dataclass
+class CssDecl:
+    prop: str
+    value: str
+    line: int
+    selectors: tuple[str, ...]
+    at_rules: tuple[str, ...]
+    depth: int
+
+
+def scan_css(text: str) -> Iterator[CssDecl | tuple]:
+    """A deliberately small CSS scanner.
+
+    Not a parser — it does not need to be. It tracks brace nesting, the
+    selector at each level, and the enclosing at-rules, which is everything the
+    rules below actually ask about.
+    """
+    buf: list[str] = []
+    line = 1
+    sel_stack: list[str] = []
+    at_stack: list[str] = []
+    i, n = 0, len(text)
+    paren = 0
+
+    def rule_depth() -> int:
+        # At-rules push an empty marker to keep the stack aligned with
+        # braces; they are not style-rule nesting and must not count. Nor
+        # does a rule of pseudo-classes alone (`:hover`, unlike `&:hover`):
+        # stylelint's max-nesting-depth ignores those too (design-rules.json).
+        return sum(1 for s in sel_stack if s and not pseudo_classes_only(s))
+
+    while i < n:
+        ch = text[i]
+        if ch == "\n":
+            line += 1
+            buf.append(ch)
+            i += 1
+            continue
+        if ch in "\"'":
+            quote = ch
+            buf.append(ch)
+            i += 1
+            while i < n and text[i] != quote:
+                if text[i] == "\\" and i + 1 < n:
+                    buf.append(text[i]); i += 1
+                if text[i] == "\n":
+                    line += 1
+                buf.append(text[i]); i += 1
+            if i < n:
+                buf.append(text[i]); i += 1
+            continue
+        if ch == "#" and text.startswith("{", i + 1):
+            # Sass interpolation, `.card-#{$name}`: text, whose braces open
+            # and close nothing (SB-A24).
+            j, nested = i + 1, 0
+            while j < n:
+                if text[j] in "\"'":              # a brace in a string is text
+                    quote = text[j]
+                    j += 1
+                    while j < n and text[j] != quote:
+                        j += 2 if text[j] == "\\" else 1
+                elif text[j] == "{":
+                    nested += 1
+                elif text[j] == "}":
+                    nested -= 1
+                    if nested == 0:
+                        break
+                j += 1
+            chunk = text[i:j + 1]
+            line += chunk.count("\n")
+            buf.append(chunk)
+            i = j + 1
+            continue
+        if ch == "(":
+            paren += 1
+        elif ch == ")":
+            paren = max(0, paren - 1)
+
+        if ch == "{" and paren == 0:
+            head = "".join(buf).strip()
+            buf = []
+            if head.startswith("@"):
+                at_stack.append(head)
+                sel_stack.append("")          # keeps depth bookkeeping simple
+                yield ("at_open", head, line, tuple(at_stack))
+            else:
+                sel_stack.append(head)
+                yield ("rule_open", head, line, rule_depth(), tuple(at_stack))
+            i += 1
+            continue
+
+        if ch == "}" and paren == 0:
+            leftover = "".join(buf).strip()
+            if leftover and ":" in leftover:
+                p, _, v = leftover.partition(":")
+                yield CssDecl(p.strip().lower(), v.strip(), line,
+                              tuple(s for s in sel_stack if s),
+                              tuple(at_stack), rule_depth())
+            buf = []
+            if sel_stack:
+                closed = sel_stack.pop()
+                if not closed and at_stack:
+                    at_stack.pop()
+            yield ("rule_close", "", line, rule_depth())
+            i += 1
+            continue
+
+        if ch == ";" and paren == 0:
+            stmt = "".join(buf).strip()
+            buf = []
+            if stmt.startswith("@"):
+                yield ("at_statement", stmt, line, tuple(at_stack), rule_depth())
+            elif ":" in stmt:
+                p, _, v = stmt.partition(":")
+                yield CssDecl(p.strip().lower(), v.strip(), line,
+                              tuple(s for s in sel_stack if s),
+                              tuple(at_stack), rule_depth())
+            i += 1
+            continue
+
+        buf.append(ch)
+        i += 1
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def is_token_file(path: Path) -> bool:
+    """The spec's token files, and any the project's config or --tokens names."""
+    if TOKEN_FILE_PAT.search(str(path).replace(os.sep, "/")):
+        return True
+    return bool(PROJECT.token_files) and Path(path).resolve() in PROJECT.token_files
+
+
+# theme.css and *-theme.css: a token file whose custom properties bind the
+# tokens and decide nothing (design-rules.json: file_classes.binding_files).
+BINDING_FILE_PAT = re.compile(r"(^|/)([\w.-]*-)?theme\.css$")
+
+
+def is_binding_file(path: Path) -> bool:
+    return bool(BINDING_FILE_PAT.search(str(path).replace(os.sep, "/")))
+
+
+def is_component_file(path: Path) -> bool:
+    """A component file is where Laws 2 and 6 bite hardest: the spec's, and
+    any the project's `components` globs match."""
+    if COMPONENT_FILE_PAT.search(str(path).replace(os.sep, "/").lower()):
+        return True
+    return PROJECT.config is not None and PROJECT.config.is_component(path)
+
+
+LAYER_BLOCK = re.compile(r"@layer(?![\w-])\s*([^{]*)", re.I)
+
+
+def layer_path(at_rules: Iterable[str]) -> list[str]:
+    """The full name of the cascade layer a rule sits in, by segment:
+    `@layer base.components` and `@layer base { @layer components {…} }` are
+    both ["base", "components"], a layer inside base, as CSS Cascade 5 reads a
+    dotted name. An anonymous layer is an empty segment."""
+    path: list[str] = []
+    for a in at_rules:
+        m = LAYER_BLOCK.match(a)
+        if m:
+            path.extend(seg.strip() for seg in m.group(1).split("."))
+    return path
+
+
+def in_layer(at_rules: Iterable[str], name: str) -> bool:
+    """In layer `name` or one of its sub-layers, never in a layer of that name
+    inside another (`base.components` is not in components: CodeRabbit on #73)."""
+    return layer_path(at_rules)[:1] == [name]
+
+
+VAR_MARK = " var() "
+
+
+def _close_paren(text: str, open_at: int) -> int:
+    """Index of the `)` matching the `(` at `open_at` (len(text) if unmatched).
+    A parenthesis in a string or after a backslash is text: `:where([data-x=")"])`
+    closes at its last `)` (CodeRabbit on #26)."""
+    depth, quote, k = 0, "", open_at
+    while k < len(text):
+        ch = text[k]
+        if ch == "\\":
+            k += 2
+            continue
+        if quote:
+            quote = "" if ch == quote else quote
+        elif ch in "\"'":
+            quote = ch
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                return k
+        k += 1
+    return len(text)
+
+
+def split_list(text: str) -> list[str]:
+    """A selector list split at its own commas, not those inside (), [] or a string."""
+    out, depth, quote, start, i = [], 0, "", 0, 0
+    while i < len(text):
+        ch = text[i]
+        if ch == "\\":
+            i += 2
+            continue
+        if quote:
+            quote = "" if ch == quote else quote
+        elif ch in "\"'":
+            quote = ch
+        elif ch in "([":
+            depth += 1
+        elif ch in ")]":
+            depth -= 1
+        elif ch == "," and depth == 0:
+            out.append(text[start:i])
+            start = i + 1
+        i += 1
+    out.append(text[start:])
+    return [s.strip() for s in out if s.strip()]
+
+
+LEGACY_PSEUDO_ELEMENT = {"before", "after", "first-line", "first-letter"}
+NTH_OF = re.compile(r"\bof\b", re.I)
+
+
+def _ident_end(text: str, i: int) -> int:
+    """Where the identifier at `i` ends: escapes and Sass's `#{…}` belong to it."""
+    while i < len(text):
+        if text[i] == "\\":
+            i += 2
+        elif text.startswith("#{", i):
+            close = text.find("}", i)
+            i = len(text) if close < 0 else close + 1
+        elif text[i].isalnum() or text[i] in "-_" or ord(text[i]) > 127:
+            i += 1
+        else:
+            break
+    return min(i, len(text))
+
+
+def parse_selector(selector: str) -> list[tuple]:
+    """One complex selector as a list of parts (N32): ("comb",) for a
+    combinator, ("simple", kind) for an id, class, attr, type, universal or
+    `&`, and ("pseudo", name, is_element, args) for a pseudo-class or
+    pseudo-element, where args are the parsed selectors a functional
+    pseudo-class takes (`:is()`, `:not()`, `:has()`, `:where()`, the `of S` of
+    `:nth-child()`), or None."""
+    parts: list[tuple] = []
+    space = False
+    i, n = 0, len(selector)
+
+    def push(part: tuple) -> None:
+        nonlocal space
+        if space and parts and parts[-1] != ("comb",):
+            parts.append(("comb",))
+        space = False
+        parts.append(part)
+
+    while i < n:
+        ch = selector[i]
+        if ch.isspace():
+            space, i = True, i + 1
+        elif ch in ">+~":
+            if not parts or parts[-1] != ("comb",):
+                parts.append(("comb",))
+            space, i = False, i + 1
+        elif ch == "#" and not selector.startswith("#{", i):
+            push(("simple", "id"))
+            i = _ident_end(selector, i + 1)
+        elif ch in ".%":                     # a class, or a Sass placeholder
+            push(("simple", "class"))
+            i = _ident_end(selector, i + 1)
+        elif ch == "[":
+            push(("simple", "attr"))
+            quote, i = "", i + 1
+            while i < n and (quote or selector[i] != "]"):
+                if selector[i] == "\\":
+                    i += 1
+                elif quote:
+                    quote = "" if selector[i] == quote else quote
+                elif selector[i] in "\"'":
+                    quote = selector[i]
+                i += 1
+            i += 1
+        elif ch == "&":                      # `&__title` is the parent, renamed
+            push(("simple", "amp"))
+            i = _ident_end(selector, i + 1)
+        elif ch == "*":
+            push(("simple", "universal"))
+            i += 1
+        elif ch == ":":
+            element = selector.startswith("::", i)
+            start = i + (2 if element else 1)
+            i = _ident_end(selector, start)
+            name, args, inner = selector[start:i].lower(), None, None
+            if i < n and selector[i] == "(":
+                close = _close_paren(selector, i)
+                inner = selector[i + 1:close]
+                if SELECTOR_ARGUMENT.fullmatch(name):          # ::slotted() takes one too
+                    args = [parse_selector(s) for s in split_list(inner)]
+                elif name in ("nth-child", "nth-last-child") and NTH_OF.search(inner):
+                    args = [parse_selector(s) for s in split_list(NTH_OF.split(inner, 1)[1])]
+                i = close + 1
+            push(("pseudo", name, element or name in LEGACY_PSEUDO_ELEMENT, args, inner))
+        elif ch == "#" or ch.isalpha() or ch in "-_\\" or ord(ch) > 127:
+            push(("simple", "type" if ch != "#" else "interpolation"))
+            i = _ident_end(selector, i)
+        else:
+            i += 1
+    return parts
+
+
+VIEW_TRANSITION_PART = {"view-transition-group", "view-transition-image-pair", "view-transition-old",
+                        "view-transition-new"}
+TAKES_HEAVIEST = {"is", "not", "has", "matches", "-moz-any"}
+ADDS_ARGUMENT = {"host", "host-context", "nth-child", "nth-last-child"}
+
+
+def specificity(parts: list[tuple], amp: tuple[int, int, int] = (0, 0, 0)) -> tuple[int, int, int]:
+    """Selectors 4 specificity, case by case as @csstools/selector-specificity
+    computes it for stylelint's selector-max-specificity: `:where()` scores
+    zero; `:is()`, `:not()`, `:has()` their heaviest argument; `:host()` and
+    `:nth-child(… of S)` a pseudo-class and the argument; `:global()` the sum
+    of its arguments; `::slotted()` a pseudo-element and its argument; a
+    `::view-transition-*(*)` nothing; `&` its parent (`amp`)."""
+    a = b = c = 0
+    for part in parts:
+        add = (0, 0, 0)
+        if part[0] == "simple":
+            add = {"id": (1, 0, 0), "class": (0, 1, 0), "attr": (0, 1, 0), "type": (0, 0, 1),
+                   "amp": amp}.get(part[1], (0, 0, 0))
+        elif part[0] == "pseudo":
+            _, name, element, args, inner = part
+            weights = [specificity(arg, amp) for arg in args or []]
+            heaviest = max(weights, default=(0, 0, 0))
+            if element:
+                bare = name in VIEW_TRANSITION_PART and (inner or "").strip() in ("", "*")
+                add = (0, 0, 0) if bare else (heaviest[0], heaviest[1], heaviest[2] + 1)
+            elif name in ("global", "local"):
+                add = tuple(sum(w[k] for w in weights) for k in range(3))
+            elif name in TAKES_HEAVIEST:
+                add = heaviest
+            elif name != "where":       # :any(), :-webkit-any() and the rest: one pseudo-class
+                plus = heaviest if name in ADDS_ARGUMENT else (0, 0, 0)
+                add = (plus[0], plus[1] + 1, plus[2])
+        a, b, c = a + add[0], b + add[1], c + add[2]
+    return a, b, c
+
+
+def has_nesting(parts: list[tuple]) -> bool:
+    """Whether a parsed selector holds `&`, in a pseudo-class's argument too. A
+    quoted `&` (`[data-x="&"]`) is an attribute's value (CodeRabbit on #26)."""
+    return any(part == ("simple", "amp") or (part[0] == "pseudo" and any(map(has_nesting, part[3] or [])))
+               for part in parts)
+
+
+def _plus(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
+    return a[0] + b[0], a[1] + b[1], a[2] + b[2]
+
+
+def _nodes(parts: list[tuple]) -> list[str]:
+    out: list[str] = []
+    for part in parts:
+        out.append(part[0])
+        for arg in (part[3] or []) if part[0] == "pseudo" else []:
+            out.append("selector")
+            out.extend(_nodes(arg))
+    return out
+
+
+def compounds(parts: list[tuple]) -> int:
+    """Compound selectors, counted as stylelint 17's selector-max-compound-selectors
+    counts them: every combinator, inside a functional pseudo-class too, but not
+    one at either end or one followed by another. Unlike stylelint, an An+B's
+    `+` (`:nth-last-child(n + 5)`) is not a combinator."""
+    nodes = _nodes(parts)
+    return 1 + sum(1 for k, node in enumerate(nodes)
+                   if node == "comb" and 0 < k < len(nodes) - 1 and nodes[k + 1] != "comb")
+
+
+def strip_var_refs(value: str) -> str:
+    """`value` with every var(…) reference — fallback included, however deeply
+    nested — replaced by a ` var() ` marker. What is left is what the author
+    wrote as a literal. Containing a var() is not the same as being tokenized:
+    `var(--pad-sm) 13px` still hardcodes 13px."""
+    out: list[str] = []
+    low, i = value.lower(), 0
+    while True:
+        j = low.find("var(", i)
+        if j < 0:
+            out.append(value[i:])
+            return "".join(out)
+        if j > 0 and (low[j - 1].isalnum() or low[j - 1] in "-_"):
+            out.append(value[i:j + 4])            # part of a longer name
+            i = j + 4
+            continue
+        out.append(value[i:j])
+        out.append(VAR_MARK)
+        i = _close_paren(value, j + 3) + 1
+
+
+def raw_colour(value: str) -> tuple[str, str] | None:
+    """(rule, text) for the first colour written as a literal, else None.
+
+    var() references and their fallbacks are ignored, and so is a colour
+    function that derives from a token — `oklch(from var(--x) l c h / .5)`,
+    `rgb(var(--rgb) / .5)` — because the token still decides the colour.
+    `url(…)` is ignored too: `url(#fade)` is a reference, not a hex colour."""
+    rest = re.sub(r"url\([^)]*\)", " url() ", strip_var_refs(value), flags=re.I)
+    m = HEX_COLOR.search(rest)
+    if m:
+        return "raw-color", m.group(0)
+    for fm in FUNC_COLOR.finditer(rest):
+        body = rest[fm.end() - 1:_close_paren(rest, fm.end() - 1)]
+        if VAR_MARK.strip() not in body:
+            return "raw-color", fm.group(0).rstrip("( ")
+    m = NAMED_COLOR.search(rest)
+    if m:
+        return "named-color", m.group(0)
+    return None
+
+
+def has_raw_length(value: str) -> str | None:
+    # Every length, not the first: `0px 13px` hid the 13px behind the zero.
+    for m in LENGTH_LITERAL.finditer(strip_var_refs(value)):
+        if not re.fullmatch(r"-?0+(\.0+)?(px|rem|em)?", m.group(0), re.I):
+            return m.group(0)
+    return None
+
+
+OWL = re.compile(r">\s*\*\s*\+\s*\*")
+
+
+def owl_selector(selectors: tuple[str, ...]) -> bool:
+    """The parent-owned flow idiom, the whole `> * + *`, in the rule that holds
+    the declaration: the PARENT's rule spacing its children. `.card + *` is a
+    component spacing its next sibling, which the owl is not."""
+    return bool(selectors) and bool(OWL.search(selectors[-1]))
+
+
+def generated_content(selectors: tuple[str, ...]) -> bool:
+    """`::before` / `::after` are the component's own generated content. Its
+    rule decides what the pseudo-element sits beside, so a margin there is
+    inner spacing, not a child claiming room outside itself. Every selector
+    of the rule that holds the declaration must name one: `&::after` nested
+    in `.card` does, `.card::before, .card__title` does not
+    (design-rules.json: margins_in_components)."""
+    listed = re.sub(r"\([^()]*\)", "()", selectors[-1]) if selectors else ""
+    return bool(listed) and all(re.search(r"::(?:before|after|marker)\s*$", s.strip()) for s in listed.split(","))
+
+
+CANCELLED_TOKEN = re.compile(
+    r"calc\(\s*(?:var\(\s*--[\w-]+\s*\)\s*\*\s*-1|-1\s*\*\s*var\(\s*--[\w-]+\s*\))\s*\)", re.I)
+
+
+def em_length(raw: str) -> bool:
+    """An em, which rides on the text's own size; a rem does not, though its
+    name ends in "em" too."""
+    return bool(re.search(r"\d(?:em)$", raw, re.I))
+
+
+def raw_position(value: str) -> str | None:
+    """The first literal length in a position that is not an em (geometry):
+    `-0.4em 12px` still hardcodes 12px."""
+    for m in LENGTH_LITERAL.finditer(strip_var_refs(value)):
+        if not re.fullmatch(r"-?0+(\.0+)?(px|rem|em)?", m.group(0), re.I) and not em_length(m.group(0)):
+            return m.group(0)
+    return None
+
+
+def scales_a_token(value: str) -> bool:
+    """A factor on a token: `calc(var(--pad-card) * 1.5)`, or `/ 2`, is a step
+    the scale does not have (Law 3; design-rules.json: values.shapes). `* -1`,
+    which cancels a token, is the one factor allowed, and a var() fallback is
+    not checked (var_fallback): `var(--pad-card, calc(1rem / 2))` passes."""
+    return bool(re.search(r"[*/]", strip_var_refs(CANCELLED_TOKEN.sub(" var() ", value))))
+
+
+def off_family(value: str, allowed: tuple) -> bool:
+    """Whether a family refuses `value`. The audit cannot resolve a Sass
+    variable, so each one is read as a token, an interpolation as the
+    expression it emits, and the rest is judged as in CSS: `padding: $space 13px` and `padding: $space 5%` are refused as
+    `var(--x) 13px` would be, and the variable itself is sass-literal's
+    (design-rules.json: sass.variables)."""
+    return not allowed_value(sass_as_css(value), allowed)
+
+
+def allowed_value(value: str, allowed: tuple) -> bool:
+    """Whether `value` is one a family allows (design-rules.json:
+    values.families), as stylelint's allowlist reads it: a shape matches it,
+    or a string equals it."""
+    value = re.sub(r"\s*!\s*important\s*$", "", value.strip(), flags=re.I)
+    return any(a.match(value) if hasattr(a, "match") else a == value for a in allowed)
+
+
+ZERO_TIME = re.compile(r"0*\.?0+m?s", re.I)
+# The pseudo-classes whose argument is a selector list; any other argument
+# (:nth-child(2n + 1), :lang(en)) is not a selector.
+SELECTOR_ARGUMENT = re.compile(r"(?:is|where|not|has|matches|any|-webkit-any|-moz-any|host|host-context|"
+                               r"slotted|global|local)", re.I)
+
+
+def foreign_selector(selector: str) -> str | None:
+    """What a component file's selector reaches that the component does not
+    own: an element (`p`, `svg`, `:is(h2, h3)`), or `*` after a space or `~`.
+    `*` after `>` or `+` is the owl's, written in the parent's own rule; this
+    is how stylelint reads selector-max-type 0 and selector-max-universal 0
+    there (design-rules.json: margins_in_components)."""
+    s = re.sub(r"""(["'])(?:\\.|(?!\1).)*\1""", '""', selector)
+    s = re.sub(r"\[[^\]]*\]", "[]", s)
+    s = re.sub(r":([\w-]+)\(([^()]*)\)",
+               lambda m: m.group(0) if SELECTOR_ARGUMENT.fullmatch(m.group(1)) else f":{m.group(1)}()", s)
+    s = re.sub(r"::?[\w-]+", "", s)
+    s = re.sub(r"[.#][\w-]+", "", s)
+    element = re.search(r"(?:^|[\s>+~(,])\s*([a-zA-Z][\w-]*)", s)
+    if element:
+        return f"the element `{element.group(1)}`"
+    for m in re.finditer(r"\*", s):
+        before = s[:m.start()].rstrip()
+        if not before or before[-1] not in ">+":
+            return "every element inside it (`*`)"
+    return None
+
+
+def in_forced_colors(at_rules: Iterable[str]) -> bool:
+    return any(a.lower().startswith("@media") and re.search(r"forced-colors\s*:\s*active", a, re.I)
+               for a in at_rules)
+
+
+# ---------------------------------------------------------------------------
+# CSS rules
+# ---------------------------------------------------------------------------
+
+def pragmas(comments: dict[int, str]) -> tuple[set[str], dict[int, set[str]]]:
+    """The ignore pragmas in a file's comments: the tags for the whole file,
+    and the tags for each line a next-line pragma names."""
+    file_tags: set[str] = set()
+    line_tags: dict[int, set[str]] = {}
+    for ln, body in comments.items():
+        m = IGNORE_FILE.search(body)
+        if m:
+            file_tags |= {t.strip().upper() for t in m.group(1).split(",") if t.strip()}
+        m = IGNORE_LINE.search(body)
+        if m:
+            line_tags[ln + 1] = {t.strip().upper() for t in m.group(1).split(",") if t.strip()}
+    return file_tags, line_tags
+
+
+def audit_css(path: Path, text: str) -> list[Finding]:
+    findings: list[Finding] = []
+    lines = text.splitlines()
+    clean, comments = strip_css_comments(text, line_comments(path))
+
+    file_ignores, line_ignores = pragmas(comments)
+    if any(mark in text[:800] for mark in GENERATED_MARKERS):
+        return []
+
+    token_file = is_token_file(path)
+    binding_file = is_binding_file(path)
+    component_file = is_component_file(path)
+    saw_layer_statement = False
+    layer_statement_line = 0
+    stated_layers: set[str] = set()
+    import_layers: list[tuple[int, str]] = []
+    first_rule_line = 0
+    first_unlayered_line = 0
+    declared_props: set[str] = set()
+    emitting_mixins: set[str] = set()     # mixins in this file that hold a whole rule
+    # One entry per open block, as scan_css stacks them: a rule's heaviest
+    # selector, None for an at-rule. A rule's parent is the nearest rule below
+    # it, whatever the nesting depth counts (a `:hover` rule adds no depth).
+    weights: list[tuple[int, int, int] | None] = []
+
+    def outside_a_layer(at_rules: Iterable[str]) -> bool:
+        # A keyframe (`from`, `to`, `50%`) is not a style rule; the references
+        # and the scaffold keep @keyframes outside layers. A Sass @mixin or
+        # @function emits nothing where it is written (SB-A24).
+        return not any(a.startswith("@layer") or KEYFRAMES_AT.match(a) or SASS_DEFINITION_AT.match(a)
+                       for a in at_rules)
+
+    def add(line: int, law: str, rule: str, sev: str, msg: str, fix: str) -> None:
+        tags = line_ignores.get(line, set()) | file_ignores
+        if law in tags or rule.upper() in tags or "ALL" in tags:
+            return
+        snippet = lines[line - 1].strip() if 0 < line <= len(lines) else ""
+        findings.append(Finding(str(path), line, law, rule, sev, msg, fix, snippet))
+
+    for ev in scan_css(clean):
+        if isinstance(ev, tuple):
+            kind = ev[0]
+            if kind == "at_statement":
+                stmt = ev[1]
+                if stmt.startswith("@layer") and "," in stmt:
+                    saw_layer_statement = True
+                    layer_statement_line = ev[2]
+                    declared = [s.strip() for s in stmt[6:].strip().rstrip(";").split(",")]
+                    # A dotted name declares its parent too, as in stylelint
+                    # (CodeRabbit on #145): `legacy.skin` places `legacy`.
+                    stated_layers.update(declared, (d.split(".")[0] for d in declared))
+                    # A sub-layer names its parent where it stands
+                    # (`components.skin` before `base` ranks components
+                    # first), and a name's first mention fixes it (Codex on #145).
+                    present = list(dict.fromkeys(p for p in (d.split(".")[0] for d in declared)
+                                                 if p in LAYER_ORDER))
+                    if present != [c for c in LAYER_ORDER if c in present]:
+                        add(ev[2], "L5", "layer-order", "error",
+                            f"Layer statement is out of order: {', '.join(declared)}.",
+                            f"Use: {LAYER_STATEMENT} A layer may be left out and others "
+                            "inserted, but these keep their relative order.")
+                imported = IMPORT_LAYER.match(stmt)
+                if imported:
+                    import_layers.append((ev[2], imported.group(1)))
+                # A mixin that holds a whole rule emits it where it is included,
+                # so at the root of a file the rule is unlayered. Only a mixin
+                # defined in this file is known (design-rules.json: sass).
+                included = SASS_INCLUDE_NAME.match(stmt)
+                if included and included.group(1).lower() in emitting_mixins and ev[4] == 0:
+                    # Inside another mixin, the rule is emitted wherever that
+                    # one is included, so the wrapper holds a whole rule too.
+                    wrappers = [m.group(1).lower() for m in map(SASS_MIXIN_NAME.match, ev[3]) if m]
+                    if wrappers:
+                        emitting_mixins.update(wrappers)
+                    elif not token_file and not first_unlayered_line and outside_a_layer(ev[3]):
+                        first_unlayered_line = ev[2]
+            elif kind == "rule_open":
+                sel, line, depth, at_rules = ev[1], ev[2], ev[3], ev[4]
+                if not first_rule_line:
+                    first_rule_line = line
+                # depth counts the top-level rule as 1; nesting starts below it,
+                # as stylelint counts (design-rules.json: nesting.max_depth).
+                if depth - 1 > MAX_NESTING:
+                    add(line, "L5", "nesting-depth", "error",
+                        f"Nesting depth {depth - 1} exceeds the limit of {MAX_NESTING}.",
+                        "Native nesting desugars through :is(), which takes the "
+                        f"specificity of its most specific argument — past depth {MAX_NESTING} "
+                        "nobody can predict the resulting number. Flatten it.")
+                foreign = (foreign_selector(sel) if component_file
+                           and not any(KEYFRAMES_AT.match(a) for a in at_rules) else None)
+                if foreign:
+                    add(line, "L2", "foreign-selector", "error",
+                        f"`{sel[:70]}` styles {foreign}, which this component does not own.",
+                        "A component styles itself and its own parts, by class. An element "
+                        "selector, or a `*` after a space, reaches into whatever renders "
+                        "inside it: Law 2 broken from the other direction. Give the part a "
+                        "class. The owl (`> * + *`) in the parent's own rule is the exception.")
+                # N32: the spec's two selector limits, as stylelint reads them.
+                # A nested rule's weight is its parent's plus its own, and its
+                # `&` scores the parent's; its compounds count as written.
+                parsed = [parse_selector(s) for s in split_list(sel)]
+                parent = next((w for w in reversed(weights) if w is not None), None)
+                own = [specificity(p, parent) if parent and has_nesting(p)
+                       else _plus(parent or (0, 0, 0), specificity(p)) for p in parsed]
+                heaviest = max(own, default=(0, 0, 0))
+                weights.append(heaviest)
+                if heaviest > SPECIFICITY_CAP and not any(KEYFRAMES_AT.match(a) for a in at_rules):
+                    add(line, "L5", "compound-specificity", "error",
+                        f"Specificity {','.join(map(str, heaviest))} is over the cap of {MAX_SPECIFICITY}: "
+                        f"`{sel[:70]}`.",
+                        "A selector this heavy is trying to WIN rather than to describe "
+                        "an element. Layers already decide who wins — say what the "
+                        "element is and move the rule to the right layer, or wrap the "
+                        "context in :where(), which weighs nothing. If it is reaching "
+                        "into another component, use that component's Tier-3 properties.")
+                most = max(map(compounds, parsed), default=1)
+                if most > MAX_COMPOUNDS:
+                    add(line, "L5", "compound-selectors", "error",
+                        f"{most} compound selectors, over the cap of {MAX_COMPOUNDS}: `{sel[:70]}`.",
+                        "Each compound is a level of DOM knowledge, so a markup change "
+                        "that should be free becomes a CSS change. Give the element a "
+                        "class of its own. :where() takes away the weight, not the "
+                        "knowledge: its compounds count too.")
+                m = ID_SELECTOR.search(sel)
+                if m and not sel.strip().startswith("@"):
+                    add(line, "L5", "id-selector", "error",
+                        f"ID selector `{m.group(0)}` in a style rule.",
+                        "IDs buy specificity you then have to match forever. "
+                        "Use a class; layers already decide who wins.")
+                # The at-rules open around this rule, not every one seen so
+                # far: a rule after a closed @layer block is unlayered (SB-A9).
+                if not token_file and depth == 1 and not first_unlayered_line and outside_a_layer(at_rules):
+                    first_unlayered_line = line
+                if depth == 1 and not sel.lstrip().startswith("&"):
+                    emitting_mixins.update(m.group(1).lower() for m in map(SASS_MIXIN_NAME.match, at_rules) if m)
+            elif kind == "at_open":
+                weights.append(None)
+            elif kind == "rule_close":
+                if weights:
+                    weights.pop()
+            continue
+
+        d: CssDecl = ev
+        prop, value, line = d.prop, d.value, d.line
+
+        if prop.startswith("--"):
+            declared_props.add(prop)
+            # A theme file binds the tokens and decides nothing, so its custom
+            # properties take a token, a colour word or a keyword, and the
+            # literals CSS forces: a breakpoint, an aspect ratio (bindings).
+            if binding_file and not any(key.match(d.prop) and allowed_value(value, allowed)
+                                        for key, allowed in BINDING_VALUES):
+                add(line, "L1", "binding-literal", "error",
+                    f"Theme binding `{d.prop}` is `{value.strip()}`, not a token.",
+                    "A theme file binds the framework's theme to tokens.css and "
+                    "decides nothing: point it at a token, var(--…). The literals it "
+                    "may hold are a breakpoint in rem and an aspect ratio (theme.css "
+                    "§0; design-rules.json: bindings).")
+            # A Tier-3 socket is where a component binds a role to a part.
+            # `--card-inset: var(--pad-card)` is the whole point;
+            # `--card-inset: 28px` is the same literal the rest of Law 1
+            # forbids, just wearing a custom property as a disguise — and
+            # it is the easiest place for one to hide, because it LOOKS
+            # like tokenized code. Unitless numbers, ratios and fallbacks
+            # are fine; a length, a colour or a duration is not — including
+            # one written beside a var(), as in `calc(var(--pad) + 28px)`.
+            if not token_file:
+                rest = strip_var_refs(value)
+                colour = raw_colour(value)
+                if OPTICAL_PROP.search(prop):
+                    pass                       # declared optical correction
+                elif has_raw_length(value) and not RELATIONAL_UNIT.match(value.strip()):
+                    add(line, "L1", "socket-literal", "error",
+                        f"Socket `{prop}` is declared as the literal `{value.strip()}`.",
+                        "A custom property is not a token. Bind the socket to "
+                        "a Tier-2 role — that is what makes the component "
+                        "theme-able, density-aware and auditable. If no role "
+                        "fits, the missing role is the actual finding.")
+                elif colour and colour[0] == "raw-color":
+                    add(line, "L1", "socket-literal", "error",
+                        f"Socket `{prop}` hardcodes the colour `{value.strip()}`.",
+                        "Dark mode re-points roles, not sockets. A literal "
+                        "here is a colour the theme can never reach.")
+                elif TIME_LITERAL.search(rest) or BEZIER_LITERAL.search(rest):
+                    add(line, "L1", "socket-literal", "error",
+                        f"Socket `{prop}` hardcodes motion: `{value.strip()}`.",
+                        "Bind it to a --motion-* pair so duration and easing "
+                        "stay together and prefers-reduced-motion still "
+                        "applies.")
+
+        # ---- L1 Sass variables ----------------------------------------------
+        # `$card-padding: 24px` is the literal Law 1 forbids, moved one line
+        # up (SB-A24; design-rules.json: sass.variables).
+        if (SASS_VARIABLE.match(prop) and not token_file and not SASS_BREAKPOINT.search(prop)
+                and not any(SASS_FUNCTION_AT.match(a) for a in d.at_rules)):
+            bare = SASS_STRING.sub('""', value)          # a string is text, not a value
+            rest = strip_var_refs(bare)
+            colour = raw_colour(bare)
+            if (has_raw_length(bare) or (colour and colour[0] == "raw-color")
+                    or TIME_LITERAL.search(rest) or BEZIER_LITERAL.search(rest)):
+                add(line, "L1", "sass-literal", "error",
+                    f"Sass variable `{prop}` holds a literal: `{value.strip()}`.",
+                    "A Sass variable is fixed at compile time: no theme re-points "
+                    "it, --density cannot reach it and DevTools does not show it. "
+                    "Declare the value as a token and read it with var(). Only a "
+                    "breakpoint ($bp-*) has to be a Sass value, because a media "
+                    "query condition cannot read a custom property.")
+
+        # ---- L5 !important -------------------------------------------------
+        # The flag, not the words inside a string (`content: "!important"`),
+        # as stylelint reads it; `! important` is the flag too (W9).
+        if re.search(r"!\s*important(?![\w-])", SASS_STRING.sub('""', value), re.I):
+            add(line, "L5", "important", "error",
+                f"`!important` on `{prop}`.",
+                "!important inverts layer order (an !important in an EARLIER "
+                "layer beats one in a later layer), so it makes the next "
+                "override strictly harder. Move the rule to the right layer.")
+
+        # ---- The token file is where literals live -------------------------
+        if token_file:
+            continue
+
+        # ---- L3 a factor on a token ----------------------------------------
+        # Spacing and radius take steps of a scale. Positioning (inset, top…)
+        # is geometry, which may divide: half the gap to a tap target's size.
+        factor = (prop in RADIUS_PROPS or prop in SPACING_VALUES) and scales_a_token(value)
+        if factor:
+            add(line, "L3", "token-factor", "error",
+                f"`{prop}: {value.strip()}` scales a token: a step the scale does not have.",
+                "Pick the step you mean, a role or a step on the scale. Density "
+                "scales by multiplying, once, in tokens.css. `* -1`, to cancel a "
+                "token, is the one factor allowed.")
+
+        # ---- L1 spacing ------------------------------------------------------
+        # Inside @media / @container / @supports too: the prelude is never a
+        # declaration, and responsive rules are where literals collect. The
+        # values are the spacing family's, as stylelint reads them, so a share
+        # of the container (5%, calc(100% - var(--gutter-page))) is refused
+        # with the pixels (N31).
+        if prop in SPACING_VALUES and not factor and off_family(value, SPACING_VALUES[prop]):
+            raw = has_raw_length(value)
+            on_scale_note = ""
+            if raw and raw.lower().endswith("px"):
+                try:
+                    if float(raw[:-2]) % 4 != 0:
+                        on_scale_note = f" {raw} is not even on the 4px grid."
+                except ValueError:
+                    pass
+            add(line, "L1", "raw-spacing", "error",
+                (f"`{prop}: {value}` uses the literal `{raw}`.{on_scale_note}" if raw else
+                 f"`{prop}: {value.strip()}` is not a step of the spacing scale."),
+                "Pick the relationship, not the pixels: --gap-fused / "
+                "--gap-tight / --gap-related / --gap-grouped / --gap-separate "
+                "/ --gap-distinct for space between siblings, --pad-* for "
+                "inset. A share of the container belongs to a layout primitive, "
+                "in a socket. See references/spacing-system.md §6.")
+
+        # ---- L1 positions ----------------------------------------------------
+        # Geometry, so a percentage, a factor and calc() are allowed. em is a
+        # RATIO to the current font size, so an em offset tracks type instead
+        # of bypassing the scale (sup/sub, optical nudges); a rem does not
+        # (design-rules.json: geometry).
+        if prop in GEOMETRY_PROPS:
+            raw = raw_position(value)
+            if raw:
+                add(line, "L1", "raw-spacing", "error",
+                    f"`{prop}: {value}` uses the literal `{raw}`.",
+                    "Place it with a token (a gap or inset role), 0, a percentage, "
+                    "or calc() over tokens. An em is allowed: it rides on the text.")
+
+        # ---- L1 strokes ------------------------------------------------------
+        if prop in STROKE_VALUES and off_family(value, STROKE_VALUES[prop]):
+            add(line, "L1", "raw-stroke", "error",
+                f"`{prop}: {value.strip()}` is not a stroke token.",
+                "Line weights are --stroke-hairline / --stroke-default / --stroke-thick "
+                "/ --stroke-focus; a shorthand takes them with a style (solid, dashed, "
+                "dotted, double) and a colour role, currentColor or transparent "
+                "(design-rules.json: values.families.stroke).")
+
+        # ---- L1 sizing --------------------------------------------------------
+        if prop in SIZING_VALUES and off_family(value, SIZING_VALUES[prop]):
+            add(line, "L1", "raw-size", "error",
+                f"`{prop}: {value.strip()}` is a literal size.",
+                "Line length and the widths of things are spacing decisions: use the "
+                "measure token (--measure-prose), 100%, none or an intrinsic keyword "
+                "(design-rules.json: values.families.sizing).")
+
+        # ---- L2 outer margins in components --------------------------------
+        # Alignment (0s and autos), a cancelled token, the owl and the
+        # component's own generated content (design-rules.json:
+        # margins_in_components). A `.prose` selector is no exemption: a flow
+        # container belongs in a layout file (N31).
+        if (component_file and prop in OUTER_MARGIN_PROPS
+                and not allowed_value(value, MARGIN_VALUES)
+                and not owl_selector(d.selectors)
+                and not generated_content(d.selectors)):
+            add(line, "L2", "child-margin", "error",
+                f"`{prop}` on a component. A child may not set its own outer margin.",
+                "The parent owns the space between siblings — set `gap` on the "
+                "parent instead. A component cannot know what it sits next to, "
+                "so a margin here is a fact asserted from inside. "
+                "(Legal: margin:auto for alignment, calc(var(--t) * -1) to "
+                "cancel a known token, an owl selector in the parent's rule.)")
+
+        # ---- L1 colour ------------------------------------------------------
+        # Every check below looks at what is left once var() references are
+        # taken out, so a token beside a literal no longer hides the literal.
+        if prop in COLOR_PROPS or prop in COLOR_SHORTHANDS:
+            colour = raw_colour(value)
+            if colour and colour[0] == "raw-color":
+                add(line, "L1", "raw-color", "error",
+                    f"`{prop}: {value.strip()}` hardcodes a colour.",
+                    "Use a role: --bg-surface / --fg-muted / --border-default "
+                    "/ --bg-accent. A hardcoded colour is a colour that dark "
+                    "mode cannot re-point, which is how a theme silently breaks.")
+            elif colour:
+                add(line, "L1", "named-color", "error",
+                    f"`{prop}: {value.strip()}` uses a CSS named colour.",
+                    "Named colours are outside the ramp and outside the "
+                    "contrast budget. Use a role token.")
+
+        # ---- L1 system colours outside forced-colors mode ------------------
+        if SYSTEM_COLOR_PROPERTY.match(prop) and not in_forced_colors(d.at_rules):
+            word = next((w for w in re.split(r"[\s,/()]+", value) if w.lower() in SYSTEM_COLOR_SET), None)
+            if word:
+                add(line, "L1", "system-color", "error",
+                    f"`{word}` is a CSS system colour, outside @media (forced-colors: active).",
+                    "A system colour is right only in forced-colors mode, where the "
+                    "user's palette replaces the page's. Anywhere else it is a colour no "
+                    "token controls, no theme re-points and no contrast check measures. "
+                    "Use a role token (design-rules.json: system_colors).")
+
+        # ---- L1 shadows ------------------------------------------------------
+        if (prop in SHADOW_PROPS
+                and value.strip().lower() not in ("none", "inherit", "initial",
+                                                  "unset", "revert", "revert-layer")
+                and (has_raw_length(value) or raw_colour(value))):
+            add(line, "L1", "raw-shadow", "error",
+                f"`{prop}` is a literal shadow.",
+                "Use an elevation role: --elevation-card / --elevation-raised / "
+                "--elevation-overlay / --elevation-modal. Hand-rolled shadows "
+                "drift out of the light model within about three commits.")
+
+        # ---- L1 typography ---------------------------------------------------
+        if prop in TYPE_PROPS:
+            if prop == "line-height" and re.fullmatch(r"[\d.]+", value.strip()):
+                add(line, "L3", "raw-leading", "warning",
+                    f"`line-height: {value.strip()}` is a literal ratio.",
+                    "Use --leading-* in base.css, or better, a --type-* role "
+                    "which carries leading in its font shorthand.")
+            elif prop == "font-weight" and re.fullmatch(r"\d{1,4}", value.strip()):
+                # No unit, so the length check below never saw it.
+                add(line, "L1", "raw-weight", "error",
+                    f"`font-weight: {value.strip()}` hardcodes a weight.",
+                    "Use --weight-regular / -medium / -semibold / -bold (weight "
+                    "has no Tier-2 role), or a --type-* role, which carries the "
+                    "weight in its font shorthand.")
+            # The one em: font-size: 1em sizes an icon to the text beside it.
+            # (Every other em was skipped here, and every rem with it, since
+            # "rem" ends in "em": N1 and N30.)
+            elif (has_raw_length(value)
+                  and not RELATIONAL_UNIT.match(value.strip())
+                  and not (prop == "font-size" and value.strip().lower() == "1em")):
+                add(line, "L1", "raw-type", "error",
+                    f"`{prop}: {value.strip()}` is off the type scale.",
+                    "Use a --type-* role (--type-body, --type-h2, --type-ui). "
+                    "Orphan sizes are how hierarchy stops reading as hierarchy.")
+
+        # ---- L1 radius -------------------------------------------------------
+        if prop in RADIUS_PROPS and has_raw_length(value):
+            add(line, "L1", "raw-radius", "error",
+                f"`{prop}: {value.strip()}` is a literal radius.",
+                "Use --radius-*. Concentric corners depend on the radius and the "
+                "inset being related — see references/spacing-system.md §8.")
+
+        # ---- L1 motion -------------------------------------------------------
+        # The motion family's values, as stylelint reads them: a time, a curve
+        # or an easing keyword is a choice the tokens make (values.families.motion).
+        if prop in MOTION_VALUES and off_family(value, MOTION_VALUES[prop]):
+            rest = strip_var_refs(sass_as_css(value))
+            # 0s switches one transition off among several: not a duration.
+            if any(not ZERO_TIME.fullmatch(t) for t in TIME_LITERAL.findall(rest)):
+                add(line, "L1", "raw-duration", "error",
+                    f"`{prop}: {value.strip()}` hardcodes a duration.",
+                    "Use --motion-hover / --motion-enter / --motion-exit / "
+                    "--motion-expand. A literal duration also ignores "
+                    "prefers-reduced-motion, which the tokens handle for you.")
+            elif BEZIER_LITERAL.search(rest) or EASING_WORD.search(rest):
+                add(line, "L1", "raw-easing", "error",
+                    f"`{prop}: {value.strip()}` hardcodes an easing curve.",
+                    "Use --ease-out (arriving), --ease-in (leaving), "
+                    "--ease-in-out (moving within view), or a --motion-* pair.")
+            else:
+                add(line, "L1", "raw-motion", "error",
+                    f"`{prop}: {value.strip()}` is not a motion token.",
+                    "Use a --motion-* pair, or the --dur-* and --ease-* tokens "
+                    "(design-rules.json: values.families.motion).")
+        if prop == "transition" and re.match(r"^\s*all\b", value, re.I):
+            add(line, "L1", "transition-all", "warning",
+                "`transition: all` animates properties you did not choose.",
+                "Name the properties. `all` costs layout work on every change "
+                "and produces animations nobody designed.")
+
+        # ---- L1 z-index ------------------------------------------------------
+        if prop == "z-index" and "var(--" not in value and value.strip() not in ("0", "auto"):
+            add(line, "L1", "raw-z-index", "error",
+                f"`z-index: {value.strip()}` is a literal.",
+                "Use the ladder: --z-raised / --z-sticky / --z-dropdown / "
+                "--z-overlay / --z-modal / --z-toast / --z-tooltip. Literal "
+                "z-indexes are how you end up with 9999.")
+
+        # ---- L6 Tier-1 leakage ------------------------------------------------
+        if component_file or in_layer(d.at_rules, "components"):
+            for ref in VAR_REF.findall(value):
+                advice = tier1_advice(ref)
+                if advice:
+                    # Declaring a Tier-3 socket FROM a Tier-2 role is the
+                    # sanctioned pattern; reading a Tier-1 primitive is not.
+                    add(line, "L6", "tier1-leak", "error",
+                        f"Component code reads the Tier-1 primitive `{ref}`.",
+                        f"Right value, wrong tier — use {advice}. The day "
+                        f"'more air in cards' lands, you want to change one "
+                        f"role, not grep for {ref} across the repo.")
+                else:
+                    # Only a shorthand can take a --motion-* pair. A longhand
+                    # (animation-duration, transition-timing-function) must read
+                    # the primitive — view-transition pseudo-elements and
+                    # scroll-driven animations need exactly that.
+                    if any(ref[2:].startswith(p) for p in TIER1_MOTION) and prop in MOTION_SHORTHANDS:
+                        add(line, "L6", "tier1-motion", "warning",
+                            f"Component code reads `{ref}` directly.",
+                            "Prefer a --motion-* pair so duration and easing "
+                            "travel together; they drift apart when split.")
+
+        # ---- Optical corrections must be declared as such ---------------------
+        if (prop in {"translate", "transform"} and has_raw_length(value)
+                and not OPTICAL_PROP.search(value)):
+            add(line, "L1", "raw-transform-offset", "warning",
+                f"`{prop}: {value.strip()}` nudges by a literal.",
+                "If it is an optical correction, declare it as "
+                "`--<thing>-optical-nudge` with a comment stating the "
+                "perceptual reason, and keep it under 2px. If it is bigger "
+                "than 2px it is a layout bug being papered over.")
+
+    # ---- File-level checks --------------------------------------------------
+    if not token_file and first_unlayered_line:
+        add(first_unlayered_line, "L5", "unlayered", "error",
+            "This stylesheet has rules outside any @layer.",
+            "Unlayered CSS beats every layer regardless of specificity, so one "
+            "unwrapped file quietly makes its rules unoverridable. Wrap the "
+            "file in @layer components { … } (or the layer it belongs to).")
+
+    first_layered_import = min((line for line, _ in import_layers), default=0)
+    if saw_layer_statement and first_rule_line and layer_statement_line > first_rule_line:
+        add(layer_statement_line, "L5", "layer-statement-position", "error",
+            "The @layer statement appears after rules have already been seen.",
+            "A layer's position is fixed the first time its name is used, so "
+            "the statement must be the first thing in the entry stylesheet, "
+            "before every @import and every rule.")
+    elif saw_layer_statement and first_layered_import and layer_statement_line > first_layered_import:
+        # The import names its layer first, whatever the statement then says (N25).
+        add(layer_statement_line, "L5", "layer-statement-position", "error",
+            f"The @layer statement comes after `@import … layer()` on line {first_layered_import}.",
+            "A layer's position is fixed the first time its name is used, and "
+            "that import used it first. Move the statement above every @import.")
+
+    # A layer first named by its import is appended after every declared one,
+    # so the vendor's rules beat yours (SB-A8, design-rules.json: layers).
+    if saw_layer_statement:
+        for line, layer in import_layers:
+            if layer not in stated_layers:
+                add(line, "L5", "layer-undeclared", "error",
+                    f"`layer({layer})` imports into a layer the @layer statement does not name.",
+                    f"A layer first named by its import lands after `overrides`, so these "
+                    f"rules beat every rule you write. Name it in the statement: {LAYER_STATEMENT}")
+
+    return findings
+
+
+# ---------------------------------------------------------------------------
+# JS / JSX rules
+# ---------------------------------------------------------------------------
+
+def strip_js_comments(text: str) -> str:
+    out = list(text)
+    i, n = 0, len(text)
+    while i < n:
+        ch = text[i]
+        if ch in "\"'`":
+            quote, i = ch, i + 1
+            while i < n and text[i] != quote:
+                if text[i] == "\\":
+                    i += 1
+                i += 1
+            i += 1
+            continue
+        if ch == "/" and i + 1 < n and text[i + 1] == "*":
+            start = i
+            i += 2
+            while i + 1 < n and not (text[i] == "*" and text[i + 1] == "/"):
+                i += 1
+            i = min(i + 2, n)
+            for j in range(start, i):
+                if out[j] != "\n":
+                    out[j] = " "
+            continue
+        if ch == "/" and i + 1 < n and text[i + 1] == "/":
+            start = i
+            while i < n and text[i] != "\n":
+                i += 1
+            for j in range(start, i):
+                out[j] = " "
+            continue
+        i += 1
+    return "".join(out)
+
+
+def match_braces(text: str, start: int) -> int:
+    """Index just past the `}}` that closes a `{{` opened at `start`."""
+    depth, i, n = 0, start, len(text)
+    while i < n:
+        c = text[i]
+        if c in "\"'`":
+            q, i = c, i + 1
+            while i < n and text[i] != q:
+                if text[i] == "\\":
+                    i += 1
+                i += 1
+        elif c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return n
+
+
+def audit_js(path: Path, text: str, root: Path | None = None) -> list[Finding]:
+    # Lint and build configs quote example code as data. Auditing them
+    # audits the examples, which is noise, not signal.
+    if CONFIG_FILE_PAT.search(str(path).replace(os.sep, '/')):
+        return []
+    findings: list[Finding] = []
+    lines = text.splitlines()
+    clean = strip_js_comments(text)
+
+    file_ignores: set[str] = set()
+    line_ignores: dict[int, set[str]] = {}
+    for idx, raw in enumerate(lines, start=1):
+        m = IGNORE_FILE.search(raw)
+        if m:
+            file_ignores |= {t.strip().upper() for t in m.group(1).split(",") if t.strip()}
+        m = IGNORE_LINE.search(raw)
+        if m:
+            line_ignores[idx + 1] = {t.strip().upper() for t in m.group(1).split(",") if t.strip()}
+    if any(mark in text[:800] for mark in GENERATED_MARKERS):
+        return []
+
+    line_of = _line_finder(clean)
+
+    def add(line: int, law: str, rule: str, sev: str, msg: str, fix: str, snippet: str = "") -> None:
+        tags = line_ignores.get(line, set()) | file_ignores
+        if law in tags or rule.upper() in tags or "ALL" in tags:
+            return
+        # A finding may name its own snippet, which is also its baseline key's
+        # text: several findings on one line stay distinct.
+        snippet = snippet or (lines[line - 1].strip() if 0 < line <= len(lines) else "")
+        findings.append(Finding(str(path), line, law, rule, sev, msg, fix, snippet))
+
+    _audit_jsx_styles(clean, line_of, add)
+    _audit_class_lists(clean, line_of, add)
+    for f in _audit_css_in_js(path, clean, line_of):
+        tags = line_ignores.get(f.line, set()) | file_ignores
+        if not (f.law in tags or f.rule.upper() in tags or "ALL" in tags):
+            findings.append(f)
+
+    # ---- Hardcoded colours in JS strings -----------------------------------
+    for m in re.finditer(r"""["'`](#[0-9a-fA-F]{3,8})["'`]""", clean):
+        ln = line_of(m.start())
+        ctx = lines[ln - 1] if 0 < ln <= len(lines) else ""
+        if test_like(path, root):
+            continue
+        if "#" in ctx and re.search(r"(href|id|anchor|hash|sha|commit)", ctx, re.I):
+            continue
+        add(ln, "L1", "js-raw-color", "warning",
+            f"Hardcoded colour `{m.group(1)}` in JS.",
+            "Read the token instead — getComputedStyle().getPropertyValue('--bg-accent') "
+            "for canvas/chart code, or set it from CSS via a custom property. A "
+            "colour in JS is a colour dark mode cannot re-point.")
+
+    return findings
+
+
+def _line_finder(text: str):
+    """pos -> 1-based line number, by bisecting a newline index (one pass over
+    the text, instead of counting newlines again for every finding)."""
+    starts = [0] + [m.end() for m in re.finditer("\n", text)]
+    return lambda pos: bisect.bisect_right(starts, pos)
+
+
+STYLE_KEY = re.compile(r"""\s*(?:(['"])((?:(?!\1)[^\\]|\\.)*)\1|([A-Za-z_$][\w$]*))\s*\Z""", re.S)
+
+
+def style_object_keys(inner: str) -> list[str]:
+    """The property names a style object sets, one per depth-0 entry.
+
+    An entry's key is what stands before its first depth-0 colon, or the whole
+    entry for a shorthand (`{ color }`); a computed key names none, and a
+    spread names the keys of the object literals it can evaluate to
+    (`spread_keys`). Reading every `'x' :` in the text took the ternary in
+    `{ '--progress': open ? '1' : '0' }` for a key named `1` (audit H8)."""
+    inner = strip_js_comments(inner)   # `{ /* note */ color: … }` (CodeRabbit on #132)
+    names: list[str] = []
+    depth, start, colon, quote, k, n = 0, 0, -1, "", 0, len(inner)
+
+    def entry(end: int) -> None:
+        text = inner[start:end].strip()
+        if text.startswith("..."):
+            names.extend(spread_keys(text[3:]))
+            return
+        key = inner[start:colon if colon >= 0 else end]
+        m = STYLE_KEY.match(key)
+        if m and (colon >= 0 or m.group(3)):
+            names.append(m.group(2) if m.group(1) else m.group(3))
+
+    while k < n:
+        c = inner[k]
+        if quote:
+            if c == "\\":
+                k += 1
+            elif c == quote:
+                quote = ""
+        elif c in "'\"`":
+            quote = c
+        elif c in "([{":
+            depth += 1
+        elif c in ")]}":
+            depth -= 1
+        elif depth == 0 and c == ":" and colon < 0:
+            colon = k
+        elif depth == 0 and c == ",":
+            entry(k)
+            start, colon = k + 1, -1
+        k += 1
+    if inner[start:].strip():
+        entry(n)
+    return names
+
+
+def spread_keys(expr: str) -> list[str]:
+    """The keys of the object literals a spread's operand can evaluate to:
+    `...{ color: 'red' }`, `...(on ? { color: 'red' } : {})`, `...(on && {…})`
+    (Codex on #132). A name (`...base`) cannot be read, and an object passed
+    to a call (`...fn({ color })`) or held in an array is not the spread."""
+    names: list[str] = []
+    opaque: list[bool] = []            # per open ( or [: a call's arguments or an array
+    k, n = 0, len(expr)
+    while k < n:
+        c = expr[k]
+        if c in "\"'`":
+            q, k = c, k + 1
+            while k < n and expr[k] != q:
+                k += 2 if expr[k] == "\\" else 1
+        elif c == "(":
+            before = expr[:k].rstrip()[-1:]
+            opaque.append(bool(before) and (before.isalnum() or before in "_$)]"))
+        elif c == "[":
+            opaque.append(True)
+        elif c in ")]":
+            if opaque:
+                opaque.pop()
+        elif c == "{":
+            end = match_braces(expr, k)
+            if not any(opaque):
+                names.extend(style_object_keys(expr[k + 1:end - 1]))
+            k = end
+            continue
+        k += 1
+    return names
+
+
+def _audit_jsx_styles(clean: str, line_of, add) -> None:
+    # ---- L4 inline style ---------------------------------------------------
+    for m in JSX_STYLE.finditer(clean):
+        open_at = clean.index("{", m.start())
+        end = match_braces(clean, open_at)
+        body = clean[open_at:end]
+        # The object itself, also in `{{ … } as CSSProperties}`.
+        inner = body[2:match_braces(body, 1) - 1]
+        names = style_object_keys(inner)
+        offenders = [k for k in names if not k.startswith("--")]
+        if not names:
+            continue
+        for pair in CUSTOM_PROPERTY_STRING.finditer(inner):
+            if DESIGN_LITERAL.match(pair.group(4).strip()):
+                add(line_of(m.start()), "L1", "inline-literal", "error",
+                    f"Inline `style` passes `{pair.group(2)}: '{pair.group(4)}'`, a design literal.",
+                    "The custom property carries a value only the runtime knows. Pass "
+                    "a number and do the arithmetic in CSS with calc(), or point the "
+                    "property at a token: var(--gap-related).",
+                    snippet=f"{pair.group(2)}: {pair.group(4)}")
+            # Law 6 through the same exception: a socket filled from a primitive.
+            for ref in VAR_REF.findall(pair.group(4)):
+                advice = tier1_advice(ref)
+                if advice:
+                    add(line_of(m.start()), "L6", "tier1-leak", "error",
+                        f"Inline `style` passes `{pair.group(2)}: '{pair.group(4)}'`, "
+                        f"which reads the Tier-1 primitive `{ref}`.",
+                        f"Right value, wrong tier — use {advice}.",
+                        snippet=f"{pair.group(2)}: {pair.group(4)}")
+        if offenders:
+            add(line_of(m.start()), "L4", "inline-style", "error",
+                f"Inline `style` sets visual propert{'y' if len(offenders) == 1 else 'ies'}: "
+                f"{', '.join(offenders[:4])}.",
+                "Inline style is the highest-specificity declaration short of "
+                "!important, and it is invisible to every stylesheet, linter and "
+                "theme. The one legal use is passing a runtime NUMBER in as a "
+                "custom property: style={{'--card-span': n}}, with the rule that "
+                "consumes it living in the component's stylesheet.")
+
+
+def _call_end(text: str, open_at: int) -> int:
+    """Index of the `)` closing the call opened at `open_at`, skipping strings."""
+    depth, k, n = 0, open_at, len(text)
+    while k < n:
+        c = text[k]
+        if c in "\"'`":
+            q, k = c, k + 1
+            while k < n and text[k] != q:
+                k += 2 if text[k] == "\\" else 1
+        elif c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+            if depth == 0:
+                return k
+        k += 1
+    return n
+
+
+def _class_strings(clean: str) -> Iterator[tuple[str, int]]:
+    """(class string, position): `className="…"` values, and every string
+    literal inside a class-helper call, once each."""
+    seen: set[int] = set()
+    for sm in CLASS_ATTR.finditer(clean):
+        seen.add(sm.start(1))
+        yield sm.group(1), sm.start(1)
+    for hm in CLASS_HELPER.finditer(clean):
+        open_at = hm.end() - 1
+        for lm in JS_STRING.finditer(clean, open_at, _call_end(clean, open_at)):
+            if lm.start(2) not in seen:
+                seen.add(lm.start(2))
+                yield lm.group(2), lm.start(2)
+
+
+def _audit_css_in_js(path: Path, clean: str, line_of) -> list[Finding]:
+    """A styled-components or emotion template body is CSS: audit it as the
+    component's CSS, at the lines it sits on. An interpolation is a runtime
+    value, so it stands in as a var()."""
+    found: list[Finding] = []
+    for m in CSS_IN_JS.finditer(clean):
+        start = m.end()                      # just past the opening backtick
+        k, n, body = start, len(clean), []
+        while k < n and clean[k] != "`":
+            if clean.startswith("${", k):
+                end = match_braces(clean, k + 1)
+                body.append("var(--interpolated)" + "\n" * clean.count("\n", k, end))
+                k = end
+                continue
+            body.append(clean[k])
+            k += 2 if clean[k] == "\\" else 1
+        css = ("\n" * (line_of(start) - 1) + "@layer components { .css-in-js {"
+               + "".join(body) + "} }")
+        found.extend(audit_css(path, css))
+    return found
+
+
+def _audit_class_lists(clean: str, line_of, add) -> None:
+    # ---- Tailwind arbitrary values / bang / space-x ------------------------
+    for cls, at in _class_strings(clean):
+        for m in TW_ARBITRARY.finditer(cls):
+            tok = m.group(0)
+            if TW_ARBITRARY_OK.match(tok):
+                continue
+            add(line_of(at), "L3", "tw-arbitrary", "error",
+                f"Tailwind arbitrary value `{tok}`.",
+                "The theme IS the token file, so an on-scale class already "
+                "exists for whatever this is. An arbitrary value re-opens the "
+                "unbounded value space the closed scale exists to shut.")
+        for m in TW_ARBITRARY_PROPERTY.finditer(cls):
+            add(line_of(at), "L1", "tw-arbitrary-property", "error",
+                f"`{m.group(0)}` puts a whole declaration in a class list.",
+                "No theme, stylesheet or audit that reads CSS can see it. If "
+                "Tailwind has no utility for the property, add an @utility in "
+                "theme.css or give it a rule in the component's own stylesheet.")
+        for m in TW_IMPORTANT_SUFFIX.finditer(cls):
+            add(line_of(at), "L5", "tw-important", "error",
+                f"`{m.group(0)}` forces !important (the v4 suffix).",
+                "!important inverts layer order and makes the next override "
+                "harder. Fix the layer or the variant instead.")
+        for m in TW_SPACE_XY.finditer(cls):
+            add(line_of(at), "L2", "tw-space-xy", "error",
+                f"`{m.group(0)}` spaces children with margins.",
+                "space-x/space-y compile to child margins with a :not(:last-child) "
+                "selector — the same double-ownership problem, behind a nicer "
+                "name. Use gap-* on the parent.")
+        for m in TW_IMPORTANT.finditer(cls):
+            add(line_of(at), "L5", "tw-important", "error",
+                f"`{m.group(0)}` forces !important.",
+                "!important inverts layer order and makes the next override "
+                "harder. Fix the layer or the variant instead.")
+        for m in TW_LITERAL.finditer(cls):
+            add(line_of(at), "L1", "tw-literal", "error",
+                f"`{m.group(0)}` is a literal value.",
+                "Tailwind generates a bare number for duration-, delay-, z-, "
+                "border-, ring- and offset- utilities whatever the theme says, "
+                "so the closed scale does not remove it. Use the role: "
+                "motion-hover, z-modal, border-stroke, focus-ring. A literal "
+                "duration also skips the reduced-motion tokens.")
+        for m in TW_OPACITY.finditer(cls):
+            add(line_of(at), "L1", "tw-opacity-modifier", "error",
+                f"`{m.group(0)}` sets a literal alpha.",
+                "A /NN modifier compiles to color-mix() with a number nobody "
+                "chose. Translucency has roles (bg-hover, bg-active, the scrim "
+                "role) that dark mode and the contrast checks can reach.")
+        for m in TW_VAR_SHORTHAND.finditer(cls):
+            if tier1_advice(m.group(1)) is None:
+                continue
+            add(line_of(at), "L6", "tier1-leak", "error",
+                f"`{m.group(0)}` reads a Tier-1 primitive.",
+                "Use the role: p-card rather than p-(--space-6), bg-surface "
+                "rather than bg-(--neutral-800).")
+
+
+# ---------------------------------------------------------------------------
+# Templates: HTML pages and single-file components
+# ---------------------------------------------------------------------------
+
+def _blank(text: str, spans: Iterable[tuple[int, int]], keep: bool) -> str:
+    """Positions and newlines preserved. keep=True blanks everything EXCEPT the
+    spans; keep=False blanks the spans themselves."""
+    spans = list(spans)
+    if keep:
+        out = [c if c == "\n" else " " for c in text]
+        for s, e in spans:
+            out[s:e] = text[s:e]
+    else:
+        out = list(text)
+        for s, e in spans:
+            for k in range(s, e):
+                if out[k] != "\n":
+                    out[k] = " "
+    return "".join(out)
+
+
+# ---- BEGIN bound-styles: audit_design.py and extract_literals.py carry this block verbatim
+# A framework's bound inline style is style="" under another name (N48): Vue's
+# `:style` and `v-bind:style` (an object, an array of them, or a string),
+# Angular's `[style]`, `[ngStyle]` and `[attr.style]`, and one property at a
+# time, Angular's `[style.width.px]` and Svelte's `style:color` directive.
+BOUND_STYLE_WHOLE = re.compile(r"(?::|v-bind:)style(?:\.(?:prop|attr|camel))*|\[(?:style|ngStyle|attr\.style)\]")
+BOUND_STYLE_ONE = re.compile(r"\[style\.(--[\w-]+|[A-Za-z][\w-]*)(?:\.([A-Za-z%]+))?\]"
+                             r"|style:(--[\w-]+|[A-Za-z][\w-]*)(?:\|important)?")
+BOUND_NUMBER = re.compile(r"-?\d*\.?\d+")
+BOUND_TAG = re.compile(r"<[A-Za-z][\w:.-]*")
+BOUND_UNIT_KEY = re.compile(r"(--[\w-]+|[A-Za-z][\w-]*)\.([A-Za-z%]+)")    # ngStyle's 'width.px'
+# An Angular control-flow block (`@if (on) { <div …> }`) holds markup; any other
+# brace in text opens an expression (`{{ … }}`, Svelte's `{…}`), which renders none.
+BOUND_BLOCK = re.compile(r"@(?:if|else|for|switch|case|default|defer|placeholder|loading|error|empty)"
+                         r"\b[^{}<>]*\Z")
+
+
+def _bound_code(expr: str) -> str:
+    """The expression with its comments blanked, every offset kept (Codex on #168)."""
+    out, k, n = list(expr), 0, len(expr)
+    while k < n:
+        if expr[k] in "\"'`":
+            k = _bound_skip(expr, k)
+            continue
+        if expr.startswith("/*", k):
+            end = expr.find("*/", k + 2)
+            end = n if end < 0 else end + 2
+        elif expr.startswith("//", k):
+            end = expr.find("\n", k)
+            end = n if end < 0 else end
+        else:
+            k += 1
+            continue
+        for j in range(k, end):
+            if out[j] != "\n":
+                out[j] = " "
+        k = end
+    return "".join(out)
+
+
+def _bound_skip(text: str, k: int) -> int:
+    """Index past the string, template literal or braced block opened at `k`."""
+    n, c = len(text), text[k]
+    if c in "\"'`":
+        k += 1
+        while k < n and text[k] != c:
+            if text[k] == "\\":
+                k += 1
+            elif c == "`" and text.startswith("${", k):
+                k = _bound_skip(text, k + 1) - 1
+            k += 1
+        return k + 1
+    depth = 0
+    while k < n:
+        if text[k] in "\"'`":
+            k = _bound_skip(text, k)
+            continue
+        if text[k] in "([{":
+            depth += 1
+        elif text[k] in ")]}":
+            depth -= 1
+            if depth == 0:
+                return k + 1
+        k += 1
+    return n
+
+
+def tag_attributes(markup: str) -> list[tuple[str, int, str | None, int, str]]:
+    """Each attribute of each start tag as (name, name_at, value, value_at,
+    delimiter): the delimiter is the value's quote, `{` for Svelte's and
+    Astro's braces, "" for a bare value, and the value None for none. A tag
+    is read to its own `>`, past quoted and braced values, so a `<` inside a
+    value (`v-if="a<b"`) opens no tag."""
+    found: list[tuple[str, int, str | None, int, str]] = []
+    n, pos = len(markup), 0
+    while True:
+        m = BOUND_TAG.search(markup, pos)
+        if not m:
+            return found
+        brace = markup.find("{", pos, m.start())
+        if brace >= 0:                              # text before the tag holds an expression
+            end = _bound_skip(markup, brace)
+            closed = markup[end - 1:end] == "}"
+            pos = end if closed and not BOUND_BLOCK.search(markup, max(0, brace - 300), brace) else brace + 1
+            continue
+        k = m.end()
+        while k < n and markup[k] != ">":
+            c = markup[k]
+            if c.isspace() or c == "/":
+                k += 1
+                continue
+            if c in "{\"'":                         # {...spread}, {shorthand}, a stray quote
+                k = _bound_skip(markup, k)
+                continue
+            start = k
+            while k < n and not markup[k].isspace() and markup[k] not in "=>/\"'{":
+                k += 1
+            name, value, value_at, delim = markup[start:k], None, k, ""
+            j = k
+            while j < n and markup[j].isspace():
+                j += 1
+            if j < n and markup[j] == "=":
+                j += 1
+                while j < n and markup[j].isspace():
+                    j += 1
+                if j < n and markup[j] in "\"'":
+                    end = markup.find(markup[j], j + 1)
+                    end = n if end < 0 else end
+                    value, value_at, delim, k = markup[j + 1:end], j + 1, markup[j], end + 1
+                elif j < n and markup[j] == "{":
+                    end = _bound_skip(markup, j)
+                    value, value_at, delim, k = markup[j + 1:end - 1], j + 1, "{", end
+                else:
+                    end = j
+                    while end < n and not markup[end].isspace() and markup[end] != ">":
+                        end += 1
+                    value, value_at, k = markup[j:end], j, end
+            found.append((name, start, value, value_at, delim))
+        pos = k + 1
+
+
+def bound_value(expr: str, at: int) -> tuple[str, str, int]:
+    """(kind, text, text_at) of a value: "text" for a string written out, its
+    quotes off; "number" for a bare number; "expr" for what only the runtime
+    knows (a name, a call, a template literal with `${}`)."""
+    lead = len(expr) - len(expr.lstrip())
+    v = expr.strip()
+    if len(v) >= 2 and v[0] in "\"'`" and _bound_skip(v, 0) == len(v) and \
+            not (v[0] == "`" and "${" in v):
+        return "text", v[1:-1], at + lead + 1
+    if BOUND_NUMBER.fullmatch(v):
+        return "number", v, at + lead
+    return "expr", v, at + lead
+
+
+def bound_branches(expr: str, at: int) -> list[tuple[str, int]]:
+    """The strings written out as a whole operand of an expression the value
+    may take: either arm of a ternary, either side of `||`, `??` or `&&`
+    (`on ? '12px' : gap`, Codex on #168). A string that is compared
+    (`t === 'dark'`) or passed to a call is no value."""
+    out: list[tuple[str, int]] = []
+    k, start, n = 0, 0, len(expr)
+
+    def piece(end: int) -> None:
+        kind, text, text_at = bound_value(expr[start:end], at + start)
+        if kind == "text":
+            out.append((text, text_at))
+
+    while k < n:
+        c = expr[k]
+        if c in "\"'`([{":
+            k = _bound_skip(expr, k)
+            continue
+        step = 2 if expr[k:k + 2] in ("||", "??", "&&") else \
+            1 if c == ":" or (c == "?" and expr[k + 1:k + 2] != ".") else 0
+        if step:
+            piece(k)
+            k += step
+            start = k
+            continue
+        k += 1
+    piece(n)
+    return out
+
+
+def _bound_declarations(text: str, at: int, kind: str) -> list[tuple[str, str, str, int]]:
+    """A string's declarations, as style="" holds them: kind "css", or "expr"
+    for a value a template literal fills in."""
+    out = []
+    for decl in re.finditer(r"[^;]+", text):
+        prop, colon, value = decl.group(0).partition(":")
+        if colon and prop.strip():
+            out.append((prop.strip(), "expr" if kind == "expr" and "${" in value else "css",
+                        value.strip(), at + decl.start() + len(prop) + 1 + len(value) - len(value.lstrip())))
+    return out
+
+
+def _bound_entries(inner: str, at: int) -> list[tuple[str, str, str, int]]:
+    """An object literal's entries as (property, kind, value, value_at)."""
+    out: list[tuple[str, str, str, int]] = []
+    k, start, colon, n = 0, 0, -1, len(inner)
+
+    def entry(end: int) -> None:
+        text = inner[start:end]
+        if text.strip().startswith("..."):
+            dots = text.index("...") + 3
+            out.extend(bound_style_entries(text[dots:], at + start + dots))
+            return
+        key = inner[start:colon if colon >= 0 else end].strip()
+        if len(key) >= 2 and key[0] in "\"'" and key[-1] == key[0]:
+            key = key[1:-1]
+        elif not re.fullmatch(r"[A-Za-z_$][\w$]*", key):
+            return                                  # a computed key names nothing it can read
+        if colon < 0:                               # `{ color }`: a name
+            out.append((key, "expr", key, at + start))
+            return
+        kind, value, value_at = bound_value(inner[colon + 1:end], at + colon + 1)
+        unit = BOUND_UNIT_KEY.fullmatch(key)
+        if unit:
+            key = unit.group(1)
+            if kind == "number":
+                kind, value = "text", value + unit.group(2)
+        out.append((key, kind, value, value_at))
+        if kind == "expr":
+            out.extend((key, "text", text, text_at) for text, text_at in bound_branches(value, value_at))
+
+    while k < n:
+        c = inner[k]
+        if c in "\"'`([{":
+            k = _bound_skip(inner, k)
+            continue
+        if c == ":" and colon < 0:
+            colon = k
+        elif c == ",":
+            entry(k)
+            start, colon = k + 1, -1
+        k += 1
+    if inner[start:].strip():
+        entry(n)
+    return out
+
+
+def bound_style_entries(expr: str, at: int) -> list[tuple[str, str, str, int]]:
+    """The declarations a bound style expression can set: each object literal
+    it can evaluate to (`{…}`, either arm of a ternary, `on && {…}`, the
+    items of an array, a spread's), and each string, read as style="" is.
+    An object or a string passed to a call, or indexed, is not the value."""
+    out: list[tuple[str, str, str, int]] = []
+    opaque: list[bool] = []
+    k, n = 0, len(expr)
+    while k < n:
+        c = expr[k]
+        before = expr[:k].rstrip()[-1:]
+        named = bool(before) and (before.isalnum() or before in "_$)]")
+        if c in "\"'`":
+            end = _bound_skip(expr, k)
+            if not any(opaque):
+                kind = "expr" if c == "`" and "${" in expr[k:end] else "css"
+                out.extend(_bound_declarations(expr[k + 1:end - 1], at + k + 1, kind))
+            k = end
+            continue
+        if c == "{":
+            end = _bound_skip(expr, k)
+            if not any(opaque):
+                out.extend(_bound_entries(expr[k + 1:end - 1], at + k + 1))
+            k = end
+            continue
+        if c in "([":
+            opaque.append(named)                    # a call's arguments, an index
+        elif c in ")]" and opaque:
+            opaque.pop()
+        k += 1
+    return out
+
+
+def bound_styles(markup: str) -> list[tuple[str, int, list[tuple[str, str, str, int]]]]:
+    """Each bound inline style in the markup, as (attribute, at, entries),
+    each entry (property, kind, value, value_at). A kind is "text" for a
+    value written out, "css" for one inside a declaration string (style=""'s
+    own form), "number" for a bare number, "expr" for one only the runtime
+    knows. An Angular unit (`[style.width.px]="13"`) joins its number."""
+    found = []
+    for name, at, value, value_at, delim in tag_attributes(markup):
+        one = BOUND_STYLE_ONE.fullmatch(name)
+        if BOUND_STYLE_WHOLE.fullmatch(name):
+            entries = bound_style_entries(_bound_code(value or ""), value_at)
+        elif one and one.group(3):                  # Svelte: a value is text unless it holds {…}
+            prop = one.group(3)
+            if value is None:
+                entries = [(prop, "expr", prop, at)]
+            elif delim == "{":
+                entries = [(prop, *bound_value(_bound_code(value), value_at))]
+            else:
+                entries = [(prop, "expr" if "{" in value else "text", value, value_at)]
+        elif one:                                   # Angular: the value is an expression
+            prop, unit = one.group(1), one.group(2)
+            kind, text, text_at = bound_value(_bound_code(value or ""), value_at)
+            if unit and kind in ("number", "text") and BOUND_NUMBER.fullmatch(text):
+                kind, text = "text", text + unit
+            entries = [(prop, kind, text, text_at)]
+        else:
+            continue
+        for prop, kind, text, text_at in list(entries):
+            if one and kind == "expr" and (delim == "{" or one.group(1)):   # `on ? '12px' : gap`
+                entries.extend((prop, "text", t, t_at) for t, t_at in bound_branches(text, text_at))
+        found.append((name, at, entries))
+    return found
+# ---- END bound-styles
+
+
+def _audit_bound_style(name: str, entries: list[tuple[str, str, str, int]], line: int, add) -> None:
+    """Law 4 for a bound style, as for JSX's style={{…}}: a visual property
+    is the failure, and a custom property's written-out value that is a
+    design literal (L1) or reads a Tier-1 primitive (L6) is Law 1 back
+    through the exception. A declaration string is read as style="" is."""
+    for prop, kind, value, _ in entries:
+        if not prop.startswith("--") or kind != "text":
+            continue
+        if DESIGN_LITERAL.match(value.strip()):
+            add(line, "L1", "inline-literal", "error",
+                f"`{name}` passes `{prop}: '{value}'`, a design literal.",
+                "The custom property carries a value only the runtime knows. Bind "
+                "a number and do the arithmetic in CSS with calc(), or point the "
+                "property at a token: var(--gap-related).",
+                snippet=f"{prop}: {value}")
+        for ref in VAR_REF.findall(value):
+            advice = tier1_advice(ref)
+            if advice:
+                add(line, "L6", "tier1-leak", "error",
+                    f"`{name}` passes `{prop}: '{value}'`, which reads the Tier-1 primitive `{ref}`.",
+                    f"Right value, wrong tier — use {advice}.",
+                    snippet=f"{prop}: {value}")
+    offenders = list(dict.fromkeys(p for p, *_ in entries if not p.startswith("--")))
+    if offenders:
+        add(line, "L4", "inline-style", "error",
+            f"`{name}` sets visual propert{'y' if len(offenders) == 1 else 'ies'}: "
+            f"{', '.join(offenders[:4])}.",
+            "A bound style is an inline style: it beats every stylesheet and layer "
+            "and is invisible to the theme. Give the element a class and style it "
+            "in the component's stylesheet; the one legal binding is a custom "
+            "property carrying a runtime value (--progress), which that stylesheet reads.")
+
+
+def audit_template(path: Path, text: str) -> list[Finding]:
+    """.html / .htm / .vue / .svelte / .astro.
+
+    <style> blocks are audited as CSS in place: everything else is blanked
+    with line breaks kept, so every finding points at the real line. A
+    style="" attribute that sets a visual property is the same Law 4 failure
+    as a JSX inline style, and class lists get the Tailwind checks. HTML email
+    never reaches here (see is_html_email)."""
+    if any(mark in text[:800] for mark in GENERATED_MARKERS):
+        return []
+
+    lines = text.splitlines()
+    file_ignores: set[str] = set()
+    line_ignores: dict[int, set[str]] = {}
+    for idx, raw in enumerate(lines, start=1):
+        m = IGNORE_FILE.search(raw)
+        if m:
+            file_ignores |= {t.strip().upper() for t in m.group(1).split(",") if t.strip()}
+        m = IGNORE_LINE.search(raw)
+        if m:
+            line_ignores[idx + 1] = {t.strip().upper() for t in m.group(1).split(",") if t.strip()}
+
+    style_spans = [m.span(1) for m in STYLE_BLOCK.finditer(text)]
+    findings = audit_css(path, _blank(text, style_spans, keep=True)) if style_spans else []
+
+    markup = _blank(text, style_spans + [m.span(1) for m in SCRIPT_BLOCK.finditer(text)],
+                    keep=False)
+    # Commented-out markup is no element: blanked, as the census blanks it, so the
+    # two read the same bound styles (CodeRabbit on #168). The ignore pragmas are
+    # read from the raw lines above.
+    markup = _blank(markup, [m.span() for m in HTML_COMMENT.finditer(markup)], keep=False)
+    line_of = _line_finder(text)
+
+    def add(line: int, law: str, rule: str, sev: str, msg: str, fix: str, snippet: str = "") -> None:
+        tags = line_ignores.get(line, set()) | file_ignores
+        if law in tags or rule.upper() in tags or "ALL" in tags:
+            return
+        snippet = snippet or (lines[line - 1].strip() if 0 < line <= len(lines) else "")
+        findings.append(Finding(str(path), line, law, rule, sev, msg, fix, snippet))
+
+    for m in TAG_STYLE_ATTR.finditer(markup):
+        props = [d.split(":", 1)[0].strip().lower()
+                 for d in m.group(2).split(";") if ":" in d]
+        offenders = [p for p in props if p and not p.startswith("--")]
+        if offenders:
+            add(line_of(m.start(2)), "L4", "inline-style", "error",
+                f"style=\"\" sets visual propert{'y' if len(offenders) == 1 else 'ies'}: "
+                f"{', '.join(offenders[:4])}.",
+                "An inline style beats every stylesheet and layer and is invisible "
+                "to the theme. Give the element a class and style it in the "
+                "stylesheet; the one legal inline use is a custom property carrying "
+                "a runtime value (style=\"--progress: 40%\").")
+
+    for name, at, entries in bound_styles(markup):    # :style, style:x, [style.x], [ngStyle] (N48)
+        _audit_bound_style(name, entries, line_of(at), add)
+    _audit_jsx_styles(markup, line_of, add)       # Astro accepts style={{…}}
+    _audit_class_lists(markup, line_of, add)
+
+    if file_ignores:
+        findings = [f for f in findings
+                    if not ({f.law, f.rule.upper(), "ALL"} & file_ignores)]
+    return findings
+
+
+# ---------------------------------------------------------------------------
+# Cross-file analysis — the violations no single file reveals
+# ---------------------------------------------------------------------------
+
+CLASS_IN_SEL = re.compile(r"\.(-?[_a-zA-Z][\w-]*)")
+
+
+def breakpoint_drift(files: list[tuple[Path, str]]) -> list[Finding]:
+    """L1 `breakpoint-drift` (SB-A11). A media query cannot read a custom
+    property, so a theme file keeps each breakpoint as a literal,
+    `--breakpoint-md`, beside tokens.css's `--bp-md`. With both files in the
+    run, the two sets must match: a copy that differs from its token or has
+    none, and a token no theme copies, are drift. Every copy is checked, and
+    a token's value is its last declaration, as in the cascade. A theme drops
+    one on purpose with a keyword (`--breakpoint-2xl: initial`). A Tailwind
+    theme (`@theme`) with no copies still counts, since Tailwind then keeps
+    its own widths, and the themes paired with one token file mirror it
+    together, as Tailwind reads every @theme. Each theme pairs with a token
+    file of its own project, the nearest folder above it with a package.json:
+    the nearest that declares breakpoints, or the nearest if none does. A
+    generated theme answers to its generator, and a theme's
+    ignore pragmas apply."""
+    tokens: dict[Path, dict[str, str]] = {}           # token file -> its --bp-*
+    themes: dict[Path, dict] = {}                     # theme file -> its copies, lines, pragmas, anchor
+    for path, text in files:
+        if not is_token_file(path):
+            continue
+        binding = is_binding_file(path)
+        if binding and any(mark in text[:800] for mark in GENERATED_MARKERS):
+            continue
+        clean, comments = strip_css_comments(text, line_comments(path))
+        found: dict[str, list[tuple[int, str]]] = {}
+        for ev in scan_css(clean):
+            if isinstance(ev, tuple):
+                continue
+            m = re.fullmatch(r"--(bp|breakpoint)-([\w-]+)", ev.prop)
+            if m and (m.group(1) == "breakpoint") == binding:
+                found.setdefault(m.group(2), []).append((ev.line, ev.value.strip()))
+        if not binding:
+            tokens[path] = {name: declared[-1][1] for name, declared in found.items()}
+            continue
+        at_theme = re.search(r"@theme\b", clean)
+        if found:
+            anchor = min(line for declared in found.values() for line, _ in declared)
+        elif at_theme:
+            anchor = clean.count("\n", 0, at_theme.start()) + 1
+        else:
+            continue                                  # a theme file Tailwind does not read
+        themes[path] = {"copies": found, "lines": text.splitlines(), "pragmas": pragmas(comments),
+                        "anchor": anchor}
+
+    def shared_folders(a: Path, b: Path) -> int:
+        n = 0
+        for x, y in zip(a.resolve().parent.parts, b.resolve().parent.parts):
+            if x.lower() != y.lower():
+                break
+            n += 1
+        return n
+
+    def project(path: Path) -> Path | None:
+        """The nearest folder above a file that holds a package.json."""
+        return next((folder for folder in path.resolve().parents if (folder / "package.json").is_file()), None)
+
+    roots = {token_file: project(token_file) for token_file in tokens}
+    mirrors: dict[Path, list[Path]] = {}             # token file -> the themes paired with it
+    for path in sorted(themes):
+        root = project(path)                         # a nested package is a project of its own
+        own = sorted(token_file for token_file in tokens if roots[token_file] == root)
+        own = [token_file for token_file in own if tokens[token_file]] or own
+        if own:                                      # another project's tokens are not this theme's
+            nearest = max(own, key=lambda token_file: shared_folders(path, token_file))
+            mirrors.setdefault(nearest, []).append(path)
+
+    findings = []
+    for source, paired in mirrors.items():
+        values = tokens[source]
+        drift = []
+        for path in paired:
+            for name, declared in themes[path]["copies"].items():
+                token = values.get(name)
+                for line, value in declared:
+                    if value.lower() in KEYWORDS:          # removed on purpose
+                        continue
+                    if token is None:
+                        drift.append((path, line, f"`--breakpoint-{name}: {value}` has no `--bp-{name}` "
+                                                  f"in {source.name}."))
+                    elif re.sub(r"\s+", "", token) != re.sub(r"\s+", "", value):
+                        drift.append((path, line, f"`--breakpoint-{name}: {value}` drifts from "
+                                                  f"{source.name}'s `--bp-{name}: {token}`."))
+        copied = {name for path in paired for name in themes[path]["copies"]}
+        home = next((path for path in paired if themes[path]["copies"]), paired[0])
+        for name, token in values.items():
+            if name not in copied:
+                drift.append((home, themes[home]["anchor"],
+                              f"{source.name}'s `--bp-{name}: {token}` has no `--breakpoint-{name}` in a "
+                              f"theme, so Tailwind's `{name}:` keeps its own width, or does not exist."))
+        for path, line, message in sorted(drift):
+            file_tags, line_tags = themes[path]["pragmas"]
+            if {"L1", "BREAKPOINT-DRIFT", "ALL"} & (line_tags.get(line, set()) | file_tags):
+                continue
+            lines = themes[path]["lines"]
+            findings.append(Finding(
+                str(path), line, "L1", "breakpoint-drift", "error", message,
+                "A media query cannot read a token, so the theme keeps a copy of each breakpoint. "
+                "Keep the copies the tokens' values, one for each, or Tailwind's variants and the "
+                "CSS's own media queries break at different widths. Drop one on purpose with "
+                "`initial`. Change one, change both.",
+                lines[line - 1].strip() if 0 < line <= len(lines) else ""))
+    return findings
+
+
+def audit_cross_file(files: list[tuple[Path, str]]) -> list[Finding]:
+    """Law 4 and Law 2 failures that are invisible file-by-file.
+
+    A component styled from two files has two homes, and no reviewer can
+    predict its appearance from either one. Worse, when both files set the
+    SAME property, which one wins is decided by specificity and load order —
+    so editing the obvious one silently does nothing. That is the single most
+    confusing bug shape in a stylesheet, and it can only be seen from above.
+
+    CSS Modules scope class names per file, so `.card` in two .module.css
+    files is two different classes and is not a finding. Only globally-scoped
+    sheets can genuinely collide.
+    """
+    findings: list[Finding] = breakpoint_drift(files)
+    # class -> prop -> [(file, line)]
+    owners: dict[str, dict[str, list[tuple[str, int]]]] = {}
+    seen_lines: dict[str, list[str]] = {}
+
+    for path, text in files:
+        if is_token_file(path):
+            continue
+        s = str(path).replace(os.sep, "/")
+        if ".module." in s.lower():
+            continue                      # build-time scoped: cannot collide
+        if any(mark in text[:800] for mark in GENERATED_MARKERS):
+            continue
+        clean, _ = strip_css_comments(text, line_comments(path))
+        seen_lines[str(path)] = text.splitlines()
+        for ev in scan_css(clean):
+            if isinstance(ev, tuple):
+                continue
+            d: CssDecl = ev
+            if d.prop.startswith("--") or not d.selectors:
+                continue
+            # The LAST selector level is the element this rule is about.
+            classes = set(CLASS_IN_SEL.findall(d.selectors[-1]))
+            for cls in classes:
+                owners.setdefault(cls, {}).setdefault(d.prop, []).append(
+                    (str(path), d.line))
+
+    for cls, props in sorted(owners.items()):
+        files_touching = {f for sites in props.values() for f, _ in sites}
+        if len(files_touching) < 2:
+            continue
+
+        # The sharp case: the same property for the same class, twice, in
+        # two files. Specificity and load order decide; nobody can tell which.
+        for prop, sites in sorted(props.items()):
+            distinct = sorted({f for f, _ in sites})
+            if len(distinct) < 2:
+                continue
+            f0, l0 = sites[0]
+            law = "L2" if prop in OUTER_MARGIN_PROPS else "L4"
+            others = ", ".join(Path(f).name for f in distinct[1:])
+            findings.append(Finding(
+                f0, l0, law, "double-owner", "error",
+                f"`.{cls}` has `{prop}` set in {len(distinct)} files "
+                f"({Path(f0).name}, {others}).",
+                "Two rules own one value, so which wins is decided by "
+                "specificity and load order — edit the obvious one and "
+                "nothing changes. Pick the component's one home and delete "
+                "the other. If a consumer genuinely needs to adjust this, "
+                "expose it as a Tier-3 custom property instead.",
+                (seen_lines.get(f0) or [""])[l0 - 1].strip()
+                if l0 <= len(seen_lines.get(f0) or []) else ""))
+
+        # The softer case: styled from several files without overlapping
+        # properties. Still two homes — just not yet actively fighting.
+        n = len(files_touching)
+        f0, l0 = next(iter(props.values()))[0]
+        where = ", ".join(sorted(Path(f).name for f in files_touching))
+        findings.append(Finding(
+            f0, l0, "L4", "scattered-component",
+            "error" if n >= 3 else "warning",
+            f"`.{cls}` is styled from {n} different files ({where}).",
+            "One home per component. A reviewer who has never seen this must "
+            "be able to predict its appearance from one file; right now they "
+            f"would have to find and read {n}. If a consumer needs to adjust "
+            "the component, give it a Tier-3 custom property and set that "
+            "from outside — a documented API instead of a second home.",
+            (seen_lines.get(f0) or [""])[l0 - 1].strip()
+            if l0 <= len(seen_lines.get(f0) or []) else ""))
+
+    return findings
+
+
+# ---------------------------------------------------------------------------
+# Driver
+# ---------------------------------------------------------------------------
+
+def file_kind(path: Path) -> str | None:
+    ext = path.suffix.lower()
+    if ext in CSS_EXT:
+        return "css"
+    if ext in JS_EXT:
+        return "js"
+    if ext in TEMPLATE_EXT:
+        return "template"
+    return None
+
+
+def iter_files(paths: list[str]) -> Iterator[Path]:
+    for fp, _root in iter_files_with_roots(paths):
+        yield fp
+
+
+def iter_files_with_roots(paths: list[str]) -> Iterator[tuple[Path, Path | None]]:
+    """Each file, with the folder it was found under (None when named)."""
+    for raw in paths:
+        p = Path(raw)
+        if p.is_file():
+            yield p, None                         # named explicitly: always reported
+        elif p.is_dir():
+            for root, dirs, files in os.walk(p):
+                dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")]
+                for f in sorted(files):
+                    fp = Path(root) / f
+                    if file_kind(fp):
+                        yield fp, p
+
+
+# `__mocks__`, `tests/`, `fixtures/` and `Badge.test.jsx`: an underscore or a
+# dot ends the word, a letter or digit in any script does not (`latest.js` and
+# `testé/` are not tests), and a plural is the same word.
+TEST_LIKE = re.compile(r"(?<![^\W_])(tests?|specs?|stories|mocks?|fixtures?)(?![^\W_])", re.I)
+
+
+def test_like(path: Path, root: Path | None = None) -> bool:
+    """A test, story, mock or fixture file, which the test tools judge, not
+    this audit. Read from the path below the folder being audited (or the path
+    as given, for a file named by a relative path): the folders a project sits
+    in, a checkout under `test/` or a temporary `wds-test-*`, say nothing about it."""
+    if root is not None:
+        try:
+            rel = path.relative_to(root).as_posix()
+        except ValueError:
+            rel = path.name
+    else:
+        rel = path.name if path.is_absolute() else path.as_posix()
+    return bool(TEST_LIKE.search(rel))
+
+
+def is_html_email(text: str) -> bool:
+    """HTML email cannot use custom properties or layers, so these laws do not
+    fit it; email-template-system's lint_email is its gate."""
+    low = text.lower()
+    return any(mark in low for mark in EMAIL_MARKERS)
+
+
+SKIP_NOT_AUDITABLE = "not CSS, JS or HTML"
+SKIP_EMAIL = "HTML email: lint it with email-template-system's lint_email"
+SKIP_REACT_EMAIL = "React Email: render it, then lint the HTML with email-template-system's lint_email"
+SKIP_INDENTED_SASS = "indented Sass, which this audit cannot read: audit the compiled CSS, or use .scss"
+
+
+def audit(paths: list[str]) -> list[Finding]:
+    return audit_run(paths)[0]
+
+
+def audit_run(paths: list[str]) -> tuple[list[Finding], int, list[tuple[Path, str]]]:
+    """(findings, number of files audited, [(file, why it was skipped)])."""
+    out: list[Finding] = []
+    audited = 0
+    skipped: list[tuple[Path, str]] = []
+    css_sources: list[tuple[Path, str]] = []
+    for fp, root in iter_files_with_roots(paths):
+        kind = file_kind(fp)
+        if kind is None:
+            skipped.append((fp, SKIP_NOT_AUDITABLE))
+            continue
+        if fp.suffix.lower() == ".sass":
+            skipped.append((fp, SKIP_INDENTED_SASS))
+            continue
+        try:
+            # utf-8-sig: PowerShell 5.1's Set-Content -Encoding utf8 writes a
+            # BOM, and a BOM before `@layer` read as a rule outside any layer.
+            text = _read_text(fp)
+        except OSError:
+            continue
+        if kind == "template" and is_html_email(text):
+            skipped.append((fp, SKIP_EMAIL))
+            continue
+        if kind == "js" and REACT_EMAIL_IMPORT.search(strip_js_comments(text)):
+            skipped.append((fp, SKIP_REACT_EMAIL))
+            continue
+        audited += 1
+        if kind == "css":
+            css_sources.append((fp, text))
+        try:
+            if kind == "css":
+                out.extend(audit_css(fp, text))
+            elif kind == "template":
+                out.extend(audit_template(fp, text))
+            else:
+                out.extend(audit_js(fp, text, root))
+        except Exception as exc:  # a crashed rule must never block a commit
+            out.append(Finding(str(fp), 1, "--", "internal-error", "warning",
+                               f"audit_design could not fully parse this file: {exc}",
+                               "Please report this file shape; the rest of the "
+                               "audit completed normally."))
+    try:
+        out.extend(audit_cross_file(css_sources))
+    except Exception as exc:
+        out.append(Finding("<cross-file>", 1, "--", "internal-error", "warning",
+                           f"cross-file analysis failed: {exc}",
+                           "Per-file findings above are unaffected."))
+    out.sort(key=lambda f: (f.file, f.line, SEVERITY_ORDER.get(f.severity, 9)))
+    return out, audited, skipped
+
+
+LAW_NAMES = {
+    "L1": "Tokens or nothing",
+    "L2": "Parents own the gaps",
+    "L3": "The scale is closed",
+    "L4": "One home per component's styles",
+    "L5": "Layers, not specificity",
+    "L6": "Semantic before primitive",
+}
+
+
+SARIF_VERSION = "2.1.0"          # the one version GitHub code scanning reads
+TOOL_URI = "https://github.com/Vybecode-LTD/Pro-Web-Designer-Suite-Plug-in"
+
+
+def sarif(findings: list[Finding]) -> dict:
+    """The findings as a SARIF log, for a code-scanning upload (SB-C10). A
+    rule is the law and its id, `L1/raw-spacing`. Paths are relative to the
+    working directory, which a CI step runs from the repository root, under a
+    `%SRCROOT%` the run defines. There is no fingerprint: code scanning uses
+    only `primaryLocationLineHash`, which upload-sarif computes from the
+    source files when it is missing (docs.github.com, 2026-10-03)."""
+    cwd = Path.cwd().resolve()
+    rules: dict[str, int] = {}
+    driver_rules, results = [], []
+    for f in findings:
+        rule_id = f"{f.law}/{f.rule}"
+        if rule_id not in rules:
+            rules[rule_id] = len(driver_rules)
+            driver_rules.append({"id": rule_id, "name": f.rule,
+                                 "shortDescription": {"text": f"{f.law} {LAW_NAMES.get(f.law, '')}: {f.rule}"},
+                                 "properties": {"law": f.law}})
+        path = Path(f.file).resolve()
+        try:
+            location = {"uri": path.relative_to(cwd).as_posix(), "uriBaseId": "%SRCROOT%"}
+        except ValueError:                           # outside the run's folder
+            location = {"uri": path.as_uri()}
+        results.append({
+            "ruleId": rule_id,
+            "ruleIndex": rules[rule_id],
+            "level": "error" if f.severity == "error" else "warning",
+            "message": {"text": f"{f.message} {f.fix}".strip()},
+            "locations": [{"physicalLocation": {"artifactLocation": location,
+                                                 "region": {"startLine": max(f.line, 1), "startColumn": 1}}}],
+        })
+    return {"$schema": "https://json.schemastore.org/sarif-2.1.0.json", "version": SARIF_VERSION,
+            "runs": [{"tool": {"driver": {"name": "audit_design", "informationUri": TOOL_URI,
+                                          "rules": driver_rules}},
+                      "originalUriBaseIds": {"%SRCROOT%": {"uri": cwd.as_uri().rstrip("/") + "/"}},
+                      "results": results}]}
+
+
+def report(findings: list[Finding], *, use_color: bool, show_fix: bool,
+           audited: int | None = None) -> str:
+    if not findings:
+        # L1–L6, not "all nine laws": 7–9 (density, keyboard, audit) are not
+        # something a static scan of source can check.
+        where = f" across {audited} file(s)" if audited is not None else ""
+        return f"design audit: clean — L1–L6 hold{where}.\n"
+
+    def c(code: str, s: str) -> str:
+        return f"\033[{code}m{s}\033[0m" if use_color else s
+
+    buf: list[str] = []
+    by_file: dict[str, list[Finding]] = {}
+    for f in findings:
+        by_file.setdefault(f.file, []).append(f)
+
+    for file, items in by_file.items():
+        buf.append(c("1", file))
+        for f in items:
+            tag = c("31", "error") if f.severity == "error" else c("33", "warn ")
+            buf.append(f"  {f.line:>5}  {tag}  {c('36', f.law)} {f.rule:<22} {f.message}")
+            if show_fix:
+                for ln in _wrap(f.fix, 92):
+                    buf.append(f"         {c('2', ln)}")
+        buf.append("")
+
+    errors = sum(1 for f in findings if f.severity == "error")
+    warns = len(findings) - errors
+    buf.append(c("1", "Summary"))
+    counts: dict[str, int] = {}
+    for f in findings:
+        counts[f.law] = counts.get(f.law, 0) + 1
+    for law in sorted(counts):
+        name = LAW_NAMES.get(law, "")
+        buf.append(f"  {law}  {name:<34} {counts[law]}")
+    buf.append(f"\n  {errors} error(s), {warns} warning(s) "
+               f"across {len(by_file)} file(s).")
+    return "\n".join(buf) + "\n"
+
+
+def _wrap(s: str, width: int) -> list[str]:
+    words, out, cur = s.split(), [], ""
+    for w in words:
+        if len(cur) + len(w) + 1 > width:
+            out.append(cur)
+            cur = w
+        else:
+            cur = f"{cur} {w}".strip()
+    if cur:
+        out.append(cur)
+    return out
+
+
+def listed_paths(raw: str) -> list[str]:
+    """The paths a --files-from list names. With a NUL in it (`git diff -z`)
+    it is NUL-separated and each name is kept exactly, newlines and spaces
+    included; otherwise one path per line (Codex and CodeRabbit on #24)."""
+    if "\0" in raw:
+        return [name for name in raw.split("\0") if name]
+    return [name.rstrip("\r") for name in raw.split("\n") if name.strip()]
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(
+        prog="python -m scripts.audit_design",
+        description="Enforce the web-design-studio laws. Law 9: nothing ships un-audited.",
+    )
+    ap.add_argument("paths", nargs="*", default=[],
+                    help="files or directories to audit (default: ., unless --files-from lists them)")
+    ap.add_argument("--files-from", metavar="FILE",
+                    help="also audit the paths listed in FILE, one per line or NUL-separated ('-' reads "
+                         "stdin), such as `git diff --name-only`; a listed path that no longer exists "
+                         "is skipped")
+    output_format = ap.add_mutually_exclusive_group()
+    output_format.add_argument("--json", action="store_true", help="machine-readable output")
+    output_format.add_argument("--sarif", action="store_true",
+                               help="SARIF output, for a code-scanning upload (GitHub reads it)")
+    ap.add_argument("--strict", action="store_true", help="warnings fail the run too")
+    ap.add_argument("--quiet", action="store_true", help="suppress the fix guidance")
+    ap.add_argument("--no-color", action="store_true")
+    ap.add_argument("--baseline", metavar="FILE", default=None,
+                    help="ignore findings recorded in this file (default: the project's "
+                         ".design-suite.json baselines.audit, else .design-baseline.json, if it exists)")
+    ap.add_argument("--tokens", action="append", default=[], metavar="FILE",
+                    help="the project's token file, a tokens.css or a contract.json (repeatable; "
+                         "default: the token files the project's .design-suite.json lists)")
+    ap.add_argument("--write-baseline", metavar="FILE",
+                    help="record current findings so only NEW ones fail")
+    ap.add_argument("--law", action="append", metavar="Lx",
+                    help="only report these laws (repeatable)")
+    args = ap.parse_args(argv)
+
+    paths = list(args.paths) or ([] if args.files_from else ["."])
+    missing = [p for p in paths if not Path(p).exists()]
+    if missing:
+        print(f"audit_design: no such path: {', '.join(missing)}", file=sys.stderr)
+        return 2
+    if args.files_from:
+        # A changed-files list names deleted files too, so a listed path that
+        # is gone is skipped, not an error (SB-C10).
+        try:
+            data = sys.stdin.buffer.read() if args.files_from == "-" else Path(args.files_from).read_bytes()
+        except OSError as exc:
+            print(f"audit_design: cannot read {args.files_from}: {exc.strerror}", file=sys.stderr)
+            return 2
+        try:
+            raw = os.fsdecode(data)          # a Linux name that is not UTF-8 keeps its bytes
+        except UnicodeDecodeError:           # Windows names are Unicode: no such name exists
+            raw = data.decode("utf-8", "replace")
+        listed = listed_paths(raw)
+        gone = [name for name in listed if not Path(name).exists()]
+        if gone:
+            names = ", ".join(gone[:5]) + (" …" if len(gone) > 5 else "")
+            print(f"audit_design: skipped {len(gone)} listed path(s) that do not exist: {names}",
+                  file=sys.stderr)
+        paths += [name for name in listed if name not in gone]
+
+    # The project's config, found from the working directory; a flag beats it (P24).
+    config = None
+    if project_config is None:                    # vendored alone, before 3.5.0
+        if args.tokens:
+            print("audit_design: --tokens needs project_config.py beside audit_design.py "
+                  "(copy it from web-design-studio's scripts).", file=sys.stderr)
+            return 2
+        if Path(".design-suite.json").is_file():
+            print("audit_design: .design-suite.json is not read: copy project_config.py from "
+                  "web-design-studio's scripts beside audit_design.py.", file=sys.stderr)
+    else:
+        try:
+            config = project_config()
+            use_project(config, [Path(t) for t in args.tokens] or (list(config.tokens) if config else []))
+        except ConfigError as exc:
+            print(f"audit_design: {exc}", file=sys.stderr)
+            return 2
+    baseline_file = args.baseline or (str(config.baselines["audit"])
+                                      if config and "audit" in config.baselines else None)
+
+    findings, audited, skipped = audit_run(paths)
+
+    for why in (SKIP_NOT_AUDITABLE, SKIP_EMAIL, SKIP_REACT_EMAIL, SKIP_INDENTED_SASS):
+        group = [p for p, reason in skipped if reason == why]
+        if group:
+            names = ", ".join(str(p) for p in group[:5]) + (" …" if len(group) > 5 else "")
+            print(f"audit_design: skipped {len(group)} file(s) ({why}): {names}",
+                  file=sys.stderr)
+    if audited == 0:
+        folders = [p for p in paths if Path(p).is_dir()]
+        if folders:
+            print(f"audit_design: 0 files audited in {', '.join(folders)}, so a pass "
+                  f"would prove nothing. Point it at the folder that holds the styles.",
+                  file=sys.stderr)
+            return 2
+        if args.json:
+            print("[]")
+        elif args.sarif:
+            print(json.dumps(sarif([]), indent=2))
+        else:
+            print("design audit: nothing to audit (no CSS, JS or HTML among the files given).")
+        return 0
+
+    if args.law:
+        wanted = {l.upper() for l in args.law}
+        findings = [f for f in findings if f.law in wanted]
+
+    # Keys are relative to the baseline file's folder, so the path spelling
+    # and the working directory stop mattering.
+    bp = Path(args.write_baseline or baseline_file or ".design-baseline.json")
+    root = bp.resolve().parent
+
+    if args.write_baseline:
+        # a folder the config names, as CI records it in a fresh checkout (P26)
+        bp.parent.mkdir(parents=True, exist_ok=True)
+        bp.write_text(
+            json.dumps(sorted({f.key(root) for f in findings}), indent=2) + "\n",
+            encoding="utf-8")
+        print(f"audit_design: recorded {len(findings)} finding(s) as the baseline in "
+              f"{args.write_baseline}.\nOnly NEW violations will fail from now on. "
+              f"Pay the debt down per directory, not all at once.")
+        return 0
+
+    baseline: set[str] = set()
+    if bp.exists():
+        try:
+            keys = json.loads(bp.read_bytes())
+            if not isinstance(keys, list) or not all(isinstance(k, str) for k in keys):
+                raise ValueError("not a list of finding keys")     # `5` was a traceback (G15)
+            baseline = {portable_key(k) for k in keys}
+        except (OSError, ValueError) as exc:
+            print(f"audit_design: could not read baseline {bp} ({exc}); auditing everything.",
+                  file=sys.stderr)
+    elif baseline_file:
+        print(f"audit_design: baseline {baseline_file} not found; auditing everything.",
+              file=sys.stderr)
+    if baseline:
+        findings = [f for f in findings if f.key(root) not in baseline]
+
+    if args.json:
+        print(json.dumps([asdict(f) for f in findings], indent=2))
+    elif args.sarif:
+        print(json.dumps(sarif(findings), indent=2))
+    else:
+        use_color = not args.no_color and sys.stdout.isatty()
+        sys.stdout.write(report(findings, use_color=use_color, show_fix=not args.quiet,
+                                audited=audited))
+
+    failing = [f for f in findings
+               if f.severity == "error" or (args.strict and f.severity == "warning")]
+    return 1 if failing else 0
+
+
+if __name__ == "__main__":
+    # A Windows pipe (git hook, CI, `> file`) defaults to the ANSI code page,
+    # where printing →, Δ or ✓ raises UnicodeEncodeError. Consoles and
+    # Claude Code already use UTF-8 and are left alone.
+    for _stream in (sys.stdout, sys.stderr):
+        if getattr(_stream, "encoding", "utf-8").lower() not in ("utf-8", "utf8"):
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+    sys.exit(main())

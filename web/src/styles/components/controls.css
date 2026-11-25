@@ -1,0 +1,243 @@
+/* Icon, Button, IconButton, text links and form fields. */
+@layer components {
+  .icon {
+    --icon-size: var(--size-icon);
+
+    flex: none;
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: var(--stroke-thick);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---- Button ------------------------------------------------------------ */
+  .button {
+    --button-bg: transparent;
+    --button-fg: var(--fg-default);
+    --button-border: var(--border-strong);
+    --button-pad-inline: var(--pad-inline-md);
+    --button-min: var(--tap-min);
+
+    display: inline-flex;
+    gap: var(--gap-tight);
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--button-min);
+    padding: var(--pad-block-sm) var(--button-pad-inline);
+    font: var(--type-ui);
+    color: var(--button-fg);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    background: var(--button-bg);
+    border: var(--stroke-default) solid var(--button-border);
+    border-radius: var(--radius-md);
+    transition:
+      background-color var(--motion-hover),
+      border-color var(--motion-hover),
+      color var(--motion-hover);
+  }
+
+  .button:hover { --button-bg: var(--bg-hover); }
+  .button:active { --button-bg: var(--bg-active); }
+
+  .button:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .button[data-variant="primary"] {
+    --button-bg: var(--bg-accent);
+    --button-fg: var(--fg-on-accent);
+    --button-border: var(--bg-accent);
+
+    font-weight: var(--weight-semibold);
+  }
+
+  .button[data-variant="primary"]:hover {
+    --button-bg: var(--bg-accent-hover);
+    --button-border: var(--bg-accent-hover);
+  }
+
+  .button[data-variant="quiet"] {
+    --button-border: transparent;
+    --button-fg: var(--fg-muted);
+  }
+
+  .button[data-variant="quiet"]:hover { --button-fg: var(--fg-strong); }
+
+  .button[data-size="sm"] {
+    --button-pad-inline: var(--pad-inline-sm);
+    --button-min: var(--size-control-sm);
+  }
+
+  .button:disabled,
+  .button[aria-disabled="true"] {
+    --button-bg: var(--bg-disabled);
+    --button-fg: var(--fg-disabled);
+    --button-border: var(--border-subtle);
+
+    cursor: not-allowed;
+  }
+
+  .button[data-state="loading"] { cursor: progress; }
+
+  .button[data-state="loading"] .icon {
+    animation: button-spin var(--motion-loop) infinite;
+  }
+
+  @keyframes button-spin {
+    to { rotate: 1turn; }
+  }
+
+  /* ---- IconButton: a square button whose name is its aria-label. --------- */
+  .icon-button {
+    --icon-button-size: var(--size-control-sm);
+
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--icon-button-size);
+    block-size: var(--icon-button-size);
+    padding: var(--space-0);
+    color: var(--fg-muted);
+    cursor: pointer;
+    background: transparent;
+    border: var(--stroke-default) solid transparent;
+    border-radius: var(--radius-md);
+    transition:
+      background-color var(--motion-hover),
+      color var(--motion-hover);
+  }
+
+  .icon-button:hover {
+    color: var(--fg-strong);
+    background: var(--bg-hover);
+  }
+
+  .icon-button:active { background: var(--bg-active); }
+
+  .icon-button:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  /* ---- Links that sit in running text or lists --------------------------- */
+  .text-link {
+    color: var(--fg-link);
+    text-decoration: underline;
+    text-decoration-thickness: var(--stroke-hairline);
+    text-underline-offset: var(--offset-underline);
+    border-radius: var(--radius-xs);
+  }
+
+  .text-link:hover { color: var(--fg-strong); }
+
+  .text-link:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  /* ---- Fields -------------------------------------------------------------- */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+  }
+
+  .field__label {
+    font: var(--type-ui);
+    color: var(--fg-default);
+  }
+
+  .field__hint {
+    font: var(--type-label);
+    color: var(--fg-muted);
+  }
+
+  .field__error {
+    font: var(--type-label);
+    color: var(--fg-danger);
+  }
+
+  .input {
+    inline-size: 100%;
+    min-block-size: var(--tap-min);
+    padding: var(--pad-block-sm) var(--pad-inline-sm);
+    font: var(--type-body);
+    color: var(--fg-strong);
+    background: var(--bg-sunken);
+    border: var(--stroke-default) solid var(--border-strong);
+    border-radius: var(--radius-md);
+    transition: border-color var(--motion-hover);
+  }
+
+  .input::placeholder { color: var(--fg-subtle); }
+  .input:hover { border-color: var(--fg-muted); }
+
+  .input:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .input[aria-invalid="true"] { border-color: var(--border-invalid); }
+
+  .input:disabled {
+    color: var(--fg-disabled);
+    cursor: not-allowed;
+    background: var(--bg-disabled);
+    border-color: var(--border-subtle);
+  }
+
+  .input[data-multiline] {
+    min-block-size: var(--size-textarea);
+    resize: vertical;
+  }
+
+  /* ---- Segmented choice: a row of radio-like buttons ------------------------ */
+  .segmented {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+    padding: var(--space-0);
+    border: 0;
+  }
+
+  .segmented__option {
+    display: inline-flex;
+    gap: var(--gap-tight);
+    align-items: center;
+    min-block-size: var(--size-control-sm);
+    padding: var(--pad-block-xs) var(--pad-inline-sm);
+    font: var(--type-ui);
+    color: var(--fg-muted);
+    cursor: pointer;
+    background: transparent;
+    border: var(--stroke-default) solid var(--border-default);
+    border-radius: var(--radius-full);
+    transition:
+      background-color var(--motion-hover),
+      border-color var(--motion-hover),
+      color var(--motion-hover);
+  }
+
+  .segmented__option:hover {
+    color: var(--fg-strong);
+    background: var(--bg-hover);
+  }
+
+  .segmented__option:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .segmented__option[aria-pressed="true"],
+  .segmented__option[aria-checked="true"] {
+    color: var(--fg-strong);
+    background: var(--bg-selected);
+    border-color: var(--border-accent);
+  }
+}

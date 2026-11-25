@@ -1,0 +1,205 @@
+# CLAUDE.md — The Synergizing of Isaac
+
+This file is the authoritative project context for any Claude Code session working on this repository. Read it fully before making any changes.
+
+---
+
+## What This Project Is
+
+**The Synergizing of Isaac** is a desktop companion app for *The Binding of Isaac: Repentance*. It lets players build hypothetical item loadouts and instantly see what synergies exist between their chosen items, trinkets, and characters. It combines a hand-curated community synergy database (458 entries) with optional AI-powered analysis via Anthropic Claude, OpenAI GPT, or Google Gemini.
+
+The app is built with **Avalonia UI 12** (cross-platform .NET desktop framework) targeting **.NET 9**, using the **MVVM pattern** with **CommunityToolkit.Mvvm** for source-generated observable properties and relay commands. It runs on Windows, macOS, and Linux.
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Framework | .NET | 9.0 |
+| UI | Avalonia | 12.0.3 |
+| Theme | Avalonia.Themes.Fluent | 12.0.3 |
+| Fonts | Avalonia.Fonts.Inter | 12.0.3 |
+| MVVM | CommunityToolkit.Mvvm | 8.4.1 |
+| Dev tools | AvaloniaUI.DiagnosticsSupport | 2.2.1 (Debug only) |
+| Language | C# 13 (latest) | — |
+| Build tool | Python 3 + Pillow | (build_mosaic.py only) |
+
+---
+
+## Solution Structure
+
+```
+TheSynergizingOfIsaac.sln
+build_mosaic.py                         # Utility script — downloads TBOI screenshots and generates bg_mosaic.png
+src/
+  TheSynergizingOfIsaac/
+    TheSynergizingOfIsaac.csproj        # Single project, WinExe output
+    app.manifest                        # Windows-only manifest (DPI awareness, Win10 compat)
+    Program.cs                          # Entry point, Avalonia AppBuilder, crash logging
+    App.axaml / App.axaml.cs            # Application root, dark theme, ViewLocator
+    ViewLocator.cs                      # Convention-based ViewModel→View resolution
+
+    Models/
+      AppSettings.cs                    # AI API keys + selected provider (persisted to %APPDATA%)
+      Character.cs                      # Name, stats (health/damage/speed/range/tears/luck), starting items, image
+      IsaacItem.cs                      # Id, name, description, quote, quality (0-4), image
+      SynergyEntry.cs                   # Items[], Trinkets[], Characters[], description, rating (S/A/B/C/D)
+      Trinket.cs                        # Id, name, description, image
+
+    Services/
+      GameDataService.cs                # Loads all JSON data from Assets/Data/ at startup; saves synergies back
+      SynergyEngine.cs                  # Scoring algorithm — matches selected loadout against synergy database
+      AiService.cs                      # Multi-provider AI integration (Anthropic/OpenAI/Gemini) with system prompt
+      SettingsService.cs                # Reads/writes settings.json from %APPDATA%/TheSynergizingOfIsaac/
+
+    ViewModels/
+      ViewModelBase.cs                  # Abstract base — extends ObservableObject
+      MainWindowViewModel.cs            # Main orchestrator — pedestals, trinkets, character, synergy computation, AI toggle
+      PedestalSlotViewModel.cs          # Single item pedestal — autocomplete selection, image loading, clear support
+      TrinketSlotViewModel.cs           # Single trinket slot — same pattern as pedestal
+      SettingsViewModel.cs              # API key form + provider radio buttons
+      AddSynergyViewModel.cs            # Add-synergy dialog — multi-select chips for items/trinkets/characters, validation
+
+    Views/
+      MainWindow.axaml / .cs            # Primary window — title, character panel, 3 pedestals, 2 trinkets, synergy panel, AI toggle, add synergy button
+      SettingsWindow.axaml / .cs        # Modal dialog — API key management
+      AddSynergyWindow.axaml / .cs      # Modal dialog — user-contributed synergy form with chip-based multi-select
+      Controls/
+        PedestalControl.axaml / .cs     # Reusable pedestal UserControl — image box, autocomplete, description card
+        TrinketSlotControl.axaml / .cs  # Reusable trinket UserControl — compact image box + autocomplete
+
+    Assets/
+      Data/
+        items.json                      # 607 items with id, name, description, quote, quality, imageName
+        trinkets.json                   # 171 trinkets with id, name, description, imageName
+        characters.json                 # 34 characters (17 base + 17 tainted) with stats and starting items
+        synergies.json                  # 458 community-curated synergy entries (items/trinkets/characters/description/rating)
+      Images/
+        Characters/                     # 34 character sprite PNGs (pixel art, rendered with NearestNeighbor interpolation)
+        Items/                          # 989 collectible sprite PNGs (collectibles_NNN.png)
+        Trinkets/                       # 171 trinket sprite PNGs (trinket_NNN.png)
+        bg_mosaic.png                   # 2400x1350 background mosaic (generated by build_mosaic.py)
+```
+
+---
+
+## How to Build and Run
+
+```bash
+# Restore + build
+dotnet build src/TheSynergizingOfIsaac/TheSynergizingOfIsaac.csproj
+
+# Run
+dotnet run --project src/TheSynergizingOfIsaac/TheSynergizingOfIsaac.csproj
+```
+
+The `.csproj` copies `Assets/Data/**` and `Assets/Images/**` to the output directory as `Content` with `PreserveNewest`. AXAML resources exclude these folders — they're loaded from disk at runtime via `AppContext.BaseDirectory`.
+
+To regenerate the background mosaic (requires Python 3 + Pillow):
+```bash
+pip install Pillow
+python build_mosaic.py
+```
+
+---
+
+## Architecture Deep Dive
+
+### Data Flow
+
+1. **Startup**: `MainWindow.OnOpened` calls `MainWindowViewModel.InitializeAsync()` which loads all 4 JSON files via `GameDataService.LoadAllAsync()`.
+2. **Selection**: When a user picks an item/trinket/character, the slot VM fires `_onSelectionChanged` (an `Action` delegate) which calls `MainWindowViewModel.UpdateSynergies()`.
+3. **Synergy Engine**: `SynergyEngine.ComputeSynergies()` iterates all 458 synergy entries, scores each by how many of its required items/trinkets/characters match the current selection, and returns matched entries sorted by relevance.
+4. **AI Analysis** (optional): When the AI toggle is on and at least one item/trinket is selected, `RequestAiAnalysis()` fires after an 800ms debounce. It uses `CancellationTokenSource` to cancel stale requests. The AI prompt includes game mechanic context (tear modifier precedence, damage formula, fire rate categories).
+5. **Add Synergy**: The user opens the Add Synergy dialog, selects items/trinkets/characters via autocomplete chip lists, writes a description, picks a rating, and saves. `GameDataService.AddSynergy()` appends to the in-memory list, `SaveSynergiesAsync()` persists to disk, and the `SynergyEngine` is rebuilt.
+
+### Synergy Scoring Algorithm
+
+In `SynergyEngine.ScoreEntry()`:
+- An entry matches only if ALL of its required items are present in the selection AND all required trinkets are present.
+- If the entry specifies characters, the selected character must match one of them.
+- Score = matched items + matched trinkets + 2 bonus if character-specific match.
+- Entries are sorted by descending score, so more specific synergies rank higher.
+
+### AI Service Architecture
+
+`AiService` supports three LLM providers, each with its own HTTP request format:
+- **Anthropic**: `POST /v1/messages` with `x-api-key` header, model `claude-sonnet-4-20250514`
+- **OpenAI**: `POST /v1/chat/completions` with Bearer token, model `gpt-4o-mini`
+- **Gemini**: `POST /v1beta/models/gemini-2.0-flash:generateContent` with API key in URL
+
+Provider resolution: uses selected provider first, falls back to first provider with a non-empty key.
+
+### Settings Persistence
+
+Settings are stored at `%APPDATA%/TheSynergizingOfIsaac/settings.json` (Windows). The `SettingsService` reads/writes this file. It contains API keys and the selected provider name.
+
+### MVVM Dialog Pattern
+
+The app uses a callback pattern for MVVM-clean dialogs:
+- `MainWindowViewModel` exposes `Func<Task>? ShowSettingsDialog` and `Func<Task<SynergyEntry?>>? ShowAddSynergyDialog`.
+- `MainWindow.axaml.cs` sets these callbacks in `OnDataContextChanged`, creating the dialog VM and window.
+- The ViewModel never references any View types directly.
+
+---
+
+## UI Design
+
+The app uses a custom dark theme inspired by The Binding of Isaac's basement aesthetic:
+- **Base background**: `#1a1a2e` (deep navy-black)
+- **Panel backgrounds**: `#22223a`, `#16162a`, `#1a1a30`
+- **Borders**: `#4a4a6e`, `#3a3a5e`
+- **Primary text**: `#e0d5c1` (warm parchment)
+- **Title/accent**: `#c9a96e` (gold)
+- **Synergy header**: `#8888cc` (soft purple)
+- **Button accents**: green (`#88cc88`), red (`#cc8888`), purple (`#8888cc`)
+- **Pixel-art rendering**: `RenderOptions.BitmapInterpolationMode="None"` (NearestNeighbor) for all game sprites
+
+The background is a 12x12 mosaic of TBOI screenshots at variable opacity (20% at 60%, 80% at 30%) blended onto the dark base, giving a depth effect.
+
+Main layout (DockPanel):
+- **Top**: Gothic title with drop shadow + settings gear (top-left)
+- **Center-top**: Three-column grid — character panel (left, 192x192), 3 pedestal controls (center), 2 trinket slots (right)
+- **Fill**: Synergy results panel with scrollable text, "+ Add Synergy" button, and AI toggle
+- **Bottom**: "Clear All" button
+
+---
+
+## Avalonia-Specific Notes
+
+- **Avalonia 12**: This version does NOT have `ItemsRepeater` or `WrapLayout` in the base package. Use `ItemsControl` with `WrapPanel` inside `ItemsPanelTemplate` instead.
+- **Compiled bindings**: Enabled globally via `AvaloniaUseCompiledBindingsByDefault=true` in the csproj. All AXAML files must use `x:DataType` for compiled binding.
+- **AutoCompleteBox**: Avalonia's AutoCompleteBox does not support two-way Text binding cleanly for clear scenarios. The code-behind subscribes to `SelectionChanged` and uses an event (`ClearRequested`) from the VM to reset `Text` and `SelectedItem` imperatively.
+- **Image loading**: All images are loaded from disk at runtime (not as Avalonia resources) via `new Bitmap(path)` where `path = Path.Combine(AppContext.BaseDirectory, ...)`.
+
+---
+
+## Key Patterns and Conventions
+
+- **Naming**: PascalCase for all public members. Private fields use `_camelCase`. JSON properties use `camelCase` with `[JsonPropertyName]`.
+- **ObservableProperty**: All bindable properties use `[ObservableProperty]` on private fields (source-generated by CommunityToolkit.Mvvm).
+- **RelayCommand**: All commands use `[RelayCommand]` attribute on private methods.
+- **Partial methods**: Property change notifications (e.g., `OnSelectedCharacterChanged`) use CommunityToolkit's partial method pattern.
+- **Async pattern**: `async void` is used only for fire-and-forget event handlers (`RequestAiAnalysis`). All other async code returns `Task`.
+- **Error handling**: Services use try/catch with silent fallback (return defaults) rather than crashing. AI errors are displayed inline in the analysis text.
+- **File-scoped namespaces**: All .cs files use `namespace X;` syntax (C# 10+).
+- **Collection expressions**: Empty collections use `[]` syntax (C# 12).
+
+---
+
+## Current State (as of last session)
+
+The app is fully functional with all features working:
+
+1. Character selection with sprite display (34 characters)
+2. 3 item pedestal slots with autocomplete search, sprite display, and description cards
+3. 2 trinket slots with autocomplete search and sprite display
+4. Synergy engine that matches loadouts against 458 curated entries
+5. Optional AI analysis via Anthropic/OpenAI/Gemini (toggle button, 800ms debounce)
+6. Settings dialog for API key management
+7. **Add Synergy feature** — users can add their own synergy entries via a dialog with chip-based multi-select for items/trinkets/characters, a rating picker, and a description field. Saves to synergies.json and immediately rebuilds the engine.
+8. Background mosaic generated from TBOI screenshots
+9. Clear All button to reset the entire loadout
+
+**Build status**: Compiles cleanly with 0 warnings, 0 errors on `dotnet build`.

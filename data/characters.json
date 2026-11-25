@@ -1,0 +1,249 @@
+[
+ {
+  "slug": "isaac",
+  "name": "Isaac",
+  "tainted": false,
+  "gameId": 0
+ },
+ {
+  "slug": "magdalene",
+  "name": "Magdalene",
+  "tainted": false,
+  "gameId": 1,
+  "startingItems": [
+   45
+  ]
+ },
+ {
+  "slug": "cain",
+  "name": "Cain",
+  "tainted": false,
+  "gameId": 2,
+  "startingItems": [
+   46
+  ]
+ },
+ {
+  "slug": "judas",
+  "name": "Judas",
+  "tainted": false,
+  "gameId": 3,
+  "startingItems": [
+   34
+  ]
+ },
+ {
+  "slug": "blue-baby",
+  "name": "Blue Baby",
+  "tainted": false,
+  "gameId": 4,
+  "gameName": "???",
+  "startingItems": [
+   36
+  ]
+ },
+ {
+  "slug": "eve",
+  "name": "Eve",
+  "tainted": false,
+  "gameId": 5,
+  "startingItems": [
+   122,
+   117
+  ]
+ },
+ {
+  "slug": "samson",
+  "name": "Samson",
+  "tainted": false,
+  "gameId": 6,
+  "startingItems": [
+   157
+  ]
+ },
+ {
+  "slug": "azazel",
+  "name": "Azazel",
+  "tainted": false,
+  "gameId": 7
+ },
+ {
+  "slug": "lazarus",
+  "name": "Lazarus",
+  "tainted": false,
+  "gameId": 8
+ },
+ {
+  "slug": "eden",
+  "name": "Eden",
+  "tainted": false,
+  "gameId": 9
+ },
+ {
+  "slug": "the-lost",
+  "name": "The Lost",
+  "tainted": false,
+  "gameId": 10,
+  "startingItems": [
+   609
+  ]
+ },
+ {
+  "slug": "lilith",
+  "name": "Lilith",
+  "tainted": false,
+  "gameId": 13,
+  "startingItems": [
+   357,
+   412
+  ]
+ },
+ {
+  "slug": "keeper",
+  "name": "Keeper",
+  "tainted": false,
+  "gameId": 14
+ },
+ {
+  "slug": "apollyon",
+  "name": "Apollyon",
+  "tainted": false,
+  "gameId": 15,
+  "startingItems": [
+   477
+  ]
+ },
+ {
+  "slug": "the-forgotten",
+  "name": "The Forgotten",
+  "tainted": false,
+  "gameId": 16
+ },
+ {
+  "slug": "bethany",
+  "name": "Bethany",
+  "tainted": false,
+  "gameId": 18,
+  "startingItems": [
+   584
+  ]
+ },
+ {
+  "slug": "jacob-and-esau",
+  "name": "Jacob and Esau",
+  "tainted": false,
+  "gameId": 19
+ },
+ {
+  "slug": "tainted-isaac",
+  "name": "Tainted Isaac",
+  "tainted": true,
+  "gameId": 21
+ },
+ {
+  "slug": "tainted-magdalene",
+  "name": "Tainted Magdalene",
+  "tainted": true,
+  "gameId": 22,
+  "pocketActive": 45
+ },
+ {
+  "slug": "tainted-cain",
+  "name": "Tainted Cain",
+  "tainted": true,
+  "gameId": 23,
+  "pocketActive": 710
+ },
+ {
+  "slug": "tainted-judas",
+  "name": "Tainted Judas",
+  "tainted": true,
+  "gameId": 24,
+  "pocketActive": 705
+ },
+ {
+  "slug": "tainted-blue-baby",
+  "name": "Tainted Blue Baby",
+  "tainted": true,
+  "gameId": 25,
+  "gameName": "Tainted ???",
+  "pocketActive": 715
+ },
+ {
+  "slug": "tainted-eve",
+  "name": "Tainted Eve",
+  "tainted": true,
+  "gameId": 26,
+  "pocketActive": 713
+ },
+ {
+  "slug": "tainted-samson",
+  "name": "Tainted Samson",
+  "tainted": true,
+  "gameId": 27
+ },
+ {
+  "slug": "tainted-azazel",
+  "name": "Tainted Azazel",
+  "tainted": true,
+  "gameId": 28
+ },
+ {
+  "slug": "tainted-lazarus",
+  "name": "Tainted Lazarus",
+  "tainted": true,
+  "gameId": 29,
+  "pocketActive": 711
+ },
+ {
+  "slug": "tainted-eden",
+  "name": "Tainted Eden",
+  "tainted": true,
+  "gameId": 30
+ },
+ {
+  "slug": "tainted-lost",
+  "name": "Tainted Lost",
+  "tainted": true,
+  "gameId": 31
+ },
+ {
+  "slug": "tainted-lilith",
+  "name": "Tainted Lilith",
+  "tainted": true,
+  "gameId": 32
+ },
+ {
+  "slug": "tainted-keeper",
+  "name": "Tainted Keeper",
+  "tainted": true,
+  "gameId": 33
+ },
+ {
+  "slug": "tainted-apollyon",
+  "name": "Tainted Apollyon",
+  "tainted": true,
+  "gameId": 34,
+  "pocketActive": 706
+ },
+ {
+  "slug": "tainted-forgotten",
+  "name": "Tainted Forgotten",
+  "tainted": true,
+  "gameId": 35
+ },
+ {
+  "slug": "tainted-bethany",
+  "name": "Tainted Bethany",
+  "tainted": true,
+  "gameId": 36,
+  "pocketActive": 712
+ },
+ {
+  "slug": "tainted-jacob",
+  "name": "Tainted Jacob",
+  "tainted": true,
+  "gameId": 37,
+  "pocketActive": 722
+ }
+]

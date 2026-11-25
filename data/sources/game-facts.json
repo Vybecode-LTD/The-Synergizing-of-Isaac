@@ -1,0 +1,9577 @@
+{
+ "quality": {
+  "items": {
+   "1": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "10": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "fly"
+    ]
+   },
+   "100": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "101": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive",
+     "angel"
+    ]
+   },
+   "102": {
+    "quality": 1,
+    "tags": [
+     "mom",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "103": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "104": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "105": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "106": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "107": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "108": {
+    "quality": 4,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "109": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "11": {
+    "quality": 2,
+    "tags": [
+     "mushroom"
+    ]
+   },
+   "110": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "111": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "112": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual"
+    ]
+   },
+   "113": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "114": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "115": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "116": {
+    "quality": 2,
+    "tags": [
+     "battery",
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "117": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "dead"
+    ]
+   },
+   "118": {
+    "quality": 4,
+    "tags": [
+     "devil",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "119": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "12": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "mushroom",
+     "offensive"
+    ]
+   },
+   "120": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mushroom",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "121": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mushroom",
+     "offensive"
+    ]
+   },
+   "122": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "123": {
+    "quality": 1,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "124": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "125": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "126": {
+    "quality": 0,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "127": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "128": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "129": {
+    "quality": 1,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "13": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "syringe"
+    ]
+   },
+   "130": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "131": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "132": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "133": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "dead",
+     "guppy"
+    ]
+   },
+   "134": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "dead",
+     "guppy",
+     "offensive"
+    ]
+   },
+   "135": {
+    "quality": 1,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "136": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "137": {
+    "quality": 1,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "138": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "139": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "14": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "syringe",
+     "offensive"
+    ]
+   },
+   "140": {
+    "quality": 1,
+    "tags": [
+     "bob",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "141": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "142": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "angel"
+    ]
+   },
+   "143": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "syringe",
+     "offensive"
+    ]
+   },
+   "144": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "145": {
+    "quality": 2,
+    "tags": [
+     "dead",
+     "guppy",
+     "offensive"
+    ]
+   },
+   "146": {
+    "quality": 3,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "147": {
+    "quality": 1,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "148": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "149": {
+    "quality": 4,
+    "tags": [
+     "bob",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "15": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "150": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "151": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "fly"
+    ]
+   },
+   "152": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tech",
+     "offensive"
+    ]
+   },
+   "153": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "154": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "155": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "156": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "nocantrip"
+    ]
+   },
+   "157": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "158": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "stars",
+     "lazarussharedglobal"
+    ]
+   },
+   "159": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "16": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "160": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "161": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "nochallenge"
+    ]
+   },
+   "162": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "angel"
+    ]
+   },
+   "163": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "164": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "165": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "166": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "167": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "168": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "169": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "17": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "170": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "171": {
+    "quality": 1,
+    "tags": [
+     "spider",
+     "offensive"
+    ]
+   },
+   "172": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "173": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "angel"
+    ]
+   },
+   "174": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "offensive"
+    ]
+   },
+   "175": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "176": {
+    "quality": 1,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "177": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "178": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "179": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "18": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "180": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "181": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "182": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive",
+     "angel"
+    ]
+   },
+   "183": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "184": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "angel"
+    ]
+   },
+   "185": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "angel"
+    ]
+   },
+   "186": {
+    "quality": 0,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "187": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "guppy",
+     "offensive"
+    ]
+   },
+   "188": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "baby",
+     "offensive"
+    ]
+   },
+   "189": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "19": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "190": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "191": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "192": {
+    "quality": 1,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "193": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "194": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars",
+     "lazarussharedglobal"
+    ]
+   },
+   "195": {
+    "quality": 1,
+    "tags": [
+     "mom",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "196": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "197": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "198": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "199": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "2": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "20": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "200": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "201": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "202": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "203": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "204": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "205": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "nocantrip"
+    ]
+   },
+   "206": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "207": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual"
+    ]
+   },
+   "208": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "209": {
+    "quality": 2,
+    "tags": [
+     "poop",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "21": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "210": {
+    "quality": 1,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "211": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "spider"
+    ]
+   },
+   "212": {
+    "quality": 1,
+    "tags": [
+     "guppy"
+    ]
+   },
+   "213": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "214": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "215": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "216": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "217": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "218": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "219": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "22": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "food"
+    ]
+   },
+   "220": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "221": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "222": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "223": {
+    "quality": 4,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "224": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "dead",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "225": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "226": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "227": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "228": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mom",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "229": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "23": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "food"
+    ]
+   },
+   "230": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "231": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "232": {
+    "quality": 4,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "233": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "234": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "236": {
+    "quality": 1,
+    "tags": [
+     "poop",
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "237": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "238": {
+    "quality": 0,
+    "tags": [
+     "uniquefamiliar",
+     "offensive",
+     "lazarusshared",
+     "noeden",
+     "nocantrip",
+     "quest"
+    ]
+   },
+   "239": {
+    "quality": 0,
+    "tags": [
+     "uniquefamiliar",
+     "offensive",
+     "lazarusshared",
+     "noeden",
+     "nocantrip",
+     "quest"
+    ]
+   },
+   "24": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "food"
+    ]
+   },
+   "240": {
+    "quality": 1,
+    "tags": [
+     "syringe",
+     "offensive"
+    ]
+   },
+   "241": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nogreed"
+    ]
+   },
+   "242": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "243": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "244": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tech",
+     "offensive"
+    ]
+   },
+   "245": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "246": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "247": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "248": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive",
+     "fly"
+    ]
+   },
+   "249": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "25": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "food"
+    ]
+   },
+   "250": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "251": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "252": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "253": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "254": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "255": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "256": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "257": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "258": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "259": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "26": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "food"
+    ]
+   },
+   "260": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "261": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "262": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "263": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "264": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "fly"
+    ]
+   },
+   "265": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual"
+    ]
+   },
+   "266": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "spider",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "267": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "tech",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "268": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "269": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "27": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "270": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "271": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "272": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "273": {
+    "quality": 1,
+    "tags": [
+     "bob",
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "274": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "fly"
+    ]
+   },
+   "275": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "276": {
+    "quality": 0,
+    "tags": [
+     "uniquefamiliar",
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "277": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "278": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "279": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "fly"
+    ]
+   },
+   "28": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "280": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "spider",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "281": {
+    "quality": 1,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "282": {
+    "quality": 1,
+    "tags": [
+     "book"
+    ]
+   },
+   "283": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "284": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "285": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "286": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "287": {
+    "quality": 1,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "288": {
+    "quality": 1,
+    "tags": [
+     "spider",
+     "offensive"
+    ]
+   },
+   "289": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "29": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "290": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "nocantrip"
+    ]
+   },
+   "291": {
+    "quality": 1,
+    "tags": [
+     "poop",
+     "offensive"
+    ]
+   },
+   "292": {
+    "quality": 4,
+    "tags": [
+     "nolostbr",
+     "book"
+    ]
+   },
+   "293": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "294": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "295": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "296": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "297": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "298": {
+    "quality": 1
+   },
+   "299": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "nocantrip",
+     "stars"
+    ]
+   },
+   "3": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "30": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "300": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "301": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "stars"
+    ]
+   },
+   "302": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "stars"
+    ]
+   },
+   "303": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "stars"
+    ]
+   },
+   "304": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "305": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "306": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "307": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive",
+     "stars"
+    ]
+   },
+   "308": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "309": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive",
+     "stars"
+    ]
+   },
+   "31": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "310": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "311": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "nochallenge"
+    ]
+   },
+   "312": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "313": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "angel"
+    ]
+   },
+   "314": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "315": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "316": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "317": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "318": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "stars"
+    ]
+   },
+   "319": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "32": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "320": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "321": {
+    "quality": 1,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "322": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "323": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "324": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "325": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "326": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip"
+    ]
+   },
+   "327": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "lazarusshared",
+     "noeden",
+     "quest"
+    ]
+   },
+   "328": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "lazarusshared",
+     "noeden",
+     "quest"
+    ]
+   },
+   "329": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "33": {
+    "quality": 1,
+    "tags": [
+     "book",
+     "offensive",
+     "angel"
+    ]
+   },
+   "330": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "331": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive",
+     "angel"
+    ]
+   },
+   "332": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "nochallenge"
+    ]
+   },
+   "333": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "334": {
+    "quality": 3,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "335": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "336": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "dead",
+     "offensive"
+    ]
+   },
+   "337": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "nocantrip"
+    ]
+   },
+   "338": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "339": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "34": {
+    "quality": 2,
+    "tags": [
+     "book",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "340": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "341": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "342": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "mushroom",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "343": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "344": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "345": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "syringe",
+     "offensive"
+    ]
+   },
+   "346": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "food"
+    ]
+   },
+   "347": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "348": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "349": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "35": {
+    "quality": 1,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "350": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "351": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "352": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "353": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "354": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "355": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "356": {
+    "quality": 3,
+    "tags": [
+     "battery",
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "357": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "358": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "359": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "36": {
+    "quality": 0,
+    "tags": [
+     "poop"
+    ]
+   },
+   "360": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "361": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "362": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "363": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual"
+    ]
+   },
+   "364": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "365": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "366": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "367": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "368": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "369": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "37": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "370": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "371": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "372": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "373": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "374": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "angel"
+    ]
+   },
+   "375": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "376": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nogreed"
+    ]
+   },
+   "377": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "378": {
+    "quality": 2,
+    "tags": [
+     "poop",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "379": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "38": {
+    "quality": 2,
+    "tags": [
+     "dead",
+     "offensive"
+    ]
+   },
+   "380": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "lazarussharedglobal"
+    ]
+   },
+   "381": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "382": {
+    "quality": 1,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "383": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "384": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "385": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "386": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "387": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "388": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "389": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "39": {
+    "quality": 1,
+    "tags": [
+     "mom",
+     "offensive"
+    ]
+   },
+   "390": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "391": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "392": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "393": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "394": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "395": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "tech",
+     "offensive"
+    ]
+   },
+   "396": {
+    "quality": 1,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "397": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "398": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "mushroom",
+     "offensive"
+    ]
+   },
+   "399": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "4": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "dead",
+     "offensive"
+    ]
+   },
+   "40": {
+    "quality": 0,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "400": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "401": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "402": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "403": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "404": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual"
+    ]
+   },
+   "405": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "406": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "407": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "408": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "409": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "41": {
+    "quality": 0,
+    "tags": [
+     "mom",
+     "offensive"
+    ]
+   },
+   "410": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "411": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "412": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "413": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "414": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "lazarussharedglobal"
+    ]
+   },
+   "415": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "416": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "lazarussharedglobal"
+    ]
+   },
+   "417": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "418": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "419": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "42": {
+    "quality": 1,
+    "tags": [
+     "bob",
+     "dead",
+     "offensive"
+    ]
+   },
+   "420": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "421": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "422": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "423": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "424": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "425": {
+    "quality": 1,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "426": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive",
+     "fly"
+    ]
+   },
+   "427": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "428": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "429": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "430": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "431": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "offensive"
+    ]
+   },
+   "432": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "433": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "434": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip",
+     "fly"
+    ]
+   },
+   "435": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "436": {
+    "quality": 1,
+    "tags": [
+     "uniquefamiliar",
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "437": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "438": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "439": {
+    "quality": 2,
+    "tags": [
+     "mom",
+     "offensive"
+    ]
+   },
+   "44": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "440": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "441": {
+    "quality": 4,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "442": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "tearsup"
+    ]
+   },
+   "443": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "444": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "445": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "446": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "447": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "448": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "449": {
+    "quality": 1,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "45": {
+    "quality": 1,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "450": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "451": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "452": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "453": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "454": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "455": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "456": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "food"
+    ]
+   },
+   "457": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "458": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "459": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "46": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "460": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "461": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive",
+     "fly"
+    ]
+   },
+   "462": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "463": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "464": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "465": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "466": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "467": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "468": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "469": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "47": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "470": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "471": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "472": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "offensive"
+    ]
+   },
+   "473": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "474": {
+    "quality": 0
+   },
+   "475": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "476": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "477": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "478": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "479": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "48": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "480": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "481": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "482": {
+    "quality": 0,
+    "tags": [
+     "nolostbr",
+     "nochallenge",
+     "nodaily"
+    ]
+   },
+   "483": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "484": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "485": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "486": {
+    "quality": 1
+   },
+   "487": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "488": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "489": {
+    "quality": 4,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "49": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "490": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "491": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "offensive"
+    ]
+   },
+   "492": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "fly"
+    ]
+   },
+   "493": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "syringe"
+    ]
+   },
+   "494": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "495": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "496": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "syringe",
+     "offensive"
+    ]
+   },
+   "497": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "498": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "499": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "5": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "50": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "500": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "501": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "502": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "503": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "504": {
+    "quality": 0,
+    "tags": [
+     "poop",
+     "offensive"
+    ]
+   },
+   "505": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "506": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "507": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "508": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mom"
+    ]
+   },
+   "509": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual"
+    ]
+   },
+   "51": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "510": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "511": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "512": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "513": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "514": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "515": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "516": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "517": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "518": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "offensive"
+    ]
+   },
+   "519": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "52": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "520": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "521": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "522": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "523": {
+    "quality": 1,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "524": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tech",
+     "offensive"
+    ]
+   },
+   "525": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "526": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "527": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "528": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "529": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "53": {
+    "quality": 1,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "530": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "531": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "532": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "533": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "534": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "535": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "536": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "537": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "538": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "539": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "54": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "540": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "541": {
+    "quality": 1,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "542": {
+    "quality": 2,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "543": {
+    "quality": 1,
+    "tags": [
+     "poop",
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "544": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "545": {
+    "quality": 3,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "546": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "547": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "548": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "549": {
+    "quality": 3,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "55": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "mom",
+     "offensive"
+    ]
+   },
+   "550": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "noeden",
+     "lazarussharedglobal",
+     "quest"
+    ]
+   },
+   "551": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "noeden",
+     "lazarussharedglobal",
+     "quest"
+    ]
+   },
+   "552": {
+    "quality": 4,
+    "tags": [
+     "mom",
+     "offensive",
+     "noeden",
+     "lazarussharedglobal",
+     "quest"
+    ]
+   },
+   "553": {
+    "quality": 3,
+    "tags": [
+     "mushroom",
+     "offensive"
+    ]
+   },
+   "554": {
+    "quality": 1,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "555": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "556": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "offensive"
+    ]
+   },
+   "557": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "558": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "559": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "56": {
+    "quality": 0,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "560": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "561": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "562": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "563": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "564": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "565": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "566": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "lazarussharedglobal"
+    ]
+   },
+   "567": {
+    "quality": 3,
+    "tags": [
+     "uniquefamiliar",
+     "summonable",
+     "tearsup",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "568": {
+    "quality": 2,
+    "tags": [
+     "angel"
+    ]
+   },
+   "569": {
+    "quality": 1,
+    "tags": [
+     "uniquefamiliar",
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "57": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "570": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "571": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "572": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "573": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "angel"
+    ]
+   },
+   "574": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "575": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "576": {
+    "quality": 1,
+    "tags": [
+     "poop",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "577": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "578": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "579": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "58": {
+    "quality": 3,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "580": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nogreed"
+    ]
+   },
+   "581": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "fly"
+    ]
+   },
+   "582": {
+    "quality": 1,
+    "tags": [
+     "mushroom",
+     "offensive"
+    ]
+   },
+   "583": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "584": {
+    "quality": 3,
+    "tags": [
+     "book",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "585": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "586": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip",
+     "lazarussharedglobal"
+    ]
+   },
+   "588": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "589": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "stars",
+     "lazarussharedglobal"
+    ]
+   },
+   "59": {
+    "quality": 0
+   },
+   "590": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "591": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "592": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "593": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "594": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "595": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "596": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "597": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "stars"
+    ]
+   },
+   "598": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive",
+     "stars"
+    ]
+   },
+   "599": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "lazarussharedglobal"
+    ]
+   },
+   "6": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "60": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "600": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "601": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "602": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "603": {
+    "quality": 0,
+    "tags": [
+     "battery",
+     "offensive"
+    ]
+   },
+   "604": {
+    "quality": 1,
+    "tags": [
+     "mom",
+     "offensive"
+    ]
+   },
+   "605": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "606": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "607": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "608": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "609": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "610": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "dead"
+    ]
+   },
+   "611": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "612": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "nocantrip"
+    ]
+   },
+   "614": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "615": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "616": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "617": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "618": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "619": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "62": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "nocantrip"
+    ]
+   },
+   "621": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "622": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "623": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "624": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "625": {
+    "quality": 4,
+    "tags": [
+     "mushroom",
+     "offensive"
+    ]
+   },
+   "626": {
+    "quality": 0,
+    "tags": [
+     "uniquefamiliar",
+     "lazarusshared",
+     "noeden",
+     "quest"
+    ]
+   },
+   "627": {
+    "quality": 0,
+    "tags": [
+     "uniquefamiliar",
+     "lazarusshared",
+     "noeden",
+     "quest"
+    ]
+   },
+   "628": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "629": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "fly"
+    ]
+   },
+   "63": {
+    "quality": 2,
+    "tags": [
+     "battery",
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "631": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "632": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "633": {
+    "quality": 3,
+    "tags": [
+     "lazarusshared",
+     "noeden",
+     "quest"
+    ]
+   },
+   "634": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "635": {
+    "quality": 1,
+    "tags": [
+     "uniquefamiliar",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "636": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "nocantrip",
+     "nochallenge",
+     "nodaily"
+    ]
+   },
+   "637": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "638": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "639": {
+    "quality": 1,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "64": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "640": {
+    "quality": 3,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "641": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "642": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "643": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive",
+     "angel"
+    ]
+   },
+   "644": {
+    "quality": 1,
+    "tags": [
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "645": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual"
+    ]
+   },
+   "646": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "647": {
+    "quality": 2,
+    "tags": [
+     "battery",
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "649": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive",
+     "fly"
+    ]
+   },
+   "65": {
+    "quality": 1,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "650": {
+    "quality": 1,
+    "tags": [
+     "offensive",
+     "fly"
+    ]
+   },
+   "651": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "stars"
+    ]
+   },
+   "652": {
+    "quality": 1,
+    "tags": [
+     "baby"
+    ]
+   },
+   "653": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "654": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "655": {
+    "quality": 1,
+    "tags": [
+     "nocantrip"
+    ]
+   },
+   "656": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "657": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "658": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "659": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "66": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "660": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "stars",
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "661": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "offensive"
+    ]
+   },
+   "663": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "664": {
+    "quality": 4,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "665": {
+    "quality": 2,
+    "tags": [
+     "guppy",
+     "offensive"
+    ]
+   },
+   "667": {
+    "quality": 2,
+    "tags": [
+     "dead",
+     "offensive"
+    ]
+   },
+   "668": {
+    "quality": 0,
+    "tags": [
+     "lazarusshared",
+     "noeden",
+     "quest"
+    ]
+   },
+   "669": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarussharedglobal"
+    ]
+   },
+   "67": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "670": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nogreed"
+    ]
+   },
+   "671": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "672": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "nokeeper",
+     "nogreed"
+    ]
+   },
+   "673": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "lazarusshared"
+    ]
+   },
+   "674": {
+    "quality": 2
+   },
+   "675": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "676": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "677": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "678": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "679": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "68": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tech",
+     "offensive"
+    ]
+   },
+   "680": {
+    "quality": 2,
+    "tags": [
+     "poop",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "681": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "682": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "683": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "684": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "685": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "686": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "687": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "688": {
+    "quality": 2
+   },
+   "689": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "69": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "690": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "691": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "angel"
+    ]
+   },
+   "692": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "693": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "fly"
+    ]
+   },
+   "694": {
+    "quality": 3,
+    "tags": [
+     "summonable"
+    ]
+   },
+   "695": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "696": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "angel"
+    ]
+   },
+   "697": {
+    "quality": 2,
+    "tags": [
+     "uniquefamiliar",
+     "offensive",
+     "lazarusshared",
+     "nogreed"
+    ]
+   },
+   "698": {
+    "quality": 4,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "699": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "7": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "70": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "syringe",
+     "offensive"
+    ]
+   },
+   "700": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip",
+     "stars"
+    ]
+   },
+   "701": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "702": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "703": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "704": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "705": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "706": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "707": {
+    "quality": 1,
+    "tags": [
+     "nolostbr",
+     "food"
+    ]
+   },
+   "708": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "709": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "71": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "mushroom",
+     "offensive"
+    ]
+   },
+   "710": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "711": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "712": {
+    "quality": 3,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "713": {
+    "quality": 3,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "714": {
+    "quality": 0,
+    "tags": [
+     "noeden"
+    ]
+   },
+   "715": {
+    "quality": 0,
+    "tags": [
+     "noeden",
+     "nocantrip"
+    ]
+   },
+   "716": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "717": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "719": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "72": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "nocantrip",
+     "angel"
+    ]
+   },
+   "720": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "721": {
+    "quality": 0,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "722": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "723": {
+    "quality": 4,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "724": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "725": {
+    "quality": 0,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "726": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "727": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "728": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "729": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "73": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual"
+    ]
+   },
+   "730": {
+    "quality": 3,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "731": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "732": {
+    "quality": 3,
+    "tags": [
+     "mom",
+     "offensive"
+    ]
+   },
+   "74": {
+    "quality": 0,
+    "tags": [
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "75": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "76": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "77": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "78": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "book",
+     "lazarussharedglobal"
+    ]
+   },
+   "79": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "summonable",
+     "offensive"
+    ]
+   },
+   "8": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "80": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "81": {
+    "quality": 3,
+    "tags": [
+     "uniquefamiliar",
+     "dead",
+     "guppy",
+     "nocantrip"
+    ]
+   },
+   "82": {
+    "quality": 3,
+    "tags": [
+     "devil",
+     "nolostbr",
+     "summonable"
+    ]
+   },
+   "83": {
+    "quality": 2,
+    "tags": [
+     "devil"
+    ]
+   },
+   "84": {
+    "quality": 2,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "85": {
+    "quality": 2,
+    "tags": [
+     "offensive",
+     "nocantrip",
+     "stars"
+    ]
+   },
+   "86": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "87": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "88": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "89": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "spider",
+     "offensive"
+    ]
+   },
+   "9": {
+    "quality": 0,
+    "tags": [
+     "poop",
+     "summonable",
+     "nocantrip",
+     "fly"
+    ]
+   },
+   "90": {
+    "quality": 3,
+    "tags": [
+     "summonable",
+     "tearsup",
+     "offensive"
+    ]
+   },
+   "91": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "offensive"
+    ]
+   },
+   "92": {
+    "quality": 2,
+    "tags": [
+     "nolostbr"
+    ]
+   },
+   "93": {
+    "quality": 1,
+    "tags": [
+     "offensive"
+    ]
+   },
+   "94": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "offensive",
+     "nocantrip"
+    ]
+   },
+   "95": {
+    "quality": 1,
+    "tags": [
+     "summonable",
+     "baby",
+     "tech",
+     "monstermanual",
+     "offensive"
+    ]
+   },
+   "96": {
+    "quality": 2,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "nocantrip"
+    ]
+   },
+   "97": {
+    "quality": 2,
+    "tags": [
+     "book",
+     "offensive"
+    ]
+   },
+   "98": {
+    "quality": 3,
+    "tags": [
+     "nolostbr",
+     "summonable",
+     "nocantrip"
+    ]
+   },
+   "99": {
+    "quality": 2,
+    "tags": [
+     "summonable",
+     "monstermanual",
+     "offensive"
+    ]
+   }
+  },
+  "source": "Derugon/TBoIR-resources 1.7.9b.J835 resources-dlc3/items_metadata.xml",
+  "trinkets": {
+   "1": {
+    "quality": 0
+   },
+   "10": {
+    "quality": 0
+   },
+   "100": {
+    "quality": 0
+   },
+   "101": {
+    "quality": 0
+   },
+   "102": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "103": {
+    "quality": 0
+   },
+   "104": {
+    "quality": 0
+   },
+   "105": {
+    "quality": 0
+   },
+   "106": {
+    "quality": 0
+   },
+   "107": {
+    "quality": 0
+   },
+   "108": {
+    "quality": 0
+   },
+   "109": {
+    "quality": 0
+   },
+   "11": {
+    "quality": 0
+   },
+   "110": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "111": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "112": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal"
+    ]
+   },
+   "113": {
+    "quality": 0
+   },
+   "114": {
+    "quality": 0
+   },
+   "115": {
+    "quality": 0
+   },
+   "116": {
+    "quality": 0
+   },
+   "117": {
+    "quality": 0
+   },
+   "118": {
+    "quality": 0
+   },
+   "119": {
+    "quality": 0
+   },
+   "12": {
+    "quality": 0
+   },
+   "120": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "121": {
+    "quality": 0
+   },
+   "122": {
+    "quality": 0
+   },
+   "123": {
+    "quality": 0
+   },
+   "124": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "125": {
+    "quality": 0
+   },
+   "126": {
+    "quality": 0
+   },
+   "127": {
+    "quality": 0
+   },
+   "128": {
+    "quality": 0
+   },
+   "129": {
+    "quality": 0
+   },
+   "13": {
+    "quality": 0
+   },
+   "130": {
+    "quality": 0
+   },
+   "131": {
+    "quality": 0
+   },
+   "132": {
+    "quality": 0
+   },
+   "133": {
+    "quality": 0
+   },
+   "134": {
+    "quality": 0
+   },
+   "135": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "136": {
+    "quality": 0
+   },
+   "137": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal"
+    ]
+   },
+   "138": {
+    "quality": 0
+   },
+   "139": {
+    "quality": 0
+   },
+   "14": {
+    "quality": 0
+   },
+   "140": {
+    "quality": 0
+   },
+   "141": {
+    "quality": 0
+   },
+   "142": {
+    "quality": 0
+   },
+   "143": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "144": {
+    "quality": 0
+   },
+   "145": {
+    "quality": 0
+   },
+   "146": {
+    "quality": 0
+   },
+   "147": {
+    "quality": 0
+   },
+   "148": {
+    "quality": 0
+   },
+   "149": {
+    "quality": 0
+   },
+   "15": {
+    "quality": 0
+   },
+   "150": {
+    "quality": 0
+   },
+   "151": {
+    "quality": 0
+   },
+   "152": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "153": {
+    "quality": 0
+   },
+   "154": {
+    "quality": 0
+   },
+   "155": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "156": {
+    "quality": 0
+   },
+   "157": {
+    "quality": 0
+   },
+   "158": {
+    "quality": 0
+   },
+   "159": {
+    "quality": 0
+   },
+   "16": {
+    "quality": 0,
+    "tags": [
+     "mom"
+    ]
+   },
+   "160": {
+    "quality": 0
+   },
+   "161": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "162": {
+    "quality": 0
+   },
+   "163": {
+    "quality": 0
+   },
+   "164": {
+    "quality": 0
+   },
+   "165": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "166": {
+    "quality": 0
+   },
+   "167": {
+    "quality": 0
+   },
+   "168": {
+    "quality": 0
+   },
+   "169": {
+    "quality": 0
+   },
+   "17": {
+    "quality": 0
+   },
+   "170": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "171": {
+    "quality": 0
+   },
+   "172": {
+    "quality": 0
+   },
+   "173": {
+    "quality": 0
+   },
+   "174": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal"
+    ]
+   },
+   "175": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal"
+    ]
+   },
+   "176": {
+    "quality": 0
+   },
+   "177": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "178": {
+    "quality": 0
+   },
+   "179": {
+    "quality": 0
+   },
+   "18": {
+    "quality": 0
+   },
+   "180": {
+    "quality": 0
+   },
+   "181": {
+    "quality": 0
+   },
+   "182": {
+    "quality": 0
+   },
+   "183": {
+    "quality": 0
+   },
+   "184": {
+    "quality": 0
+   },
+   "185": {
+    "quality": 0
+   },
+   "186": {
+    "quality": 0
+   },
+   "187": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal"
+    ]
+   },
+   "188": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "189": {
+    "quality": 0
+   },
+   "19": {
+    "quality": 0
+   },
+   "2": {
+    "quality": 0
+   },
+   "20": {
+    "quality": 0
+   },
+   "21": {
+    "quality": 0
+   },
+   "22": {
+    "quality": 0
+   },
+   "23": {
+    "quality": 0
+   },
+   "24": {
+    "quality": 0
+   },
+   "25": {
+    "quality": 0
+   },
+   "26": {
+    "quality": 0
+   },
+   "27": {
+    "quality": 0
+   },
+   "28": {
+    "quality": 0
+   },
+   "29": {
+    "quality": 0
+   },
+   "3": {
+    "quality": 0,
+    "tags": [
+     "battery"
+    ]
+   },
+   "30": {
+    "quality": 0
+   },
+   "31": {
+    "quality": 0
+   },
+   "32": {
+    "quality": 0
+   },
+   "33": {
+    "quality": 0
+   },
+   "34": {
+    "quality": 0
+   },
+   "35": {
+    "quality": 0
+   },
+   "36": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "37": {
+    "quality": 0
+   },
+   "38": {
+    "quality": 0,
+    "tags": [
+     "mom"
+    ]
+   },
+   "39": {
+    "quality": 0
+   },
+   "4": {
+    "quality": 0
+   },
+   "40": {
+    "quality": 0
+   },
+   "41": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "42": {
+    "quality": 0
+   },
+   "43": {
+    "quality": 0
+   },
+   "44": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "45": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "46": {
+    "quality": 0
+   },
+   "48": {
+    "quality": 0
+   },
+   "49": {
+    "quality": 0
+   },
+   "5": {
+    "quality": 0
+   },
+   "50": {
+    "quality": 0
+   },
+   "51": {
+    "quality": 0
+   },
+   "52": {
+    "quality": 0
+   },
+   "53": {
+    "quality": 0
+   },
+   "54": {
+    "quality": 0
+   },
+   "55": {
+    "quality": 0
+   },
+   "56": {
+    "quality": 0
+   },
+   "57": {
+    "quality": 0
+   },
+   "58": {
+    "quality": 0
+   },
+   "59": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "6": {
+    "quality": 0
+   },
+   "60": {
+    "quality": 0
+   },
+   "61": {
+    "quality": 0
+   },
+   "62": {
+    "quality": 0
+   },
+   "63": {
+    "quality": 0
+   },
+   "64": {
+    "quality": 0
+   },
+   "65": {
+    "quality": 0
+   },
+   "66": {
+    "quality": 0
+   },
+   "67": {
+    "quality": 0
+   },
+   "68": {
+    "quality": 0
+   },
+   "69": {
+    "quality": 0
+   },
+   "7": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal"
+    ]
+   },
+   "70": {
+    "quality": 0
+   },
+   "71": {
+    "quality": 0,
+    "tags": [
+     "bob"
+    ]
+   },
+   "72": {
+    "quality": 0,
+    "tags": [
+     "battery",
+     "nogreed"
+    ]
+   },
+   "73": {
+    "quality": 0
+   },
+   "74": {
+    "quality": 0
+   },
+   "75": {
+    "quality": 0
+   },
+   "76": {
+    "quality": 0
+   },
+   "77": {
+    "quality": 0
+   },
+   "78": {
+    "quality": 0
+   },
+   "79": {
+    "quality": 0
+   },
+   "8": {
+    "quality": 0
+   },
+   "80": {
+    "quality": 0
+   },
+   "81": {
+    "quality": 0
+   },
+   "82": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal"
+    ]
+   },
+   "83": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "84": {
+    "quality": 0,
+    "tags": [
+     "lazarussharedglobal",
+     "nogreed"
+    ]
+   },
+   "85": {
+    "quality": 0,
+    "tags": [
+     "nogreed"
+    ]
+   },
+   "86": {
+    "quality": 0
+   },
+   "87": {
+    "quality": 0,
+    "tags": [
+     "mom"
+    ]
+   },
+   "88": {
+    "quality": 0
+   },
+   "89": {
+    "quality": 0
+   },
+   "9": {
+    "quality": 0
+   },
+   "90": {
+    "quality": 0
+   },
+   "91": {
+    "quality": 0
+   },
+   "92": {
+    "quality": 0
+   },
+   "93": {
+    "quality": 0
+   },
+   "94": {
+    "quality": 0
+   },
+   "95": {
+    "quality": 0
+   },
+   "96": {
+    "quality": 0
+   },
+   "97": {
+    "quality": 0
+   },
+   "98": {
+    "quality": 0
+   },
+   "99": {
+    "quality": 0
+   }
+  }
+ },
+ "players": {
+  "players": {
+   "0": {
+    "items": [],
+    "pocketActive": null
+   },
+   "1": {
+    "items": [
+     45
+    ],
+    "pocketActive": null
+   },
+   "10": {
+    "items": [
+     609
+    ],
+    "pocketActive": null
+   },
+   "11": {
+    "items": [
+     214
+    ],
+    "pocketActive": null
+   },
+   "12": {
+    "items": [],
+    "pocketActive": null
+   },
+   "13": {
+    "items": [
+     357,
+     412
+    ],
+    "pocketActive": null
+   },
+   "14": {
+    "items": [],
+    "pocketActive": null
+   },
+   "15": {
+    "items": [
+     477
+    ],
+    "pocketActive": null
+   },
+   "16": {
+    "items": [],
+    "pocketActive": null
+   },
+   "17": {
+    "items": [],
+    "pocketActive": null
+   },
+   "18": {
+    "items": [
+     584
+    ],
+    "pocketActive": null
+   },
+   "19": {
+    "items": [],
+    "pocketActive": null
+   },
+   "2": {
+    "items": [
+     46
+    ],
+    "pocketActive": null
+   },
+   "20": {
+    "items": [],
+    "pocketActive": null
+   },
+   "21": {
+    "items": [],
+    "pocketActive": null
+   },
+   "22": {
+    "items": [],
+    "pocketActive": 45
+   },
+   "23": {
+    "items": [],
+    "pocketActive": 710
+   },
+   "24": {
+    "items": [],
+    "pocketActive": 705
+   },
+   "25": {
+    "items": [],
+    "pocketActive": 715
+   },
+   "26": {
+    "items": [],
+    "pocketActive": 713
+   },
+   "27": {
+    "items": [],
+    "pocketActive": null
+   },
+   "28": {
+    "items": [],
+    "pocketActive": null
+   },
+   "29": {
+    "items": [],
+    "pocketActive": 711
+   },
+   "3": {
+    "items": [
+     34
+    ],
+    "pocketActive": null
+   },
+   "30": {
+    "items": [],
+    "pocketActive": null
+   },
+   "31": {
+    "items": [],
+    "pocketActive": null
+   },
+   "32": {
+    "items": [],
+    "pocketActive": null
+   },
+   "33": {
+    "items": [],
+    "pocketActive": null
+   },
+   "34": {
+    "items": [],
+    "pocketActive": 706
+   },
+   "35": {
+    "items": [],
+    "pocketActive": null
+   },
+   "36": {
+    "items": [],
+    "pocketActive": 712
+   },
+   "37": {
+    "items": [],
+    "pocketActive": 722
+   },
+   "38": {
+    "items": [],
+    "pocketActive": 711
+   },
+   "39": {
+    "items": [],
+    "pocketActive": 722
+   },
+   "4": {
+    "items": [
+     36
+    ],
+    "pocketActive": null
+   },
+   "40": {
+    "items": [],
+    "pocketActive": null
+   },
+   "5": {
+    "items": [
+     122,
+     117
+    ],
+    "pocketActive": null
+   },
+   "6": {
+    "items": [
+     157
+    ],
+    "pocketActive": null
+   },
+   "7": {
+    "items": [],
+    "pocketActive": null
+   },
+   "8": {
+    "items": [],
+    "pocketActive": null
+   },
+   "9": {
+    "items": [],
+    "pocketActive": null
+   }
+  },
+  "source": "Derugon/TBoIR-resources 1.7.9b.J835 resources-dlc3/players.xml"
+ },
+ "pools": {
+  "pools": {
+   "1": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "10": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "100": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "101": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedBoss"
+   ],
+   "102": [
+    "treasure",
+    "shop",
+    "beggar",
+    "demonBeggar",
+    "momsChest",
+    "greedTreasure",
+    "craneGame",
+    "oldChest"
+   ],
+   "103": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "104": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "105": [
+    "treasure",
+    "greedShop",
+    "craneGame",
+    "ultraSecret"
+   ],
+   "106": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "107": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "108": [
+    "treasure",
+    "angel",
+    "greedTreasure"
+   ],
+   "109": [
+    "treasure",
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "11": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "110": [
+    "treasure",
+    "momsChest",
+    "greedTreasure",
+    "ultraSecret",
+    "oldChest"
+   ],
+   "111": [
+    "treasure",
+    "beggar",
+    "greedTreasure"
+   ],
+   "112": [
+    "angel",
+    "greedAngel",
+    "babyShop"
+   ],
+   "113": [
+    "treasure",
+    "devil",
+    "greedDevil",
+    "babyShop"
+   ],
+   "114": [
+    "treasure",
+    "devil",
+    "momsChest",
+    "greedTreasure",
+    "greedDevil",
+    "oldChest"
+   ],
+   "115": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil"
+   ],
+   "116": [
+    "shop",
+    "batteryBum",
+    "greedShop",
+    "craneGame"
+   ],
+   "117": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "118": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "119": [
+    "ultraSecret"
+   ],
+   "12": [
+    "treasure",
+    "greedTreasure",
+    "greedBoss",
+    "ultraSecret"
+   ],
+   "120": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedBoss",
+    "greedSecret"
+   ],
+   "121": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedBoss",
+    "greedSecret"
+   ],
+   "122": [
+    "devil",
+    "demonBeggar",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "123": [
+    "treasure",
+    "devil",
+    "library",
+    "greedDevil"
+   ],
+   "124": [
+    "treasure",
+    "angel",
+    "greedTreasure"
+   ],
+   "125": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "126": [
+    "treasure",
+    "demonBeggar",
+    "curse",
+    "greedTreasure",
+    "greedCurse"
+   ],
+   "127": [
+    "treasure",
+    "devil",
+    "secret",
+    "demonBeggar",
+    "greedSecret"
+   ],
+   "128": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "129": [
+    "treasure"
+   ],
+   "13": [
+    "treasure",
+    "demonBeggar",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "131": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "132": [
+    "greedTreasure",
+    "greedBoss",
+    "greedDevil"
+   ],
+   "133": [
+    "devil",
+    "redChest",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "134": [
+    "devil",
+    "redChest",
+    "curse"
+   ],
+   "135": [
+    "ultraSecret"
+   ],
+   "136": [
+    "treasure",
+    "craneGame"
+   ],
+   "137": [
+    "treasure",
+    "shop",
+    "greedTreasure",
+    "craneGame",
+    "ultraSecret",
+    "bombBum"
+   ],
+   "138": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel",
+    "woodenChest"
+   ],
+   "139": [
+    "shop",
+    "momsChest",
+    "greedShop",
+    "oldChest"
+   ],
+   "14": [
+    "treasure",
+    "boss",
+    "demonBeggar",
+    "greedBoss"
+   ],
+   "140": [
+    "treasure",
+    "redChest",
+    "greedTreasure",
+    "bombBum",
+    "rottenBeggar"
+   ],
+   "141": [
+    "boss"
+   ],
+   "142": [
+    "treasure",
+    "angel",
+    "greedTreasure"
+   ],
+   "143": [
+    "treasure",
+    "boss",
+    "demonBeggar",
+    "greedBoss"
+   ],
+   "144": [
+    "treasure",
+    "beggar",
+    "babyShop"
+   ],
+   "145": [
+    "devil",
+    "redChest",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "146": [
+    "treasure",
+    "angel",
+    "greedTreasure"
+   ],
+   "147": [
+    "shop",
+    "craneGame"
+   ],
+   "148": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "149": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "15": [
+    "treasure",
+    "greedBoss",
+    "ultraSecret"
+   ],
+   "150": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "151": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "152": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "153": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "154": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "155": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "156": [
+    "shop",
+    "angel",
+    "greedShop"
+   ],
+   "157": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "159": [
+    "devil",
+    "demonBeggar",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "16": [
+    "secret",
+    "greedBoss",
+    "greedSecret"
+   ],
+   "160": [
+    "treasure"
+   ],
+   "161": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "162": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel"
+   ],
+   "163": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "164": [
+    "shop"
+   ],
+   "165": [
+    "boss"
+   ],
+   "166": [
+    "treasure",
+    "greedShop",
+    "craneGame",
+    "ultraSecret"
+   ],
+   "167": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "168": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "169": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "17": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "170": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "171": [
+    "treasure"
+   ],
+   "172": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "babyShop"
+   ],
+   "173": [
+    "treasure",
+    "angel"
+   ],
+   "174": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "175": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "oldChest"
+   ],
+   "176": [
+    "treasure",
+    "boss",
+    "greedBoss",
+    "ultraSecret"
+   ],
+   "177": [
+    "shop",
+    "beggar",
+    "ultraSecret"
+   ],
+   "178": [
+    "treasure",
+    "angel",
+    "greedAngel"
+   ],
+   "179": [
+    "goldenChest"
+   ],
+   "180": [
+    "treasure",
+    "beggar"
+   ],
+   "182": [
+    "angel",
+    "greedAngel",
+    "ultraSecret"
+   ],
+   "183": [
+    "boss",
+    "greedBoss",
+    "woodenChest"
+   ],
+   "184": [
+    "angel",
+    "greedAngel"
+   ],
+   "185": [
+    "angel",
+    "greedAngel"
+   ],
+   "186": [
+    "treasure",
+    "devil",
+    "greedTreasure"
+   ],
+   "187": [
+    "devil",
+    "greedDevil"
+   ],
+   "188": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "189": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "19": [
+    "treasure"
+   ],
+   "190": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret",
+    "bombBum"
+   ],
+   "191": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "192": [
+    "treasure",
+    "library",
+    "greedTreasure"
+   ],
+   "193": [
+    "boss",
+    "greedBoss",
+    "ultraSecret"
+   ],
+   "194": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "195": [
+    "shop",
+    "boss",
+    "beggar",
+    "demonBeggar",
+    "momsChest",
+    "greedBoss",
+    "oldChest"
+   ],
+   "196": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "197": [
+    "boss",
+    "angel",
+    "greedBoss",
+    "greedAngel"
+   ],
+   "198": [
+    "boss",
+    "beggar",
+    "greedBoss"
+   ],
+   "199": [
+    "shop",
+    "keyMaster",
+    "momsChest",
+    "greedShop",
+    "oldChest"
+   ],
+   "2": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "20": [
+    "secret",
+    "greedSecret"
+   ],
+   "200": [
+    "treasure",
+    "momsChest",
+    "greedTreasure",
+    "oldChest"
+   ],
+   "201": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "202": [
+    "treasure"
+   ],
+   "203": [
+    "shop"
+   ],
+   "204": [
+    "shop",
+    "beggar",
+    "greedShop"
+   ],
+   "205": [
+    "shop",
+    "batteryBum"
+   ],
+   "206": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "207": [
+    "greedBoss",
+    "babyShop"
+   ],
+   "208": [
+    "shop",
+    "greedShop",
+    "craneGame",
+    "ultraSecret"
+   ],
+   "209": [
+    "treasure",
+    "shellGame",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "21": [
+    "shop",
+    "beggar",
+    "craneGame"
+   ],
+   "210": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "211": [
+    "treasure"
+   ],
+   "212": [
+    "devil",
+    "redChest",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "craneGame"
+   ],
+   "213": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "214": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "215": [
+    "devil",
+    "curse"
+   ],
+   "216": [
+    "devil",
+    "demonBeggar",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "217": [
+    "treasure",
+    "momsChest",
+    "greedTreasure",
+    "oldChest"
+   ],
+   "218": [
+    "boss"
+   ],
+   "219": [
+    "boss"
+   ],
+   "22": [
+    "boss",
+    "beggar",
+    "greedBoss"
+   ],
+   "220": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "221": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "222": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "223": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "224": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "225": [
+    "treasure",
+    "devil",
+    "demonBeggar",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "226": [
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "227": [
+    "treasure",
+    "shop",
+    "craneGame"
+   ],
+   "228": [
+    "treasure",
+    "momsChest",
+    "greedTreasure",
+    "oldChest"
+   ],
+   "229": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "23": [
+    "boss",
+    "beggar",
+    "greedBoss"
+   ],
+   "230": [
+    "devil",
+    "demonBeggar",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "231": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "232": [
+    "shop",
+    "craneGame"
+   ],
+   "233": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "234": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "236": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "237": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil"
+   ],
+   "24": [
+    "boss",
+    "beggar",
+    "greedBoss"
+   ],
+   "240": [
+    "treasure",
+    "boss",
+    "demonBeggar",
+    "greedBoss"
+   ],
+   "241": [
+    "devil",
+    "demonBeggar",
+    "curse"
+   ],
+   "242": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "243": [
+    "angel",
+    "greedAngel"
+   ],
+   "244": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "245": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "246": [
+    "shop",
+    "beggar",
+    "greedShop"
+   ],
+   "247": [
+    "shop",
+    "greedShop",
+    "ultraSecret"
+   ],
+   "248": [
+    "shop",
+    "greedShop"
+   ],
+   "249": [
+    "shop"
+   ],
+   "25": [
+    "boss",
+    "beggar",
+    "greedBoss"
+   ],
+   "250": [
+    "shop"
+   ],
+   "251": [
+    "shop",
+    "greedShop",
+    "craneGame"
+   ],
+   "252": [
+    "shop",
+    "greedShop"
+   ],
+   "253": [
+    "boss",
+    "greedBoss",
+    "ultraSecret"
+   ],
+   "254": [
+    "boss",
+    "greedTreasure",
+    "greedBoss",
+    "ultraSecret"
+   ],
+   "255": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "256": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "257": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "258": [
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "259": [
+    "devil",
+    "demonBeggar",
+    "greedDevil"
+   ],
+   "26": [
+    "boss",
+    "beggar",
+    "greedBoss",
+    "rottenBeggar"
+   ],
+   "260": [
+    "shop",
+    "curse",
+    "greedShop",
+    "greedCurse"
+   ],
+   "261": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "262": [
+    "devil",
+    "secret",
+    "demonBeggar",
+    "greedSecret"
+   ],
+   "263": [
+    "secret",
+    "greedSecret",
+    "craneGame"
+   ],
+   "264": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "265": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "266": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "267": [
+    "treasure",
+    "greedTreasure",
+    "craneGame",
+    "babyShop"
+   ],
+   "268": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "babyShop",
+    "rottenBeggar"
+   ],
+   "269": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "babyShop"
+   ],
+   "27": [
+    "boss",
+    "greedBoss",
+    "woodenChest"
+   ],
+   "270": [
+    "treasure",
+    "greedDevil",
+    "babyShop"
+   ],
+   "271": [
+    "treasure",
+    "secret",
+    "beggar",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "272": [
+    "treasure",
+    "keyMaster",
+    "babyShop"
+   ],
+   "273": [
+    "treasure",
+    "greedTreasure",
+    "babyShop",
+    "rottenBeggar"
+   ],
+   "274": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "275": [
+    "treasure",
+    "devil",
+    "babyShop"
+   ],
+   "276": [
+    "treasure",
+    "ultraSecret"
+   ],
+   "277": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "278": [
+    "treasure",
+    "devil",
+    "demonBeggar",
+    "babyShop"
+   ],
+   "279": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "28": [
+    "boss",
+    "goldenChest",
+    "greedBoss"
+   ],
+   "280": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "281": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "282": [
+    "treasure",
+    "library"
+   ],
+   "283": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "284": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "285": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "286": [
+    "shop",
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "287": [
+    "treasure",
+    "secret",
+    "library"
+   ],
+   "288": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "289": [
+    "shop",
+    "greedShop",
+    "ultraSecret"
+   ],
+   "29": [
+    "boss",
+    "goldenChest",
+    "momsChest",
+    "greedBoss",
+    "oldChest"
+   ],
+   "290": [
+    "shop"
+   ],
+   "291": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "292": [
+    "treasure",
+    "devil",
+    "library",
+    "greedDevil"
+   ],
+   "294": [
+    "treasure",
+    "beggar"
+   ],
+   "295": [
+    "treasure",
+    "shop"
+   ],
+   "296": [
+    "shop"
+   ],
+   "297": [
+    "shop",
+    "redChest",
+    "greedShop"
+   ],
+   "298": [
+    "treasure"
+   ],
+   "299": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "3": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "30": [
+    "boss",
+    "momsChest",
+    "greedBoss",
+    "ultraSecret",
+    "oldChest"
+   ],
+   "300": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "301": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "302": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "303": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "304": [
+    "treasure"
+   ],
+   "305": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "306": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "307": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "308": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "309": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "31": [
+    "boss",
+    "momsChest",
+    "greedBoss",
+    "ultraSecret",
+    "oldChest"
+   ],
+   "310": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "311": [
+    "devil",
+    "greedDevil"
+   ],
+   "312": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "313": [
+    "treasure",
+    "angel",
+    "greedAngel"
+   ],
+   "314": [
+    "treasure",
+    "greedBoss"
+   ],
+   "315": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "316": [
+    "treasure",
+    "secret",
+    "redChest",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "317": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "318": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "319": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "32": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "320": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "321": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "322": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "323": [
+    "treasure"
+   ],
+   "324": [
+    "treasure"
+   ],
+   "325": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "326": [
+    "angel",
+    "greedAngel"
+   ],
+   "329": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "33": [
+    "shop",
+    "angel",
+    "library"
+   ],
+   "330": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "331": [
+    "angel",
+    "greedAngel"
+   ],
+   "332": [
+    "treasure",
+    "angel",
+    "greedTreasure"
+   ],
+   "333": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel"
+   ],
+   "334": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel",
+    "ultraSecret"
+   ],
+   "335": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel"
+   ],
+   "336": [
+    "treasure",
+    "greedTreasure",
+    "rottenBeggar"
+   ],
+   "337": [
+    "shop",
+    "craneGame"
+   ],
+   "338": [
+    "shop",
+    "craneGame"
+   ],
+   "339": [
+    "boss",
+    "greedBoss"
+   ],
+   "34": [
+    "devil",
+    "library",
+    "greedTreasure",
+    "greedDevil"
+   ],
+   "340": [
+    "boss",
+    "demonBeggar",
+    "greedBoss"
+   ],
+   "341": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "oldChest"
+   ],
+   "342": [
+    "boss",
+    "greedBoss"
+   ],
+   "343": [
+    "boss",
+    "goldenChest",
+    "keyMaster",
+    "greedBoss"
+   ],
+   "344": [
+    "boss",
+    "goldenChest",
+    "greedBoss"
+   ],
+   "345": [
+    "boss",
+    "demonBeggar",
+    "greedBoss"
+   ],
+   "346": [
+    "boss",
+    "greedBoss"
+   ],
+   "347": [
+    "shop"
+   ],
+   "348": [
+    "shop",
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "349": [
+    "shop",
+    "greedTreasure",
+    "woodenChest"
+   ],
+   "35": [
+    "devil",
+    "secret",
+    "library",
+    "greedTreasure",
+    "greedDevil",
+    "greedSecret"
+   ],
+   "350": [
+    "treasure"
+   ],
+   "351": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "352": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "353": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "354": [
+    "boss",
+    "goldenChest",
+    "greedBoss"
+   ],
+   "355": [
+    "boss",
+    "goldenChest",
+    "momsChest",
+    "greedBoss",
+    "oldChest"
+   ],
+   "356": [
+    "shop",
+    "batteryBum",
+    "greedShop"
+   ],
+   "357": [
+    "shop",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "358": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "359": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "36": [
+    "treasure",
+    "shellGame"
+   ],
+   "360": [
+    "devil",
+    "greedDevil",
+    "babyShop"
+   ],
+   "361": [
+    "treasure",
+    "babyShop"
+   ],
+   "362": [
+    "treasure",
+    "beggar",
+    "greedTreasure",
+    "craneGame",
+    "woodenChest"
+   ],
+   "363": [
+    "angel",
+    "greedAngel",
+    "babyShop"
+   ],
+   "364": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "365": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "366": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "367": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "368": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "369": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "37": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "370": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "371": [
+    "treasure",
+    "redChest",
+    "curse",
+    "greedTreasure",
+    "greedCurse"
+   ],
+   "372": [
+    "shop",
+    "batteryBum",
+    "greedShop",
+    "babyShop"
+   ],
+   "373": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "374": [
+    "treasure",
+    "angel",
+    "greedTreasure"
+   ],
+   "375": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "376": [
+    "shop",
+    "beggar"
+   ],
+   "377": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "378": [
+    "treasure",
+    "shellGame",
+    "greedTreasure"
+   ],
+   "379": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "38": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "380": [
+    "shop",
+    "greedTreasure",
+    "greedShop"
+   ],
+   "381": [
+    "treasure"
+   ],
+   "382": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "383": [
+    "shop",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "384": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "385": [
+    "treasure",
+    "beggar",
+    "babyShop"
+   ],
+   "386": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "387": [
+    "angel",
+    "greedAngel"
+   ],
+   "388": [
+    "treasure",
+    "secret",
+    "keyMaster",
+    "babyShop"
+   ],
+   "389": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "39": [
+    "treasure",
+    "momsChest",
+    "oldChest"
+   ],
+   "390": [
+    "treasure",
+    "angel",
+    "greedAngel",
+    "babyShop"
+   ],
+   "391": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil"
+   ],
+   "392": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "393": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "394": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "395": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "396": [
+    "shop"
+   ],
+   "397": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "398": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "399": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "4": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "40": [
+    "treasure",
+    "ultraSecret"
+   ],
+   "400": [
+    "angel",
+    "greedAngel"
+   ],
+   "401": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "402": [
+    "shop",
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "403": [
+    "shop",
+    "greedShop",
+    "craneGame",
+    "babyShop"
+   ],
+   "404": [
+    "treasure",
+    "babyShop"
+   ],
+   "405": [
+    "treasure",
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "406": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "407": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel"
+   ],
+   "408": [
+    "devil",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "409": [
+    "devil",
+    "demonBeggar",
+    "greedDevil"
+   ],
+   "41": [
+    "treasure",
+    "momsChest",
+    "oldChest"
+   ],
+   "410": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "411": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "412": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "413": [
+    "angel",
+    "greedAngel"
+   ],
+   "414": [
+    "shop"
+   ],
+   "415": [
+    "angel",
+    "greedAngel"
+   ],
+   "416": [
+    "shop",
+    "greedTreasure",
+    "greedShop"
+   ],
+   "417": [
+    "devil",
+    "babyShop"
+   ],
+   "418": [
+    "treasure"
+   ],
+   "419": [
+    "treasure",
+    "craneGame"
+   ],
+   "42": [
+    "treasure",
+    "greedTreasure",
+    "rottenBeggar"
+   ],
+   "420": [
+    "devil",
+    "demonBeggar",
+    "greedDevil"
+   ],
+   "421": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "422": [
+    "treasure",
+    "shop",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "423": [
+    "angel",
+    "greedAngel"
+   ],
+   "424": [
+    "shop",
+    "secret",
+    "greedSecret"
+   ],
+   "425": [
+    "shop",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "426": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "427": [
+    "treasure",
+    "craneGame"
+   ],
+   "428": [
+    "boss",
+    "goldenChest",
+    "greedBoss"
+   ],
+   "430": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "431": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil"
+   ],
+   "432": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "433": [
+    "devil",
+    "greedDevil"
+   ],
+   "434": [
+    "shop",
+    "greedTreasure",
+    "greedShop"
+   ],
+   "435": [
+    "treasure",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "436": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "437": [
+    "treasure",
+    "craneGame"
+   ],
+   "438": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "439": [
+    "shop",
+    "momsChest",
+    "greedShop",
+    "craneGame",
+    "oldChest",
+    "woodenChest"
+   ],
+   "44": [
+    "treasure",
+    "craneGame"
+   ],
+   "440": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "441": [
+    "devil",
+    "greedDevil"
+   ],
+   "442": [
+    "devil",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "443": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "444": [
+    "treasure",
+    "goldenChest",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "445": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "446": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "447": [
+    "treasure",
+    "beggar",
+    "greedTreasure"
+   ],
+   "448": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "449": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "45": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "450": [
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "451": [
+    "shop",
+    "curse",
+    "greedShop",
+    "greedCurse",
+    "greedDevil",
+    "craneGame"
+   ],
+   "452": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "453": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "454": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "455": [
+    "boss",
+    "goldenChest",
+    "beggar",
+    "greedBoss",
+    "oldChest"
+   ],
+   "456": [
+    "boss",
+    "goldenChest",
+    "beggar",
+    "greedBoss"
+   ],
+   "457": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "458": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "459": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "46": [
+    "treasure",
+    "beggar",
+    "greedShop",
+    "craneGame"
+   ],
+   "460": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "461": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "462": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "463": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "464": [
+    "angel"
+   ],
+   "465": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "466": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "467": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "468": [
+    "devil",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "babyShop"
+   ],
+   "469": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "47": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "470": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "471": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "472": [
+    "shop",
+    "greedShop",
+    "babyShop"
+   ],
+   "473": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "475": [
+    "shop",
+    "devil",
+    "redChest",
+    "demonBeggar",
+    "curse",
+    "greedShop",
+    "greedCurse",
+    "ultraSecret"
+   ],
+   "476": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "477": [
+    "devil",
+    "angel",
+    "greedShop"
+   ],
+   "478": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "479": [
+    "shop"
+   ],
+   "48": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "480": [
+    "shop",
+    "rottenBeggar"
+   ],
+   "481": [
+    "treasure",
+    "greedShop",
+    "ultraSecret"
+   ],
+   "482": [
+    "treasure",
+    "greedShop"
+   ],
+   "483": [
+    "shop",
+    "greedShop",
+    "bombBum"
+   ],
+   "485": [
+    "treasure",
+    "shop",
+    "beggar",
+    "greedShop"
+   ],
+   "486": [
+    "shop",
+    "greedShop"
+   ],
+   "487": [
+    "shop",
+    "demonBeggar",
+    "greedShop"
+   ],
+   "488": [
+    "treasure",
+    "greedShop",
+    "craneGame",
+    "woodenChest"
+   ],
+   "489": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "49": [
+    "treasure",
+    "craneGame",
+    "ultraSecret"
+   ],
+   "490": [
+    "angel",
+    "greedAngel"
+   ],
+   "491": [
+    "treasure",
+    "babyShop"
+   ],
+   "492": [
+    "treasure",
+    "keyMaster",
+    "babyShop"
+   ],
+   "493": [
+    "treasure",
+    "demonBeggar",
+    "greedTreasure"
+   ],
+   "494": [
+    "treasure",
+    "batteryBum",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "495": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "496": [
+    "treasure",
+    "demonBeggar",
+    "curse",
+    "greedTreasure",
+    "greedCurse"
+   ],
+   "497": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "498": [
+    "devil",
+    "angel"
+   ],
+   "499": [
+    "angel",
+    "greedAngel"
+   ],
+   "5": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "50": [
+    "greedTreasure"
+   ],
+   "500": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "501": [
+    "secret",
+    "greedSecret"
+   ],
+   "502": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "503": [
+    "devil",
+    "demonBeggar",
+    "curse",
+    "greedTreasure",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "504": [
+    "treasure",
+    "shellGame",
+    "greedTreasure"
+   ],
+   "505": [
+    "shop",
+    "craneGame"
+   ],
+   "506": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "507": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "508": [
+    "treasure",
+    "momsChest",
+    "greedTreasure",
+    "oldChest"
+   ],
+   "509": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "51": [
+    "boss",
+    "devil",
+    "demonBeggar",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "craneGame",
+    "ultraSecret"
+   ],
+   "510": [
+    "angel"
+   ],
+   "511": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "512": [
+    "treasure",
+    "greedTreasure",
+    "greedShop"
+   ],
+   "513": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "514": [
+    "shop",
+    "greedTreasure"
+   ],
+   "515": [
+    "shop",
+    "greedTreasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "516": [
+    "treasure",
+    "greedTreasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "517": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "518": [
+    "shop",
+    "greedTreasure",
+    "greedShop",
+    "craneGame",
+    "babyShop"
+   ],
+   "519": [
+    "devil",
+    "angel",
+    "greedDevil",
+    "babyShop"
+   ],
+   "52": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "520": [
+    "shop",
+    "batteryBum",
+    "greedTreasure"
+   ],
+   "521": [
+    "shop"
+   ],
+   "522": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "523": [
+    "shop"
+   ],
+   "524": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "525": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "526": [
+    "devil",
+    "angel",
+    "greedDevil",
+    "greedAngel"
+   ],
+   "527": [
+    "shop",
+    "keyMaster",
+    "greedShop",
+    "craneGame",
+    "woodenChest"
+   ],
+   "528": [
+    "angel",
+    "greedAngel"
+   ],
+   "529": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "53": [
+    "treasure",
+    "ultraSecret"
+   ],
+   "530": [
+    "devil"
+   ],
+   "531": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "532": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "533": [
+    "angel",
+    "greedAngel"
+   ],
+   "534": [
+    "shop",
+    "goldenChest",
+    "greedShop"
+   ],
+   "535": [
+    "shop",
+    "greedShop"
+   ],
+   "536": [
+    "devil",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "537": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "538": [
+    "boss",
+    "greedBoss",
+    "craneGame"
+   ],
+   "539": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "54": [
+    "shop",
+    "beggar"
+   ],
+   "540": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "541": [
+    "boss",
+    "greedBoss",
+    "ultraSecret"
+   ],
+   "542": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "543": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel"
+   ],
+   "544": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "545": [
+    "treasure",
+    "devil",
+    "library",
+    "greedTreasure",
+    "greedDevil"
+   ],
+   "546": [
+    "secret",
+    "greedSecret",
+    "oldChest"
+   ],
+   "547": [
+    "boss",
+    "greedBoss",
+    "oldChest"
+   ],
+   "548": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "549": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "55": [
+    "treasure",
+    "momsChest",
+    "greedTreasure",
+    "oldChest"
+   ],
+   "553": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "554": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "555": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "556": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "557": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "558": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "559": [
+    "treasure",
+    "batteryBum",
+    "greedTreasure"
+   ],
+   "56": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "560": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "561": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "562": [
+    "secret",
+    "greedSecret"
+   ],
+   "563": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "564": [
+    "boss",
+    "greedBoss"
+   ],
+   "565": [
+    "treasure",
+    "redChest",
+    "curse",
+    "greedTreasure",
+    "greedCurse",
+    "ultraSecret"
+   ],
+   "566": [
+    "shop",
+    "greedShop"
+   ],
+   "567": [
+    "angel",
+    "greedAngel"
+   ],
+   "568": [
+    "angel",
+    "greedAngel"
+   ],
+   "569": [
+    "devil",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "57": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "570": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "571": [
+    "secret",
+    "goldenChest",
+    "greedSecret"
+   ],
+   "572": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "573": [
+    "angel",
+    "greedAngel",
+    "ultraSecret"
+   ],
+   "574": [
+    "angel",
+    "greedAngel"
+   ],
+   "575": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "576": [
+    "treasure",
+    "shellGame",
+    "greedTreasure"
+   ],
+   "577": [
+    "devil",
+    "greedDevil"
+   ],
+   "578": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "579": [
+    "angel",
+    "greedAngel"
+   ],
+   "58": [
+    "treasure",
+    "library"
+   ],
+   "580": [
+    "secret",
+    "redChest",
+    "curse",
+    "keyMaster",
+    "momsChest",
+    "ultraSecret"
+   ],
+   "581": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "582": [
+    "secret",
+    "greedSecret"
+   ],
+   "583": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "584": [
+    "angel",
+    "library",
+    "greedAngel"
+   ],
+   "585": [
+    "shop",
+    "greedShop"
+   ],
+   "586": [
+    "angel",
+    "greedAngel"
+   ],
+   "588": [
+    "planetarium"
+   ],
+   "589": [
+    "planetarium"
+   ],
+   "590": [
+    "planetarium"
+   ],
+   "591": [
+    "planetarium"
+   ],
+   "592": [
+    "planetarium"
+   ],
+   "593": [
+    "planetarium"
+   ],
+   "594": [
+    "planetarium"
+   ],
+   "595": [
+    "planetarium"
+   ],
+   "596": [
+    "planetarium"
+   ],
+   "597": [
+    "planetarium"
+   ],
+   "598": [
+    "planetarium"
+   ],
+   "599": [
+    "shop",
+    "craneGame"
+   ],
+   "6": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "60": [
+    "shop",
+    "woodenChest"
+   ],
+   "600": [
+    "boss",
+    "greedBoss"
+   ],
+   "601": [
+    "angel",
+    "greedAngel"
+   ],
+   "602": [
+    "shop"
+   ],
+   "603": [
+    "shop",
+    "batteryBum",
+    "greedShop"
+   ],
+   "604": [
+    "shop",
+    "greedShop",
+    "craneGame",
+    "oldChest"
+   ],
+   "605": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "606": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "607": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "608": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "609": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret",
+    "craneGame"
+   ],
+   "610": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "611": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "612": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret",
+    "babyShop"
+   ],
+   "614": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret",
+    "bombBum"
+   ],
+   "615": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "616": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "617": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "618": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret",
+    "rottenBeggar"
+   ],
+   "619": [
+    "shop",
+    "greedShop"
+   ],
+   "62": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "621": [
+    "shop",
+    "greedShop",
+    "ultraSecret"
+   ],
+   "622": [
+    "angel",
+    "greedAngel"
+   ],
+   "623": [
+    "shop",
+    "greedShop"
+   ],
+   "624": [
+    "shop",
+    "boss",
+    "greedBoss",
+    "greedShop",
+    "craneGame"
+   ],
+   "625": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "628": [
+    "secret",
+    "greedSecret"
+   ],
+   "629": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "craneGame",
+    "babyShop"
+   ],
+   "63": [
+    "shop",
+    "batteryBum",
+    "greedShop",
+    "craneGame"
+   ],
+   "631": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "632": [
+    "secret",
+    "greedSecret"
+   ],
+   "634": [
+    "devil",
+    "angel",
+    "greedDevil",
+    "greedAngel"
+   ],
+   "635": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "636": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "637": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "638": [
+    "shop",
+    "greedShop",
+    "craneGame"
+   ],
+   "639": [
+    "treasure",
+    "greedTreasure",
+    "rottenBeggar"
+   ],
+   "64": [
+    "shop",
+    "greedTreasure"
+   ],
+   "640": [
+    "angel",
+    "greedAngel"
+   ],
+   "641": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "642": [
+    "shop",
+    "redChest",
+    "curse",
+    "greedCurse"
+   ],
+   "643": [
+    "angel",
+    "greedAngel"
+   ],
+   "644": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "645": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "646": [
+    "devil",
+    "greedDevil",
+    "bombBum"
+   ],
+   "647": [
+    "shop",
+    "batteryBum",
+    "greedShop"
+   ],
+   "649": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure",
+    "craneGame",
+    "babyShop"
+   ],
+   "65": [
+    "treasure",
+    "library",
+    "greedTreasure"
+   ],
+   "650": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "651": [
+    "angel",
+    "greedAngel"
+   ],
+   "652": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "653": [
+    "angel",
+    "greedAngel"
+   ],
+   "654": [
+    "devil",
+    "redChest",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "655": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "657": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "658": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "659": [
+    "boss",
+    "greedBoss"
+   ],
+   "66": [
+    "treasure",
+    "craneGame"
+   ],
+   "660": [
+    "shop"
+   ],
+   "661": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "663": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "664": [
+    "secret",
+    "greedSecret"
+   ],
+   "665": [
+    "devil",
+    "redChest",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "667": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "669": [
+    "secret",
+    "greedSecret"
+   ],
+   "67": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "670": [
+    "shop"
+   ],
+   "671": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "672": [
+    "devil",
+    "demonBeggar"
+   ],
+   "674": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "675": [
+    "treasure",
+    "secret",
+    "greedTreasure"
+   ],
+   "676": [
+    "treasure",
+    "demonBeggar",
+    "greedTreasure"
+   ],
+   "677": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "678": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "679": [
+    "devil",
+    "greedDevil",
+    "babyShop"
+   ],
+   "68": [
+    "treasure",
+    "greedTreasure",
+    "greedDevil",
+    "craneGame"
+   ],
+   "680": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "681": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "682": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "683": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "684": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "685": [
+    "angel",
+    "greedAngel"
+   ],
+   "686": [
+    "angel",
+    "greedAngel"
+   ],
+   "687": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "688": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "689": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "69": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "690": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "691": [
+    "angel",
+    "secret",
+    "greedShop",
+    "greedAngel",
+    "greedSecret"
+   ],
+   "692": [
+    "devil",
+    "curse",
+    "greedShop",
+    "greedCurse",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "693": [
+    "treasure",
+    "keyMaster",
+    "greedTreasure"
+   ],
+   "694": [
+    "devil",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "695": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "696": [
+    "angel",
+    "greedAngel"
+   ],
+   "697": [
+    "secret",
+    "curse"
+   ],
+   "698": [
+    "devil",
+    "greedDevil",
+    "babyShop"
+   ],
+   "699": [
+    "devil",
+    "greedDevil"
+   ],
+   "7": [
+    "treasure",
+    "angel",
+    "greedTreasure",
+    "greedAngel",
+    "woodenChest"
+   ],
+   "70": [
+    "boss",
+    "demonBeggar",
+    "greedBoss"
+   ],
+   "700": [
+    "secret",
+    "greedShop",
+    "greedSecret",
+    "ultraSecret"
+   ],
+   "701": [
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "702": [
+    "devil",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "703": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedShop",
+    "greedSecret",
+    "ultraSecret"
+   ],
+   "704": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "705": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "706": [
+    "devil",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "707": [
+    "boss",
+    "beggar",
+    "greedBoss"
+   ],
+   "708": [
+    "boss",
+    "goldenChest",
+    "greedBoss"
+   ],
+   "709": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "71": [
+    "treasure",
+    "greedBoss"
+   ],
+   "710": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "711": [
+    "secret",
+    "curse",
+    "greedShop",
+    "greedCurse",
+    "greedSecret",
+    "ultraSecret"
+   ],
+   "712": [
+    "devil",
+    "library",
+    "greedDevil"
+   ],
+   "713": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "716": [
+    "shop",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "717": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedSecret"
+   ],
+   "719": [
+    "shop",
+    "secret",
+    "greedTreasure",
+    "greedSecret",
+    "woodenChest"
+   ],
+   "72": [
+    "treasure",
+    "angel",
+    "greedAngel",
+    "ultraSecret"
+   ],
+   "720": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "721": [
+    "secret",
+    "greedTreasure",
+    "greedShop",
+    "greedSecret"
+   ],
+   "722": [
+    "treasure",
+    "greedTreasure",
+    "greedShop"
+   ],
+   "723": [
+    "treasure",
+    "secret",
+    "greedTreasure",
+    "greedShop",
+    "greedSecret",
+    "craneGame"
+   ],
+   "724": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "725": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "726": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret"
+   ],
+   "727": [
+    "treasure",
+    "greedTreasure",
+    "bombBum"
+   ],
+   "728": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "729": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "73": [
+    "greedBoss",
+    "greedShop",
+    "greedCurse",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "730": [
+    "boss",
+    "goldenChest",
+    "greedBoss",
+    "craneGame"
+   ],
+   "731": [
+    "boss",
+    "greedBoss"
+   ],
+   "732": [
+    "goldenChest",
+    "momsChest",
+    "greedShop",
+    "oldChest"
+   ],
+   "74": [
+    "devil",
+    "goldenChest",
+    "greedDevil"
+   ],
+   "75": [
+    "treasure",
+    "shop",
+    "greedShop"
+   ],
+   "76": [
+    "treasure",
+    "greedShop"
+   ],
+   "77": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "78": [
+    "treasure",
+    "angel",
+    "library",
+    "greedTreasure",
+    "greedAngel"
+   ],
+   "79": [
+    "devil",
+    "demonBeggar",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "8": [
+    "treasure",
+    "devil",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "80": [
+    "devil",
+    "demonBeggar",
+    "curse",
+    "greedCurse",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "81": [
+    "devil",
+    "redChest",
+    "curse",
+    "greedCurse",
+    "greedDevil"
+   ],
+   "82": [
+    "devil",
+    "demonBeggar",
+    "greedDevil",
+    "ultraSecret"
+   ],
+   "83": [
+    "devil",
+    "demonBeggar",
+    "greedDevil"
+   ],
+   "84": [
+    "devil",
+    "secret",
+    "greedShop",
+    "greedSecret"
+   ],
+   "85": [
+    "treasure",
+    "shop",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "86": [
+    "treasure"
+   ],
+   "87": [
+    "treasure",
+    "demonBeggar",
+    "greedTreasure"
+   ],
+   "88": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ],
+   "89": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "9": [
+    "shellGame"
+   ],
+   "90": [
+    "craneGame"
+   ],
+   "91": [
+    "treasure",
+    "greedShop",
+    "craneGame"
+   ],
+   "92": [
+    "treasure",
+    "boss"
+   ],
+   "93": [
+    "treasure",
+    "greedTreasure",
+    "craneGame"
+   ],
+   "94": [
+    "treasure",
+    "greedTreasure"
+   ],
+   "95": [
+    "treasure",
+    "greedTreasure",
+    "craneGame",
+    "babyShop"
+   ],
+   "96": [
+    "treasure",
+    "greedTreasure",
+    "ultraSecret",
+    "babyShop"
+   ],
+   "97": [
+    "treasure",
+    "devil",
+    "library",
+    "greedTreasure",
+    "greedDevil"
+   ],
+   "98": [
+    "treasure",
+    "angel",
+    "greedTreasure"
+   ],
+   "99": [
+    "treasure",
+    "greedTreasure",
+    "babyShop"
+   ]
+  },
+  "source": "Derugon/TBoIR-resources 1.7.9b.J835 resources-dlc3/itempools.xml"
+ }
+}

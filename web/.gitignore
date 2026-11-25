@@ -1,0 +1,5 @@
+node_modules/
+dist/
+coverage/
+# Rebuilt from data/sprites by scripts/build-sprites.mjs
+public/sprites/

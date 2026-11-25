@@ -1,0 +1,15 @@
+.git
+.claude
+**/node_modules
+**/.venv
+**/__pycache__
+web/dist
+web/coverage
+web/public/sprites
+api/var
+api/tests
+src
+docs
+dev plans
+*.sln
+build_mosaic.py

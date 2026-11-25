@@ -1,0 +1,45 @@
+/* Dialog: a centred modal panel on the native <dialog>. */
+@layer components {
+  .dialog {
+    inline-size: var(--width-dialog);
+    max-block-size: var(--block-dialog-max);
+    padding: var(--space-0);
+    margin: auto;
+    overflow: auto;
+    color: var(--fg-default);
+    background: var(--bg-raised);
+    border: var(--stroke-default) solid var(--border-default);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--elevation-modal);
+  }
+
+  .dialog::backdrop {
+    background: var(--bg-scrim);
+  }
+
+  .dialog__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-separate);
+    padding: var(--pad-card);
+  }
+
+  .dialog__header {
+    display: flex;
+    gap: var(--gap-grouped);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dialog__title {
+    font: var(--type-h2);
+    color: var(--fg-strong);
+  }
+
+  .dialog__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-related);
+    justify-content: flex-end;
+  }
+}
