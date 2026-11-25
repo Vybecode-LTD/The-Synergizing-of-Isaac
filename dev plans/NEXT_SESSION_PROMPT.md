@@ -13,24 +13,25 @@ says what to do next; those say what exists.
 - Synergy facts come from the wiki's Repentance lines (`data/synergy-checks.md`). No facts from memory.
 
 ## 3. State when this was written (verify before trusting it)
-- `main`: `3dc5c13` (PRs #2 and #3 merged 2026-11-25), CI passed.
-- **PR #4** (`data/check-abc-synergies`): every A, B and C synergy checked against the wiki; the list is
-  442. Open, not merged. Head and CI: `gh pr view 4 --json headRefOid,statusCheckRollup`. Local suites were
-  green on the pushed head (web 125 tests, API 81, validate, parity).
-- Checkout: `data/check-abc-synergies`, nothing uncommitted.
+- `main`: `45bea2a`. **PR #4** (every A, B and C synergy checked against the wiki; the list is 442) was
+  **merged by the owner's yes** on 2026-11-25, on green CI (web and API jobs). No PR is open.
+- Reviews of #4: Codex found nothing. CodeRabbit's was cancelled by the merge ("the pull request is
+  closed"), so it never reviewed #4. Wait for CodeRabbit before merging a data PR.
+- Checkout: `main`, in sync with `origin/main`. **Uncommitted on purpose:** this file, `docs/HANDOFF.md`
+  and `CLAUDE.md`'s Current state, refreshed after the merge. Carry them into your first branch.
 - Merged branches still exist locally and on GitHub: `feat/toy-box`, `data/check-sd-synergies`,
-  `feat/web-app`. Deleting them is the owner's call.
+  `feat/web-app`, `data/check-abc-synergies`. Deleting them is the owner's call.
 
 ## 4. First job, then the order
-1. **Ask the owner whether to merge PR #4.** If its CI is red, fix it first, all fixes in one push. After
-   the merge: `git switch main && git pull`.
-2. Deploy only on the owner's word: `docs/DEPLOY.md` and its seven checks.
+1. **Ask the owner what is next:** deploy (`docs/DEPLOY.md` and its seven checks, only on their word),
+   or the transformation question below. Commit the uncommitted refresh with the first branch's work.
+2. A reviewer's game fact is a claim, not a source: check any later review finding against the wiki.
 3. Then the HANDOFF's next steps 3 and 4 (transformation tags that follow Repentance+; an end-to-end smoke
    test and a Docker build in CI).
 
 ## 5. Waiting on the owner (ask, do not decide)
-- Merge PR #4? Deploy (said "not yet" on 2026-11-24)? The 301 from `issac.toys` is theirs at Spaceship.
-  Delete the three merged branches? Should the builder count transformations as Repentance does, rather
+- Deploy (said "not yet" on 2026-11-24)? The 301 from `issac.toys` is theirs at Spaceship. Delete the four
+  merged branches? Should the builder count transformations as Repentance does, rather
   than as the item tracker's Repentance+ tags do?
 
 ## 6. Environment and traps
@@ -51,5 +52,6 @@ Decisions `docs/decisions/0001`–`0005`, next free `0006`. Contracts: `dev plan
    use the wrong baseline (Ipecac + Soy Milk was compared with base fire rate, not with Ipecac alone).
 2. Matching item names in text: longest name first across the whole roster (Technology vs Technology 2),
    cache pages by kind (item and trinket Cancer differ), and check a plain title is not a boss's page.
-3. Earlier ones: memory notes `fourth-session-promotion-candidates`, `third-session-promotion-candidates`,
+3. Merging while CodeRabbit's check runs cancels its review for good (PR #4); wait for it on data PRs.
+4. Earlier ones: memory notes `fourth-session-promotion-candidates`, `third-session-promotion-candidates`,
    `earlier-promotion-candidates`.

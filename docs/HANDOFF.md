@@ -1,59 +1,50 @@
-# Handoff — 2026-11-25 (fifth session)
+# Handoff — 2026-11-25 (sixth session)
 
 ## Current state
 
 - **isaac.toys** is a web app (builder with shareable links, "one pickup away", stat and transformation
   summary, a page per item, trinket and character, the synergy list, own synergies, an AI read inside daily
   caps). Decisions: `docs/decisions/0001` to `0005`. **Nothing is deployed**; no Railway project exists.
-- `main` = `3dc5c13` (PRs #2 and #3 merged with the owner's yes on 2026-11-25).
-- **PR #4, branch `data/check-abc-synergies`:** every A, B and C synergy checked against the wiki for
-  Repentance. 381 entries: 148 confirmed, 194 corrected, 28 re-rated, 11 removed. With the S and D check,
-  every entry has now been checked once; the list is 442. Record and method: `data/synergy-checks.md`.
-  **Waiting for the owner's OK to merge.**
+- `main` = `45bea2a` (PR #4: every A, B and C synergy checked against the wiki; the list is 442; record in
+  `data/synergy-checks.md`). Codex found nothing in #4; CodeRabbit's review was cancelled by the merge.
+- The four merged branches are deleted, locally and on GitHub (the owner's yes, 2026-11-25).
+- Branch `ci/docker-smoke`, PR #5: a CI job that builds the `Dockerfile`, runs it as Railway does and
+  smoke-tests it; `api/app/smoke.py`, the same checks for the live site; a fix for `.webp` and `.woff2`
+  going out as `application/octet-stream` (Python 3.12 knows neither; the slim image has no system list).
 - **The desktop app is untouched.**
 
-## What PR #4 changes
+## Owner decisions this session (2026-11-25)
 
-- `data/synergies.json` (the check), `data/synergy-checks.md` (a section and a 381-row table),
-  `data/README.md`, the About page's sources line (`data/content/about.json`: "every one was checked"),
-  `data/meta.json` (rebuilt: updated 2026-11-25), `data/tests/parity.json` (regenerated), `web/public/og.png`
-  (redrawn: 442 synergies), and the count in four tests (two API, two web).
-- The suspect entries from the last handoff were wrong: `technology+c-azazel` (the laser wraps the beam for
-  1.5x; it does not fire while Azazel charges) and `brimstone+lord-of-the-pit+the-pact` (Leviathan counts a
-  set list, not any devil item; Whore of Babylon is not on it).
-
-## How the check ran
-
-A script pulled every wiki line where one member's page names another, with its version mark. Six
-checkers each took a sixth of the list with the same written rules. Every change was then read against
-its wiki line, and 11 were adjusted (for example, Ipecac + Soy Milk had been re-rated on arithmetic that
-compared against base fire rate instead of Ipecac alone). The scripts were scratch work, not kept.
+1. Deploy this session, once the Docker check passes in CI.
+2. The builder counts transformations as Repentance does and marks items that count only in Repentance+.
+   Chosen over keeping the tracker's tags and over Repentance with no mark. Record it as decision 0006
+   with the change.
+3. Delete the four merged branches: done.
 
 ## Verified this session
 
-- `python scripts/gamedata.py validate`: 0 problems. `build` changed only `meta.json`'s date.
-- Web `npm run check`: lint, types, 125 of 125 tests. API: 81 tests, 99% coverage; ruff and mypy clean.
-- The parity snapshot was regenerated and both sides pass against it. `og.png` was looked at: 442.
+- API: 113 tests, 99% coverage; ruff, format and mypy clean. The type test failed before the fix.
+- `python -m app.smoke` against the built site on 8001: 12 of 12. With the fix taken out it failed fonts,
+  sprite sheets and the built app; with it back, 12 of 12. 23 deliberate breaks each turn their check red.
 
 ## Not verified
 
-- CI on PR #4's head: read it with `gh pr view 4 --json headRefOid,statusCheckRollup`.
-- No browser check: the change is data and words. The synergy list and About page are covered by tests.
-- 20 entries the checkers marked low-confidence were reviewed and kept; the wiki leaves four questions open
-  (listed in `data/synergy-checks.md`, "Left open by the wiki").
+- The `docker` job has not run yet: PR #5's CI is its first run.
+- `ClaudeAnalyzer` has never made a real model call.
 
 ## Next steps, in order
 
-1. Owner: merge PR #4?
-2. Deploy on the owner's go-ahead ("not yet" on 2026-11-24): `docs/DEPLOY.md`, then its seven checks.
-3. The roster's transformation tags (from the item tracker) follow Repentance+ in places, e.g. Infestation
-   counts toward Beelzebub. Decide whether the builder's transformation progress should follow Repentance.
-4. A browser end-to-end smoke test and a Docker build in CI; split the data out of the main bundle.
+1. PR #5 green in CI, then the owner's yes to merge.
+2. Deploy with the owner: `docs/DEPLOY.md` (owner steps, then its five checks; check 2 is `app.smoke`).
+3. Transformations (decision 0006): source each transformation's Repentance item list from the wiki,
+   override the tracker's tags in `scripts/gamedata.py`, mark the Repentance+-only items in the builder, on
+   both sides, and regenerate the parity snapshot. A data PR: wait for CodeRabbit before merging.
+4. A browser end-to-end smoke test; split the data out of the main bundle (Vite warns at 500 kB).
 
 ## Waiting on the owner
 
-1. Merge PR #4? 2. Deploy? 3. The 301 from `issac.toys` (at Spaceship, at deploy). 4. Delete the merged
-   branches (`feat/toy-box`, `data/check-sd-synergies`, `feat/web-app`, local and on GitHub)?
+1. Merge PR #5. 2. The Railway steps, the Anthropic key and DNS at Spaceship (`docs/DEPLOY.md`). 3. The 301
+   from `issac.toys` (at Spaceship).
 
 ## Warnings
 
@@ -61,4 +52,5 @@ compared against base fire rate instead of Ipecac alone). The scripts were scrat
   the `[data-theme="dark"]` copy.
 - Never list Railway variables: it prints the Anthropic key.
 - A mutation or fail-before script that rewrites source files owns them until it finishes.
+- Merging a PR before CodeRabbit's check finishes cancels its review for good; wait for it on data PRs.
 - The site uses the game's own sprites; the footer and About page say it is an unofficial fan project.
