@@ -41,7 +41,8 @@ says what to do next; those say what exists.
 - The 301 from `issac.toys` to `https://isaac.toys` is the owner's to set at Spaceship.
 
 ## 6. Environment and traps
-- Start: `cd web && npm run check`; `cd api && .venv\Scripts\python -m pytest --cov`. Send output to a file.
+- Start, each from the repo root: `cd web; npm run check`, then `cd api; .venv\Scripts\python -m pytest --cov`.
+  Send output to a file.
 - Wiki facts: the MediaWiki API at `bindingofisaacrebirth.wiki.gg/api.php` (`action=parse&prop=wikitext`)
   works with curl `--ssl-no-revoke`, or httpx with truststore (`api\.venv`). Windows file names ignore
   case: `Crown Of Light` and `Crown of Light` collide in a cache.

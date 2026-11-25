@@ -2185,7 +2185,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "B",
-  "description": "Restock refills the shop after each purchase and Steam Sale halves prices. In Repentance a restocked item costs more after every purchase, and extra Steam Sales only divide prices further (two make them a third), so the endless free shop of older versions is gone. Still a good way to turn coins into items."
+  "description": "Restock refills the shop after each purchase and Steam Sale halves prices. In Repentance, outside Greed Mode, each restock adds to the price (+2, then +4, +6 and so on for items), and Steam Sale discounts only the base price, not that increase. Extra Steam Sales only divide the base price further (two make it a third), so the endless free shop of older versions is gone. Still a good way to turn coins into items."
  },
  {
   "id": "chaos+restock+steam-sale",
@@ -2197,7 +2197,7 @@
   "trinkets": [],
   "characters": [],
   "rating": "A",
-  "description": "With Chaos, Restock can restock the shop with otherwise rare items, and Steam Sale cuts their price. In Repentance restocked prices rise after every purchase, so the endless free shop of older versions no longer happens."
+  "description": "With Chaos, Restock can restock the shop with otherwise rare items, and Steam Sale cuts their base price. In Repentance, outside Greed Mode, each restock adds to the price and the discount does not cover that increase, so the endless free shop of older versions no longer happens."
  },
  {
   "id": "sharp-plug+the-wafer",

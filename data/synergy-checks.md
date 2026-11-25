@@ -17,8 +17,9 @@ the entry gave for it is wrong in Repentance. Descriptions are written in this p
 17 re-rated, 5 removed. The list went from 458 entries to 453.
 A, B and C entries are not checked yet.
 
-**Review:** CodeRabbit on PR #2 caught the Repentance Steam Sale formula (n copies divide prices by n + 1)
-and a two-item entry that needs a transformation (`guppys-head+soy-milk`); both are fixed below. Its point
+**Review:** CodeRabbit on PR #2 caught the Repentance Steam Sale formula (n copies divide prices by n + 1),
+Restock's rules (no rise in Greed Mode; the rise is not discounted) and a two-item entry that needs a
+transformation (`guppys-head+soy-milk`); all are fixed below. Its point
 on Epic Fetus + Ipecac was checked and kept: the Epic Fetus page's Repentance line gives +2, while the
 Ipecac page's line has no version mark.
 
@@ -65,8 +66,8 @@ Ipecac page's line has no version mark.
 | `almond-milk+libra` | Libra, Almond Milk | S → C | Re-rated | Repentance gives a very small all-stats up |
 | `box-of-friends+car-battery` | Car Battery, Box of Friends | S | Corrected | Two copies each, so three of each familiar, not four |
 | `car-battery+void` | Car Battery, Void | S | Confirmed | The pair is on the wiki |
-| `restock+steam-sale` | Restock, Steam Sale | S → B | Re-rated | Repentance raises restock prices, and n Steam Sales divide prices by n + 1: no free shop |
-| `chaos+restock+steam-sale` | Restock, Steam Sale, Chaos | S → A | Re-rated | Same Repentance price changes: no endless free shop |
+| `restock+steam-sale` | Restock, Steam Sale | S → B | Re-rated | Repentance (outside Greed Mode) adds to each restock price, which Steam Sale does not discount; n Steam Sales divide the base price by n + 1 |
+| `chaos+restock+steam-sale` | Restock, Steam Sale, Chaos | S → A | Re-rated | Same Repentance price rules outside Greed Mode: no endless free shop |
 | `habit+scapular` | Habit, Scapular | S | Corrected | Scapular works once per room, so not infinite |
 | `mega-mush+void` | Void, Mega Mush | S | Corrected | Mega Mush lasts 30 seconds; Void uses it every 6 charges |
 | `blank-card+echo-chamber` | Echo Chamber, Blank Card | - | Removed | Removed: using Blank Card does not trigger Echo Chamber or join its queue |
