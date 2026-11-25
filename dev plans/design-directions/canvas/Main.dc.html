@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pedestal: synergy builder</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#100D0B}
+</style>
+</helmet>
+<div style="min-height: 100%; background: #15110E; color: #EFE6D6; font-family: 'Manrope', system-ui, sans-serif; font-size: 16px; line-height: 1.55;">
+
+<header style="border-bottom: 1px solid #2B231D;">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 22px clamp(20px, 4vw, 40px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 32px;">
+    <a href="Main.dc.html" style="text-decoration: none; font-family: 'Cormorant', serif; font-size: 32px; font-weight: 700; letter-spacing: 0.01em; color: #EFE6D6; line-height: 1;">isaac<span style="color: #F0A43A;">.toys</span></a>
+    <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 6px 26px; font-size: 15px; font-weight: 500;">
+      <a href="Main.dc.html" aria-current="page" style="color: #F0A43A; text-decoration: none; padding: 6px 0; border-bottom: 2px solid #F0A43A;">Builder</a>
+      <a href="PedestalItem.dc.html" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Items</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Trinkets</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Characters</a>
+      <a href="PedestalSynergies.dc.html" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Synergies</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section aria-labelledby="build-title" style="background: radial-gradient(ellipse 70% 60% at 50% 72%, #2A1D12 0%, #15110E 70%); border-bottom: 1px solid #2B231D;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) clamp(20px, 4vw, 40px) 56px; display: flex; flex-direction: column; gap: 36px;">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 48px;">
+        <div style="flex: 1 1 520px; min-width: 0;">
+          <h1 id="build-title" style="margin: 0; font-family: 'Cormorant', serif; font-weight: 600; font-size: clamp(42px, 5.6vw, 72px); line-height: 1.02; letter-spacing: -0.01em; padding-bottom: 0.08em;">Binding of Isaac synergy builder</h1>
+          <p style="margin: 14px 0 0; font-size: 19px; color: #B3A692; max-width: 40ch;">Add what you're holding. Synergies show up as you go.</p>
+        </div>
+        <div role="search" style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 8px;">
+          <label for="pickup" style="font-size: 14px; font-weight: 600; color: #EFE6D6;">Add an item or trinket</label>
+          <div style="display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 18px; background: #0E0B09; border: 1px solid #4A3D33; border-radius: 4px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.55);">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+            <input id="pickup" type="text" placeholder="Add an item or trinket…" style="flex: 1; min-width: 0; height: 100%; background: transparent; border: 0; outline: none; color: #EFE6D6; font: inherit; font-size: 17px;">
+          </div>
+        </div>
+      </div>
+
+      <ul role="list" aria-label="Your build" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(128px, 100%), 1fr)); gap: 28px 12px;">
+        <sc-for list="{{altar}}" as="p" hint-placeholder-count="8">
+          <li style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0;">
+            <div style="position: relative; width: 100%; max-width: 148px; height: 150px; display: flex; align-items: flex-end; justify-content: center;">
+              <div aria-hidden="true" style="position: absolute; left: 50%; top: 0; width: 100%; height: 140px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(240,164,58,{{p.glow}}), rgba(240,164,58,0));"></div>
+              <img src="{{p.src}}" alt="" style="position: relative; width: {{p.size}}px; height: {{p.size}}px; object-fit: contain; image-rendering: pixelated; margin-bottom: 6px; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.65));">
+            </div>
+            <div aria-hidden="true" style="width: 84%; max-width: 124px; height: 16px; background: linear-gradient(#56473B, #352B24); border-radius: 3px 3px 0 0; box-shadow: inset 0 1px 0 rgba(239,230,214,0.22);"></div>
+            <div aria-hidden="true" style="width: 95%; max-width: 140px; height: 22px; background: linear-gradient(#2E2620, #1E1814); border-radius: 0 0 2px 2px; border-top: 1px solid #120E0B;"></div>
+            <span style="margin-top: 14px; font-family: 'Cormorant', serif; font-size: 22px; font-weight: 600; line-height: 1.15;">{{p.name}}</span>
+            <span style="font-size: 13px; color: #B3A692;">{{p.meta}}</span>
+            <button type="button" aria-label="{{p.removeLabel}}" style="margin-top: 8px; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 1px solid #3C322A; border-radius: 50%; color: #B3A692; cursor: pointer;">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+            </button>
+          </li>
+        </sc-for>
+      </ul>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+        <button type="button" style="height: 46px; padding: 0 20px; display: inline-flex; align-items: center; gap: 10px; background: transparent; color: #F0A43A; border: 1px solid #F0A43A; border-radius: 4px; font: inherit; font-weight: 600; font-size: 15px; cursor: pointer;">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>
+          Copy link to this build
+        </button>
+        <button type="button" style="height: 46px; padding: 0 16px; background: transparent; color: #B3A692; border: 0; font: inherit; font-size: 15px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;">Clear all</button>
+      </div>
+    </div>
+  </section>
+
+  <div style="max-width: 1240px; margin: 0 auto; padding: 64px clamp(20px, 4vw, 40px) 0; display: flex; flex-wrap: wrap; gap: 48px;">
+    <section aria-labelledby="syn-title" style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px;">
+      <header style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px;">
+        <h2 id="syn-title" style="margin: 0; font-family: 'Cormorant', serif; font-weight: 600; font-size: 44px; line-height: 1.05;">7 synergies</h2>
+        <ul role="list" aria-label="By rating" style="margin: 0; padding: 0; list-style: none; display: flex; gap: 14px;">
+          <sc-for list="{{tally}}" as="t" hint-placeholder-count="3">
+            <li style="display: flex; align-items: center; gap: 8px; font-size: 15px; color: #B3A692;">
+              <span style="width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant', serif; font-size: 19px; font-weight: 700; background: {{t.bg}}; color: {{t.fg}}; box-shadow: 0 0 0 2px #15110E, 0 0 0 3px {{t.bg}};">{{t.r}}</span>×{{t.n}}
+            </li>
+          </sc-for>
+        </ul>
+      </header>
+      <ul role="list" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px;">
+        <sc-for list="{{matched}}" as="s" hint-placeholder-count="7">
+          <li style="display: flex; flex-wrap: wrap; gap: 18px 22px; align-items: flex-start; padding: 22px 24px; background: #1D1713; border: 1px solid #33291F; border-radius: 4px; box-shadow: inset 0 1px 0 rgba(239,230,214,0.05);">
+            <span aria-label="{{s.ratingLabel}}" role="img" style="flex: none; width: 48px; height: 48px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant', serif; font-size: 28px; font-weight: 700; background: {{s.bg}}; color: {{s.fg}}; box-shadow: 0 0 0 3px #1D1713, 0 0 0 4px {{s.bg}};">{{s.r}}</span>
+            <div style="flex: none; display: flex; align-items: center; gap: 4px;">
+              <sc-for list="{{s.sprites}}" as="sp" hint-placeholder-count="2">
+                <img src="{{sp.src}}" alt="" style="width: 64px; height: 64px; object-fit: contain; image-rendering: pixelated;">
+              </sc-for>
+            </div>
+            <div style="flex: 1 1 300px; min-width: 0;">
+              <h3 style="margin: 0; font-family: 'Cormorant', serif; font-size: 26px; font-weight: 600; line-height: 1.15;">{{s.title}}</h3>
+              <p style="margin: 6px 0 0; color: #B3A692; font-size: 15.5px;">{{s.description}}</p>
+            </div>
+          </li>
+        </sc-for>
+      </ul>
+      <p style="margin: 4px 0 0;"><a href="PedestalSynergies.dc.html" style="color: #F0A43A; text-underline-offset: 4px;">Browse all 454 synergies</a></p>
+    </section>
+
+    <aside aria-label="Build summary" style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 28px;">
+      <section style="padding: 26px 26px 24px; background: #1D1713; border: 1px solid #33291F; border-radius: 4px;">
+        <h3 style="margin: 0 0 14px; font-family: 'Cormorant', serif; font-size: 28px; font-weight: 600;">Stat changes</h3>
+        <dl style="margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 0;">
+          <sc-for list="{{stats}}" as="st" hint-placeholder-count="7">
+            <dt style="padding: 9px 0; border-bottom: 1px solid #2B231D; color: #EFE6D6;">{{st.k}}</dt>
+            <dd style="margin: 0; padding: 9px 0; border-bottom: 1px solid #2B231D; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: {{st.c}};">{{st.v}}</dd>
+          </sc-for>
+        </dl>
+        <p style="margin: 14px 0 0; font-size: 13.5px; color: #B3A692;">Added up from the items, before the game applies its formulas and caps.</p>
+      </section>
+      <section style="padding: 26px; background: #1D1713; border: 1px solid #33291F; border-radius: 4px;">
+        <h3 style="margin: 0 0 16px; font-family: 'Cormorant', serif; font-size: 28px; font-weight: 600;">Transformations</h3>
+        <ul role="list" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 18px;">
+          <sc-for list="{{transforms}}" as="tf" hint-placeholder-count="2">
+            <li style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+                <span style="font-family: 'Cormorant', serif; font-size: 22px; font-weight: 600;">{{tf.name}}</span>
+                <span style="font-size: 14px; color: #B3A692;">1 of 3</span>
+              </div>
+              <div aria-hidden="true" style="display: flex; gap: 6px;">
+                <span style="flex: 1; height: 6px; border-radius: 3px; background: #F0A43A; box-shadow: 0 0 10px rgba(240,164,58,0.55);"></span>
+                <span style="flex: 1; height: 6px; border-radius: 3px; background: #3C322A;"></span>
+                <span style="flex: 1; height: 6px; border-radius: 3px; background: #3C322A;"></span>
+              </div>
+              <span style="font-size: 14px; color: #B3A692;">{{tf.from}}</span>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <section aria-labelledby="away-title" style="max-width: 1240px; margin: 0 auto; padding: 72px clamp(20px, 4vw, 40px) 0;">
+    <h2 id="away-title" style="margin: 0; font-family: 'Cormorant', serif; font-weight: 600; font-size: 44px; line-height: 1.05;">One pickup away</h2>
+    <p style="margin: 10px 0 28px; color: #B3A692; font-size: 17px;">If you see one of these, it completes a synergy with what you have.</p>
+    <ul role="list" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(132px, 100%), 1fr)); gap: 12px;">
+      <sc-for list="{{away}}" as="a" hint-placeholder-count="8">
+        <li>
+          <button type="button" aria-label="{{a.addLabel}}" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px 12px 18px; background: #1A1511; border: 1px dashed #4A3D33; border-radius: 4px; color: #EFE6D6; font: inherit; cursor: pointer;">
+            <img src="{{a.src}}" alt="" style="width: 64px; height: 64px; image-rendering: pixelated; opacity: 0.92; filter: drop-shadow(0 0 12px rgba(240,164,58,0.28));">
+            <span style="font-family: 'Cormorant', serif; font-size: 20px; font-weight: 600; line-height: 1.15;">{{a.name}}</span>
+            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #B3A692;">
+              <span style="width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant', serif; font-size: 15px; font-weight: 700; background: #F0A43A; color: #15110E;">S</span>{{a.completes}}
+            </span>
+          </button>
+        </li>
+      </sc-for>
+    </ul>
+    <p style="margin: 18px 0 0;"><button type="button" style="height: 44px; padding: 0 4px; background: transparent; border: 0; color: #F0A43A; font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;">Show all 66</button></p>
+  </section>
+
+  <section aria-labelledby="ai-title" style="max-width: 1240px; margin: 0 auto; padding: 72px clamp(20px, 4vw, 40px) 88px;">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 48px; padding: clamp(28px, 4vw, 44px); background: #1A1410; border: 1px solid #5A4630; border-radius: 4px; box-shadow: 0 0 0 6px #15110E, 0 0 0 7px #2B231D;">
+      <div style="flex: 1 1 420px; min-width: 0;">
+        <h2 id="ai-title" style="margin: 0; font-family: 'Cormorant', serif; font-weight: 600; font-size: 40px; line-height: 1.05;">AI read on this build</h2>
+        <p style="margin: 10px 0 0; color: #B3A692; font-size: 17px; max-width: 52ch;">Looks at the whole build at once, including pairs the list above doesn't cover.</p>
+      </div>
+      <div style="flex: 0 1 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+        <button type="button" style="height: 54px; padding: 0 28px; background: #F0A43A; color: #15110E; border: 0; border-radius: 4px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 0 24px rgba(240,164,58,0.35);">Analyse this build</button>
+        <span style="font-size: 13.5px; color: #B3A692;">Five fresh analyses a day for each visitor.</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="background: #100D0B; border-top: 1px solid #2B231D;">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 40px clamp(20px, 4vw, 40px) 56px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px 48px; font-size: 14px; color: #B3A692;">
+    <p style="margin: 0; flex: 1 1 420px; max-width: 70ch;">isaac.toys is an unofficial fan project, not affiliated with or endorsed by Edmund McMillen or Nicalis. All item, trinket and character artwork belongs to them.</p>
+    <p style="margin: 0; flex: 0 1 auto;">Data: Repentance 1.7.9b, updated 24 November 2026</p>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3090}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const B = {
+      brim: '/_blob/b23bbe7f39de27e4a7a078acff0487a5', tammy: '/_blob/8a9a8bc7b77cf6b399c4e87e7a913a4d',
+      tech: '/_blob/93bb336fbdd0921b22a0210b77204c70', rock: '/_blob/8627f4c9af1259775a480cfecdd973fb',
+      crown: '/_blob/b8be76cf3ab3bca6001f575a2188bb08', sacred: '/_blob/e20266ac8fb94dce7317acaaacc661ad',
+      perfection: '/_blob/154017cedf3f046fdcbe6e87d73168d3', azazel: '/_blob/98f8f8866e83eb48625d620f61680060',
+      ipecac: '/_blob/fad8d1805d16ce75571f964f4a5fed51', soy: '/_blob/df32a1523ab1bec318a69918669c854c',
+      epic: '/_blob/fbfa9f13fabe1f6474a043a1102d9261', haemo: '/_blob/d5e32910f7dbff817f37aecbf1385d31',
+      immac: '/_blob/b0d1bbf229c3ccc536e3abd931d396ce', knife: '/_blob/f788695d033f6d7f087a74ebfc8f16f0',
+      poly: '/_blob/6485c53fe9839a73f61089493e1cebb1', datam: '/_blob/0c42f64fe0910b1849320194298ed17f'
+    };
+    const R = { S: ['#F0A43A', '#15110E'], A: ['#D8C49A', '#15110E'], B: ['#8DB5A2', '#15110E'], C: ['#A39684', '#15110E'], D: ['#A8361F', '#FFF4E6'] };
+    const glow = { 4: 0.62, 3: 0.46, 2: 0.32, 1: 0.2, 0: 0.12 };
+    const altar = [
+      { name: 'Azazel', meta: 'Character', src: B.azazel, size: 114, q: 3 },
+      { name: 'Brimstone', meta: 'Quality 4', src: B.brim, size: 128, q: 4 },
+      { name: "Tammy's Head", meta: 'Quality 2', src: B.tammy, size: 128, q: 2 },
+      { name: 'Technology', meta: 'Quality 3', src: B.tech, size: 128, q: 3 },
+      { name: 'Rock Bottom', meta: 'Quality 3', src: B.rock, size: 128, q: 3 },
+      { name: 'Crown of Light', meta: 'Quality 4', src: B.crown, size: 128, q: 4 },
+      { name: 'Sacred Heart', meta: 'Quality 4', src: B.sacred, size: 128, q: 4 },
+      { name: 'Perfection', meta: 'Trinket', src: B.perfection, size: 128, q: 1 }
+    ].map((p) => ({ ...p, glow: glow[p.q], removeLabel: 'Remove ' + p.name }));
+    const card = (r, title, sprites, description) => ({
+      r, title, description, bg: R[r][0], fg: R[r][1], ratingLabel: 'Rated ' + r,
+      sprites: sprites.map((src) => ({ src }))
+    });
+    const matched = [
+      card('S', 'Brimstone + Azazel', [B.brim, B.azazel], "Upgrades Azazel's short-range Mini Brimstone into the full-length Brimstone laser. Removes Azazel's biggest weakness (short range) while keeping flight and black hearts."),
+      card('S', 'Crown of Light + Brimstone', [B.crown, B.brim], 'Crown of Light doubles damage while all your red heart containers are full, and the 2x carries into the Brimstone beam. Taking damage switches the crown off for the rest of the room.'),
+      card('S', 'Rock Bottom + Brimstone', [B.rock, B.brim], 'Rock Bottom prevents the charge time increase, so Brimstone fires at near-normal fire rate. Dramatically increases beam DPS output.'),
+      card('S', "Brimstone + Tammy's Head", [B.brim, B.tammy], "Using Tammy's Head fires 10 Brimstone lasers in all directions simultaneously. Each laser deals your full Brimstone damage. One of the most powerful combos in the game, capable of clearing entire rooms and melting bosses instantly."),
+      card('S', 'Brimstone + Technology', [B.brim, B.tech], 'The Technology laser coils around the Brimstone beam and multiplies damage by 1.5, stacking with other multipliers. In Repentance the double-Brimstone upgrade (a second Brimstone, or Sulfur) replaces that 1.5x with its own 1.2x, so it can lower your damage.'),
+      card('A', 'Perfection', [B.perfection], 'Perfection grants +10 Luck while held, destroyed on damage. Maximizes luck-based tear effects like Tough Love, Holy Light, and Parasitoid. Keep it safe for massive DPS boost.'),
+      card('B', 'Technology + Azazel', [B.tech, B.azazel], "Technology fires a continuous laser alongside Azazel's Mini Brimstone. The laser fires while Brimstone charges, giving constant DPS. Good complement to Azazel's kit.")
+    ];
+    const tally = [['S', 5], ['A', 1], ['B', 1]].map(([r, n]) => ({ r, n, bg: R[r][0], fg: R[r][1] }));
+    const up = '#9CC7B3', down = '#E8937A';
+    const stats = [
+      ['Damage', '+1', up], ['Damage', '×2.3', up], ['Tears', '−0.4', down], ['Tears', '×0.33', down],
+      ['Range', '+0.5', up], ['Shot speed', '−0.25', down], ['Soul hearts', '+2', up]
+    ].map(([k, v, c]) => ({ k, v, c }));
+    const transforms = [{ name: 'Leviathan', from: 'From Brimstone' }, { name: 'Seraphim', from: 'From Sacred Heart' }];
+    const away = [
+      ['Ipecac', B.ipecac, 3], ['Soy Milk', B.soy, 3], ['Epic Fetus', B.epic, 2], ['Haemolacria', B.haemo, 2],
+      ['Immaculate Heart', B.immac, 2], ["Mom's Knife", B.knife, 2], ['Polyphemus', B.poly, 2], ['Dataminer', B.datam, 1]
+    ].map(([name, src, n]) => ({ name, src, completes: n === 1 ? 'Completes 1' : 'Completes ' + n, addLabel: 'Add ' + name + ' to the build' }));
+    return { altar, matched, tally, stats, transforms, away };
+  }
+}
+</script>
+</body>
+</html>

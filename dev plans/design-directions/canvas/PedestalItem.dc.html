@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pedestal: Brimstone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#100D0B}
+@keyframes ped-flicker{0%,100%{opacity:1;transform:translateX(-50%) scale(1)}22%{opacity:.86;transform:translateX(-50%) scale(.985)}47%{opacity:.97;transform:translateX(-50%) scale(1.01)}71%{opacity:.82;transform:translateX(-50%) scale(.99)}}
+.ped-halo{animation:ped-flicker 3.6s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.ped-halo{animation:none}}
+</style>
+</helmet>
+<div style="min-height: 100%; background: #15110E; color: #EFE6D6; font-family: 'Manrope', system-ui, sans-serif; font-size: 16px; line-height: 1.55;">
+
+<header style="border-bottom: 1px solid #2B231D;">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 22px clamp(20px, 4vw, 40px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 32px;">
+    <a href="Main.dc.html" style="text-decoration: none; font-family: 'Cormorant', serif; font-size: 32px; font-weight: 700; color: #EFE6D6; line-height: 1;">isaac<span style="color: #F0A43A;">.toys</span></a>
+    <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 6px 26px; font-size: 15px; font-weight: 500;">
+      <a href="Main.dc.html" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Builder</a>
+      <a href="PedestalItem.dc.html" aria-current="page" style="color: #F0A43A; text-decoration: none; padding: 6px 0; border-bottom: 2px solid #F0A43A;">Items</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Trinkets</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Characters</a>
+      <a href="PedestalSynergies.dc.html" style="color: #B3A692; text-decoration: none; padding: 6px 0;">Synergies</a>
+      <a href="#" style="color: #B3A692; text-decoration: none; padding: 6px 0;">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section style="background: radial-gradient(ellipse 60% 70% at 26% 58%, #2C1E12 0%, #15110E 68%); border-bottom: 1px solid #2B231D;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 28px clamp(20px, 4vw, 40px) 64px;">
+      <nav aria-label="Breadcrumb" style="font-size: 14px; color: #B3A692;"><a href="#" style="color: #B3A692;">Items</a><span aria-hidden="true" style="margin: 0 10px; color: #5A4C40;">/</span><span aria-current="page" style="color: #EFE6D6;">Brimstone</span></nav>
+      <div style="margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 40px 72px;">
+        <figure style="margin: 0; flex: 0 1 380px; display: flex; flex-direction: column; align-items: center;">
+          <div style="position: relative; width: 340px; max-width: 100%; height: 330px; display: flex; align-items: flex-end; justify-content: center;">
+            <div class="ped-halo" aria-hidden="true" style="position: absolute; left: 50%; top: 10px; width: 330px; height: 300px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(240,164,58,0.58), rgba(240,164,58,0.14) 60%, rgba(240,164,58,0));"></div>
+            <img src="/_blob/b23bbe7f39de27e4a7a078acff0487a5" alt="Brimstone" style="position: relative; width: 256px; height: 256px; image-rendering: pixelated; margin-bottom: 10px; filter: drop-shadow(0 14px 10px rgba(0,0,0,0.7));">
+          </div>
+          <div aria-hidden="true" style="width: 250px; height: 26px; background: linear-gradient(#5C4C3F, #382D25); border-radius: 4px 4px 0 0; box-shadow: inset 0 1px 0 rgba(239,230,214,0.24);"></div>
+          <div aria-hidden="true" style="width: 220px; height: 70px; background: linear-gradient(#2E2620, #1D1713); border-top: 1px solid #120E0B;"></div>
+          <div aria-hidden="true" style="width: 280px; height: 18px; background: #241D18; border-radius: 0 0 3px 3px; border-top: 1px solid #120E0B;"></div>
+        </figure>
+        <div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 22px;">
+          <div>
+            <h1 style="margin: 0; font-family: 'Cormorant', serif; font-weight: 600; font-size: clamp(56px, 7vw, 96px); line-height: 0.98; padding-bottom: 0.1em;">Brimstone</h1>
+            <p style="margin: 6px 0 0; font-family: 'Cormorant', serif; font-style: italic; font-size: 28px; color: #E8D9BD; line-height: 1.25;">Tears become blood laser, hits 9 times</p>
+          </div>
+          <dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 0 32px; border-top: 1px solid #33291F;">
+            <div style="padding: 14px 0; border-bottom: 1px solid #33291F;">
+              <dt style="font-size: 13px; color: #B3A692;">Quality</dt>
+              <dd style="margin: 6px 0 0; display: flex; align-items: center; gap: 10px;"><span style="font-weight: 700; font-size: 18px;">4</span><span aria-hidden="true" style="display: flex; gap: 4px;"><span style="width: 18px; height: 6px; border-radius: 3px; background: #F0A43A;"></span><span style="width: 18px; height: 6px; border-radius: 3px; background: #F0A43A;"></span><span style="width: 18px; height: 6px; border-radius: 3px; background: #F0A43A;"></span><span style="width: 18px; height: 6px; border-radius: 3px; background: #F0A43A;"></span></span><span style="font-size: 14px; color: #B3A692;">of 4</span></dd>
+            </div>
+            <div style="padding: 14px 0; border-bottom: 1px solid #33291F;">
+              <dt style="font-size: 13px; color: #B3A692;">Stat changes</dt>
+              <dd style="margin: 6px 0 0; font-weight: 600; font-size: 17px; color: #E8937A;">Tears ×0.33</dd>
+            </div>
+            <div style="padding: 14px 0; border-bottom: 1px solid #33291F;">
+              <dt style="font-size: 13px; color: #B3A692;">Item pools</dt>
+              <dd style="margin: 6px 0 0; font-size: 17px;">Devil Room, Ultra Secret Room</dd>
+            </div>
+            <div style="padding: 14px 0; border-bottom: 1px solid #33291F;">
+              <dt style="font-size: 13px; color: #B3A692;">Transformation</dt>
+              <dd style="margin: 6px 0 0; font-size: 17px;">Leviathan</dd>
+            </div>
+            <div style="padding: 14px 0; border-bottom: 1px solid #33291F;">
+              <dt style="font-size: 13px; color: #B3A692;">Type</dt>
+              <dd style="margin: 6px 0 0; font-size: 17px;">Passive, from Rebirth</dd>
+            </div>
+            <div style="padding: 14px 0; border-bottom: 1px solid #33291F;">
+              <dt style="font-size: 13px; color: #B3A692;">Item ID</dt>
+              <dd style="margin: 6px 0 0; font-size: 17px; font-variant-numeric: tabular-nums;">118</dd>
+            </div>
+          </dl>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <a href="Main.dc.html" style="height: 52px; padding: 0 26px; display: inline-flex; align-items: center; background: #F0A43A; color: #15110E; border-radius: 4px; text-decoration: none; font-weight: 700; box-shadow: 0 0 24px rgba(240,164,58,0.3);">Add to build</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="item-syn" style="max-width: 1240px; margin: 0 auto; padding: 64px clamp(20px, 4vw, 40px) 88px; display: flex; flex-direction: column; gap: 22px;">
+    <header style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px;">
+      <h2 id="item-syn" style="margin: 0; font-family: 'Cormorant', serif; font-weight: 600; font-size: 44px; line-height: 1.05;">63 synergies with Brimstone</h2>
+      <ul role="list" aria-label="By rating" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 14px;">
+        <sc-for list="{{tally}}" as="t" hint-placeholder-count="5">
+          <li style="display: flex; align-items: center; gap: 8px; font-size: 15px; color: #B3A692;">
+            <span style="width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant', serif; font-size: 19px; font-weight: 700; background: {{t.bg}}; color: {{t.fg}}; box-shadow: 0 0 0 2px #15110E, 0 0 0 3px {{t.bg}};">{{t.r}}</span>×{{t.n}}
+          </li>
+        </sc-for>
+      </ul>
+    </header>
+    <p style="margin: 0; color: #B3A692; font-size: 17px; max-width: 70ch;">Brimstone has 63 known synergies in this list. The strongest are with Azazel, Crown of Light and Epic Fetus.</p>
+    <ul role="list" style="margin: 8px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(520px, 100%), 1fr)); gap: 14px;">
+      <sc-for list="{{cards}}" as="s" hint-placeholder-count="9">
+        <li style="display: flex; gap: 18px; align-items: flex-start; padding: 22px 24px; background: #1D1713; border: 1px solid #33291F; border-radius: 4px; box-shadow: inset 0 1px 0 rgba(239,230,214,0.05);">
+          <img src="{{s.src}}" alt="" style="flex: none; width: 64px; height: 64px; object-fit: contain; image-rendering: pixelated;">
+          <div style="flex: 1 1 auto; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span role="img" aria-label="Rated S" style="flex: none; width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant', serif; font-size: 21px; font-weight: 700; background: #F0A43A; color: #15110E; box-shadow: 0 0 0 2px #1D1713, 0 0 0 3px #F0A43A;">S</span>
+              <h3 style="margin: 0; font-family: 'Cormorant', serif; font-size: 25px; font-weight: 600; line-height: 1.15;">{{s.title}}</h3>
+            </div>
+            <p style="margin: 8px 0 0; color: #B3A692; font-size: 15.5px;">{{s.description}}</p>
+          </div>
+        </li>
+      </sc-for>
+    </ul>
+    <p style="margin: 10px 0 0;"><button type="button" style="height: 44px; padding: 0 4px; background: transparent; border: 0; color: #F0A43A; font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;">Show all 63 synergies</button></p>
+  </section>
+</main>
+
+<footer style="background: #100D0B; border-top: 1px solid #2B231D;">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 40px clamp(20px, 4vw, 40px) 56px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px 48px; font-size: 14px; color: #B3A692;">
+    <p style="margin: 0; flex: 1 1 420px; max-width: 70ch;">isaac.toys is an unofficial fan project, not affiliated with or endorsed by Edmund McMillen or Nicalis. All item, trinket and character artwork belongs to them.</p>
+    <p style="margin: 0; flex: 0 1 auto;">Data: Repentance 1.7.9b, updated 24 November 2026</p>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const R = { S: ['#F0A43A', '#15110E'], A: ['#D8C49A', '#15110E'], B: ['#8DB5A2', '#15110E'], C: ['#A39684', '#15110E'], D: ['#A8361F', '#FFF4E6'] };
+    const tally = [['S', 9], ['A', 27], ['B', 25], ['C', 1], ['D', 1]].map(([r, n]) => ({ r, n, bg: R[r][0], fg: R[r][1] }));
+    const cards = [
+      ['With Azazel', '/_blob/98f8f8866e83eb48625d620f61680060', "Upgrades Azazel's short-range Mini Brimstone into the full-length Brimstone laser. Removes Azazel's biggest weakness (short range) while keeping flight and black hearts."],
+      ['With Crown of Light', '/_blob/b8be76cf3ab3bca6001f575a2188bb08', 'Crown of Light doubles damage while all your red heart containers are full, and the 2x carries into the Brimstone beam. Taking damage switches the crown off for the rest of the room.'],
+      ['With Epic Fetus', '/_blob/fbfa9f13fabe1f6474a043a1102d9261', "Each Epic Fetus missile explosion shoots 10 Brimstone lasers in all directions. Combines the missile's massive base damage with full Brimstone beams. Absolutely devastating room clear."],
+      ['With Haemolacria', '/_blob/d5e32910f7dbff817f37aecbf1385d31', "Haemolacria takes priority: you fire arcing tears that burst into 4-7 Brimstone beams on impact, each dealing full damage per tick. Tear delay rises by 20 on top of Haemolacria's own tears down."],
+      ["With Mom's Knife", '/_blob/f788695d033f6d7f087a74ebfc8f16f0', "Mom's Knife takes priority, and Brimstone's tears down does not apply. Each throw also launches a barrage of extra knives that cross the whole screen and do not return, each dealing 2x Isaac's damage in Repentance. A longer charge adds more knives: about 2-4 uncharged, 8-10 fully charged. Does not work with Azazel's own Brimstone."],
+      ['With Rock Bottom', '/_blob/8627f4c9af1259775a480cfecdd973fb', 'Rock Bottom prevents the charge time increase, so Brimstone fires at near-normal fire rate. Dramatically increases beam DPS output.'],
+      ["With Tammy's Head", '/_blob/8a9a8bc7b77cf6b399c4e87e7a913a4d', "Using Tammy's Head fires 10 Brimstone lasers in all directions simultaneously. Each laser deals your full Brimstone damage. One of the most powerful combos in the game, capable of clearing entire rooms and melting bosses instantly."],
+      ['With Tech X', '/_blob/a45e4598f23e318271c5f08e011342ac', "Tech X takes priority and fires a Brimstone ring instead of its laser ring. The ring is larger, has a much wider hitbox, and Brimstone's tears down does not apply. One of the strongest beam builds."],
+      ['With Technology', '/_blob/93bb336fbdd0921b22a0210b77204c70', 'The Technology laser coils around the Brimstone beam and multiplies damage by 1.5, stacking with other multipliers. In Repentance the double-Brimstone upgrade (a second Brimstone, or Sulfur) replaces that 1.5x with its own 1.2x, so it can lower your damage.']
+    ].map(([title, src, description]) => ({ title, src, description }));
+    return { tally, cards };
+  }
+}
+</script>
+</body>
+</html>
