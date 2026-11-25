@@ -40,6 +40,7 @@ jobs:
         run: |
           python ../scripts/design/audit_design.py src --strict
           python ../scripts/design/check_roles.py src/styles/tokens.css
+          python ../scripts/design/check_roles.py src/styles/tokens.css --pairs ../scripts/design/toy-box-pairs.json
 
   api:
     name: API (lint, types, tests) and data
