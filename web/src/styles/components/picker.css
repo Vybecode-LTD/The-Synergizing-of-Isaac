@@ -1,4 +1,4 @@
-/* EntityPicker: the search box that adds items and trinkets. */
+/* EntityPicker: the big search box that adds items and trinkets. */
 @layer components {
   .picker {
     position: relative;
@@ -6,18 +6,16 @@
 
   .picker__field {
     display: flex;
-    gap: var(--gap-tight);
+    gap: var(--gap-related);
     align-items: center;
     min-block-size: var(--size-control-lg);
     padding-inline: var(--pad-inline-md);
-    color: var(--fg-muted);
-    background: var(--bg-sunken);
-    border: var(--stroke-default) solid var(--border-strong);
-    border-radius: var(--radius-lg);
-    transition: border-color var(--motion-hover);
+    color: var(--fg-strong);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--elevation-card);
   }
-
-  .picker__field:hover { border-color: var(--fg-muted); }
 
   .picker__field:focus-within {
     outline: var(--stroke-focus) solid var(--border-focus);
@@ -29,7 +27,7 @@
     min-inline-size: 0;
     align-self: stretch;
     padding: var(--space-0);
-    font: var(--type-body);
+    font: var(--type-lead);
     color: var(--fg-strong);
     background: transparent;
     border: 0;
@@ -43,8 +41,9 @@
     display: none;
     padding: var(--gap-hair) var(--pad-inline-xs);
     font: var(--type-label);
+    font-weight: var(--weight-extrabold);
     color: var(--fg-muted);
-    border: var(--stroke-hairline) solid var(--border-default);
+    border: var(--stroke-thick) solid var(--border-strong);
     border-radius: var(--radius-sm);
   }
 
@@ -54,19 +53,19 @@
 
   .picker__list {
     position: absolute;
-    inset-block-start: calc(100% + var(--gap-tight));
+    inset-block-start: calc(100% + var(--gap-related));
     inset-inline: var(--space-0);
     z-index: var(--z-dropdown);
     display: flex;
     flex-direction: column;
     gap: var(--gap-hair);
     max-block-size: var(--size-menu-max);
-    padding: var(--pad-block-xs);
+    padding: var(--pad-block-sm);
     overflow-y: auto;
     list-style: none;
     background: var(--bg-raised);
-    border: var(--stroke-default) solid var(--border-default);
-    border-radius: var(--radius-lg);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-xl);
     box-shadow: var(--elevation-overlay);
   }
 
@@ -77,11 +76,11 @@
     align-items: center;
     padding: var(--pad-block-sm) var(--pad-inline-sm);
     cursor: pointer;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
   }
 
   .picker__option[aria-selected="true"] {
-    background: var(--bg-active);
+    background: var(--bg-selected);
   }
 
   .picker__text {

@@ -1,4 +1,4 @@
-/* Icon, Button, IconButton, text links and form fields. */
+/* Icon, Button, IconButton, text links and form fields: chunky, ink-outlined, pressable. */
 @layer components {
   .icon {
     --icon-size: var(--size-icon);
@@ -8,41 +8,50 @@
     block-size: var(--icon-size);
     fill: none;
     stroke: currentcolor;
-    stroke-width: var(--stroke-thick);
+    stroke-width: var(--stroke-ink);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  /* ---- Button ------------------------------------------------------------ */
+  /* ---- Button: a toy you press. It sinks into its shadow when pushed. ---- */
   .button {
-    --button-bg: transparent;
-    --button-fg: var(--fg-default);
-    --button-border: var(--border-strong);
-    --button-pad-inline: var(--pad-inline-md);
-    --button-min: var(--tap-min);
+    --button-bg: var(--bg-surface);
+    --button-fg: var(--fg-strong);
+    --button-border: var(--border-ink);
+    --button-shadow: var(--elevation-sticker);
+    --button-pad-inline: var(--pad-inline-lg);
+    --button-min: var(--size-control-md);
 
     display: inline-flex;
     gap: var(--gap-tight);
     align-items: center;
     justify-content: center;
     min-block-size: var(--button-min);
-    padding: var(--pad-block-sm) var(--button-pad-inline);
-    font: var(--type-ui);
+    padding: var(--pad-block-xs) var(--button-pad-inline);
+    font: var(--type-button);
     color: var(--button-fg);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
     background: var(--button-bg);
-    border: var(--stroke-default) solid var(--button-border);
-    border-radius: var(--radius-md);
+    border: var(--stroke-ink) solid var(--button-border);
+    border-radius: var(--radius-full);
+    box-shadow: var(--button-shadow);
     transition:
       background-color var(--motion-hover),
       border-color var(--motion-hover),
-      color var(--motion-hover);
+      color var(--motion-hover),
+      box-shadow var(--motion-instant),
+      translate var(--motion-instant);
   }
 
-  .button:hover { --button-bg: var(--bg-hover); }
-  .button:active { --button-bg: var(--bg-active); }
+  .button:hover { --button-bg: var(--bg-selected); }
+
+  .button:active {
+    --button-shadow: var(--elevation-flat);
+
+    translate: var(--offset-sm) var(--offset-sm);
+  }
 
   .button:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
@@ -52,25 +61,33 @@
   .button[data-variant="primary"] {
     --button-bg: var(--bg-accent);
     --button-fg: var(--fg-on-accent);
-    --button-border: var(--bg-accent);
-
-    font-weight: var(--weight-semibold);
   }
 
-  .button[data-variant="primary"]:hover {
-    --button-bg: var(--bg-accent-hover);
-    --button-border: var(--bg-accent-hover);
-  }
+  .button[data-variant="primary"]:hover { --button-bg: var(--bg-accent-hover); }
 
+  /* Quiet: an underlined word, no box. */
   .button[data-variant="quiet"] {
+    --button-bg: transparent;
     --button-border: transparent;
-    --button-fg: var(--fg-muted);
+    --button-shadow: var(--elevation-flat);
+    --button-fg: var(--fg-strong);
+    --button-pad-inline: var(--pad-inline-sm);
+
+    text-decoration: underline;
+    text-decoration-thickness: var(--stroke-thick);
+    text-underline-offset: var(--offset-underline);
   }
 
-  .button[data-variant="quiet"]:hover { --button-fg: var(--fg-strong); }
+  .button[data-variant="quiet"]:hover {
+    --button-bg: var(--bg-hover);
+
+    text-decoration-thickness: var(--stroke-ink);
+  }
+
+  .button[data-variant="quiet"]:active { translate: none; }
 
   .button[data-size="sm"] {
-    --button-pad-inline: var(--pad-inline-sm);
+    --button-pad-inline: var(--pad-inline-md);
     --button-min: var(--size-control-sm);
   }
 
@@ -78,9 +95,11 @@
   .button[aria-disabled="true"] {
     --button-bg: var(--bg-disabled);
     --button-fg: var(--fg-disabled);
-    --button-border: var(--border-subtle);
+    --button-border: var(--border-default);
+    --button-shadow: var(--elevation-flat);
 
     cursor: not-allowed;
+    translate: none;
   }
 
   .button[data-state="loading"] { cursor: progress; }
@@ -93,7 +112,7 @@
     to { rotate: 1turn; }
   }
 
-  /* ---- IconButton: a square button whose name is its aria-label. --------- */
+  /* ---- IconButton: a round button whose name is its aria-label. --------- */
   .icon-button {
     --icon-button-size: var(--size-control-sm);
 
@@ -103,42 +122,46 @@
     inline-size: var(--icon-button-size);
     block-size: var(--icon-button-size);
     padding: var(--space-0);
-    color: var(--fg-muted);
+    color: var(--icon-button-fg, var(--fg-strong));
     cursor: pointer;
-    background: transparent;
-    border: var(--stroke-default) solid transparent;
-    border-radius: var(--radius-md);
+    background: var(--icon-button-bg, transparent);
+    border-width: var(--stroke-ink);
+    border-style: solid;
+    border-color: var(--icon-button-border, transparent);
+    border-radius: var(--radius-full);
     transition:
       background-color var(--motion-hover),
       color var(--motion-hover);
   }
 
-  .icon-button:hover {
-    color: var(--fg-strong);
-    background: var(--bg-hover);
-  }
-
-  .icon-button:active { background: var(--bg-active); }
+  /* A parent can recolour it through --icon-button-fg, -bg, -bg-hover and
+     -border (the builder's remove button is ink). */
+  .icon-button:hover { background: var(--icon-button-bg-hover, var(--bg-hover)); }
+  .icon-button:active { background: var(--icon-button-bg-hover, var(--bg-active)); }
 
   .icon-button:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: var(--stroke-focus);
+    outline-offset: var(--stroke-thick);
   }
 
   /* ---- Links that sit in running text or lists --------------------------- */
   .text-link {
+    font-weight: var(--weight-extrabold);
     color: var(--fg-link);
     text-decoration: underline;
-    text-decoration-thickness: var(--stroke-hairline);
+    text-decoration-thickness: var(--stroke-thick);
     text-underline-offset: var(--offset-underline);
     border-radius: var(--radius-xs);
   }
 
-  .text-link:hover { color: var(--fg-strong); }
+  .text-link:hover {
+    color: var(--fg-accent);
+    text-decoration-thickness: var(--stroke-ink);
+  }
 
   .text-link:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: var(--stroke-focus);
+    outline-offset: var(--stroke-thick);
   }
 
   /* ---- Fields -------------------------------------------------------------- */
@@ -150,7 +173,7 @@
 
   .field__label {
     font: var(--type-ui);
-    color: var(--fg-default);
+    color: var(--fg-strong);
   }
 
   .field__hint {
@@ -166,17 +189,15 @@
   .input {
     inline-size: 100%;
     min-block-size: var(--tap-min);
-    padding: var(--pad-block-sm) var(--pad-inline-sm);
+    padding: var(--pad-block-md) var(--pad-inline-md);
     font: var(--type-body);
     color: var(--fg-strong);
-    background: var(--bg-sunken);
-    border: var(--stroke-default) solid var(--border-strong);
-    border-radius: var(--radius-md);
-    transition: border-color var(--motion-hover);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-xl);
   }
 
   .input::placeholder { color: var(--fg-subtle); }
-  .input:hover { border-color: var(--fg-muted); }
 
   .input:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
@@ -189,7 +210,7 @@
     color: var(--fg-disabled);
     cursor: not-allowed;
     background: var(--bg-disabled);
-    border-color: var(--border-subtle);
+    border-color: var(--border-default);
   }
 
   .input[data-multiline] {
@@ -197,7 +218,7 @@
     resize: vertical;
   }
 
-  /* ---- Segmented choice: a row of radio-like buttons ------------------------ */
+  /* ---- Segmented choice: a row of pill toggles ------------------------------ */
   .segmented {
     display: inline-flex;
     flex-wrap: wrap;
@@ -210,34 +231,31 @@
     display: inline-flex;
     gap: var(--gap-tight);
     align-items: center;
-    min-block-size: var(--size-control-sm);
-    padding: var(--pad-block-xs) var(--pad-inline-sm);
+    min-block-size: var(--tap-min);
+    padding: var(--pad-block-xs) var(--pad-inline-md);
     font: var(--type-ui);
-    color: var(--fg-muted);
+    color: var(--fg-strong);
     cursor: pointer;
-    background: transparent;
-    border: var(--stroke-default) solid var(--border-default);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
     border-radius: var(--radius-full);
     transition:
       background-color var(--motion-hover),
-      border-color var(--motion-hover),
-      color var(--motion-hover);
+      box-shadow var(--motion-instant);
   }
 
-  .segmented__option:hover {
-    color: var(--fg-strong);
-    background: var(--bg-hover);
-  }
+  .segmented__option:hover { background: var(--bg-selected); }
 
   .segmented__option:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: var(--stroke-focus);
+    outline-offset: var(--stroke-thick);
   }
 
+  /* Pressed: lifted, filled with the sun tint. The pressed state is also in
+     aria-pressed, which assistive tech reads; the shadow repeats it. */
   .segmented__option[aria-pressed="true"],
   .segmented__option[aria-checked="true"] {
-    color: var(--fg-strong);
     background: var(--bg-selected);
-    border-color: var(--border-accent);
+    box-shadow: var(--elevation-sticker);
   }
 }

@@ -1,4 +1,4 @@
-/* Browse pages: page head, filters, and the grid of tiles. */
+/* Browse pages: page head, the filter tray, and the grid of tiles. */
 @layer components {
   .page {
     display: flex;
@@ -9,12 +9,12 @@
   .page-head {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-tight);
+    gap: var(--gap-related);
   }
 
   .page-head__title {
     font: var(--type-h1);
-    letter-spacing: var(--tracking-tighter);
+    letter-spacing: var(--tracking-display);
     color: var(--fg-strong);
   }
 
@@ -32,30 +32,32 @@
     color: var(--fg-muted);
   }
 
-  /* ---- Filters ------------------------------------------------------------- */
+  /* ---- Filters: a tray of controls ------------------------------------------- */
   .filters {
     display: flex;
     flex-wrap: wrap;
     gap: var(--gap-grouped) var(--gap-separate);
     align-items: center;
+    padding: var(--pad-well);
+    background: var(--bg-sunken);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-3xl);
+    box-shadow: var(--elevation-well);
   }
 
   .search-field {
     display: flex;
     flex: 1 1 var(--width-form);
-    gap: var(--gap-tight);
+    gap: var(--gap-related);
     align-items: center;
     max-inline-size: var(--width-form);
-    min-block-size: var(--tap-min);
-    padding-inline: var(--pad-inline-sm);
-    color: var(--fg-muted);
-    background: var(--bg-sunken);
-    border: var(--stroke-default) solid var(--border-strong);
-    border-radius: var(--radius-md);
-    transition: border-color var(--motion-hover);
+    min-block-size: var(--size-control-md);
+    padding-inline: var(--pad-inline-md);
+    color: var(--fg-strong);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-xl);
   }
-
-  .search-field:hover { border-color: var(--fg-muted); }
 
   .search-field:focus-within {
     outline: var(--stroke-focus) solid var(--border-focus);
@@ -67,7 +69,7 @@
     min-inline-size: 0;
     align-self: stretch;
     padding: var(--space-0);
-    font: var(--type-body);
+    font: var(--type-lead);
     color: var(--fg-strong);
     background: transparent;
     border: 0;
@@ -95,15 +97,15 @@
     padding: var(--pad-card);
     font: var(--type-body);
     color: var(--fg-muted);
-    border: var(--stroke-default) dashed var(--border-default);
-    border-radius: var(--radius-lg);
+    border: var(--stroke-ink) dashed var(--border-ink);
+    border-radius: var(--radius-2xl);
   }
 
-  /* ---- Tile grid ------------------------------------------------------------- */
+  /* ---- Tile grid: every pickup as a toy -------------------------------------------- */
   .tile-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--size-tile-wide), 1fr));
-    gap: var(--gap-tight);
+    gap: var(--gap-grouped) var(--gap-related);
     padding: var(--space-0);
     list-style: none;
   }
@@ -116,27 +118,29 @@
     block-size: 100%;
     padding: var(--pad-block-md) var(--pad-inline-xs);
     font: var(--type-label);
-    color: var(--fg-default);
+    font-weight: var(--weight-bold);
+    color: var(--fg-strong);
     text-align: center;
     text-decoration: none;
     background: var(--bg-surface);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--elevation-sticker);
     transition:
-      background-color var(--motion-hover),
-      border-color var(--motion-hover),
-      color var(--motion-hover);
+      translate var(--motion-hover),
+      box-shadow var(--motion-hover),
+      background-color var(--motion-hover);
   }
 
   .tile:hover {
-    color: var(--fg-strong);
-    background: var(--bg-raised);
-    border-color: var(--border-accent);
+    background: var(--bg-selected);
+    box-shadow: var(--elevation-card);
+    translate: calc(var(--motion-travel-xs) * -0.5) calc(var(--motion-travel-xs) * -0.5);
   }
 
   .tile:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: var(--stroke-focus);
+    outline-offset: var(--stroke-thick);
   }
 
   .tile__name {

@@ -1,73 +1,73 @@
-/* Builder page: the build on the left, what it means on the right. */
+/* Builder page: the title and the search box, the tray of what you hold, then
+   what it means. One column, so the tray fits eight tiles on a wide screen. */
 @layer components {
   .builder {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-subsection);
+  }
+
+  /* Title beside the search box on a wide screen; the tray, the actions and
+     the summary each take the full width below. The summary comes after the
+     actions on screen; it holds nothing to focus, so tab order is unchanged. */
+  .builder__build {
     display: grid;
-    gap: var(--space-block);
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-separate) var(--gap-distinct);
+    align-items: end;
   }
 
   @media (min-width: 64rem) {
-    .builder {
-      /* The build column is about a third of the content width and never squeezes the results. */
-      grid-template-columns: minmax(0, var(--width-build)) minmax(0, 1fr);
-    }
-
     .builder__build {
-      position: sticky;
-      inset-block-start: var(--offset-sticky);
-      max-block-size: var(--block-sticky-max);
-      overflow-y: auto;
+      grid-template-columns: minmax(0, 1fr) minmax(0, var(--width-search));
     }
-  }
-
-  .builder__build {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-separate);
-    padding: var(--pad-card);
-    background: var(--bg-surface);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-xl);
   }
 
   .builder__intro {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-tight);
+    gap: var(--gap-related);
   }
 
   .builder__title {
-    font: var(--type-h2);
+    font: var(--type-h1);
+    letter-spacing: var(--tracking-display);
     color: var(--fg-strong);
-    letter-spacing: var(--tracking-tight);
   }
 
   .builder__lede {
-    font: var(--type-ui);
+    max-inline-size: var(--measure-narrow);
+    font: var(--type-lead);
     color: var(--fg-muted);
   }
 
   .builder__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap-tight);
+    grid-column: 1 / -1;
+    gap: var(--gap-related);
     align-items: center;
   }
 
   .builder__results {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-distinct);
+    gap: var(--space-subsection);
     min-inline-size: 0;
   }
 
-  /* ---- Shelf and pedestals ------------------------------------------------ */
+  /* ---- The tray and its tiles ------------------------------------------------ */
   .shelf {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--size-tile), 1fr));
-    gap: var(--gap-related) var(--gap-tight);
-    padding: var(--space-0);
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--size-tile), 100%), 1fr));
+    gap: var(--gap-separate) var(--gap-related);
+    padding: var(--gutter-page);
     list-style: none;
+    background: var(--bg-sunken);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-3xl);
+    box-shadow: var(--elevation-well);
   }
 
   .pedestal {
@@ -76,29 +76,34 @@
   }
 
   .pedestal__main {
+    --tile-bg: var(--bg-surface);
+    --tile-fg: var(--fg-strong);
+    --tile-fg-muted: var(--fg-muted);
+    --sprite-zoom: 2;
+
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: var(--gap-fused);
+    gap: var(--gap-tight);
     align-items: center;
     min-inline-size: 0;
-    padding: var(--pad-block-sm) var(--pad-inline-xs);
-    font: var(--type-label);
-    color: var(--fg-default);
+    padding: var(--pad-block-lg) var(--pad-inline-xs) var(--pad-block-md);
+    color: var(--tile-fg);
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    background: transparent;
-    border: var(--stroke-default) solid transparent;
-    border-radius: var(--radius-lg);
+    background: var(--tile-bg);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--elevation-card);
     transition:
-      background-color var(--motion-hover),
-      border-color var(--motion-hover);
+      translate var(--motion-hover),
+      box-shadow var(--motion-hover);
   }
 
   .pedestal__main:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-subtle);
+    box-shadow: var(--elevation-raised);
+    translate: calc(var(--motion-travel-xs) * -1) calc(var(--motion-travel-xs) * -1);
   }
 
   .pedestal__main:focus-visible {
@@ -106,62 +111,64 @@
     outline-offset: var(--stroke-focus);
   }
 
+  /* Who you play is the featured sticker; a trinket is mint; what the
+     character starts with is drawn dashed, since it comes with them. */
+  .pedestal[data-kind="character"] .pedestal__main {
+    --tile-bg: var(--bg-feature);
+    --tile-fg: var(--fg-on-feature);
+    --tile-fg-muted: var(--fg-on-feature-muted);
+  }
+
+  .pedestal[data-kind="trinket"] .pedestal__main { --tile-bg: var(--bg-trinket); }
+
+  .pedestal[data-kind="starting"] .pedestal__main {
+    border-style: dashed;
+    box-shadow: var(--elevation-flat);
+  }
+
   .pedestal__art {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    place-items: center;
+    min-block-size: var(--size-sprite-4x);
   }
 
-  /* The stone: a slab with a narrower foot, the way item pedestals stand in the game. */
-  .pedestal__stone {
-    position: relative;
-    inline-size: var(--size-stone);
-    block-size: var(--size-stone-slab);
-    background: var(--border-default);
-    border-block-start: var(--stroke-default) solid var(--border-strong);
-    border-radius: var(--radius-xs);
-  }
-
-  .pedestal__stone::after {
-    position: absolute;
-    inset-block-start: 100%;
-    inset-inline: var(--size-stone-slab);
-    block-size: var(--size-stone-foot);
-    content: "";
-    background: var(--border-subtle);
-    border-end-start-radius: var(--radius-xs);
-    border-end-end-radius: var(--radius-xs);
-  }
+  /* The old stone pedestal; the tile is the pedestal now. */
+  .pedestal__stone { display: none; }
 
   .pedestal__unknown {
     display: grid;
     place-items: center;
     inline-size: var(--size-sprite-2x);
     block-size: var(--size-sprite-2x);
-    font: var(--type-h1);
-    color: var(--fg-subtle);
+    font: var(--type-display);
+    color: var(--tile-fg-muted);
   }
 
   .pedestal__name {
-    padding-block-start: var(--pad-block-sm);
     overflow-wrap: anywhere;
-    font: var(--type-label);
-    color: var(--fg-strong);
+    font: var(--type-tile);
+    color: var(--tile-fg);
   }
 
   .pedestal__meta {
     font: var(--type-label);
-    color: var(--fg-muted);
+    color: var(--tile-fg-muted);
   }
 
-  .pedestal[data-kind="character"] .pedestal__meta { color: var(--fg-accent); }
-
+  /* The remove button: an ink button pinned to the tile's corner. */
   .pedestal__remove {
+    --icon-button-fg: var(--fg-on-ink);
+    --icon-button-bg: var(--bg-ink);
+    --icon-button-bg-hover: var(--bg-accent);
+    --icon-button-border: var(--bg-sunken);
+
     position: absolute;
-    inset-block-start: var(--space-0);
-    inset-inline-end: var(--space-0);
+    inset-block-start: var(--offset-sticker);
+    inset-inline-end: var(--offset-sticker);
   }
 
+  /* A new pickup drops into the tray with a little bounce. It never starts
+     hidden, so a paused animation cannot hide it. */
   @media (prefers-reduced-motion: no-preference) {
     .pedestal__relic {
       animation: pedestal-arrive var(--motion-emphasis) both;
@@ -169,43 +176,47 @@
   }
 
   @keyframes pedestal-arrive {
-    from {
-      opacity: 0;
-      translate: 0 calc(var(--motion-travel-sm) * -1);
-    }
+    from { scale: var(--scale-pop); }
   }
 
-  /* ---- Summary --------------------------------------------------------------- */
+  /* ---- Summary: two cards under the tray ------------------------------------------ */
   .summary {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-grouped);
-    padding-block-start: var(--gap-grouped);
-    border-block-start: var(--stroke-hairline) solid var(--border-subtle);
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--width-summary-min), 100%), 1fr));
+    gap: var(--gap-separate);
+    order: 1;
   }
 
   .summary__block {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-tight);
+    gap: var(--gap-related);
+    padding: var(--pad-card);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
   }
 
   .summary__note {
-    font: var(--type-label);
+    font: var(--type-small);
     color: var(--fg-muted);
   }
 
   .eyebrow {
-    font: var(--type-label);
-    letter-spacing: var(--tracking-caps);
-    color: var(--fg-muted);
-    text-transform: uppercase;
+    font: var(--type-ui);
+    color: var(--fg-strong);
+  }
+
+  .summary .eyebrow {
+    font: var(--type-h3);
+    letter-spacing: var(--tracking-tight);
   }
 
   .transformations {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-fused);
+    gap: var(--gap-related);
     padding: var(--space-0);
     list-style: none;
   }
@@ -213,60 +224,78 @@
   .transformation {
     display: flex;
     gap: var(--gap-related);
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    font: var(--type-ui);
-    color: var(--fg-default);
+    font: var(--type-tile);
+    color: var(--fg-strong);
   }
 
   .transformation__count {
+    flex: none;
+    padding: var(--pad-block-xs) var(--pad-inline-sm);
+    font: var(--type-ui);
     font-variant-numeric: tabular-nums;
-    color: var(--fg-muted);
+    color: var(--fg-strong);
+    border: var(--stroke-thick) dashed var(--border-ink);
+    border-radius: var(--radius-full);
   }
 
-  .transformation[data-done="true"] .transformation__count { color: var(--fg-accent); }
+  .transformation[data-done="true"] .transformation__count {
+    color: var(--fg-on-feature);
+    background: var(--bg-feature);
+    border-style: solid;
+  }
 
   /* ---- Results ----------------------------------------------------------------- */
   .results__section,
-  .ai-panel,
   .empty {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-grouped);
+    gap: var(--gap-separate);
   }
+
+  /* The empty builder holds two groups; the second heading starts a new one. */
+  .empty > * + .results__title { padding-block-start: var(--gap-grouped); }
 
   .results__header {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap-tight) var(--gap-grouped);
+    gap: var(--gap-related) var(--gap-separate);
     align-items: center;
     justify-content: space-between;
   }
 
   .results__title {
     font: var(--type-h2);
+    letter-spacing: var(--tracking-tighter);
     color: var(--fg-strong);
-    letter-spacing: var(--tracking-tight);
   }
 
   .results__lede {
     flex-basis: 100%;
     max-inline-size: var(--measure-prose);
-    font: var(--type-body);
+    font: var(--type-lead);
     color: var(--fg-muted);
   }
 
+  /* In a header the lede takes a line of its own, under the title. */
+  .results__header > .results__lede { max-inline-size: none; }
+
+  /* Cards in two columns on a wide screen. The row gap leaves room for the
+     sticker that hangs over each card's top edge. */
   .results__cards {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-related);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--width-card-min), 100%), 1fr));
+    gap: var(--gap-distinct) var(--gap-separate);
+    padding-block-start: var(--gap-grouped);
   }
 
   .results__cards:empty { display: none; }
 
   .tally {
     display: flex;
-    gap: var(--gap-related);
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
     align-items: center;
     padding: var(--space-0);
     list-style: none;
@@ -274,11 +303,16 @@
 
   .tally__item {
     display: inline-flex;
-    gap: var(--gap-fused);
+    gap: var(--gap-tight);
     align-items: center;
-    font: var(--type-ui);
+    min-block-size: var(--size-control-sm);
+    padding: var(--pad-block-xs) var(--pad-inline-sm) var(--pad-block-xs) var(--pad-block-sm);
+    font: var(--type-button);
     font-variant-numeric: tabular-nums;
-    color: var(--fg-muted);
+    color: var(--fg-strong);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-full);
   }
 
   .notice {
@@ -289,47 +323,60 @@
     justify-content: space-between;
     padding: var(--pad-well);
     font: var(--type-ui);
-    color: var(--fg-default);
+    color: var(--fg-strong);
     background: var(--bg-selected);
-    border: var(--stroke-default) solid var(--border-accent);
-    border-radius: var(--radius-lg);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
   }
 
   .notice[data-tone="quiet"] {
-    color: var(--fg-muted);
     background: transparent;
-    border-color: var(--border-default);
     border-style: dashed;
   }
 
-  /* ---- Suggestions --------------------------------------------------------------- */
+  /* ---- One pickup away: dashed tiles, each with the rating it would bring ------- */
   .suggestions {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--width-card-min), 100%), 1fr));
-    gap: var(--gap-tight);
-    padding: var(--space-0);
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--size-tile), 100%), 1fr));
+    gap: var(--gap-separate) var(--gap-related);
+    padding: var(--gap-grouped) var(--space-0) var(--space-0);
     list-style: none;
   }
 
   .suggestion {
-    display: grid;
-    grid-template-columns: auto auto minmax(0, 1fr) auto;
-    gap: var(--gap-related);
+    --sprite-zoom: 2;
+    --rating-tilt: var(--tilt-left);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
     align-items: center;
-    padding: var(--pad-block-sm) var(--pad-inline-sm);
+    padding: var(--pad-block-lg) var(--pad-inline-xs) var(--pad-block-md);
+    text-align: center;
     background: var(--bg-surface);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    border: var(--stroke-ink) dashed var(--border-ink);
+    border-radius: var(--radius-2xl);
+  }
+
+  /* The sticker (the tile's first child, its RatingBadge) on the corner. */
+  .suggestion > :first-child {
+    position: absolute;
+    inset-block-start: var(--offset-sticker);
+    inset-inline-start: var(--offset-sticker);
   }
 
   .suggestion__text {
     display: flex;
+    flex: 1;
     flex-direction: column;
+    gap: var(--gap-fused);
     min-inline-size: 0;
   }
 
   .suggestion__name {
-    font: var(--type-ui);
+    overflow-wrap: anywhere;
+    font: var(--type-tile);
     color: var(--fg-strong);
   }
 
@@ -342,7 +389,7 @@
   .examples {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(var(--width-chip-min), 100%), 1fr));
-    gap: var(--gap-tight);
+    gap: var(--gap-separate) var(--gap-related);
     padding: var(--space-0);
     list-style: none;
   }
@@ -351,21 +398,23 @@
     display: flex;
     gap: var(--gap-related);
     align-items: center;
+    block-size: 100%;
     padding: var(--pad-block-md) var(--pad-inline-md);
     font: var(--type-ui);
     color: var(--fg-strong);
     text-decoration: none;
     background: var(--bg-surface);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--elevation-card);
     transition:
-      background-color var(--motion-hover),
-      border-color var(--motion-hover);
+      translate var(--motion-hover),
+      box-shadow var(--motion-hover);
   }
 
   .example:hover {
-    background: var(--bg-raised);
-    border-color: var(--border-accent);
+    box-shadow: var(--elevation-raised);
+    translate: calc(var(--motion-travel-xs) * -1) calc(var(--motion-travel-xs) * -1);
   }
 
   .example:focus-visible {
@@ -378,12 +427,26 @@
     flex: none;
   }
 
-  /* ---- AI panel ------------------------------------------------------------------------ */
+  /* ---- AI panel: the spotlight, a pool-blue sticker with white words ------------------ */
   .ai-panel {
-    padding: var(--pad-card);
-    background: var(--bg-surface);
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-xl);
+    /* The pool-blue focus ring would vanish on the pool panel: ring in white. */
+    --border-focus: var(--fg-on-spotlight);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-separate);
+    padding: var(--space-block);
+    color: var(--fg-on-spotlight);
+    background: var(--bg-spotlight);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-3xl);
+    box-shadow: var(--elevation-raised);
+  }
+
+  .ai-panel .results__title,
+  .ai-panel .results__lede,
+  .ai-panel .eyebrow {
+    color: var(--fg-on-spotlight);
   }
 
   .ai-panel__answer {
@@ -392,7 +455,7 @@
     gap: var(--gap-related);
     max-inline-size: var(--measure-prose);
     font: var(--type-body);
-    color: var(--fg-default);
+    color: var(--fg-on-spotlight);
   }
 
   .ai-panel__list {
@@ -404,14 +467,19 @@
 
   .ai-panel__note {
     padding-block-start: var(--gap-related);
-    font: var(--type-label);
-    color: var(--fg-muted);
-    border-block-start: var(--stroke-hairline) solid var(--border-subtle);
+    font: var(--type-small);
+    color: var(--fg-on-spotlight);
+    border-block-start: var(--stroke-thick) solid var(--border-on-spotlight);
   }
 
+  /* An error is a card on the panel, in the page's own colours. */
   .ai-panel__error {
+    padding: var(--pad-block-md) var(--pad-inline-md);
     font: var(--type-ui);
     color: var(--fg-danger);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-xl);
   }
 
   /* ---- Character picker ---------------------------------------------------------------- */
@@ -437,31 +505,27 @@
     inline-size: 100%;
     padding: var(--pad-block-sm) var(--pad-inline-xs);
     font: var(--type-label);
-    color: var(--fg-default);
+    font-weight: var(--weight-bold);
+    color: var(--fg-strong);
     text-align: center;
     cursor: pointer;
-    background: transparent;
-    border: var(--stroke-default) solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    transition:
-      background-color var(--motion-hover),
-      border-color var(--motion-hover);
+    background: var(--bg-surface);
+    border: var(--stroke-thick) solid var(--border-ink);
+    border-radius: var(--radius-xl);
+    transition: background-color var(--motion-hover);
   }
 
-  .character-option:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-strong);
-  }
+  .character-option:hover { background: var(--bg-selected); }
 
   .character-option:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: var(--stroke-focus);
+    outline-offset: var(--stroke-thick);
   }
 
   .character-option[aria-pressed="true"] {
-    color: var(--fg-strong);
-    background: var(--bg-selected);
-    border-color: var(--border-accent);
+    color: var(--fg-on-feature);
+    background: var(--bg-feature);
+    box-shadow: var(--elevation-sticker);
   }
 
   .character-option__name { overflow-wrap: anywhere; }
@@ -483,14 +547,14 @@
 
   .synergy-form__piece {
     display: inline-flex;
-    gap: var(--gap-fused);
+    gap: var(--gap-tight);
     align-items: center;
     padding: var(--pad-block-xs) var(--pad-inline-sm) var(--pad-block-xs) var(--pad-inline-xs);
     font: var(--type-ui);
     color: var(--fg-strong);
     background: var(--bg-sunken);
-    border: var(--stroke-hairline) solid var(--border-default);
-    border-radius: var(--radius-md);
+    border: var(--stroke-thick) solid var(--border-ink);
+    border-radius: var(--radius-full);
   }
 
   .synergy-form__check {

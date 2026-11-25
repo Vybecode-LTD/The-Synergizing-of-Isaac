@@ -1,16 +1,15 @@
-/* Site frame: sticky header with wordmark and nav, the main column, the footer. */
+/* Site frame: sticky header with wordmark and nav, the main column, the ink footer. */
 @layer components {
   .site-header {
     position: sticky;
     inset-block-start: var(--space-0);
     z-index: var(--z-sticky);
     background: var(--bg-canvas);
-    border-block-end: var(--stroke-hairline) solid var(--border-subtle);
   }
 
   .site-header__inner {
     display: flex;
-    gap: var(--gap-grouped) var(--gap-separate);
+    gap: var(--gap-related) var(--gap-separate);
     align-items: center;
     justify-content: space-between;
     max-inline-size: var(--width-page);
@@ -19,17 +18,17 @@
     margin-inline: auto;
   }
 
-  /* ---- Wordmark: the domain is the logo --------------------------------------- */
+  /* ---- Wordmark: the domain is the logo, ".toys" its sticker ---------------- */
   .wordmark {
     display: inline-flex;
     flex: none;
-    gap: var(--gap-tight);
+    gap: var(--gap-fused);
     align-items: center;
-    font: var(--type-h3);
-    letter-spacing: var(--tracking-tight);
+    font: var(--type-wordmark);
+    letter-spacing: var(--tracking-tighter);
     color: var(--fg-strong);
     text-decoration: none;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-lg);
   }
 
   .wordmark:focus-visible {
@@ -37,34 +36,44 @@
     outline-offset: var(--stroke-focus);
   }
 
-  .wordmark__mark {
-    inline-size: var(--size-mark);
-    block-size: var(--size-mark);
-    fill: var(--fg-accent);
-  }
+  /* The board's wordmark is the word alone; the glyph stays for the favicon. */
+  .wordmark__mark { display: none; }
 
-  /* One word, two tones. */
   .wordmark__tld {
-    color: var(--fg-accent);
+    display: inline-block;
+    padding: var(--gap-hair) var(--pad-inline-xs) var(--gap-fused);
+    color: var(--fg-on-accent);
+    background: var(--bg-accent);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--elevation-sticker);
+    rotate: var(--tilt-slight);
   }
 
-  /* ---- Nav --------------------------------------------------------------------- */
+  /* ---- Nav: pills; the page you are on is filled in ink ------------------------ */
+  /* It scrolls sideways on a phone, so it pads itself (and cancels the pad on
+     the outside) to leave room for the focus ring, which its scroll box clips. */
   .site-nav {
     display: flex;
-    gap: var(--gap-fused);
+    gap: var(--gap-tight);
     align-items: center;
     min-inline-size: 0;
+    padding: var(--pad-block-sm) var(--pad-inline-xs);
+    margin-inline: calc(var(--pad-inline-xs) * -1);
     overflow-x: auto;
     scrollbar-width: none;
   }
 
   .site-nav__link {
-    padding: var(--pad-block-sm) var(--pad-inline-sm);
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--tap-min);
+    padding-inline: var(--pad-inline-md);
     font: var(--type-ui);
-    color: var(--fg-muted);
+    color: var(--fg-default);
     text-decoration: none;
     white-space: nowrap;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
     transition:
       background-color var(--motion-hover),
       color var(--motion-hover);
@@ -77,58 +86,62 @@
 
   .site-nav__link:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
-    outline-offset: calc(var(--stroke-focus) * -1);
+    outline-offset: var(--stroke-thick);
   }
 
   .site-nav__link[aria-current="page"] {
-    color: var(--fg-accent);
-    background: var(--bg-selected);
+    color: var(--fg-on-ink);
+    background: var(--bg-ink);
   }
 
   @media (max-width: 47.99rem) {
     .site-header__inner {
       flex-direction: column;
       align-items: stretch;
-      padding-block: var(--pad-block-sm);
+      padding-block: var(--pad-block-md);
     }
+
+    .wordmark { align-self: flex-start; }
   }
 
   /* ---- Main and footer ------------------------------------------------------------ */
   .site-main {
     max-inline-size: var(--width-page);
     min-block-size: var(--block-viewport);
-    padding: var(--space-block) var(--gutter-page) var(--space-subsection);
+    padding: var(--space-block) var(--gutter-page) var(--space-section);
     margin-inline: auto;
   }
 
   .site-main:focus { outline: none; }
 
   .site-footer {
-    border-block-start: var(--stroke-hairline) solid var(--border-subtle);
+    color: var(--fg-on-band-muted);
+    background: var(--bg-band);
   }
 
   .site-footer__inner {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap-related) var(--gap-separate);
+    gap: var(--gap-related) var(--gap-distinct);
     justify-content: space-between;
     max-inline-size: var(--width-page);
-    padding: var(--space-block) var(--gutter-page);
+    padding: var(--space-block) var(--gutter-page) var(--space-subsection);
     margin-inline: auto;
-    font: var(--type-label);
-    color: var(--fg-muted);
+    font: var(--type-small);
   }
 
   .site-footer__inner > :first-child { max-inline-size: var(--measure-prose); }
 
   .site-footer__link {
-    color: var(--fg-link);
+    font-weight: var(--weight-bold);
+    color: var(--fg-on-band);
     text-decoration: underline;
+    text-decoration-thickness: var(--stroke-thick);
     text-underline-offset: var(--offset-underline);
     border-radius: var(--radius-xs);
   }
 
-  .site-footer__link:hover { color: var(--fg-strong); }
+  .site-footer__link:hover { text-decoration-thickness: var(--stroke-ink); }
 
   .site-footer__link:focus-visible {
     outline: var(--stroke-focus) solid var(--border-focus);
