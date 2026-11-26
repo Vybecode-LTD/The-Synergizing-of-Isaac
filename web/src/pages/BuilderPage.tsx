@@ -38,8 +38,8 @@ import { useCustomSynergies } from "../hooks/useCustomSynergies";
 import { usePage } from "../hooks/usePage";
 import { fill, pageContent, siteValues } from "../seo";
 
-/** Travels with a bare "/" that the builder itself produced by emptying the build. */
-const EMPTIED = { emptied: true };
+/** Travels with a bare "/" that means "empty": the builder emptying the build, or the logo going home. */
+export const EMPTIED = { emptied: true };
 
 /** Well-known S-tier pairs, offered as one-click starting points on an empty builder. */
 const EXAMPLES = gameData.synergies
@@ -52,10 +52,11 @@ export function BuilderPage() {
   const [params, setParams] = useSearchParams();
   const urlHasBuild = params.has("c") || params.has("i") || params.has("t");
   const fromUrl = useMemo(() => decodeBuild(params, gameData), [params]);
-  // A bare "/" means two things. Reached by a link, the logo or a first visit, it means "show what I had":
+  // A bare "/" means two things. Reached by the Builder link or a first visit, it means "show what I had":
   // the remembered build is shown and put in the address bar so it can be shared. Reached by emptying the
-  // build here, it means empty, and that edit says so in the navigation state. (Deciding this once, when
-  // the page mounted, wiped the build when the Builder link was clicked on the builder itself.)
+  // build here, or by the logo (home is an empty builder; the owner, 2026-11-26), it means empty, and the
+  // navigation state says so. (Deciding this once, when the page mounted, wiped the build when the Builder
+  // link was clicked on the builder itself.) Back still returns to the build before.
   const emptied = (useLocation().state as { emptied?: unknown } | null)?.emptied === true;
   const restoring = !urlHasBuild && !emptied && !isEmpty(stored);
   const build = urlHasBuild ? fromUrl : restoring ? stored : EMPTY_BUILD;

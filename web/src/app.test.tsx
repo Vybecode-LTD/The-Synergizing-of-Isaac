@@ -130,14 +130,12 @@ describe("builder", () => {
     expect(within(shelf()).getByRole("link", { name: "Tammy's Head" })).toBeInTheDocument();
   });
 
-  it("keeps the build when the Builder link or the logo is clicked on the builder itself", async () => {
+  it("keeps the build when the Builder link is clicked on the builder itself", async () => {
     // Review finding: a link to "/" while the builder was already open read as "the build is now empty".
     const user = open("/?i=118.38");
     await user.click(screen.getByRole("link", { name: "Builder" }));
     expect(within(shelf()).getByRole("link", { name: "Tammy's Head" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "1 synergy" })).toBeInTheDocument();
-    await user.click(screen.getByRole("link", { name: "isaac.toys, home" }));
-    expect(within(shelf()).getByRole("link", { name: "Brimstone" })).toBeInTheDocument();
 
     // An edit made after coming back is the one that is kept.
     await user.click(screen.getByRole("button", { name: "Remove Tammy's Head" }));
@@ -151,6 +149,37 @@ describe("builder", () => {
     await user.click(screen.getByRole("link", { name: "Builder" }));
     expect(screen.getByRole("heading", { name: "Start with what’s in your run" })).toBeInTheDocument();
     expect(within(shelf()).queryByRole("link", { name: "Brimstone" })).not.toBeInTheDocument();
+  });
+
+  it("goes home to an empty builder from the logo, on the builder and from any other page", async () => {
+    // The owner, 2026-11-26: the logo goes to the home page, and it had kept the build on screen.
+    const start = () => screen.queryByRole("heading", { name: "Start with what’s in your run" });
+    const user = open("/?i=118.38");
+    await user.click(screen.getByRole("link", { name: "isaac.toys, home" }));
+    expect(start()).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 2, name: "1 synergy" })).not.toBeInTheDocument();
+    // It stays empty: the Builder link does not bring the old build back.
+    await user.click(screen.getByRole("link", { name: "Builder" }));
+    expect(start()).toBeInTheDocument();
+
+    // From another page too. Control first: the example opens a build, so the empty start is not a default.
+    await user.click(screen.getByRole("link", { name: /Brimstone \+ Tammy's Head/ }));
+    expect(screen.getByRole("heading", { level: 2, name: "1 synergy" })).toBeInTheDocument();
+    expect(start()).not.toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "Items" }));
+    await user.click(screen.getByRole("link", { name: "isaac.toys, home" }));
+    expect(start()).toBeInTheDocument();
+  });
+
+  it("switches between light and dark from the header, and says which way it goes", async () => {
+    const user = open("/items");
+    const header = within(document.querySelector<HTMLElement>(".site-header")!);
+    expect(document.documentElement).not.toHaveAttribute("data-theme");
+    await user.click(header.getByRole("button", { name: "Switch to dark theme" }));
+    expect(document.documentElement).toHaveAttribute("data-theme", "dark");
+    await user.click(header.getByRole("button", { name: "Switch to light theme" }));
+    expect(document.documentElement).toHaveAttribute("data-theme", "light");
+    expect(header.getByRole("button", { name: "Switch to dark theme" })).toBeInTheDocument();
   });
 
   it("empties the build when its last pickup is removed, and keeps it empty", async () => {

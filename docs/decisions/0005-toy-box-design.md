@@ -10,10 +10,16 @@ canvas and in `dev plans/design-directions/canvas/Toy*.dc.html`; palettes are in
 `dev plans/design-directions/README.md`.
 
 - **Themes:** light (the boards) and a dark Toy Box (ink-navy ground, the same stickers and tiles), chosen by
-  the visitor's system setting. Until this, the site shipped dark only.
+  the visitor's system setting. Until this, the site shipped dark only. *Amended 2026-11-26* (owner: "There's
+  no way to switch between light and dark mode"): a switch in the header pins either one, remembered on
+  that device; until the visitor uses it, the system setting decides (PR #7).
 - **Share image:** `web/public/og.png` is redrawn in Toy Box style, and its counts are read from `data/`
   instead of being typed into `web/scripts/build-og.mjs` (it still said 458 synergies after the check
   brought the list to 453).
+- **Favicon** (added 2026-11-26, owner: "Yes, design one"): the site's own mascot, a wind-up toy block in
+  tomato with a sun-yellow key and a hard ink shadow, drawn on a 32px grid in the token colours
+  (`web/public/favicon.svg`). Not a game character: the site's icon must not borrow the game's art or look
+  official. The wordmark's hidden glyph, kept only for the old favicon, is removed.
 - **Motion:** one moment, the item page's quality sticker wobbles; still under `prefers-reduced-motion`.
 
 **Options that lost.** A, Pedestal (dark, candlelit relics) and C, Almanac (light field guide). Their boards

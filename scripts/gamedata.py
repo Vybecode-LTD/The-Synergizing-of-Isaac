@@ -226,7 +226,11 @@ def transformation_tags(sets: list[dict]) -> dict[tuple[str, str], dict[int, lis
         for field, key in fields:
             by_id = tags.setdefault((kind, key), {})
             for t in sets:
-                for n in t.get(field, []):
+                members = t.get(field)
+                if not isinstance(members, list):
+                    # The same words validate uses: build stops here rather than guessing an empty list.
+                    raise ValueError(f"transformation {t.get('id', '?')!r}: {field} must be a list, empty if none")
+                for n in members:
                     by_id.setdefault(n, []).append(t["id"])
     return {k: {n: sorted(ids) for n, ids in v.items()} for k, v in tags.items()}
 
@@ -458,6 +462,7 @@ def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict])
     problems: list[str] = []
     sets = doc.get("transformations", [])
     known = {"item": {i["id"] for i in items}, "trinket": {t["id"] for t in trinkets}}
+    any_malformed = False
     for field in ("id", "name"):
         values = [t.get(field) for t in sets]
         dupes = sorted({str(v) for v in values if values.count(v) > 1})
@@ -470,6 +475,14 @@ def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict])
             problems.append(f"{where}: needs must be a whole number above 0")
         if not t.get("page") or type(t.get("revision")) is not int:
             problems.append(f"{where}: no wiki page and revision to source it")
+        # The browser reads all four lists with no default: a missing one crashes the build summary.
+        fields = [f for pairs in TRANSFORMATION_FIELDS.values() for f, _ in pairs]
+        malformed = [f for f in fields if not isinstance(t.get(f), list)]
+        for field in malformed:
+            problems.append(f"{where}: {field} must be a list, empty if none")
+        if malformed:
+            any_malformed = True
+            continue
         if not any(t.get(f) for fields in TRANSFORMATION_FIELDS.values() for f, _ in fields):
             problems.append(f"{where}: counts nothing")
         for kind, ((rep, _), (plus, _)) in TRANSFORMATION_FIELDS.items():
@@ -484,6 +497,9 @@ def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict])
                     if n not in known[kind]:
                         problems.append(f"{where}: unknown {kind} id {n} in {field}")
 
+    if any_malformed:
+        # Tags derived from a malformed file would be wrong; fix the lists first, then compare.
+        return problems
     tags = transformation_tags(sets)
     for kind, records in (("item", items), ("trinket", trinkets)):
         for r in records:

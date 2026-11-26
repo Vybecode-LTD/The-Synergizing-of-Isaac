@@ -5,6 +5,7 @@ import { afterEach } from "vitest";
 afterEach(() => {
   cleanup();
   localStorage.clear();
+  document.documentElement.removeAttribute("data-theme");
 });
 
 // jsdom has no <dialog> behaviour; give it the two methods the app calls.

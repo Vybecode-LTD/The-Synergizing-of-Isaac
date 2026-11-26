@@ -7,11 +7,13 @@
     background: var(--bg-canvas);
   }
 
+  /* Wordmark, nav, theme switch in one row; on a phone the nav drops to its own row. */
   .site-header__inner {
-    display: flex;
+    display: grid;
+    grid-template-areas: "mark nav theme";
+    grid-template-columns: auto minmax(0, 1fr) auto;
     gap: var(--gap-related) var(--gap-separate);
     align-items: center;
-    justify-content: space-between;
     max-inline-size: var(--width-page);
     min-block-size: var(--header-block-size);
     padding-inline: var(--gutter-page);
@@ -21,7 +23,8 @@
   /* ---- Wordmark: the domain is the logo, ".toys" its sticker ---------------- */
   .wordmark {
     display: inline-flex;
-    flex: none;
+    grid-area: mark;
+    justify-self: start;
     gap: var(--gap-fused);
     align-items: center;
     font: var(--type-wordmark);
@@ -35,9 +38,6 @@
     outline: var(--stroke-focus) solid var(--border-focus);
     outline-offset: var(--stroke-focus);
   }
-
-  /* The board's wordmark is the word alone; the glyph stays for the favicon. */
-  .wordmark__mark { display: none; }
 
   .wordmark__tld {
     display: inline-block;
@@ -55,8 +55,11 @@
      the outside) to leave room for the focus ring, which its scroll box clips. */
   .site-nav {
     display: flex;
+    grid-area: nav;
     gap: var(--gap-tight);
     align-items: center;
+    /* Right-aligned, but never pushed past the start when it scrolls. */
+    justify-content: safe flex-end;
     min-inline-size: 0;
     padding: var(--pad-block-sm) var(--pad-inline-xs);
     margin-inline: calc(var(--pad-inline-xs) * -1);
@@ -94,14 +97,18 @@
     background: var(--bg-ink);
   }
 
+  .theme-toggle { grid-area: theme; }
+
   @media (max-width: 47.99rem) {
     .site-header__inner {
-      flex-direction: column;
-      align-items: stretch;
+      grid-template-areas:
+        "mark theme"
+        "nav nav";
+      grid-template-columns: minmax(0, 1fr) auto;
       padding-block: var(--pad-block-md);
     }
 
-    .wordmark { align-self: flex-start; }
+    .site-nav { justify-content: flex-start; }
   }
 
   /* ---- Main and footer ------------------------------------------------------------ */

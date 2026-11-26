@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { Link, NavLink, Outlet, Route, Routes, useLocation } from "react-router";
+import { Icon } from "./components/Icon";
 import { BuildProvider } from "./hooks/BuildStore";
 import { usePage, usePageHead } from "./hooks/usePage";
+import { useTheme } from "./hooks/useTheme";
 import { AboutPage } from "./pages/AboutPage";
-import { BuilderPage } from "./pages/BuilderPage";
+import { BuilderPage, EMPTIED } from "./pages/BuilderPage";
 import { CharacterPage, CharactersPage } from "./pages/CharacterPages";
 import { ItemPage, ItemsPage } from "./pages/ItemPages";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -22,16 +24,24 @@ const NAV = [
 function Wordmark() {
   const [name, tld] = wordmarkParts();
   return (
-    <Link className="wordmark" to="/" aria-label={`${SITE.domain}, home`}>
-      <svg className="wordmark__mark" viewBox="0 0 16 16" aria-hidden="true" shapeRendering="crispEdges">
-        <path d="M7 1h2v1h1v1h1v3h-1v1H6V6H5V3h1V2h1z" />
-        <path d="M5 9h6v2h-1v2h2v2H4v-2h2v-2H5z" />
-      </svg>
+    // Home is an empty builder; the Builder link is the one that brings your build back.
+    <Link className="wordmark" to="/" state={EMPTIED} aria-label={`${SITE.domain}, home`}>
       <span>
         {name}
         <span className="wordmark__tld">{tld}</span>
       </span>
     </Link>
+  );
+}
+
+/** Light or dark. It names the theme it switches to, and shows that theme's sign. */
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  const label = theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
+  return (
+    <button type="button" className="icon-button theme-toggle" onClick={toggle} aria-label={label} title={label}>
+      <Icon name={theme === "dark" ? "sun" : "moon"} />
+    </button>
   );
 }
 
@@ -58,6 +68,7 @@ function Shell() {
               </NavLink>
             ))}
           </nav>
+          <ThemeToggle />
         </div>
       </header>
       <main id="main" className="site-main" tabIndex={-1}>
