@@ -2,7 +2,21 @@
 
 **Status: deployed 2026-11-25** (6:07 pm EST, 23:07 UTC) from `main` at `1c536f2`, set up through the
 Railway connector on the owner's go-ahead. `isaac.toys` verified and the key added on 2026-11-26: health
-says `"ai": true`, and check 2 below passed 12 of 12 against `https://isaac.toys`. Checks 3 to 5 are not done. There is no Docker on the owner's machine, so CI's `docker` job
+says `"ai": true`, and check 2 below passed 12 of 12 against `https://isaac.toys`.
+
+**Check 3 passed** on 2026-11-26 at 12:34 UTC (7:34 am EST), on `isaac.toys` at `0da6fb7`, with the owner's
+OK. The home connection had used 3 of its 5 (the owner's own tries; Railway's HTTP log showed no other
+visitor had asked). Two fresh random builds answered `"cached": false`, the next fresh one 429
+`rate_limited`, and forged `x-forwarded-for` and `cf-connecting-ip` each 429 `rate_limited`. Two paid
+analyses. Not yet shown: that a visitor on another network has an allowance of their own. To show it,
+with the owner's OK (it costs an analysis), all on one UTC day: confirm this connection is refused with
+429 `rate_limited` (send a never-asked build; a 429 costs nothing), then ask a never-asked build from a
+phone on mobile data. A 200 with `"cached": false` shows a separate allowance exists, not that it is five;
+a cached answer proves nothing.
+
+**Check 4 passed** the same morning: after a redeploy (deployment `47f699b7`, live 12:36 UTC), a build
+analysed before it came back `"cached": true` with the same text, free, though the visitor's allowance was
+used up. Check 5 (submit the sitemap) is the owner's. There is no Docker on the owner's machine, so CI's `docker` job
 is where the image is proven first: it runs it as Railway does and smoke-tests it. Deploying and every
 Railway change need the owner's go-ahead. Background: the `railway-deploy-playbook` skill.
 
