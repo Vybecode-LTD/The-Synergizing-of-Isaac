@@ -13,6 +13,20 @@ const DESKTOP = { width: 1440, height: 900 };
 const PHONE = { width: 390, height: 844 };
 
 const h1 = (page: Page) => page.getByRole("heading", { level: 1 });
+
+/** The footer's brandmark has loaded, is decorative, is `size` wide, and sits left of the credit, notice and link. */
+async function expectBrandmark(page: Page, size: number) {
+  const footer = page.getByRole("contentinfo");
+  const mark = footer.locator("img.site-footer__mark");
+  await expect(mark).toHaveAttribute("alt", "");
+  await expect.poll(() => mark.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+  const markBox = (await mark.boundingBox())!;
+  const textBox = (await footer.locator(".site-footer__text").boundingBox())!;
+  expect(markBox.width).toBe(size);
+  expect(markBox.x + markBox.width).toBeLessThan(textBox.x);
+  expect(markBox.y).toBeLessThan(textBox.y + textBox.height);
+  expect(markBox.y + markBox.height).toBeGreaterThan(textBox.y);
+}
 const results = (page: Page) => page.locator("#synergies-title");
 const startHeading = (page: Page) => page.getByRole("heading", { name: "Start with what’s in your run" });
 const theme = (page: Page) => page.evaluate(() => document.documentElement.getAttribute("data-theme"));
@@ -23,7 +37,7 @@ const logo = (page: Page) => page.getByRole("link", { name: "isaac.toys, home" }
 test.describe("desktop", () => {
   test.use({ viewport: DESKTOP, colorScheme: "light" });
 
-  test("home is an empty builder, served with its CSP, and the footer credits CarbonDSP", async ({ page }) => {
+  test("home is an empty builder, served with its CSP, and the footer credits CarbonDSP beside its brandmark", async ({ page }) => {
     const response = await page.goto("/");
     expect(response?.status()).toBe(200);
     expect(response?.headers()["content-security-policy"]).toContain("script-src 'self'");
@@ -35,6 +49,8 @@ test.describe("desktop", () => {
     await expect(footer.getByText("Built by CarbonDSP for the TBOI community.")).toBeVisible();
     await expect(footer.getByRole("link", { name: "CarbonDSP" })).toHaveAttribute("href", "https://carbondsp.com/");
     await expect(footer.getByText(/is an unofficial fan project/)).toBeVisible();
+    await expect(footer.getByRole("link", { name: "About, sources and credits" })).toHaveAttribute("href", "/about");
+    await expectBrandmark(page, 128);
   });
 
   test("builds from the search box with the keyboard, and the address is the build", async ({ page }) => {
@@ -155,6 +171,7 @@ test.describe("phone", () => {
       await page.goto(path);
       await expect(h1(page)).toBeVisible();
       await expect(page.getByRole("contentinfo").getByRole("link", { name: "CarbonDSP" })).toBeVisible();
+      await expectBrandmark(page, 80);
       const width = await page.evaluate(() => document.documentElement.scrollWidth);
       expect(width).toBeLessThanOrEqual(PHONE.width);
     });

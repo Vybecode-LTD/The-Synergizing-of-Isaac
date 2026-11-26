@@ -33,6 +33,8 @@ jobs:
       - run: npm run typecheck
       - run: npm run test:coverage
       - run: npm run build
+      - name: The game data has a chunk of its own and no file passes 500 kB
+        run: npm run bundle:check
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

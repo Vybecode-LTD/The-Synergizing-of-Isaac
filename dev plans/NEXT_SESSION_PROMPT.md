@@ -16,24 +16,23 @@ says what to do next; those say what exists.
 - Wait for CodeRabbit before merging: merging first cancels its review for good.
 
 ## 3. State when this was written (verify before trusting it)
-- `main`: `ceafe70` (PR #8). Live deployment `04e3dc97` is that commit, status SUCCESS.
-- **PR #9** (`feat/e2e-and-footer`): browser end-to-end test in CI's `docker` job (`web/e2e/`, Playwright
-  1.65) and the footer credit "Built by CarbonDSP for the TBOI community." linked to carbondsp.com. Pushed
-  once; its CI had not finished. Check with `gh pr checks 9`.
+- `main`: `703fd94` (PR #9: browser e2e test in CI, CarbonDSP footer credit; merged 9:32 am EST). Live
+  deployment `7ae5af93` is that commit, SUCCESS; live e2e 13 of 13, smoke 12 of 12.
+- **PR #10** (`perf/split-data-chunk`): the game data and the libraries in chunks of their own
+  (`web/vite.config.ts`, held by `npm run bundle:check`), CodeRabbit's two fixes, and the CarbonDSP
+  brandmark in the footer (reverse version, decision 0007). Check `gh pr checks 10`.
 - Deploy checks 1 to 5 passed; check 3's other-network half is unproven ("Not now", 2026-11-26).
 - Merged branches still on GitHub: `ci/docker-smoke`, `data/transformations-repentance`,
-  `docs/deploy-checks-and-handoff`, `fix/home-link-and-theme-switch`.
+  `docs/deploy-checks-and-handoff`, `fix/home-link-and-theme-switch`, `feat/e2e-and-footer`.
 
 ## 4. First job, then the order
-1. PR #9: CI green, then CodeRabbit's review. If the browser step fails, download the `e2e-results`
-   artifact (traces, screenshots) and fix it in one push. Then **ask the owner** to merge (merging
-   deploys). After the deploy: `SITE=https://isaac.toys npm run e2e` in `web/`, which must pass 13 of 13.
-2. `docs/HANDOFF.md` next step 2: split the data out of the main bundle (Vite warns at 500 kB). Keep the
-   e2e suite green; it covers the builder, pages and 404s.
-3. The tracker's older item names: ask first (section 5).
+1. PR #10: CI green and CodeRabbit finished, then **ask the owner** to merge (merging deploys). After the
+   deploy: `SITE=https://isaac.toys npm run e2e` in `web/` (13 of 13), and the live page loads
+   `data-*.js` and `vendor-*.js`.
+2. The tracker's older item names: ask first (section 5).
 
 ## 5. Waiting on the owner (ask, do not decide)
-- Merge PR #9? Delete the four merged branches? Switch on Railway's "Wait for CI" (dashboard toggle)?
+- Merge PR #10? Delete the five merged branches? Switch on Railway's "Wait for CI" (dashboard toggle)?
   Rename the items with the tracker's older spellings ("1UP", "Number two")? Run check 3's other-network
   half (one paid analysis, phone on mobile data)?
 
@@ -47,8 +46,9 @@ says what to do next; those say what exists.
 - The GitHub API (5,000 calls an hour, shared) ran out once; `git push` still works when it does.
 
 ## 7. Where things are
-Decisions `docs/decisions/0001`–`0006`, next free `0007`. Evidence: `docs/TESTING.md`. Deploy facts:
-`docs/DEPLOY.md`. Tools: `dev plans/tools/`. Memory: the project's `MEMORY.md`. Next PR number: 10.
+Decisions `docs/decisions/0001`–`0007`, next free `0008`. Evidence: `docs/TESTING.md`. Deploy facts:
+`docs/DEPLOY.md`. Tools: `dev plans/tools/`. Memory: the project's `MEMORY.md` (this session's
+candidates: `seventh-session-promotion-candidates`). Next PR number: 11.
 
 ## 8. Promotion candidates for `knowledge/` (owner approves)
 1. Prove a browser suite against the live site before deploying the change: the old build must fail exactly

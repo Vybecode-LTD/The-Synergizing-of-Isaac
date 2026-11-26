@@ -1,4 +1,7 @@
 import { useEffect } from "react";
+// Files, never inlined into the script: the browser keeps them across deploys that change only the app.
+import brandmark from "./assets/brand/carbondsp-reverse-128.png?no-inline";
+import brandmark2x from "./assets/brand/carbondsp-reverse-256.png?no-inline";
 import { Link, NavLink, Outlet, Route, Routes, useLocation } from "react-router";
 import { Icon } from "./components/Icon";
 import { BuildProvider } from "./hooks/BuildStore";
@@ -76,7 +79,17 @@ function Shell() {
       </main>
       <footer className="site-footer">
         <div className="site-footer__inner">
-          <div className="stack stack--tight">
+          {/* The brand kit's reverse brandmark (white C), the one it gives for dark surfaces such as this band. */}
+          <img
+            className="site-footer__mark"
+            src={brandmark}
+            srcSet={`${brandmark2x} 2x`}
+            alt=""
+            width={128}
+            height={128}
+            decoding="async"
+          />
+          <div className="site-footer__text stack stack--tight">
             <p className="site-footer__credit">
               Built by{" "}
               <a className="site-footer__link" href="https://carbondsp.com/">
@@ -88,12 +101,12 @@ function Shell() {
               {SITE.domain} is an unofficial fan project, not affiliated with or endorsed by Edmund McMillen or
               Nicalis. The Binding of Isaac and its artwork belong to their owners.
             </p>
+            <p>
+              <Link className="site-footer__link" to="/about">
+                About, sources and credits
+              </Link>
+            </p>
           </div>
-          <p>
-            <Link className="site-footer__link" to="/about">
-              About, sources and credits
-            </Link>
-          </p>
         </div>
       </footer>
     </>

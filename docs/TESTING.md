@@ -1,7 +1,7 @@
 # Testing
 
-Last run: 2026-11-26, on the owner's Windows machine, branch `feat/e2e-and-footer` (the browser
-end-to-end test, and the CarbonDSP credit in the footer).
+Last run: 2026-11-26, on the owner's Windows machine, branch `perf/split-data-chunk` (the game data and
+the libraries in chunks of their own).
 
 ## Frameworks
 
@@ -20,16 +20,18 @@ end-to-end test, and the CarbonDSP credit in the footer).
 
 | Command | Where | Result |
 |---|---|---|
-| `npm run test:coverage` | `web/` | 158 passed. Fails under 85% lines |
+| `npm run test:coverage` | `web/` | 166 passed. Fails under 85% lines |
+| `npm run bundle:check` | `web/`, after `npm run build` | passes, all eight data modules in the data chunk: entry 57.1 kB, `vendor` 256.7 kB, `data` 316.9 kB, runtime 0.6 kB; the single 630.8 kB bundle before the split fails it |
 | `npm run e2e` | `web/`, built site running on 8001 (`SITE=<url>` for another) | 13 of 13 browser checks, none skipped |
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
 | `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 66 files |
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
 | same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 70 of 70 pass (stickers, feature, spotlight, band, ink, tints, outlines; light and dark) |
-| `npm run build` | `web/` | builds; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
+| `npm run build` | `web/` | builds with no chunk-size warning; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
 | `.venv\Scripts\python -m pytest --cov` | `api/` | 131 passed; 99% of `app/` |
 | `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
-| CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off`, then `npm run e2e` against it | GitHub Actions | smoke 13 of 13 on PR #5 (log read: health answered with 719 items); the browser step is new in PR #9 |
+| CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off`, then `npm run e2e` against it | GitHub Actions | smoke 13 of 13 on PR #5 (log read: health answered with 719 items); on PR #9's head, smoke 13 of 13 and browser 13 passed, none skipped |
+| `SITE=https://isaac.toys npm run e2e` | `web/`, the live site | 13 of 13 on 2026-11-26 after PR #9 deployed (`703fd94`) |
 | `app.smoke https://web-production-6d147b3c.up.railway.app --ai off --indexable --site-url https://isaac.toys` | `api/`, the live site | 13 of 13, 2026-11-25, before the key was set |
 | `.venv\Scripts\python -m ruff check .`, `-m ruff format --check .`, `-m mypy` | `api/` | clean |
 | `.venv\Scripts\python -m app.parity --check` | `api/` | snapshot is current |
@@ -86,6 +88,12 @@ end-to-end test, and the CarbonDSP credit in the footer).
   error or uncaught exception (`web/e2e/fixtures.ts`), which is how a CSP refusal shows. The reporter
   (`web/e2e/no-vacuous-pass.ts`) fails a run with nothing passed or anything skipped and prints the count.
   It never asks for an AI read.
+- **Bundle layout** (`web/scripts/check-bundle.mjs`, tested by `check-bundle.test.mjs`; CI runs it after the
+  build): no JavaScript file over Vite's 500 kB warning; every module from `data/` that ships sits in the one
+  `data-*.js` chunk and in no other, the entry included; and `index.html` has a `rel="modulepreload"` link to
+  it. Which chunk holds which module comes from the report the build writes (`chunkReport` in
+  `web/vite.config.ts`, to `web/node_modules/.cache/isaac-toys/chunks.json`, never into `dist/`). A missing
+  report, or one that doesn't match `dist/assets`, fails.
 
 ## Checks that tests can fail
 
@@ -150,6 +158,28 @@ end-to-end test, and the CarbonDSP credit in the footer).
   "tested nothing"), a `console.error`, and an inline script, which the CSP refused ("Executing inline script
   violates ... 'script-src 'self''"). Rendered contrast with `--click-each ".theme-toggle"`: the builder and
   Brimstone's page 0 failing in 8 states each (1440 and 390, light and dark, before and after the switch).
+- Data chunk, 2026-11-26 (PR #10): the bundle check failed the real build before the split for exactly four
+  reasons (630.8 kB entry, no data chunk, data in the entry, data in no chunk of its own), and its six tests
+  cover each failure, the limit to the byte, and a page with no entry. After the split, the server still
+  sends the preload links on a page it rewrites (`/items/brimstone`) and serves the data chunk as
+  `text/javascript` with `max-age=31536000, immutable`. Changing a visible string in `App.tsx` renamed only
+  the entry (`index-BWOl1gZU` to `index-1MYX03ve`); `data`, `vendor` and the runtime kept their names, so a
+  deploy that changes only the app leaves them in the browser's cache. (A first probe, an unused export,
+  changed nothing at all, the entry included, so it proved nothing and was replaced.) Locally `npm run e2e`
+  13 of 13 and `app.smoke` 12 of 12 on the split build.
+- CodeRabbit's review of PR #10, two findings, both real: the committed check returned no problems for a
+  build with `characters.json` in the entry, and none for a data chunk that was only `rel="prefetch"`. The
+  link must now be `modulepreload` (attributes in any order). Its follow-up was right too: the first fix gave
+  each data file a text marker, but `meta.json`'s marker "Repentance 1.7.9b" is also in `about.json`, so the
+  committed check passed `meta.json` in the entry. Neither of `meta.json`'s values is unique to it
+  (`2026-11-25` is in `transformations.json`), so the check now reads module membership from the build's
+  chunk report. A real build with `meta.json` left out of the data group failed it ("the entry chunk
+  index-CO9lEGKL.js holds data/meta.json"); with the config restored byte for byte it passed again.
+- Footer brandmark (PR #10, decision 0007): the footer test was red before the mark existed. The browser
+  test checks it loads, is decorative, is 128 px (80 px on a phone) and sits left of the three lines. Against
+  the live site, which lacks it, exactly those six checks failed and seven passed. With the two PNGs moved out
+  of `dist/assets`, the test failed twice over: the image never loaded, and the 404 reached the console.
+  Rendered contrast on Brimstone's page: 0 failing in 8 states.
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404

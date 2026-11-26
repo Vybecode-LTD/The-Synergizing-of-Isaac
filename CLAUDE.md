@@ -18,8 +18,12 @@ it reads its own old data and gets no new work unless the owner asks.
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Live at
   `isaac.toys` with AI on** since 2026-11-26 (Railway; `docs/DEPLOY.md` has the ids; checks 1 to 5 passed,
   apart from check 3's other-network half).
-- PR #9 (open): a browser end-to-end test in CI's `docker` job (`web/e2e/`, Playwright), and a footer
-  credit, "Built by CarbonDSP for the TBOI community", linked to carbondsp.com.
+- PR #9 (merged and live 2026-11-26): a browser end-to-end test in CI's `docker` job (`web/e2e/`,
+  Playwright), and a footer credit, "Built by CarbonDSP for the TBOI community", linked to carbondsp.com.
+- PR #10 (open): the game data and the libraries load as chunks of their own (`web/vite.config.ts`), so
+  no file passes 500 kB and a deploy that changes only the app leaves them cached; `npm run bundle:check`
+  holds it in CI. Also the CarbonDSP brandmark in the footer, the reverse version for the dark band
+  (decision 0007).
 - PR #7 (merged 2026-11-26): a light/dark switch, the logo goes home to an empty builder, an original
   favicon (decision 0005, amended).
 - Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B
@@ -71,6 +75,7 @@ the machine's global Python 3.14 lacks wheels for some packages).
 | Run the built site locally | `.venv\Scripts\python -m uvicorn app.server:app --port 8001` (after `npm run build`) |
 | Rebuild data from sources | `python scripts/gamedata.py build` then `validate` (repo root) |
 | Refresh the browser/server snapshot | `.venv\Scripts\python -m app.parity` (in `api/`) |
+| Bundle layout (data in its own chunk, nothing over 500 kB) | `npm run bundle:check` (after `npm run build`) |
 | Browser end-to-end test (installed Chrome here; site running) | `npm run e2e` (in `web/`; `SITE=<url>` for another site, e.g. live, at no cost) |
 | Smoke-test a running site (local, CI's image, live) | `.venv\Scripts\python -m app.smoke <url> --ai on\|off\|skip` (in `api/`; `--indexable` for production) |
 

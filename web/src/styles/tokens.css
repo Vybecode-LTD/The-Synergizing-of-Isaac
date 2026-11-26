@@ -431,6 +431,8 @@
     --size-tile-wide:    calc(var(--sprite-cell) * 3.5);  /* browse tile                */
     --size-art:          calc(var(--sprite-cell) * 11);   /* detail-page art frame      */
     --size-sticker:      calc(var(--space-20) + var(--space-4));  /* quality sticker, 96px */
+    --size-brandmark:    var(--space-32);   /* CarbonDSP brandmark in the footer, 128px */
+    --size-brandmark-sm: var(--space-20);   /* the same on a phone, 80px  */
     --gap-hair:          var(--space-0-5);  /* optical gap inside one mark    */
     --indent-list:       var(--space-5);
     --offset-underline:  var(--space-1);
