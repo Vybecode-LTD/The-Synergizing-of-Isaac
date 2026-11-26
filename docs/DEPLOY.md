@@ -86,8 +86,11 @@ secret header set by a Cloudflare rule, or Cloudflare's address ranges), and rem
 3. **The limit works behind the edge.** `<site>` is `https://isaac.toys`, or the generated
    `*.up.railway.app` address until the custom domain verifies. A saved answer comes back before any
    allowance is counted, so **every probe uses a build nobody has asked for before**, and its answer must
-   say `"cached": false`. Ask for as many such builds from one connection as `AI_PER_VISITOR_PER_DAY`
-   allows (10 since 2026-11-26); the next new one must answer 429.
+   say `"cached": false`. Ask for new builds from one connection until one is refused. The limit holds
+   when the last answer before the refusal says `"limit": 10` (`AI_PER_VISITOR_PER_DAY` since 2026-11-26)
+   and `"remaining": 0`, and the refusal is 429. Earlier use that day leaves fewer than ten, which is fine.
+   A refusal before any answer proves nothing: wait for the next UTC day. `dev plans/tools/limit_check.py`
+   does all of this (`--self-test` checks its verdicts and sends nothing).
    **Every 429 here counts only with `detail.code` `"rate_limited"`** (the visitor's allowance). The site's
    daily cap answers 429 too, with `"budget_exhausted"`, whoever asks: that proves nothing about visitors,
    so wait for the next UTC day (7 pm EST) and repeat.

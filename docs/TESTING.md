@@ -180,6 +180,11 @@ the libraries in chunks of their own).
   the live site, which lacks it, exactly those six checks failed and seven passed. With the two PNGs moved out
   of `dist/assets`, the test failed twice over: the image never loaded, and the 404 reached the console.
   Rendered contrast on Brimstone's page: 0 failing in 8 states.
+- Limit check tool, 2026-11-26 (PR #11, CodeRabbit's three findings, all real): it reported "limit holds"
+  when refused before any answer, added a false "no refusal" FAIL after a limit mismatch, and DEPLOY's
+  check 3 assumed a full allowance. `dev plans/tools/limit_check.py --self-test` now runs 8 made-up runs
+  and sends nothing: 8 of 8 pass. With each finding's old behaviour put back on a copy, the self-test
+  failed on exactly the case for it (3 of 3).
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404

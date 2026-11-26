@@ -10,7 +10,7 @@ Plans, contracts, design sources and starting prompts for this project.
 | `design-directions/tools/` | `sample_build.py` (pulls the boards' real content from `data/`), `contrast.py` (palette contrast) |
 | `NEXT_SESSION_PROMPT.md` | The starting prompt for the next agent. Overwritten at the end of every session |
 | `contracts/transformations-repentance.md` | Contract for counting transformations as Repentance does, Repentance+ marked (decision 0006). Approved 2026-11-25; PR #6 |
-| `tools/limit_check.py` | DEPLOY check 3 against `isaac.toys`. **Spends at most seven paid analyses: the owner's OK first** |
+| `tools/limit_check.py` | DEPLOY check 3 against `isaac.toys`. **Spends up to twelve paid analyses (the limit of 10, plus 2): the owner's OK first.** `--self-test` checks its verdicts on made-up runs and sends nothing |
 | `tools/favicon_draw.py` | The favicon's 32px grid and palette; rewrites `web/public/favicon.svg` byte for byte |
 | `contracts/web-app-seams.md` | Contract for the web app's seams: build-link format, `/api/analyze`, the SQLite tables, public URLs, environment variables. Status: draft, with open questions for the owner |
 
