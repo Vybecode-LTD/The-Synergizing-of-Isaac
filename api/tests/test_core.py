@@ -329,10 +329,6 @@ def test_the_validator_catches_a_broken_transformation_file(tmp_path: Path) -> N
     sets["bookworm"]["revision"] = True
     sets["spun"]["items"].append(sets["spun"]["items"][0])
     sets["super-bum"].update(items=[], trinkets=[], plusItems=[], plusTrinkets=[])
-    # Review finding (CodeRabbit, PR #7): the browser reads every list with no default, so a missing one
-    # crashed the build summary while build and validate quietly read it as empty.
-    del sets["necromancer"]["items"]
-    sets["seraphim"]["plusTrinkets"] = "none"
     doc["transformations"].append(dict(sets["leviathan"]))
     (copy / "transformations.json").write_text(json.dumps(doc), encoding="utf-8")
 
@@ -346,14 +342,40 @@ def test_the_validator_catches_a_broken_transformation_file(tmp_path: Path) -> N
         "transformation 'bookworm': no wiki page and revision",
         "transformation 'spun': repeated id in items",
         "transformation 'super-bum': counts nothing",
-        "transformation 'necromancer': items must be a list, empty if none",
-        "transformation 'seraphim': plusTrinkets must be a list, empty if none",
         "transformations: duplicate id: leviathan",
         # The built tags no longer match the file: build was not run.
         "item 'Infestation': transformations differs from transformations.json (run build)",
         "item 'Bum Friend': transformations differs from transformations.json (run build)",
     ):
         assert expected in problems
+
+
+def test_a_transformation_without_its_four_lists_is_named_not_crashed_on(tmp_path: Path) -> None:
+    """Review findings (CodeRabbit, PR #7): the browser reads every list with no default, so a missing one
+    crashed the build summary while build and validate read it as empty; then a null one crashed validate
+    itself, in the tag step, before it could say which transformation was wrong."""
+    script = load_gamedata_script()
+    copy = tmp_path / "data"
+    shutil.copytree(REPO / "data", copy)
+    doc = json.loads((copy / "transformations.json").read_text(encoding="utf-8"))
+    sets = {t["id"]: t for t in doc["transformations"]}
+    del sets["necromancer"]["items"]
+    sets["seraphim"]["plusTrinkets"] = "none"
+    sets["oh-crap"]["trinkets"] = None
+    (copy / "transformations.json").write_text(json.dumps(doc), encoding="utf-8")
+
+    problems = script.validate(copy)
+    for expected in (
+        "transformation 'necromancer': items must be a list, empty if none",
+        "transformation 'seraphim': plusTrinkets must be a list, empty if none",
+        "transformation 'oh-crap': trinkets must be a list, empty if none",
+    ):
+        assert expected in problems
+    # Tags from a malformed file would be wrong, so none are compared: no "(run build)" noise.
+    assert not [p for p in problems if "run build" in p]
+    # build stops with the same words instead of a TypeError (at the first malformed one; here the null).
+    with pytest.raises(ValueError, match="transformation 'oh-crap': trinkets must be a list, empty if none"):
+        script.transformation_tags([sets["oh-crap"]])
 
 
 def test_slugs_and_text_repair() -> None:

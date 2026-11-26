@@ -25,7 +25,7 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
 | same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 70 of 70 pass (stickers, feature, spotlight, band, ink, tints, outlines; light and dark) |
 | `npm run build` | `web/` | builds; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
-| `.venv\Scripts\python -m pytest --cov` | `api/` | 130 passed; 99% of `app/` |
+| `.venv\Scripts\python -m pytest --cov` | `api/` | 131 passed; 99% of `app/` |
 | `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
 | CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off` | GitHub Actions | 13 of 13 on PR #5 (log read: health answered with 719 items) |
 | `app.smoke https://web-production-6d147b3c.up.railway.app --ai off --indexable --site-url https://isaac.toys` | `api/`, the live site | 13 of 13, 2026-11-25, before the key was set |
@@ -121,7 +121,9 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
 - CodeRabbit's review of PR #7 (findings in PR #6's code), each red before its fix: outside production a
   `googlebot: noindex` alone passed as noindex; in production `max-image-preview: none` failed as if it were
   `none`; a transformation with its `items` list deleted, or a string for a list, passed `validate` (the
-  browser would crash reading it). The live site still passes `app.smoke` 12 of 12 under the new parser.
+  browser would crash reading it). Its follow-up: a `null` list crashed `validate` itself with a TypeError
+  in the tag step; now each malformed list is named, no tags are compared, and `build` stops with the same
+  words. The live site still passes `app.smoke` 12 of 12 under the new parser.
 - Favicon, 2026-11-26: the first draft drew nothing in Chrome, because its comment held `--` and so was not
   XML. `src/publicFiles.test.ts` now parses it; a copy with that comment put back fails it. The final file
   was rendered in Chrome at 16 to 256px on light and dark tab bars, and the built site serves it as
