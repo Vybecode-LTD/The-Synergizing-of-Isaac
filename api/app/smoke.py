@@ -169,13 +169,37 @@ def check_headers(fetch: Fetch, options: Options) -> None:
         headers = get(fetch, path, status).headers
         expect("script-src 'self'" in headers.get("content-security-policy", ""), f"{path} has no script policy")
         expect(headers.get("x-content-type-options") == "nosniff", f"{path} lets the browser sniff types")
-        noindex = bool({"noindex", "none"} & robots_directives(headers.get("x-robots-tag", "")))
-        expect(noindex != options.indexable, f"{path} {'is' if noindex else 'is not'} marked noindex")
+        rules = robots_directives(headers.get("x-robots-tag", ""))
+        if options.indexable:
+            # Production: no crawler may be kept out, the ones named alone included.
+            kept_out = sorted(c or "every crawler" for c, d in rules if d in ("noindex", "none"))
+            expect(not kept_out, f"{path} is marked noindex for {', '.join(kept_out)}")
+        else:
+            # Anywhere else every crawler must be kept out: a rule for one crawler leaves the rest in.
+            expect(bool({("", "noindex"), ("", "none")} & rules), f"{path} is not marked noindex for every crawler")
 
 
-def robots_directives(header: str) -> set[str]:
-    """X-Robots-Tag directives in lower case, any "botname:" in front dropped: "noindex, nofollow" is both."""
-    return {part.split(":", 1)[-1].strip().lower() for part in header.split(",") if part.strip()}
+# Directives that take a value after a colon, so the word before it is not a crawler's name.
+PARAMETERED = {"max-snippet", "max-image-preview", "max-video-preview", "unavailable_after"}
+
+
+def robots_directives(header: str) -> set[tuple[str, str]]:
+    """X-Robots-Tag as (crawler, directive) pairs in lower case; the crawler is "" for a rule for all.
+
+    "otherbot: noindex, nofollow" scopes both to otherbot, as Google reads it, and "max-image-preview: none"
+    is one directive with a value, not "none".
+    """
+    found: set[tuple[str, str]] = set()
+    crawler = ""
+    for raw in header.lower().split(","):
+        part = raw.strip()
+        name, colon, rest = part.partition(":")
+        if colon and name.strip() not in PARAMETERED:
+            crawler, part = name.strip(), rest.strip()
+            name = part.partition(":")[0]
+        if part:
+            found.add((crawler, name.strip() if name.strip() in PARAMETERED else part))
+    return found
 
 
 def check_analyze_is_off(fetch: Fetch, options: Options) -> None:

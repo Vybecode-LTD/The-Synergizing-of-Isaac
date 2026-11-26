@@ -470,6 +470,12 @@ def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict])
             problems.append(f"{where}: needs must be a whole number above 0")
         if not t.get("page") or type(t.get("revision")) is not int:
             problems.append(f"{where}: no wiki page and revision to source it")
+        # The browser reads all four lists with no default: a missing one crashes the build summary.
+        malformed = [f for fields in TRANSFORMATION_FIELDS.values() for f, _ in fields if not isinstance(t.get(f), list)]
+        for field in malformed:
+            problems.append(f"{where}: {field} must be a list, empty if none")
+        if malformed:
+            continue
         if not any(t.get(f) for fields in TRANSFORMATION_FIELDS.values() for f, _ in fields):
             problems.append(f"{where}: counts nothing")
         for kind, ((rep, _), (plus, _)) in TRANSFORMATION_FIELDS.items():

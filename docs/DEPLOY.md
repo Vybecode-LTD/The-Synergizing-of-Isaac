@@ -71,6 +71,9 @@ secret header set by a Cloudflare rule, or Cloudflare's address ranges), and rem
    `*.up.railway.app` address until the custom domain verifies. A saved answer comes back before any
    allowance is counted, so **every probe uses a build nobody has asked for before**, and its answer must
    say `"cached": false`. Ask for five such builds from one connection; a sixth new one must answer 429.
+   **Every 429 here counts only with `detail.code` `"rate_limited"`** (the visitor's allowance). The site's
+   daily cap answers 429 too, with `"budget_exhausted"`, whoever asks: that proves nothing about visitors,
+   so wait for the next UTC day (7 pm EST) and repeat.
    Then forge each header the limiter could believe, each with another new build (items 2 and 3 here, if
    they were not among the six):
    `curl -X POST <site>/api/analyze -H "content-type: application/json" -H "x-forwarded-for: 1.2.3.4" -d "{\"items\":[2]}"`

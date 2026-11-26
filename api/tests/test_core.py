@@ -329,6 +329,10 @@ def test_the_validator_catches_a_broken_transformation_file(tmp_path: Path) -> N
     sets["bookworm"]["revision"] = True
     sets["spun"]["items"].append(sets["spun"]["items"][0])
     sets["super-bum"].update(items=[], trinkets=[], plusItems=[], plusTrinkets=[])
+    # Review finding (CodeRabbit, PR #7): the browser reads every list with no default, so a missing one
+    # crashed the build summary while build and validate quietly read it as empty.
+    del sets["necromancer"]["items"]
+    sets["seraphim"]["plusTrinkets"] = "none"
     doc["transformations"].append(dict(sets["leviathan"]))
     (copy / "transformations.json").write_text(json.dumps(doc), encoding="utf-8")
 
@@ -342,6 +346,8 @@ def test_the_validator_catches_a_broken_transformation_file(tmp_path: Path) -> N
         "transformation 'bookworm': no wiki page and revision",
         "transformation 'spun': repeated id in items",
         "transformation 'super-bum': counts nothing",
+        "transformation 'necromancer': items must be a list, empty if none",
+        "transformation 'seraphim': plusTrinkets must be a list, empty if none",
         "transformations: duplicate id: leviathan",
         # The built tags no longer match the file: build was not run.
         "item 'Infestation': transformations differs from transformations.json (run build)",

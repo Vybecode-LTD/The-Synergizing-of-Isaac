@@ -170,10 +170,36 @@ def test_a_combined_robots_header_still_counts_as_noindex(make_client: Callable[
 
         return fetch
 
-    for value in ("NoIndex, nofollow", "googlebot: noindex", "none"):
+    for value in ("NoIndex, nofollow", "googlebot: noindex", "none", "otherbot: nofollow, noindex"):
         assert failures(smoke.run(with_header(live, value), LIVE)) == {"headers"}, value
     # Control: outside production the same combined value is what is wanted.
     assert failures(smoke.run(with_header(ci, "noindex, nofollow"), CI)) == set()
+
+    # Review findings (CodeRabbit, PR #7). A rule for one crawler does not keep the others out, so outside
+    # production only an unscoped noindex will do; and "max-image-preview: none" is about image previews,
+    # not indexing, so production may send it.
+    for value in ("googlebot: noindex", "googlebot: none", "nofollow", "max-image-preview: none"):
+        assert failures(smoke.run(with_header(ci, value), CI)) == {"headers"}, value
+    for value in ("max-image-preview: none", "max-snippet: 20, max-image-preview: large", "googlebot: max-snippet: 5"):
+        assert failures(smoke.run(with_header(live, value), LIVE)) == set(), value
+
+
+@pytest.mark.parametrize(
+    ("header", "directives"),
+    [
+        ("noindex, nofollow", {("", "noindex"), ("", "nofollow")}),
+        ("GoogleBot: NoIndex", {("googlebot", "noindex")}),
+        ("otherbot: noindex, nofollow", {("otherbot", "noindex"), ("otherbot", "nofollow")}),
+        ("max-image-preview: none", {("", "max-image-preview")}),
+        ("googlebot: max-snippet: 20, none", {("googlebot", "max-snippet"), ("googlebot", "none")}),
+        ("unavailable_after: 2026-12-31, noindex", {("", "unavailable_after"), ("", "noindex")}),
+        ("", set()),
+    ],
+)
+def test_robots_directives_keep_their_crawler_and_their_parameters_apart(
+    header: str, directives: set[tuple[str, str]]
+) -> None:
+    assert smoke.robots_directives(header) == directives
 
 
 def test_analyze_is_never_asked_of_a_site_whose_health_says_ai_is_on(
