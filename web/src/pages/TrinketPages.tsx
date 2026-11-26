@@ -8,7 +8,7 @@ import { SynergyCard } from "../components/SynergyCard";
 import { MAX_TRINKETS, addTrinket } from "../engine/buildCodec";
 import { gameData } from "../engine/data";
 import { matchScore } from "../engine/search";
-import { statLines } from "../engine/summary";
+import { statLines, transformationNames } from "../engine/summary";
 import { synergiesFor } from "../engine/synergy";
 import { useBuildStore } from "../hooks/BuildStore";
 import { usePage } from "../hooks/usePage";
@@ -63,6 +63,11 @@ export function TrinketPage() {
 
   const inBuild = build.trinkets.includes(trinket.id);
   const buildFull = build.trinkets.length >= MAX_TRINKETS;
+  const transformations = transformationNames(
+    trinket,
+    gameData.transformations,
+    pageContent.copy.repentancePlusOnly,
+  );
 
   return (
     <div className="page">
@@ -81,6 +86,14 @@ export function TrinketPage() {
             {trinket.effect || `${pageContent.fallbacks.trinketEffect}.`}
           </p>
           <StatChips lines={statLines(trinket.stats)} />
+          {transformations && (
+            <dl className="facts">
+              <div className="facts__row">
+                <dt className="facts__label">{pageContent.copy.countsToward}</dt>
+                <dd className="facts__value">{transformations}</dd>
+              </div>
+            </dl>
+          )}
           <div className="entity__actions">
             {inBuild ? (
               <Link className="button" data-variant="primary" to="/">

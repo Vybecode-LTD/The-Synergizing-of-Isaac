@@ -354,7 +354,10 @@
   "slug": "a-missing-page",
   "name": "A Missing Page",
   "dlc": "Rebirth",
-  "effect": "Chance to do Necronomicon effect (80 dmg) on hit"
+  "effect": "Chance to do Necronomicon effect (80 dmg) on hit",
+  "transformationsPlus": [
+   "necromancer"
+  ]
  },
  {
   "id": 49,
@@ -523,7 +526,7 @@
   "name": "Bob's Bladder",
   "dlc": "Afterbirth",
   "effect": "Bombs make green creep",
-  "transformations": [
+  "transformationsPlus": [
    "bob"
   ]
  },

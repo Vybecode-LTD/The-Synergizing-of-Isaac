@@ -1,0 +1,383 @@
+{
+ "source": "https://bindingofisaacrebirth.wiki.gg/",
+ "checked": "2026-11-25",
+ "about": "Each transformation's items and trinkets from its wiki page's Requirements section. items and trinkets count in Repentance; plusItems and plusTrinkets count only in Repentance+. Edited by hand; scripts/gamedata.py build copies the tags onto items.json and trinkets.json.",
+ "transformations": [
+  {
+   "id": "guppy",
+   "name": "Guppy",
+   "needs": 3,
+   "page": "Guppy",
+   "revision": 262417,
+   "items": [
+    81,
+    133,
+    134,
+    145,
+    187,
+    212,
+    665
+   ],
+   "trinkets": [
+    169
+   ],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "beelzebub",
+   "name": "Beelzebub",
+   "needs": 3,
+   "page": "Beelzebub",
+   "revision": 266812,
+   "items": [
+    9,
+    10,
+    57,
+    128,
+    151,
+    248,
+    264,
+    272,
+    274,
+    279,
+    320,
+    364,
+    365,
+    426,
+    430,
+    434,
+    461,
+    492,
+    511,
+    581,
+    629,
+    649,
+    650,
+    693
+   ],
+   "trinkets": [],
+   "plusItems": [
+    148
+   ],
+   "plusTrinkets": []
+  },
+  {
+   "id": "fun-guy",
+   "name": "Fun Guy",
+   "needs": 3,
+   "page": "Fun Guy",
+   "revision": 269273,
+   "items": [
+    11,
+    12,
+    71,
+    120,
+    121,
+    342,
+    398,
+    553,
+    582,
+    625
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "seraphim",
+   "name": "Seraphim",
+   "needs": 3,
+   "page": "Seraphim (Transformation)",
+   "revision": 269816,
+   "items": [
+    33,
+    72,
+    101,
+    142,
+    162,
+    173,
+    182,
+    184,
+    185,
+    313,
+    331,
+    374,
+    568,
+    573,
+    643,
+    691,
+    696
+   ],
+   "trinkets": [],
+   "plusItems": [
+    390
+   ],
+   "plusTrinkets": []
+  },
+  {
+   "id": "bob",
+   "name": "Bob",
+   "needs": 3,
+   "page": "Bob",
+   "revision": 262459,
+   "items": [
+    42,
+    140,
+    149,
+    273
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": [
+    71
+   ]
+  },
+  {
+   "id": "spun",
+   "name": "Spun",
+   "needs": 3,
+   "page": "Spun",
+   "revision": 269952,
+   "items": [
+    13,
+    14,
+    70,
+    143,
+    240,
+    345,
+    493,
+    496
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "yes-mother",
+   "name": "Yes Mother?",
+   "needs": 3,
+   "page": "Yes Mother?",
+   "revision": 262431,
+   "items": [
+    29,
+    30,
+    31,
+    39,
+    41,
+    55,
+    102,
+    110,
+    114,
+    139,
+    195,
+    199,
+    200,
+    217,
+    228,
+    355,
+    439,
+    508,
+    552,
+    604,
+    732
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "conjoined",
+   "name": "Conjoined",
+   "needs": 3,
+   "page": "Conjoined",
+   "revision": 262491,
+   "items": [
+    8,
+    67,
+    95,
+    100,
+    112,
+    113,
+    163,
+    167,
+    174,
+    188,
+    265,
+    267,
+    268,
+    269,
+    275,
+    322,
+    360,
+    363,
+    390,
+    404,
+    431,
+    435,
+    472,
+    491,
+    518,
+    607,
+    608,
+    652,
+    661,
+    679,
+    698
+   ],
+   "trinkets": [],
+   "plusItems": [
+    519
+   ],
+   "plusTrinkets": []
+  },
+  {
+   "id": "leviathan",
+   "name": "Leviathan",
+   "needs": 3,
+   "page": "Leviathan",
+   "revision": 262479,
+   "items": [
+    51,
+    79,
+    80,
+    82,
+    83,
+    118,
+    159,
+    230,
+    399,
+    556,
+    572
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "oh-crap",
+   "name": "Oh Crap",
+   "needs": 3,
+   "page": "Oh Crap",
+   "revision": 269205,
+   "items": [
+    9,
+    36,
+    209,
+    236,
+    291,
+    378,
+    504,
+    543,
+    576,
+    680
+   ],
+   "trinkets": [],
+   "plusItems": [
+    725
+   ],
+   "plusTrinkets": []
+  },
+  {
+   "id": "bookworm",
+   "name": "Bookworm",
+   "needs": 3,
+   "page": "Bookworm",
+   "revision": 262546,
+   "items": [
+    33,
+    34,
+    35,
+    58,
+    65,
+    78,
+    97,
+    123,
+    192,
+    282,
+    287,
+    292,
+    545,
+    584,
+    712
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "spider-baby",
+   "name": "Spider Baby",
+   "needs": 3,
+   "page": "Spider Baby (Transformation)",
+   "revision": 262550,
+   "items": [
+    89,
+    153,
+    170,
+    171,
+    211,
+    234,
+    248,
+    266,
+    280,
+    288,
+    367,
+    377,
+    403,
+    461,
+    575,
+    717
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "stompy",
+   "name": "Stompy",
+   "needs": 3,
+   "page": "Stompy",
+   "revision": 274268,
+   "items": [
+    12,
+    302
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": [],
+   "note": "One Makes You Larger pills count too."
+  },
+  {
+   "id": "super-bum",
+   "name": "Super Bum",
+   "needs": 3,
+   "page": "Super Bum",
+   "revision": 269131,
+   "items": [
+    144,
+    278,
+    388
+   ],
+   "trinkets": [],
+   "plusItems": [],
+   "plusTrinkets": []
+  },
+  {
+   "id": "necromancer",
+   "name": "Necromancer",
+   "needs": 3,
+   "page": "Necromancer",
+   "revision": 262562,
+   "items": [],
+   "trinkets": [],
+   "plusItems": [
+    35,
+    262
+   ],
+   "plusTrinkets": [
+    48
+   ]
+  }
+ ]
+}

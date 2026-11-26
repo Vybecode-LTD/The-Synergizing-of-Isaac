@@ -87,7 +87,9 @@
     "examplesLede": "Type an item’s name in the box, or open one of these to see how it works:",
     "browseAll": "Browse all {synergies} synergies",
     "startingItemsNote": "Starting items come from the game’s own character table. Items the game hands out in code, such as an unlockable starting item, aren’t listed.",
-    "noStartingItems": "No items listed in the game's character table."
+    "noStartingItems": "No items listed in the game's character table.",
+    "countsToward": "Counts toward",
+    "repentancePlusOnly": "{name} (Repentance+ only)"
   },
   "fallbacks": {
     "itemEffect": "A stat item that only changes your numbers",

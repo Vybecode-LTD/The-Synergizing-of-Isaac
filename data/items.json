@@ -137,7 +137,8 @@
   "effect": "Flies won't attack you",
   "quality": 0,
   "transformations": [
-   "beelzebub"
+   "beelzebub",
+   "oh-crap"
   ],
   "pools": [
    "shellGame"
@@ -191,7 +192,8 @@
    "redHearts": 1
   },
   "transformations": [
-   "fun-guy"
+   "fun-guy",
+   "stompy"
   ],
   "pools": [
    "treasure",
@@ -567,6 +569,9 @@
   "quality": 1,
   "transformations": [
    "bookworm"
+  ],
+  "transformationsPlus": [
+   "necromancer"
   ],
   "pools": [
    "devil",
@@ -2249,7 +2254,7 @@
   "dlc": "Rebirth",
   "effect": "Spawns 2-6 blue flies when hit",
   "quality": 0,
-  "transformations": [
+  "transformationsPlus": [
    "beelzebub"
   ],
   "pools": [
@@ -3925,6 +3930,9 @@
   "stats": {
    "blackHearts": 1
   },
+  "transformationsPlus": [
+   "necromancer"
+  ],
   "pools": [
    "demonBeggar",
    "devil",
@@ -4511,6 +4519,9 @@
   "dlc": "Rebirth",
   "effect": "Crush rocks",
   "quality": 1,
+  "transformations": [
+   "stompy"
+  ],
   "pools": [
    "treasure"
   ],
@@ -5777,7 +5788,9 @@
   "effect": "Familiar (10 dmg, homing tears)",
   "quality": 3,
   "transformations": [
-   "conjoined",
+   "conjoined"
+  ],
+  "transformationsPlus": [
    "seraphim"
   ],
   "pools": [
@@ -7553,7 +7566,7 @@
   "dlc": "Booster Pack #1",
   "effect": "Familiar, transforms into a random familiar every 10 seconds",
   "quality": 2,
-  "transformations": [
+  "transformationsPlus": [
    "conjoined"
   ],
   "pools": [
@@ -10224,7 +10237,7 @@
   "dlc": "Repentance",
   "effect": "Causes you to throw a random type of poop at random intervals + chance to have Explosive Diarrhea when standing still",
   "quality": 0,
-  "transformations": [
+  "transformationsPlus": [
    "oh-crap"
   ],
   "pools": [

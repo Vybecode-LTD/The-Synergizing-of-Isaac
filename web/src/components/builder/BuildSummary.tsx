@@ -1,5 +1,5 @@
 import { gameData } from "../../engine/data";
-import { totalStats, transformationProgress } from "../../engine/summary";
+import { progressText, totalStats, transformationProgress } from "../../engine/summary";
 import { effectiveItems } from "../../engine/synergy";
 import type { Build } from "../../engine/types";
 import { StatChips } from "../Badges";
@@ -9,7 +9,7 @@ export function BuildSummary({ build }: { build: Build }) {
   const items = [...effectiveItems(build, gameData)].map((id) => gameData.itemById.get(id)!);
   const trinkets = build.trinkets.map((id) => gameData.trinketById.get(id)!);
   const stats = totalStats([...items, ...trinkets]);
-  const transformations = transformationProgress(items);
+  const transformations = transformationProgress([...items, ...trinkets], gameData.transformations);
   if (stats.length === 0 && transformations.length === 0) return null;
 
   return (
@@ -28,13 +28,18 @@ export function BuildSummary({ build }: { build: Build }) {
             {transformations.map((t) => (
               <li key={t.id} className="transformation" data-done={t.done}>
                 <span className="transformation__name">{t.name}</span>
-                <span className="transformation__count">
-                  {Math.min(t.count, t.needs)} of {t.needs}
-                  {t.done ? ", transformed" : ""}
-                </span>
+                <span className="transformation__count">{progressText(t)}</span>
               </li>
             ))}
           </ul>
+          {transformations
+            .filter((t) => t.note)
+            .map((t) => (
+              <p key={t.id} className="summary__note">
+                {t.name}: {t.note}
+              </p>
+            ))}
+          <p className="summary__note">Counted as Repentance counts them.</p>
         </div>
       )}
     </section>

@@ -136,8 +136,9 @@ Every entry in the list has now been checked once.
 **Left open by the wiki:** what 20/20 + Polyphemus does to damage (the two pages disagree); how often Tech X
 rings block shots with Lost Contact (the wiki asks for more testing); Mom's Eye + Monstro's Lung (the
 Monstro's Lung page's Repentance line is followed); Halo of Flies + Infestation + Skatole completes
-Beelzebub only in Repentance+. The roster's transformation tags come from the item tracker and follow
-Repentance+ in places (Infestation counts toward Beelzebub there); `items.json` was not changed here.
+Beelzebub only in Repentance+. The roster's transformation tags came from the item tracker and followed
+Repentance+ in places (Infestation counted toward Beelzebub there); since decision 0006 they come from the
+wiki's Repentance lists in `transformations.json`, with the Repentance+ differences marked.
 
 | Entry | Members | Rating | Verdict | Why |
 |---|---|---|---|---|

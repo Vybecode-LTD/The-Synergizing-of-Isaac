@@ -57,6 +57,7 @@ class GameData:
     trinket_by_id: dict[int, dict[str, Any]] = field(default_factory=dict)
     trinket_by_slug: dict[str, dict[str, Any]] = field(default_factory=dict)
     character_by_slug: dict[str, dict[str, Any]] = field(default_factory=dict)
+    transformations: list[dict[str, Any]] = field(default_factory=list)
 
     @classmethod
     def load(cls, path: Path) -> GameData:
@@ -91,9 +92,20 @@ class GameData:
             trinket_by_id={t["id"]: t for t in trinkets},
             trinket_by_slug={t["slug"]: t for t in trinkets},
             character_by_slug={c["slug"]: c for c in characters},
+            transformations=read("transformations.json")["transformations"],
         )
 
     # ------------------------------------------------------------ rules
+
+    def transformation_names(self, record: dict[str, Any]) -> str:
+        """What a pickup counts toward, as both sides write it: "Conjoined, Seraphim (Repentance+ only)".
+
+        Mirrors `transformationNames` in web/src/engine/summary.ts."""
+        names = {t["id"]: t["name"] for t in self.transformations}
+        plus_only = self.content["pages"]["copy"]["repentancePlusOnly"]
+        parts = [names.get(t, t) for t in record.get("transformations", [])]
+        parts += [plus_only.replace("{name}", names.get(t, t)) for t in record.get("transformationsPlus", [])]
+        return ", ".join(parts)
 
     def effective_items(self, build: Build) -> set[int]:
         """What the build really has: the picks plus what the character starts with."""

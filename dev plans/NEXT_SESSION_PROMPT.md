@@ -1,57 +1,58 @@
-# Starting prompt — isaac.toys (written 2026-11-25, end of the fifth session)
+# Starting prompt — isaac.toys (written 2026-11-25, sixth session)
 
 Work in `C:\DEV\The-Synergizing-of-Isaac`. Read `CLAUDE.md` (project), then `docs/HANDOFF.md`. This file
 says what to do next; those say what exists.
 
 ## 1. What this is
 `isaac.toys`: a free web companion for *The Binding of Isaac: Repentance*. React app in `web/`, FastAPI in
-`api/`, game data in `data/`. Runs only locally (web 5273, built site 8001). Not deployed.
+`api/`, game data in `data/`. **Deployed on Railway** (project `isaac.toys`; ids in `docs/DEPLOY.md`), live at
+<https://web-production-6d147b3c.up.railway.app>. Railway deploys every push to `main`.
 
 ## 2. Rules beyond `CLAUDE.md`
-- **Never deploy, create a Railway project, set a variable or merge without the owner's explicit OK.**
-- Never list Railway variables (it prints the Anthropic key). Never put a key in `web/`.
-- Synergy facts come from the wiki's Repentance lines (`data/synergy-checks.md`). No facts from memory.
+- **Never merge, change Railway settings or variables, or spend on the AI without the owner's explicit OK.**
+- Never list Railway variables (MCP `list-variables` or CLI): it prints the Anthropic key.
+- Game facts come from the wiki for Repentance (`data/synergy-checks.md`, `data/transformations.json`).
+- A data PR waits for CodeRabbit before merging: merging first cancels its review for good.
 
 ## 3. State when this was written (verify before trusting it)
-- `main`: `45bea2a`. **PR #4** (every A, B and C synergy checked against the wiki; the list is 442) was
-  **merged by the owner's yes** on 2026-11-25, on green CI (web and API jobs). No PR is open.
-- Reviews of #4: Codex found nothing. CodeRabbit's was cancelled by the merge ("the pull request is
-  closed"), so it never reviewed #4. Wait for CodeRabbit before merging a data PR.
-- Checkout: `main`, in sync with `origin/main`. **Uncommitted on purpose:** this file, `docs/HANDOFF.md`
-  and `CLAUDE.md`'s Current state, refreshed after the merge. Carry them into your first branch.
-- Merged branches still exist locally and on GitHub: `feat/toy-box`, `data/check-sd-synergies`,
-  `feat/web-app`, `data/check-abc-synergies`. Deleting them is the owner's call.
+- `main`: `1c536f2` (PR #5 merged). PR #6 (`data/transformations-repentance`, decision 0006) open; check its
+  CI and CodeRabbit with `gh pr checks 6`.
+- Live deployment: `main` at `1c536f2`, `app.smoke` 13 of 13 with AI off.
+- Waiting on the owner: the Anthropic key in Railway, and the CNAME and TXT for `isaac.toys` at Spaceship
+  (records in `docs/DEPLOY.md`). Check with MCP `domain-status` and `/api/health` (`"ai"`).
 
 ## 4. First job, then the order
-1. **Ask the owner what is next:** deploy (`docs/DEPLOY.md` and its seven checks, only on their word),
-   or the transformation question below. Commit the uncommitted refresh with the first branch's work.
-2. A reviewer's game fact is a claim, not a source: check any later review finding against the wiki.
-3. Then the HANDOFF's next steps 3 and 4 (transformation tags that follow Repentance+; an end-to-end smoke
-   test and a Docker build in CI).
+1. If the key is in (`/api/health` says `"ai": true`): from `api/`,
+   `.venv\Scripts\python -m app.smoke https://web-production-6d147b3c.up.railway.app --ai on --indexable --site-url https://isaac.toys`,
+   then **ask the owner** before `docs/DEPLOY.md` check 3 (limit behind the edge, with builds nobody has
+   asked for; five paid analyses) and check 4 (a redeploy, then a cached answer). Both run on the Railway
+   address above until `isaac.toys` verifies.
+2. PR #6: green CI and CodeRabbit read, then ask the owner to merge. After the deploy, `/items/infestation`
+   must say "Beelzebub (Repentance+ only)".
+3. When `isaac.toys` verifies: `app.smoke https://isaac.toys ...`, then the owner submits the sitemap
+   (check 5).
+4. Then `docs/HANDOFF.md` next step 4.
 
 ## 5. Waiting on the owner (ask, do not decide)
-- Deploy (said "not yet" on 2026-11-24)? The 301 from `issac.toys` is theirs at Spaceship. Delete the four
-  merged branches? Should the builder count transformations as Repentance does, rather
-  than as the item tracker's Repentance+ tags do?
+- Merge PR #6? Switch on Railway's "Wait for CI" for the service (dashboard toggle)? Rename the items whose
+  names follow the tracker's older spellings ("1UP", "Number two")?
 
 ## 6. Environment and traps
-- Start, from the repo root: `cd web; npm run check`, then `cd ../api; .venv\Scripts\python -m pytest --cov`.
-- The wiki's API answers through Python only with `truststore` (in `api\.venv`, not with `python -I` on the
-  global interpreter). Its version marks are `{{dlc|<range>}}`, read along Rebirth, a, a+, r, r+; `nr` means
-  older versions only. A parent marked `nr` with a child marked `r` is how it writes "changed in Repentance".
-- Restart the 8001 server after every `npm run build` (it caches the old `index.html`).
-- `tokens.css` writes the dark roles twice; edit both.
+- Start: `cd web; npm run check`, then `cd ../api; .venv\Scripts\python -m pytest --cov`.
+- The wiki's API answers through Python only with `truststore` (in `api\.venv`). Its version marks
+  `{{dlc|...}}` run along Rebirth, a, a+, r, r+: `x` means from x on, `nx` means before x.
+- The wiki's "Seraphim" and "Spider Baby" redirect to the items; the transformations are "... (Transformation)".
+- A new service can't opt into `railway.toml`: the healthcheck and Dockerfile path are set on the service.
+- Restart the 8001 server after every `npm run build`.
 
 ## 7. Where things are
-Decisions `docs/decisions/0001`–`0005`, next free `0006`. Contracts: `dev plans/contracts/`. Evidence:
-`docs/TESTING.md`, `docs/HANDOFF.md`, `data/synergy-checks.md`. Memory: the project's `MEMORY.md`.
+Decisions `docs/decisions/0001`–`0006`, next free `0007`. Contracts: `dev plans/contracts/`. Evidence:
+`docs/TESTING.md`. Deploy facts: `docs/DEPLOY.md`. Memory: the project's `MEMORY.md`.
 
 ## 8. Promotion candidates for `knowledge/` (owner approves)
-1. A fact-check of hundreds of entries: extract the evidence by script, split it across parallel checkers
-   with one written brief, then review every change against its source line. A checker's arithmetic can
-   use the wrong baseline (Ipecac + Soy Milk was compared with base fire rate, not with Ipecac alone).
-2. Matching item names in text: longest name first across the whole roster (Technology vs Technology 2),
-   cache pages by kind (item and trinket Cancer differ), and check a plain title is not a boss's page.
-3. Merging while CodeRabbit's check runs cancels its review for good (PR #4); wait for it on data PRs.
-4. Earlier ones: memory notes `fourth-session-promotion-candidates`, `third-session-promotion-candidates`,
-   `earlier-promotion-candidates`.
+1. Python 3.12 and slim images know neither `.webp` nor `.woff2`: serve built files from a type table.
+2. A smoke checker in the standard library, tested with one deliberate break per check, runs against the
+   CI image and the live site alike.
+3. Railway via the connector: an empty service, then variables, volume and healthcheck, then the source,
+   so the first build has everything; read the deploy log for the builder and the healthcheck.
+4. Earlier: `fifth-session-promotion-candidates` and older memory notes.

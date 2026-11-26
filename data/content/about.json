@@ -28,7 +28,8 @@
         { "p": ["The site covers {items} items, {trinkets} trinkets, {characters} characters and {synergies} synergies. The data was last updated on {updated}."] },
         {
           "ul": [
-            ["Item and trinket names, IDs, effects, stat changes and transformations come from the open-source ", { "text": "Rebirth Item Tracker", "href": "https://github.com/Rchardon/RebirthItemTracker" }, " (BSD 2-Clause, copyright Brett824, Hyphen-ated and Gamonymous)."],
+            ["Item and trinket names, IDs, effects and stat changes come from the open-source ", { "text": "Rebirth Item Tracker", "href": "https://github.com/Rchardon/RebirthItemTracker" }, " (BSD 2-Clause, copyright Brett824, Hyphen-ated and Gamonymous)."],
+            ["Which items and trinkets count toward each transformation comes from the ", { "text": "Binding of Isaac wiki", "href": "https://bindingofisaacrebirth.wiki.gg/" }, " for Repentance. What counts only in Repentance+ is marked."],
             ["Quality, item pools and starting items are the numbers in the game's own data files for Repentance 1.7.9b."],
             ["The synergies were written by hand, and every one was checked against the ", { "text": "Binding of Isaac wiki", "href": "https://bindingofisaacrebirth.wiki.gg/" }, " for Repentance on 24 and 25 November 2026. Where the wiki says nothing about a pair, it was checked against each item's own effects."]
           ]

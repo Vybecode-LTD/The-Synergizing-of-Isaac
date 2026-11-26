@@ -1,4 +1,4 @@
-import type { Item, StatKey, Stats, Trinket } from "./types";
+import type { Item, StatKey, Stats, Transformation, Trinket } from "./types";
 
 export const STAT_LABELS: Record<StatKey, string> = {
   damage: "Damage",
@@ -76,48 +76,78 @@ export function totalStats(entries: readonly (Item | Trinket)[]): StatLine[] {
   return statLines(totals);
 }
 
-export const TRANSFORMATION_NAMES: Record<string, string> = {
-  guppy: "Guppy",
-  beelzebub: "Beelzebub",
-  "fun-guy": "Fun Guy",
-  seraphim: "Seraphim",
-  bob: "Bob",
-  spun: "Spun",
-  "yes-mother": "Yes Mother?",
-  conjoined: "Conjoined",
-  leviathan: "Leviathan",
-  "oh-crap": "Oh Crap",
-  bookworm: "Bookworm",
-  "spider-baby": "Spider Baby",
-  "super-bum": "Super Bum",
-};
-
-/** Every transformation takes three of its items. */
-export const TRANSFORMATION_NEEDS = 3;
-
 export interface TransformationProgress {
   id: string;
   name: string;
+  /** Pickups that count in Repentance. */
   count: number;
+  /** Pickups that count only in Repentance+, on top of `count`. */
+  plus: number;
   needs: number;
   done: boolean;
+  doneInPlus: boolean;
+  /** The transformation exists only in Repentance+ (Necromancer). */
+  plusOnly: boolean;
+  note?: string;
 }
 
-/** Progress toward each transformation the build has started, closest first. */
-export function transformationProgress(items: readonly Item[]): TransformationProgress[] {
-  const counts = new Map<string, number>();
-  for (const item of items) {
-    for (const id of item.transformations ?? []) counts.set(id, (counts.get(id) ?? 0) + 1);
+/**
+ * Progress toward each transformation the build has started, counted as Repentance counts it, with what
+ * Repentance+ adds (decision 0006). Items and trinkets both count where the game counts them. Closest first.
+ */
+export function transformationProgress(
+  entries: readonly (Item | Trinket)[],
+  transformations: readonly Transformation[],
+): TransformationProgress[] {
+  const counts = new Map<string, { count: number; plus: number }>();
+  const tally = (id: string) => counts.get(id) ?? counts.set(id, { count: 0, plus: 0 }).get(id)!;
+  for (const entry of entries) {
+    for (const id of entry.transformations ?? []) tally(id).count += 1;
+    for (const id of entry.transformationsPlus ?? []) tally(id).plus += 1;
   }
-  return [...counts.entries()]
-    .map(([id, count]) => ({
-      id,
-      name: TRANSFORMATION_NAMES[id] ?? id,
-      count,
-      needs: TRANSFORMATION_NEEDS,
-      done: count >= TRANSFORMATION_NEEDS,
-    }))
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  return transformations
+    .filter((t) => counts.has(t.id))
+    .map((t) => {
+      const { count, plus } = counts.get(t.id)!;
+      const plusOnly = t.items.length === 0 && t.trinkets.length === 0;
+      return {
+        id: t.id,
+        name: t.name,
+        count,
+        plus,
+        needs: t.needs,
+        done: !plusOnly && count >= t.needs,
+        doneInPlus: count + plus >= t.needs,
+        plusOnly,
+        ...(t.note ? { note: t.note } : {}),
+      };
+    })
+    .sort((a, b) => b.count - a.count || b.plus - a.plus || a.name.localeCompare(b.name));
+}
+
+/** "2 of 3; 3 of 3 in Repentance+", "3 of 3, transformed", "Repentance+ only: 1 of 3". */
+export function progressText(t: TransformationProgress): string {
+  const of = (n: number) => `${Math.min(n, t.needs)} of ${t.needs}`;
+  if (t.plusOnly) return `Repentance+ only: ${of(t.plus)}${t.doneInPlus ? ", transformed" : ""}`;
+  if (t.done) return `${of(t.count)}, transformed`;
+  return t.plus > 0 ? `${of(t.count)}; ${of(t.count + t.plus)} in Repentance+` : of(t.count);
+}
+
+/**
+ * What a pickup counts toward, as both sides write it: "Conjoined, Seraphim (Repentance+ only)".
+ * Mirrors `GameData.transformation_names` in api/app/gamedata.py; checked through data/tests/parity.json.
+ */
+export function transformationNames(
+  record: Pick<Item, "transformations" | "transformationsPlus">,
+  transformations: readonly Transformation[],
+  plusOnlyTemplate: string,
+): string {
+  const names = new Map(transformations.map((t) => [t.id, t.name]));
+  const name = (id: string) => names.get(id) ?? id;
+  return [
+    ...(record.transformations ?? []).map(name),
+    ...(record.transformationsPlus ?? []).map((id) => plusOnlyTemplate.replace("{name}", name(id))),
+  ].join(", ");
 }
 
 export const POOL_NAMES: Record<string, string> = {

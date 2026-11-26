@@ -209,6 +209,27 @@ def test_stats_are_written_the_way_the_app_writes_them(client: TestClient) -> No
     assert "<li>Tears +1</li>" in client.get("/trinkets/cancer").text
 
 
+# ---------------------------------------------------------------- transformations as Repentance counts them
+
+
+@pytest.mark.parametrize(
+    ("path", "line"),
+    [
+        ("/items/infestation", "<p>Counts toward: Beelzebub (Repentance+ only).</p>"),
+        ("/items/seraphim", "<p>Counts toward: Conjoined, Seraphim (Repentance+ only).</p>"),
+        ("/trinkets/kids-drawing", "<p>Counts toward: Guppy.</p>"),
+        ("/trinkets/bobs-bladder", "<p>Counts toward: Bob (Repentance+ only).</p>"),
+    ],
+)
+def test_a_page_says_what_its_pickup_counts_toward(client: TestClient, path: str, line: str) -> None:
+    """Decision 0006: Repentance's lists, with what counts only in Repentance+ marked, trinkets included."""
+    assert line in client.get(path).text
+
+
+def test_a_pickup_that_counts_toward_nothing_says_nothing(client: TestClient) -> None:
+    assert "Counts toward" not in client.get("/items/the-sad-onion").text
+
+
 # ---------------------------------------------------------------- before the first deploy (2026-11-25)
 
 # Every kind of file `npm run build` writes into web/dist, and the type it must be served as.

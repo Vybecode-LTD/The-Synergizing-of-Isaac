@@ -27,7 +27,10 @@ export interface Item {
   quality: 0 | 1 | 2 | 3 | 4;
   type: "active" | "passive";
   stats?: Stats;
+  /** Transformations it counts toward in Repentance (data/transformations.json, decision 0006). */
   transformations?: string[];
+  /** Transformations it counts toward only in Repentance+. */
+  transformationsPlus?: string[];
   pools?: string[];
 }
 
@@ -38,6 +41,22 @@ export interface Trinket {
   dlc: string;
   effect: string;
   stats?: Stats;
+  transformations?: string[];
+  transformationsPlus?: string[];
+}
+
+/** One entry of data/transformations.json: the wiki's Repentance list, with what counts only in Repentance+. */
+export interface Transformation {
+  id: string;
+  name: string;
+  needs: number;
+  page: string;
+  revision: number;
+  items: number[];
+  trinkets: number[];
+  plusItems: number[];
+  plusTrinkets: number[];
+  note?: string;
 }
 
 export interface Character {

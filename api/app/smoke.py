@@ -169,11 +169,24 @@ def check_headers(fetch: Fetch, options: Options) -> None:
         headers = get(fetch, path, status).headers
         expect("script-src 'self'" in headers.get("content-security-policy", ""), f"{path} has no script policy")
         expect(headers.get("x-content-type-options") == "nosniff", f"{path} lets the browser sniff types")
-        noindex = headers.get("x-robots-tag") == "noindex"
+        noindex = bool({"noindex", "none"} & robots_directives(headers.get("x-robots-tag", "")))
         expect(noindex != options.indexable, f"{path} {'is' if noindex else 'is not'} marked noindex")
 
 
+def robots_directives(header: str) -> set[str]:
+    """X-Robots-Tag directives in lower case, any "botname:" in front dropped: "noindex, nofollow" is both."""
+    return {part.split(":", 1)[-1].strip().lower() for part in header.split(",") if part.strip()}
+
+
 def check_analyze_is_off(fetch: Fetch, options: Options) -> None:
+    # A build sent to a site with a key is a paid analysis, so ask only a site whose own health says AI is off.
+    health = fetch("GET", "/api/health", None)
+    try:
+        body = json.loads(health.body) if health.status == 200 else {}
+    except ValueError:
+        body = {}
+    ai = body.get("ai") if isinstance(body, dict) else None
+    expect(ai is False, f"not sent: /api/health does not say AI is off (ai is {ai!r})")
     reply = fetch("POST", "/api/analyze", b'{"items": [1]}')
     expect(reply.status == 503, f"/api/analyze answered {reply.status}, expected 503 with AI off")
     expect(json.loads(reply.body)["detail"]["code"] == "not_configured", "/api/analyze has the wrong error code")
