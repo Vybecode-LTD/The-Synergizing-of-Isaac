@@ -11,7 +11,7 @@ visitor had asked). Two fresh random builds answered `"cached": false`, the next
 analyses. Not yet shown: that a visitor on another network has an allowance of their own. To show it,
 with the owner's OK (it costs an analysis), all on one UTC day: confirm this connection is refused with
 429 `rate_limited` (send a never-asked build; a 429 costs nothing), then ask a never-asked build from a
-phone on mobile data. A 200 with `"cached": false` shows a separate allowance exists, not that it is five;
+phone on mobile data. A 200 with `"cached": false` shows a separate allowance exists, not how big it is;
 a cached answer proves nothing.
 
 **Check 4 passed** the same morning: after a redeploy (deployment `47f699b7`, live 12:36 UTC), a build
@@ -60,7 +60,7 @@ answers and the daily counters. No database server.
 | `SITE_URL` | `https://isaac.toys` | Canonical URLs, sitemap, share image |
 | `DATA_DIR` | `/data` | Where the SQLite file lives (the volume) |
 | `AI_MODEL` | leave unset: the owner chose the default, `claude-opus-5-5` | `docs/decisions/0003` has the cost of each choice |
-| `AI_PER_VISITOR_PER_DAY` | optional, default `5` | Fresh analyses per visitor per day |
+| `AI_PER_VISITOR_PER_DAY` | `10`, set on 2026-11-26 at the owner's request (the code's default is `5`) | Fresh analyses per visitor per day |
 | `AI_SITE_PER_DAY` | optional, default `200` | Fresh analyses for the whole site per day: the spending cap |
 | `AI_MAX_TOKENS` | optional, default `4000` | Ceiling for one answer, thinking included. A cut-off answer is refused, not saved; the log says to raise this |
 | `CLIENT_IP_HEADER` | leave unset: the owner chose DNS only, no Cloudflare proxy | Which header names the visitor. `cf-connecting-ip` is for a proxied domain only |
@@ -86,12 +86,13 @@ secret header set by a Cloudflare rule, or Cloudflare's address ranges), and rem
 3. **The limit works behind the edge.** `<site>` is `https://isaac.toys`, or the generated
    `*.up.railway.app` address until the custom domain verifies. A saved answer comes back before any
    allowance is counted, so **every probe uses a build nobody has asked for before**, and its answer must
-   say `"cached": false`. Ask for five such builds from one connection; a sixth new one must answer 429.
+   say `"cached": false`. Ask for as many such builds from one connection as `AI_PER_VISITOR_PER_DAY`
+   allows (10 since 2026-11-26); the next new one must answer 429.
    **Every 429 here counts only with `detail.code` `"rate_limited"`** (the visitor's allowance). The site's
    daily cap answers 429 too, with `"budget_exhausted"`, whoever asks: that proves nothing about visitors,
    so wait for the next UTC day (7 pm EST) and repeat.
    Then forge each header the limiter could believe, each with another new build (items 2 and 3 here, if
-   they were not among the six):
+   they were not among those already asked):
    `curl -X POST <site>/api/analyze -H "content-type: application/json" -H "x-forwarded-for: 1.2.3.4" -d "{\"items\":[2]}"`
    `curl -X POST <site>/api/analyze -H "content-type: application/json" -H "cf-connecting-ip: 1.2.3.4" -d "{\"items\":[3]}"`
    A 429 means the limiter refused the forged visitor, as it must. A 200 with `"cached": false` means the
@@ -100,7 +101,7 @@ secret header set by a Cloudflare rule, or Cloudflare's address ranges), and rem
    first header is the one the app trusts by default: it counts on Railway's edge overwriting
    `X-Forwarded-For`, which is known from another project and not yet proven here. The second may pass
    only when `CLIENT_IP_HEADER` says Cloudflare. A limiter that worked locally let 39 of 40 through behind
-   Railway's proxy on another project. The five allowed answers are paid analyses.
+   Railway's proxy on another project. The allowed answers (ten) are paid analyses.
 4. **The volume holds.** Redeploy, repeat an analysis already asked: it must come back `"cached": true`.
 5. Submit `https://isaac.toys/sitemap.xml` in Google Search Console and Bing Webmaster Tools. Done by the
    owner, both, by 2026-11-26.

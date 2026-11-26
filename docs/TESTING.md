@@ -31,7 +31,7 @@ the libraries in chunks of their own).
 | `.venv\Scripts\python -m pytest --cov` | `api/` | 131 passed; 99% of `app/` |
 | `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
 | CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off`, then `npm run e2e` against it | GitHub Actions | smoke 13 of 13 on PR #5 (log read: health answered with 719 items); on PR #9's head, smoke 13 of 13 and browser 13 passed, none skipped |
-| `SITE=https://isaac.toys npm run e2e` | `web/`, the live site | 13 of 13 on 2026-11-26 after PR #9 deployed (`703fd94`) |
+| `SITE=https://isaac.toys npm run e2e` | `web/`, the live site | 13 of 13 on 2026-11-26 after PR #9 deployed (`703fd94`), and again after PR #10 (`7a494aa`, the brandmark checks included) |
 | `app.smoke https://web-production-6d147b3c.up.railway.app --ai off --indexable --site-url https://isaac.toys` | `api/`, the live site | 13 of 13, 2026-11-25, before the key was set |
 | `.venv\Scripts\python -m ruff check .`, `-m ruff format --check .`, `-m mypy` | `api/` | clean |
 | `.venv\Scripts\python -m app.parity --check` | `api/` | snapshot is current |

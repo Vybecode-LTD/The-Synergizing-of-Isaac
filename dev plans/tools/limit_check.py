@@ -1,10 +1,12 @@
 """DEPLOY.md check 3 against the live site: the per-visitor limit holds behind Railway's edge.
 
-SPENDS MONEY: at most seven paid analyses (five allowed, then two more only if both forged headers get
-through, which is itself the failure this looks for). Run only with the owner's explicit OK for that run.
+SPENDS MONEY: at most LIMIT + 2 paid analyses (LIMIT allowed, then two more only if both forged headers
+get through, which is itself the failure this looks for). Run only with the owner's explicit OK for that
+run. LIMIT must match `AI_PER_VISITOR_PER_DAY` on Railway; if the site's first answer reports another
+limit, the run stops there.
 
 Every probe is a random three-item build nobody has asked for, so a 200 must say "cached": false. Fresh
-builds are sent from this connection until the first refusal (at most six: five paid, one refused). Then
+builds are sent from this connection until the first refusal (at most LIMIT + 1: LIMIT paid, one refused). Then
 each forgeable header gets its own fresh build and its own random address; a 200 there means the forged
 visitor got a new allowance. A 429 counts only with code "rate_limited"; "budget_exhausted" (the site's
 cap) proves nothing.
@@ -20,6 +22,7 @@ import urllib.request
 from pathlib import Path
 
 SITE = "https://isaac.toys"
+LIMIT = 10  # AI_PER_VISITOR_PER_DAY on Railway, raised from 5 on 2026-11-26 (docs/decisions/0003)
 REPO = Path(__file__).resolve().parents[2]  # dev plans/tools/ -> the checkout this file is in
 ITEMS = [i["id"] for i in json.loads((REPO / "data" / "items.json").read_text("utf-8"))]
 # Forged visitors come from shared address space (100.64.0.0/10), a new one per probe: a fixed address
@@ -69,12 +72,16 @@ log: list[dict] = []
 verdicts: list[str] = []
 
 # Part 1: fresh builds from this connection until refused.
-for n in range(1, 7):
+for n in range(1, LIMIT + 2):
     result = ask(fresh_build())
     log.append(result)
     print(f"own {n}: {result['status']} cached={result['cached']} remaining={result['remaining']} "
           f"code={result['code']} {result['seconds']}s {result['text_start']!r}", flush=True)
     if result["status"] != 200:
+        break
+    if result["limit"] != LIMIT:
+        # Stop before spending more: this run's bounds were worked out for LIMIT.
+        verdicts.append(f"INCONCLUSIVE: the site reports limit {result['limit']}, this check expects {LIMIT}")
         break
     if result["cached"] is not False:
         # Starts with INCONCLUSIVE so the exit code fails the run (review finding, Codex, PR #8).
@@ -86,7 +93,7 @@ if last["status"] == 429 and last["code"] == "rate_limited":
 elif last["status"] == 429:
     verdicts.append(f"INCONCLUSIVE: 429 with code {last['code']!r} after {paid}; repeat after the UTC day turns")
 else:
-    verdicts.append(f"FAIL: six fresh builds, no refusal (last {last['status']})")
+    verdicts.append(f"FAIL: {len(log)} fresh builds, no refusal (last {last['status']})")
 
 # Part 2: forged visitors, each with a fresh build. Only meaningful once this connection is refused.
 if last["status"] == 429 and last["code"] == "rate_limited":
