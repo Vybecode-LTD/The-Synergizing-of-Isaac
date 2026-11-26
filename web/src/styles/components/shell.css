@@ -139,6 +139,9 @@
 
   .site-footer__inner > :first-child { max-inline-size: var(--measure-prose); }
 
+  /* Who made the site reads first, in the band's full ink; the notice under it stays muted. */
+  .site-footer__credit { color: var(--fg-on-band); }
+
   .site-footer__link {
     font-weight: var(--weight-bold);
     color: var(--fg-on-band);

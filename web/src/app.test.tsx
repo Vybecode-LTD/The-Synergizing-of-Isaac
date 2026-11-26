@@ -182,6 +182,16 @@ describe("builder", () => {
     expect(header.getByRole("button", { name: "Switch to dark theme" })).toBeInTheDocument();
   });
 
+  it("credits CarbonDSP in the footer and keeps the unofficial notice beside it", () => {
+    open("/items");
+    const footer = within(screen.getByRole("contentinfo"));
+    const credit = footer.getByRole("link", { name: "CarbonDSP" });
+    expect(credit).toHaveAttribute("href", "https://carbondsp.com/");
+    expect(credit.closest("p")).toHaveTextContent(/^Built by CarbonDSP for the TBOI community\.$/);
+    expect(footer.getByText(/isaac\.toys is an unofficial fan project, not affiliated with or endorsed by/)).toBeInTheDocument();
+    expect(footer.getByRole("link", { name: "About, sources and credits" })).toHaveAttribute("href", "/about");
+  });
+
   it("empties the build when its last pickup is removed, and keeps it empty", async () => {
     const user = open("/?i=118");
     await user.click(screen.getByRole("button", { name: "Remove Brimstone" }));

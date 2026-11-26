@@ -76,10 +76,19 @@ function Shell() {
       </main>
       <footer className="site-footer">
         <div className="site-footer__inner">
-          <p>
-            {SITE.domain} is an unofficial fan project, not affiliated with or endorsed by Edmund McMillen or Nicalis.
-            The Binding of Isaac and its artwork belong to their owners.
-          </p>
+          <div className="stack stack--tight">
+            <p className="site-footer__credit">
+              Built by{" "}
+              <a className="site-footer__link" href="https://carbondsp.com/">
+                CarbonDSP
+              </a>{" "}
+              for the TBOI community.
+            </p>
+            <p>
+              {SITE.domain} is an unofficial fan project, not affiliated with or endorsed by Edmund McMillen or
+              Nicalis. The Binding of Isaac and its artwork belong to their owners.
+            </p>
+          </div>
           <p>
             <Link className="site-footer__link" to="/about">
               About, sources and credits
