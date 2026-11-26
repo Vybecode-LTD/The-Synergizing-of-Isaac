@@ -39,9 +39,6 @@
     outline-offset: var(--stroke-focus);
   }
 
-  /* The board's wordmark is the word alone; the glyph stays for the favicon. */
-  .wordmark__mark { display: none; }
-
   .wordmark__tld {
     display: inline-block;
     padding: var(--gap-hair) var(--pad-inline-xs) var(--gap-fused);

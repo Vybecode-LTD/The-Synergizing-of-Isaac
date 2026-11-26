@@ -26,10 +26,6 @@ function Wordmark() {
   return (
     // Home is an empty builder; the Builder link is the one that brings your build back.
     <Link className="wordmark" to="/" state={EMPTIED} aria-label={`${SITE.domain}, home`}>
-      <svg className="wordmark__mark" viewBox="0 0 16 16" aria-hidden="true" shapeRendering="crispEdges">
-        <path d="M7 1h2v1h1v1h1v3h-1v1H6V6H5V3h1V2h1z" />
-        <path d="M5 9h6v2h-1v2h2v2H4v-2h2v-2H5z" />
-      </svg>
       <span>
         {name}
         <span className="wordmark__tld">{tld}</span>
