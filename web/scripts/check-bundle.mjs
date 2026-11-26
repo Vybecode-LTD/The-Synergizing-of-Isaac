@@ -1,47 +1,18 @@
 // Checks that the built app keeps the game data in a chunk of its own. No JavaScript file may pass Vite's
-// 500 kB warning. One `data-*.js` chunk must hold every data file the app imports, no other chunk may hold
-// any of them, and index.html must modulepreload that chunk beside the entry. Run `npm run bundle:check`
-// after `npm run build`; CI runs it.
-import { readFileSync, readdirSync, statSync } from "node:fs";
+// 500 kB warning. Every module from data/ that ships must sit in one `data-*.js` chunk and in no other, and
+// index.html must modulepreload that chunk beside the entry. Which chunk holds which module comes from the
+// report the build writes (the `chunk-report` plugin in vite.config.ts), not from searching for text:
+// data files share words ("Repentance 1.7.9b" is in both meta.json and about.json), so text can't tell
+// them apart. Run `npm run bundle:check` after `npm run build`; CI runs it.
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** Vite's `chunkSizeWarningLimit` counts kB of 1,000 bytes. */
 export const LIMIT_BYTES = 500 * 1000;
 
-/** Every file in data/ the app imports (`@data/...` in web/src, tests aside). */
-export const DATA_FILES = [
-  "items.json",
-  "trinkets.json",
-  "characters.json",
-  "synergies.json",
-  "transformations.json",
-  "meta.json",
-  "content/pages.json",
-  "content/about.json",
-];
-
-function* strings(value) {
-  if (typeof value === "string") yield value;
-  else if (Array.isArray(value)) for (const v of value) yield* strings(v);
-  else if (value && typeof value === "object") for (const v of Object.values(value)) yield* strings(v);
-}
-
-/** The first run of 16 or more plain characters in a data file's strings, cut to 40: it turns up only where that file is. */
-export function dataSentinel(json) {
-  for (const text of strings(json)) {
-    const match = text.match(/[A-Za-z][A-Za-z0-9 ,.]{15,}/);
-    if (match) return match[0].slice(0, 40);
-  }
-  throw new Error("No string has 16 characters of plain text to look for.");
-}
-
-/** A sentinel for each of DATA_FILES, read from the data folder. */
-export function readSentinels(dataDir) {
-  return Object.fromEntries(
-    DATA_FILES.map((name) => [name, dataSentinel(JSON.parse(readFileSync(path.join(dataDir, name), "utf-8")))]),
-  );
-}
+/** Where the build writes its chunk report, relative to web/. Outside dist/, so the site never serves it. */
+export const REPORT = "node_modules/.cache/isaac-toys/chunks.json";
 
 /** The `<link>` tags of a page, each as its rel tokens and its href, whatever order the attributes come in. */
 function links(html) {
@@ -51,11 +22,15 @@ function links(html) {
   }));
 }
 
-/** Everything wrong with the build in `dist`, as sentences; an empty list means it holds. */
-export function checkBundle(dist, sentinels) {
+/**
+ * Everything wrong with the build in `dist`, as sentences; an empty list means it holds.
+ * `report` is the build's chunk report: `[{ file: "assets/x.js", modules: ["data/items.json", ...] }]`,
+ * with module paths relative to the repository root, or null when there is none.
+ */
+export function checkBundle(dist, report) {
   const problems = [];
   const assets = path.join(dist, "assets");
-  const scripts = readdirSync(assets).filter((name) => name.endsWith(".js"));
+  const scripts = readdirSync(assets).filter((name) => name.endsWith(".js")).sort();
   for (const name of scripts) {
     const size = statSync(path.join(assets, name)).size;
     if (size > LIMIT_BYTES) problems.push(`${name} is ${(size / 1000).toFixed(1)} kB, over ${LIMIT_BYTES / 1000} kB`);
@@ -64,15 +39,26 @@ export function checkBundle(dist, sentinels) {
   const html = readFileSync(path.join(dist, "index.html"), "utf-8");
   const entry = html.match(/<script type="module"[^>]*\ssrc="\/assets\/([^"]+\.js)"/)?.[1];
   if (!entry) return [...problems, "index.html has no module entry script"];
+  if (!report) return [...problems, "no chunk report: run npm run build"];
+
+  const chunks = report.map((chunk) => ({ name: path.posix.basename(chunk.file), modules: chunk.modules }));
+  const reported = chunks.map((c) => c.name).sort();
+  if (reported.join() !== scripts.join()) {
+    return [
+      ...problems,
+      `the chunk report (${reported.join(", ")}) does not match dist/assets (${scripts.join(", ")}): rebuild`,
+    ];
+  }
 
   const dataChunks = scripts.filter((name) => /^data-[\w-]+\.js$/.test(name));
   if (dataChunks.length !== 1) problems.push(`expected one data-*.js chunk, found ${dataChunks.length}`);
-  const texts = new Map(scripts.map((name) => [name, readFileSync(path.join(assets, name), "utf-8")]));
-  for (const [file, sentinel] of Object.entries(sentinels)) {
-    const holders = scripts.filter((name) => texts.get(name).includes(sentinel));
-    if (holders.includes(entry)) problems.push(`the entry chunk ${entry} carries data from ${file}`);
+  const dataModules = [...new Set(chunks.flatMap((c) => c.modules.filter((m) => m.startsWith("data/"))))].sort();
+  if (dataModules.length === 0) problems.push("no module from data/ is in any chunk");
+  for (const module of dataModules) {
+    const holders = chunks.filter((c) => c.modules.includes(module)).map((c) => c.name);
+    if (holders.includes(entry)) problems.push(`the entry chunk ${entry} holds ${module}`);
     if (holders.length !== 1 || holders[0] !== dataChunks[0]) {
-      problems.push(`data from ${file} is in ${holders.join(", ") || "no chunk"}, not in one data chunk`);
+      problems.push(`${module} is in ${holders.join(", ")}, not in one data chunk`);
     }
   }
 
@@ -88,13 +74,16 @@ export function checkBundle(dist, sentinels) {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const web = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
   const dist = path.join(web, "dist");
-  const problems = checkBundle(dist, readSentinels(path.join(web, "..", "data")));
+  const reportFile = path.join(web, REPORT);
+  const report = existsSync(reportFile) ? JSON.parse(readFileSync(reportFile, "utf-8")) : null;
+  const problems = checkBundle(dist, report);
   if (problems.length > 0) {
     console.error(`Bundle check failed:\n  ${problems.join("\n  ")}`);
     process.exit(1);
   }
+  const data = report.find((c) => /\/data-[\w-]+\.js$/.test(c.file));
   const listed = readdirSync(path.join(dist, "assets"))
     .filter((name) => name.endsWith(".js"))
     .map((name) => `${name} ${(statSync(path.join(dist, "assets", name)).size / 1000).toFixed(1)} kB`);
-  console.log(`Bundle check passed, ${DATA_FILES.length} data files in the data chunk: ${listed.join(", ")}`);
+  console.log(`Bundle check passed. The data chunk holds ${data.modules.join(", ")}. Files: ${listed.join(", ")}`);
 }

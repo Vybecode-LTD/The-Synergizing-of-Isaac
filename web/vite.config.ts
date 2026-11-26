@@ -1,5 +1,8 @@
+import { mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import { fileURLToPath, URL } from "node:url";
 import react from "@vitejs/plugin-react";
+import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 
 const data = fileURLToPath(new URL("../data", import.meta.url));
@@ -7,11 +10,33 @@ const dataPrefix = `${data.replaceAll("\\", "/").toLowerCase()}/`;
 /** A JSON file from the repository's data/ folder, however the bundler spells the path. */
 const isGameData = (id: string) => id.endsWith(".json") && id.replaceAll("\\", "/").toLowerCase().startsWith(dataPrefix);
 
+const repo = fileURLToPath(new URL("..", import.meta.url));
+/**
+ * Writes which source files each built chunk holds, as paths from the repository root, for
+ * `npm run bundle:check` (scripts/check-bundle.mjs, whose REPORT names the same file). It goes beside
+ * the build tools' caches, never into dist/, so the site does not serve it.
+ */
+function chunkReport(): Plugin {
+  const file = fileURLToPath(new URL("./node_modules/.cache/isaac-toys/chunks.json", import.meta.url));
+  const fromRepo = (id: string) => (path.isAbsolute(id) ? path.relative(repo, id).replaceAll("\\", "/") : id);
+  return {
+    name: "isaac-toys:chunk-report",
+    apply: "build",
+    generateBundle(_options, bundle) {
+      const chunks = Object.values(bundle).flatMap((out) =>
+        out.type === "chunk" ? [{ file: out.fileName, modules: out.moduleIds.map(fromRepo).sort() }] : [],
+      );
+      mkdirSync(path.dirname(file), { recursive: true });
+      writeFileSync(file, `${JSON.stringify(chunks, null, 2)}\n`);
+    },
+  };
+}
+
 // The API runs on 8001 locally: Windows reserves 8000 on the owner's machine.
 const api = process.env.VITE_API_PROXY ?? "http://127.0.0.1:8001";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), chunkReport()],
   resolve: {
     alias: { "@data": data },
   },

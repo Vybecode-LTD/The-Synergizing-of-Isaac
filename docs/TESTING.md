@@ -20,8 +20,8 @@ the libraries in chunks of their own).
 
 | Command | Where | Result |
 |---|---|---|
-| `npm run test:coverage` | `web/` | 167 passed. Fails under 85% lines |
-| `npm run bundle:check` | `web/`, after `npm run build` | passes, all eight data files in the data chunk: entry 57.1 kB, `vendor` 256.7 kB, `data` 316.9 kB, runtime 0.6 kB; the single 630.8 kB bundle before the split fails it |
+| `npm run test:coverage` | `web/` | 166 passed. Fails under 85% lines |
+| `npm run bundle:check` | `web/`, after `npm run build` | passes, all eight data modules in the data chunk: entry 57.1 kB, `vendor` 256.7 kB, `data` 316.9 kB, runtime 0.6 kB; the single 630.8 kB bundle before the split fails it |
 | `npm run e2e` | `web/`, built site running on 8001 (`SITE=<url>` for another) | 13 of 13 browser checks, none skipped |
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
 | `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 66 files |
@@ -89,9 +89,11 @@ the libraries in chunks of their own).
   (`web/e2e/no-vacuous-pass.ts`) fails a run with nothing passed or anything skipped and prints the count.
   It never asks for an AI read.
 - **Bundle layout** (`web/scripts/check-bundle.mjs`, tested by `check-bundle.test.mjs`; CI runs it after the
-  build): no JavaScript file over Vite's 500 kB warning; exactly one `data-*.js` chunk, holding a run of text
-  from each of the eight data files the app imports, which no other chunk holds (the entry included); and
-  `index.html` has a `rel="modulepreload"` link to it.
+  build): no JavaScript file over Vite's 500 kB warning; every module from `data/` that ships sits in the one
+  `data-*.js` chunk and in no other, the entry included; and `index.html` has a `rel="modulepreload"` link to
+  it. Which chunk holds which module comes from the report the build writes (`chunkReport` in
+  `web/vite.config.ts`, to `web/node_modules/.cache/isaac-toys/chunks.json`, never into `dist/`). A missing
+  report, or one that doesn't match `dist/assets`, fails.
 
 ## Checks that tests can fail
 
@@ -166,9 +168,13 @@ the libraries in chunks of their own).
   changed nothing at all, the entry included, so it proved nothing and was replaced.) Locally `npm run e2e`
   13 of 13 and `app.smoke` 12 of 12 on the split build.
 - CodeRabbit's review of PR #10, two findings, both real: the committed check returned no problems for a
-  build with `characters.json` in the entry, and none for a data chunk that was only `rel="prefetch"`. Now
-  each of the eight data files has its own marker, and the link must be `modulepreload` (attributes in any
-  order); a test covers each case.
+  build with `characters.json` in the entry, and none for a data chunk that was only `rel="prefetch"`. The
+  link must now be `modulepreload` (attributes in any order). Its follow-up was right too: the first fix gave
+  each data file a text marker, but `meta.json`'s marker "Repentance 1.7.9b" is also in `about.json`, so the
+  committed check passed `meta.json` in the entry. Neither of `meta.json`'s values is unique to it
+  (`2026-11-25` is in `transformations.json`), so the check now reads module membership from the build's
+  chunk report. A real build with `meta.json` left out of the data group failed it ("the entry chunk
+  index-CO9lEGKL.js holds data/meta.json"); with the config restored byte for byte it passed again.
 - Footer brandmark (PR #10, decision 0007): the footer test was red before the mark existed. The browser
   test checks it loads, is decorative, is 128 px (80 px on a phone) and sits left of the three lines. Against
   the live site, which lacks it, exactly those six checks failed and seven passed. With the two PNGs moved out

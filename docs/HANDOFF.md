@@ -16,8 +16,9 @@
   chunks of their own: entry 57 kB, `vendor` 257 kB, `data` 317 kB (it was one 631 kB file, over Vite's
   500 kB warning). All are preloaded together and cached for a year. A deploy that changes only the app
   now leaves `data` and `vendor` in the browser's cache. `web/scripts/check-bundle.mjs`
-  (`npm run bundle:check`) holds the layout in CI; after CodeRabbit's review it checks all eight data files
-  and a real `modulepreload` link.
+  (`npm run bundle:check`) holds the layout in CI. After CodeRabbit's two reviews it reads which modules each
+  chunk holds from a report the build writes (`node_modules/.cache/isaac-toys/chunks.json`, not served) and
+  requires a real `modulepreload` link.
 - PR #10 also adds the owner's request: the CarbonDSP brandmark on the left of the footer's three lines. It
   uses the kit's **reverse** version, not the primary the owner named, because the primary's black C
   vanishes on the dark band. Screenshots of both were sent on 2026-11-26. Decision 0007.
@@ -40,7 +41,7 @@
   - The bundle check failed the old build for exactly its four reasons. The server keeps the preload links
     on the pages it rewrites.
   - An app-only change renamed only the entry chunk.
-  - Brandmark: web 167 tests; `npm run e2e` 13 of 13 locally. Against live (no mark yet) exactly the six
+  - Brandmark: web 166 tests; `npm run e2e` 13 of 13 locally. Against live (no mark yet) exactly the six
     footer checks failed; with the PNGs removed the test failed. Rendered contrast 0 failing in 8 states.
 
 ## Not verified
