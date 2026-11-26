@@ -19,9 +19,9 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
 
 | Command | Where | Result |
 |---|---|---|
-| `npm run test:coverage` | `web/` | 143 passed. Fails under 85% lines |
+| `npm run test:coverage` | `web/` | 154 passed. Fails under 85% lines |
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
-| `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 63 files |
+| `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 65 files |
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
 | same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 70 of 70 pass (stickers, feature, spotlight, band, ink, tints, outlines; light and dark) |
 | `npm run build` | `web/` | builds; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
@@ -111,6 +111,13 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
   out, it failed fonts (`application/octet-stream`), sprite sheets (the same) and the built app
   (`application/javascript` from the Windows registry); with the fix back, 12 of 12 passed. The type test
   was red before the fix.
+- Logo and theme switch, 2026-11-26 (PR #7): the logo test was red before the fix (the build stayed on
+  screen). Seven deliberate breaks of the switch (`theme.js` not pinning, its two colour bars swapped, junk
+  accepted; the hook not saving, not following the system, not unpinning; the label not changing) each
+  turned a test red. In real Chrome against the built site with its CSP, 19 of 19 checks: dark is on by
+  DOMContentLoaded after a reload (no light flash), Back after the logo returns the build, the phone header
+  keeps a 44px switch on the wordmark's row with no sideways scroll, and no console errors. Rendered
+  contrast with `--click-each ".theme-toggle"`: the builder 0 failing in 8 states.
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404

@@ -1,7 +1,8 @@
 # Deploying isaac.toys
 
 **Status: deployed 2026-11-25** (6:07 pm EST, 23:07 UTC) from `main` at `1c536f2`, set up through the
-Railway connector on the owner's go-ahead. There is no Docker on the owner's machine, so CI's `docker` job
+Railway connector on the owner's go-ahead. `isaac.toys` verified and the key added on 2026-11-26: health
+says `"ai": true`, and check 2 below passed 12 of 12 against `https://isaac.toys`. Checks 3 to 5 are not done. There is no Docker on the owner's machine, so CI's `docker` job
 is where the image is proven first: it runs it as Railway does and smoke-tests it. Deploying and every
 Railway change need the owner's go-ahead. Background: the `railway-deploy-playbook` skill.
 
@@ -13,7 +14,7 @@ Railway change need the owner's go-ahead. Background: the `railway-deploy-playbo
 | Build and health | Dockerfile (`dockerfilePath` set on the service; the deploy log shows both stages), healthcheck `/api/health` with 100 s, restart on failure up to 5. Set on the service itself: a service created now cannot opt into `railway.toml` |
 | Volume | `isaac-data` at `/data` |
 | Domains | `web-production-6d147b3c.up.railway.app` and `isaac.toys`, both to port 8080 (the `PORT` Railway injects) |
-| DNS at Spaceship | `@` CNAME `gc4twalz.up.railway.app` (Spaceship serves a root CNAME as an ALIAS), and TXT `_railway-verify` with the value Railway shows |
+| DNS at Spaceship | `@` CNAME `qbx1inm3.up.railway.app` (Spaceship serves a root CNAME as an ALIAS; Railway first showed `gc4twalz`, and MCP `domain-status` gives the current one), and TXT `_railway-verify` with the value Railway shows |
 
 ## Shape
 
