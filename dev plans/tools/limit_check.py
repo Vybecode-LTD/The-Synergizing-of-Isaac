@@ -70,7 +70,8 @@ for n in range(1, 7):
     if result["status"] != 200:
         break
     if result["cached"] is not False:
-        verdicts.append(f"own {n}: a fresh build came back cached={result['cached']}; inconclusive")
+        # Starts with INCONCLUSIVE so the exit code fails the run (review finding, Codex, PR #8).
+        verdicts.append(f"INCONCLUSIVE own {n}: a fresh build came back cached={result['cached']}")
 paid = sum(1 for r in log if r["status"] == 200 and r["cached"] is False)
 last = log[-1]
 if last["status"] == 429 and last["code"] == "rate_limited":
