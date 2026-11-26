@@ -16,7 +16,10 @@ it reads its own old data and gets no new work unless the owner asks.
 ## Current state (2026-11-26)
 
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Live at
-  `isaac.toys` with AI on** since 2026-11-26 (Railway; `docs/DEPLOY.md` has the ids; checks 1 to 4 passed).
+  `isaac.toys` with AI on** since 2026-11-26 (Railway; `docs/DEPLOY.md` has the ids; checks 1 to 5 passed,
+  apart from check 3's other-network half).
+- PR #9 (open): a browser end-to-end test in CI's `docker` job (`web/e2e/`, Playwright), and a footer
+  credit, "Built by CarbonDSP for the TBOI community", linked to carbondsp.com.
 - PR #7 (merged 2026-11-26): a light/dark switch, the logo goes home to an empty builder, an original
   favicon (decision 0005, amended).
 - Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B
@@ -46,11 +49,11 @@ it reads its own old data and gets no new work unless the owner asks.
 |---|---|
 | Web | React 19, React Router 8, TypeScript 6 (strict), Vite 8, plain CSS with design tokens |
 | Fonts | Bricolage Grotesque and Figtree, self-hosted from `@fontsource-variable` |
-| Web tests | Vitest 5, React Testing Library, jsdom |
+| Web tests | Vitest 5, React Testing Library, jsdom; Playwright 1.65 for the browser end-to-end test |
 | API | Python 3.12, FastAPI, Uvicorn, Anthropic SDK 2.x, SQLite (standard library) |
 | API tests | pytest, pytest-asyncio, pytest-cov, ruff, mypy (strict) |
 | Data tooling | Python standard library only; sharp (Node) packs the sprite sheets |
-| Hosting (planned) | Railway, one service, one volume for the SQLite file |
+| Hosting | Railway, one service, one volume for the SQLite file |
 
 ## Commands
 
@@ -68,6 +71,7 @@ the machine's global Python 3.14 lacks wheels for some packages).
 | Run the built site locally | `.venv\Scripts\python -m uvicorn app.server:app --port 8001` (after `npm run build`) |
 | Rebuild data from sources | `python scripts/gamedata.py build` then `validate` (repo root) |
 | Refresh the browser/server snapshot | `.venv\Scripts\python -m app.parity` (in `api/`) |
+| Browser end-to-end test (installed Chrome here; site running) | `npm run e2e` (in `web/`; `SITE=<url>` for another site, e.g. live, at no cost) |
 | Smoke-test a running site (local, CI's image, live) | `.venv\Scripts\python -m app.smoke <url> --ai on\|off\|skip` (in `api/`; `--indexable` for production) |
 
 ## Rules that are specific to this project

@@ -1,5 +1,8 @@
 node_modules/
 dist/
 coverage/
+# Playwright's traces and failure screenshots (npm run e2e)
+test-results/
+playwright-report/
 # Rebuilt from data/sprites by scripts/build-sprites.mjs
 public/sprites/

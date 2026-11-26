@@ -16,8 +16,10 @@ a cached answer proves nothing.
 
 **Check 4 passed** the same morning: after a redeploy (deployment `47f699b7`, live 12:36 UTC), a build
 analysed before it came back `"cached": true` with the same text, free, though the visitor's allowance was
-used up. Check 5 (submit the sitemap) is the owner's. There is no Docker on the owner's machine, so CI's `docker` job
-is where the image is proven first: it runs it as Railway does and smoke-tests it. Deploying and every
+used up. **Check 5 passed:** the owner said on 2026-11-26 that the sitemap is submitted to both Google Search
+Console and Bing Webmaster Tools. There is no Docker on the owner's machine, so CI's `docker` job is where
+the image is proven first: it runs it as Railway does, smoke-tests it, and drives it in a real browser
+(`npm run e2e`, from PR #9). Deploying and every
 Railway change need the owner's go-ahead. Background: the `railway-deploy-playbook` skill.
 
 | What | Value |
@@ -100,7 +102,8 @@ secret header set by a Cloudflare rule, or Cloudflare's address ranges), and rem
    only when `CLIENT_IP_HEADER` says Cloudflare. A limiter that worked locally let 39 of 40 through behind
    Railway's proxy on another project. The five allowed answers are paid analyses.
 4. **The volume holds.** Redeploy, repeat an analysis already asked: it must come back `"cached": true`.
-5. Submit `https://isaac.toys/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
+5. Submit `https://isaac.toys/sitemap.xml` in Google Search Console and Bing Webmaster Tools. Done by the
+   owner, both, by 2026-11-26.
 
 ## Never
 

@@ -1,13 +1,14 @@
 # Testing
 
-Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformations-repentance`
-(transformations as Repentance counts them, decision 0006).
+Last run: 2026-11-26, on the owner's Windows machine, branch `feat/e2e-and-footer` (the browser
+end-to-end test, and the CarbonDSP credit in the footer).
 
 ## Frameworks
 
 | Area | Tools | Config |
 |---|---|---|
 | Web | Vitest 5, React Testing Library 16, user-event 14, jsdom 31, `@vitest/coverage-v8` | `web/vite.config.ts`, `web/src/test/setup.ts` |
+| Browser end-to-end | Playwright 1.65 (`@playwright/test`, pinned): the installed Chrome here, Playwright's Chromium in CI | `web/playwright.config.ts`, `web/e2e/` |
 | Web static checks | TypeScript 6 strict (`noUncheckedIndexedAccess`), ESLint 10 + typescript-eslint, zero warnings | `web/tsconfig.json`, `web/eslint.config.js` |
 | API | pytest 9, pytest-asyncio, pytest-cov, FastAPI `TestClient` | `api/pyproject.toml`, `api/tests/conftest.py` |
 | API static checks | ruff (lint and format), mypy strict | `api/pyproject.toml` |
@@ -19,7 +20,8 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
 
 | Command | Where | Result |
 |---|---|---|
-| `npm run test:coverage` | `web/` | 157 passed. Fails under 85% lines |
+| `npm run test:coverage` | `web/` | 158 passed. Fails under 85% lines |
+| `npm run e2e` | `web/`, built site running on 8001 (`SITE=<url>` for another) | 13 of 13 browser checks, none skipped |
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
 | `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 66 files |
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
@@ -27,7 +29,7 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
 | `npm run build` | `web/` | builds; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
 | `.venv\Scripts\python -m pytest --cov` | `api/` | 131 passed; 99% of `app/` |
 | `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
-| CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off` | GitHub Actions | 13 of 13 on PR #5 (log read: health answered with 719 items) |
+| CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off`, then `npm run e2e` against it | GitHub Actions | smoke 13 of 13 on PR #5 (log read: health answered with 719 items); the browser step is new in PR #9 |
 | `app.smoke https://web-production-6d147b3c.up.railway.app --ai off --indexable --site-url https://isaac.toys` | `api/`, the live site | 13 of 13, 2026-11-25, before the key was set |
 | `.venv\Scripts\python -m ruff check .`, `-m ruff format --check .`, `-m mypy` | `api/` | clean |
 | `.venv\Scripts\python -m app.parity --check` | `api/` | snapshot is current |
@@ -73,6 +75,17 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
   (WebP bytes), Brimstone's page, real 404s for a page, a file and an endpoint, robots and sitemap for the
   environment, security headers, and AI switched off (skipped when AI is on: it would be paid for). CI runs
   it against the image; after a deploy it runs against the live site.
+- **In a real browser** (`web/e2e/site.e2e.ts`, 13 tests): the server's own pages with its CSP, driven as a
+  visitor would. Home is an empty builder served with `script-src 'self'`; two pickups added by keyboard
+  give 1 synergy and the address carries the build through a reload; the theme switch pins dark before the
+  app runs (read at DOMContentLoaded), moves the browser bar's colour and switches back; the logo goes home
+  and Back returns the build; an item opens from the list with its title; the synergy list prints the count
+  in `data/synergies.json`; `/no-such-room` and `/Items` answer 404 with the empty room; the footer credits
+  CarbonDSP (link to `https://carbondsp.com/`) beside the unofficial notice; at 390px the header keeps a
+  44px switch on the wordmark's row, and five pages have no sideways scroll. Every test fails on a console
+  error or uncaught exception (`web/e2e/fixtures.ts`), which is how a CSP refusal shows. The reporter
+  (`web/e2e/no-vacuous-pass.ts`) fails a run with nothing passed or anything skipped and prints the count.
+  It never asks for an AI read.
 
 ## Checks that tests can fail
 
@@ -128,6 +141,15 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
   XML. `src/publicFiles.test.ts` now parses it; a copy with that comment put back fails it. The final file
   was rendered in Chrome at 16 to 256px on light and dark tab bars, and the built site serves it as
   `image/svg+xml`.
+- Browser end-to-end test and footer credit, 2026-11-26 (PR #9): the footer's unit test was red before the
+  footer changed (no "CarbonDSP" link). The e2e suite run against the live site, which still had the old
+  footer, failed exactly the six checks that read the footer and passed the other seven, through Railway's
+  real headers. With `dist/theme.js` replaced by a no-op (then restored byte for byte), the theme test failed
+  (`data-theme` null at DOMContentLoaded). Four planted controls, each red: a skipped test beside a passing
+  one (the reporter fails the run), no test matching (Playwright's "No tests found", then the reporter's
+  "tested nothing"), a `console.error`, and an inline script, which the CSP refused ("Executing inline script
+  violates ... 'script-src 'self''"). Rendered contrast with `--click-each ".theme-toggle"`: the builder and
+  Brimstone's page 0 failing in 8 states each (1440 and 390, light and dark, before and after the switch).
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404
@@ -142,6 +164,10 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
   keeps the old `index.html`, which then points at deleted assets and the gate measures an unstyled page.
   The Toy Box run (2026-11-25) and its two extra checks (the dialog in a tall viewport, the AI answer with a
   faked response) are in `docs/HANDOFF.md`.
+- **Browser end-to-end, here:** `npm run build`, start the site on 8001 (restart it after every build), then
+  `npm run e2e` in `web/`. It drives the installed Chrome (Playwright cannot download browsers on this
+  machine); `SITE=https://isaac.toys npm run e2e` runs it against the live site at no cost. Failure
+  screenshots and traces go to `web/test-results/` (git-ignored; CI uploads them as `e2e-results`).
 - **Browser against server** is not a by-hand step: the parity tests (`web/src/parity.test.ts`,
   `api/tests/test_core.py`) compare both sides with `data/tests/parity.json` on every run. The first session
   also compared the browser's titles with the server's on nine routes by hand, once, with no script kept.
@@ -152,9 +178,10 @@ Last run: 2026-11-25, on the owner's Windows machine, branch `data/transformatio
 
 ## Known gaps
 
-- No browser end-to-end suite in CI yet. Playwright cannot download browsers on the owner's machine; the
-  interface is covered in jsdom and checked by hand in the preview browser.
-- jsdom does not lay anything out: clipping, overflow and sticky behaviour are only checked by eye.
+- The browser test covers the paths above, not every interaction: the AI panel (it would be paid for), the
+  own-synergy dialog and the filters are covered in jsdom only. It runs in Chromium; no Firefox or Safari.
+- jsdom does not lay anything out. The browser test measures the phone header and sideways scroll on five
+  pages; other clipping and sticky behaviour is only checked by eye.
 - The `Dockerfile` cannot be built locally (no Docker on this machine). CI's `docker` job builds and runs it
   on every pull request and push to `main`.
 - `ClaudeAnalyzer` is tested against a stubbed client. No real model call has been made.
