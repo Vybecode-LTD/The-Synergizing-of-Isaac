@@ -16,15 +16,15 @@ it reads its own old data and gets no new work unless the owner asks.
 ## Current state (2026-11-26)
 
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Live at
-  `isaac.toys` with AI on** since 2026-11-26 (Railway; `docs/DEPLOY.md` has the ids and the checks left).
-- PR #7: the logo goes home to an empty builder, and a light/dark switch in the header (decision 0005,
-  amended).
+  `isaac.toys` with AI on** since 2026-11-26 (Railway; `docs/DEPLOY.md` has the ids; checks 1 to 4 passed).
+- PR #7 (merged 2026-11-26): a light/dark switch, the logo goes home to an empty builder, an original
+  favicon (decision 0005, amended).
 - Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B
   and C in PR #4 (merged 2026-11-25). The list is 442.
 - The Toy Box look (decision 0005, PR #3) is on `main`: light by default, a dark Toy Box by system
-  setting. PRs #2 and #3 were merged on 2026-11-25. See `docs/HANDOFF.md` for what is next.
+  setting or the header switch. See `docs/HANDOFF.md` for what is next.
 - PR #5 (merged): CI builds and smoke-tests the Docker image. Transformations follow Repentance with the
-  Repentance+ differences marked (decision 0006, PR #6).
+  Repentance+ differences marked (decision 0006, PR #6, merged 2026-11-26).
 - Owner decisions on record: `docs/decisions/`. Open questions for the owner: `docs/HANDOFF.md`.
 
 ## Map
