@@ -19,8 +19,8 @@ says what to do next; those say what exists.
 - `main`: `703fd94` (PR #9: browser e2e test in CI, CarbonDSP footer credit; merged 9:32 am EST). Live
   deployment `7ae5af93` is that commit, SUCCESS; live e2e 13 of 13, smoke 12 of 12.
 - **PR #10** (`perf/split-data-chunk`): the game data and the libraries in chunks of their own
-  (`web/vite.config.ts`), held by `npm run bundle:check` in CI. Pushed once; CI had not finished. Check
-  with `gh pr checks 10`.
+  (`web/vite.config.ts`, held by `npm run bundle:check`), CodeRabbit's two fixes, and the CarbonDSP
+  brandmark in the footer (reverse version, decision 0007). Check `gh pr checks 10`.
 - Deploy checks 1 to 5 passed; check 3's other-network half is unproven ("Not now", 2026-11-26).
 - Merged branches still on GitHub: `ci/docker-smoke`, `data/transformations-repentance`,
   `docs/deploy-checks-and-handoff`, `fix/home-link-and-theme-switch`, `feat/e2e-and-footer`.
@@ -46,7 +46,7 @@ says what to do next; those say what exists.
 - The GitHub API (5,000 calls an hour, shared) ran out once; `git push` still works when it does.
 
 ## 7. Where things are
-Decisions `docs/decisions/0001`–`0006`, next free `0007`. Evidence: `docs/TESTING.md`. Deploy facts:
+Decisions `docs/decisions/0001`–`0007`, next free `0008`. Evidence: `docs/TESTING.md`. Deploy facts:
 `docs/DEPLOY.md`. Tools: `dev plans/tools/`. Memory: the project's `MEMORY.md` (this session's
 candidates: `seventh-session-promotion-candidates`). Next PR number: 11.
 

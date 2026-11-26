@@ -16,7 +16,11 @@
   chunks of their own: entry 57 kB, `vendor` 257 kB, `data` 317 kB (it was one 631 kB file, over Vite's
   500 kB warning). All are preloaded together and cached for a year. A deploy that changes only the app
   now leaves `data` and `vendor` in the browser's cache. `web/scripts/check-bundle.mjs`
-  (`npm run bundle:check`) holds the layout in CI. No behaviour change.
+  (`npm run bundle:check`) holds the layout in CI; after CodeRabbit's review it checks all eight data files
+  and a real `modulepreload` link.
+- PR #10 also adds the owner's request: the CarbonDSP brandmark on the left of the footer's three lines. It
+  uses the kit's **reverse** version, not the primary the owner named, because the primary's black C
+  vanishes on the dark band. Screenshots of both were sent on 2026-11-26. Decision 0007.
 - Merged branches still on GitHub: `ci/docker-smoke`, `data/transformations-repentance`,
   `docs/deploy-checks-and-handoff`, `fix/home-link-and-theme-switch`, `feat/e2e-and-footer`.
   **The desktop app is untouched.**
@@ -36,17 +40,21 @@
   - The bundle check failed the old build for exactly its four reasons. The server keeps the preload links
     on the pages it rewrites.
   - An app-only change renamed only the entry chunk.
+  - Brandmark: web 167 tests; `npm run e2e` 13 of 13 locally. Against live (no mark yet) exactly the six
+    footer checks failed; with the PNGs removed the test failed. Rendered contrast 0 failing in 8 states.
 
 ## Not verified
 
-- PR #10's CI had not run when this was written: read `gh pr checks 10`. The API is unchanged.
+- PR #10's second push (the review fixes and the brandmark) had not run CI when this was written: read
+  `gh pr checks 10`, and CodeRabbit's status on the head (it was rate-limited once). The API is unchanged.
 - The browser test runs in Chromium only (no Firefox or Safari), and the AI panel, the own-synergy dialog
   and the filters are checked in jsdom only.
 
 ## Next steps, in order
 
 1. PR #10: green CI, let CodeRabbit finish, then ask the owner to merge (merging deploys). After the deploy,
-   run `SITE=https://isaac.toys npm run e2e`; the live page should load `data-*.js` and `vendor-*.js`.
+   run `SITE=https://isaac.toys npm run e2e`; the live page should load `data-*.js` and `vendor-*.js`, and
+   show the brandmark. The owner's earlier "Yes, when green" was for PR #10 before the brandmark joined it.
 2. The tracker's older item names ("1UP", "Number two"): rename only on the owner's word.
 
 ## Waiting on the owner

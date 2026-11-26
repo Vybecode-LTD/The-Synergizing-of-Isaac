@@ -182,9 +182,16 @@ describe("builder", () => {
     expect(header.getByRole("button", { name: "Switch to dark theme" })).toBeInTheDocument();
   });
 
-  it("credits CarbonDSP in the footer and keeps the unofficial notice beside it", () => {
+  it("credits CarbonDSP in the footer beside its brandmark, and keeps the unofficial notice", () => {
     open("/items");
     const footer = within(screen.getByRole("contentinfo"));
+    // The brandmark is decorative: the credit beside it names CarbonDSP, so a screen reader hears it once.
+    const mark = screen.getByRole("contentinfo").querySelector("img.site-footer__mark");
+    expect(mark).toHaveAttribute("alt", "");
+    // Under test Vite keeps the import's `?no-inline`; the build gives a hashed file name instead.
+    expect(mark?.getAttribute("src")).toMatch(/carbondsp-reverse-128\.png(\?\S*)?$/);
+    expect(mark?.getAttribute("srcset")).toMatch(/carbondsp-reverse-256\.png(\?\S*)? 2x$/);
+    expect(footer.queryByRole("img")).toBeNull();
     const credit = footer.getByRole("link", { name: "CarbonDSP" });
     expect(credit).toHaveAttribute("href", "https://carbondsp.com/");
     expect(credit.closest("p")).toHaveTextContent(/^Built by CarbonDSP for the TBOI community\.$/);

@@ -20,8 +20,8 @@ the libraries in chunks of their own).
 
 | Command | Where | Result |
 |---|---|---|
-| `npm run test:coverage` | `web/` | 164 passed. Fails under 85% lines |
-| `npm run bundle:check` | `web/`, after `npm run build` | passes: entry 56.9 kB, `vendor` 256.7 kB, `data` 316.9 kB, runtime 0.6 kB; the single 630.8 kB bundle before the split fails it |
+| `npm run test:coverage` | `web/` | 167 passed. Fails under 85% lines |
+| `npm run bundle:check` | `web/`, after `npm run build` | passes, all eight data files in the data chunk: entry 57.1 kB, `vendor` 256.7 kB, `data` 316.9 kB, runtime 0.6 kB; the single 630.8 kB bundle before the split fails it |
 | `npm run e2e` | `web/`, built site running on 8001 (`SITE=<url>` for another) | 13 of 13 browser checks, none skipped |
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
 | `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 66 files |
@@ -90,7 +90,8 @@ the libraries in chunks of their own).
   It never asks for an AI read.
 - **Bundle layout** (`web/scripts/check-bundle.mjs`, tested by `check-bundle.test.mjs`; CI runs it after the
   build): no JavaScript file over Vite's 500 kB warning; exactly one `data-*.js` chunk, holding a run of text
-  from `data/items.json` that no other chunk holds, the entry included; and `index.html` preloads it.
+  from each of the eight data files the app imports, which no other chunk holds (the entry included); and
+  `index.html` has a `rel="modulepreload"` link to it.
 
 ## Checks that tests can fail
 
@@ -164,6 +165,15 @@ the libraries in chunks of their own).
   deploy that changes only the app leaves them in the browser's cache. (A first probe, an unused export,
   changed nothing at all, the entry included, so it proved nothing and was replaced.) Locally `npm run e2e`
   13 of 13 and `app.smoke` 12 of 12 on the split build.
+- CodeRabbit's review of PR #10, two findings, both real: the committed check returned no problems for a
+  build with `characters.json` in the entry, and none for a data chunk that was only `rel="prefetch"`. Now
+  each of the eight data files has its own marker, and the link must be `modulepreload` (attributes in any
+  order); a test covers each case.
+- Footer brandmark (PR #10, decision 0007): the footer test was red before the mark existed. The browser
+  test checks it loads, is decorative, is 128 px (80 px on a phone) and sits left of the three lines. Against
+  the live site, which lacks it, exactly those six checks failed and seven passed. With the two PNGs moved out
+  of `dist/assets`, the test failed twice over: the image never loaded, and the 404 reached the console.
+  Rendered contrast on Brimstone's page: 0 failing in 8 states.
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404

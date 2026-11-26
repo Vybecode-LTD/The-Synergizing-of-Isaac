@@ -126,21 +126,33 @@
     background: var(--bg-band);
   }
 
+  /* The brandmark on the left, beside the three lines: the credit, the notice, the About link. */
   .site-footer__inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--gap-related) var(--gap-distinct);
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: var(--size-brandmark) minmax(0, var(--measure-prose));
+    gap: var(--gap-separate);
+    align-items: center;
     max-inline-size: var(--width-page);
     padding: var(--space-block) var(--gutter-page) var(--space-subsection);
     margin-inline: auto;
     font: var(--type-small);
   }
 
-  .site-footer__inner > :first-child { max-inline-size: var(--measure-prose); }
+  .site-footer__mark {
+    inline-size: 100%;
+    block-size: auto;
+  }
 
   /* Who made the site reads first, in the band's full ink; the notice under it stays muted. */
   .site-footer__credit { color: var(--fg-on-band); }
+
+  @media (max-width: 47.99rem) {
+    .site-footer__inner {
+      grid-template-columns: var(--size-brandmark-sm) minmax(0, 1fr);
+      gap: var(--gap-related);
+      align-items: start;
+    }
+  }
 
   .site-footer__link {
     font-weight: var(--weight-bold);
