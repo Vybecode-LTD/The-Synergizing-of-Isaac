@@ -19,6 +19,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "e2e": "playwright test",
+    "bundle:check": "node scripts/check-bundle.mjs",
     "design:audit": "python -I -X utf8 ../scripts/design/audit_design.py src --strict",
     "check": "npm run lint && npm run typecheck && npm run test"
   },

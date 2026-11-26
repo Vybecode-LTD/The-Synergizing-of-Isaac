@@ -3,6 +3,9 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
 const data = fileURLToPath(new URL("../data", import.meta.url));
+const dataPrefix = `${data.replaceAll("\\", "/").toLowerCase()}/`;
+/** A JSON file from the repository's data/ folder, however the bundler spells the path. */
+const isGameData = (id: string) => id.endsWith(".json") && id.replaceAll("\\", "/").toLowerCase().startsWith(dataPrefix);
 
 // The API runs on 8001 locally: Windows reserves 8000 on the owner's machine.
 const api = process.env.VITE_API_PROXY ?? "http://127.0.0.1:8001";
@@ -22,6 +25,19 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: false,
+    rolldownOptions: {
+      output: {
+        // The game data and the libraries change less often than the app, so each gets a chunk of its own:
+        // the browser keeps them across a deploy that leaves them alone, loads all three at once, and no
+        // file passes Vite's 500 kB warning. `npm run bundle:check` holds this in CI.
+        codeSplitting: {
+          groups: [
+            { name: "data", test: isGameData },
+            { name: "vendor", test: /[\\/]node_modules[\\/]/ },
+          ],
+        },
+      },
+    },
   },
   test: {
     environment: "jsdom",
