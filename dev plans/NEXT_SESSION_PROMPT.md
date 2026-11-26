@@ -26,10 +26,10 @@ ids in `docs/DEPLOY.md`). Railway deploys every push to `main`.
 
 ## 4. First job, then the order
 1. PR #8: CI green, then **ask the owner** to merge (merging deploys).
-2. Ask whether the owner has submitted the sitemap (DEPLOY check 5) and run one analysis on a phone on
-   mobile data (proves another network gets its own five; the only part of check 3 not shown).
+2. Ask whether the owner has submitted the sitemap (DEPLOY check 5). The unproven part of check 3
+   (another network has its own allowance) costs money: only with the owner's OK, follow DEPLOY's steps.
 3. Then `docs/HANDOFF.md` next step 3, starting with the browser end-to-end test in CI (seed:
-   `dev plans/tools/check_header.mjs`, which imports Playwright from the `verify-real-pass` skill).
+   `dev plans/tools/check_header.mjs`; it finds Playwright through `PLAYWRIGHT_MODULE`).
 
 ## 5. Waiting on the owner (ask, do not decide)
 - Merge PR #8? Delete the three merged branches? Switch on Railway's "Wait for CI" (dashboard toggle)?

@@ -33,8 +33,9 @@
 
 ## Not verified
 
-- That a visitor on another network gets their own five analyses (one analysis from a phone on mobile data
-  would show it). Codex's review of PR #7 had not reported when it merged.
+- That a visitor on another network has an allowance of their own. It costs an analysis and needs the home
+  connection refused on the same UTC day first: the steps are in `docs/DEPLOY.md` check 3. Codex's review
+  of PR #7 had not reported when it merged.
 
 ## Next steps, in order
 

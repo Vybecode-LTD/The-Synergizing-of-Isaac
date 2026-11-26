@@ -8,8 +8,11 @@ says `"ai": true`, and check 2 below passed 12 of 12 against `https://isaac.toys
 OK. The home connection had used 3 of its 5 (the owner's own tries; Railway's HTTP log showed no other
 visitor had asked). Two fresh random builds answered `"cached": false`, the next fresh one 429
 `rate_limited`, and forged `x-forwarded-for` and `cf-connecting-ip` each 429 `rate_limited`. Two paid
-analyses. Not yet shown: that a visitor on another network still gets their own five (one analysis from a
-phone on mobile data would show it).
+analyses. Not yet shown: that a visitor on another network has an allowance of their own. To show it,
+with the owner's OK (it costs an analysis), all on one UTC day: confirm this connection is refused with
+429 `rate_limited` (send a never-asked build; a 429 costs nothing), then ask a never-asked build from a
+phone on mobile data. A 200 with `"cached": false` shows a separate allowance exists, not that it is five;
+a cached answer proves nothing.
 
 **Check 4 passed** the same morning: after a redeploy (deployment `47f699b7`, live 12:36 UTC), a build
 analysed before it came back `"cached": true` with the same text, free, though the visitor's allowance was

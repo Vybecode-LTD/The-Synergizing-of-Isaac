@@ -1,8 +1,22 @@
 // Drives the locally built site in real Chrome: the theme switch, its memory across a reload, the logo,
-// Back, and the header at desktop and phone widths. Screenshots land next to this file.
-import { chromium } from "file:///C:/Users/vybec/.claude/skills/verify-real-pass/scripts/node_modules/playwright/index.mjs";
+// Back, and the header at desktop and phone widths. Screenshots go to the temp folder.
+//
+// Needs Playwright 1.52 or later and an installed Chrome (it does not download browsers). Point
+// PLAYWRIGHT_MODULE at Playwright's index.mjs; by default it uses the verify-real-pass skill's copy in your
+// home folder (set up once with `npm install` in ~/.claude/skills/verify-real-pass/scripts).
+import { existsSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
+
+const playwright =
+  process.env.PLAYWRIGHT_MODULE ??
+  path.join(os.homedir(), ".claude", "skills", "verify-real-pass", "scripts", "node_modules", "playwright", "index.mjs");
+if (!existsSync(playwright)) {
+  console.error(`Playwright not found at ${playwright}: set PLAYWRIGHT_MODULE to its index.mjs`);
+  process.exit(2);
+}
+const { chromium } = await import(pathToFileURL(playwright).href);
 
 const here = os.tmpdir(); // screenshots go to the temp folder, never into the repo
 const SITE = process.env.SITE ?? "http://localhost:8001";

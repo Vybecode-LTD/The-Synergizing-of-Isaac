@@ -1,12 +1,15 @@
 """DEPLOY.md check 3 against the live site: the per-visitor limit holds behind Railway's edge.
 
-SPENDS MONEY: up to five paid analyses. Run only with the owner's explicit OK for that run.
+SPENDS MONEY: at most seven paid analyses (five allowed, then two more only if both forged headers get
+through, which is itself the failure this looks for). Run only with the owner's explicit OK for that run.
 
 Every probe is a random three-item build nobody has asked for, so a 200 must say "cached": false. Fresh
 builds are sent from this connection until the first refusal (at most six: five paid, one refused). Then
-each forgeable header gets its own fresh build; a 200 there means the forged visitor got a new allowance.
-A 429 counts only with code "rate_limited"; "budget_exhausted" (the site's cap) proves nothing.
+each forgeable header gets its own fresh build and its own random address; a 200 there means the forged
+visitor got a new allowance. A 429 counts only with code "rate_limited"; "budget_exhausted" (the site's
+cap) proves nothing.
 """
+import ipaddress
 import json
 import random
 import sys
@@ -17,7 +20,11 @@ import urllib.request
 from pathlib import Path
 
 SITE = "https://isaac.toys"
-ITEMS = [i["id"] for i in json.loads(Path(r"C:\DEV\The-Synergizing-of-Isaac\data\items.json").read_text("utf-8"))]
+REPO = Path(__file__).resolve().parents[2]  # dev plans/tools/ -> the checkout this file is in
+ITEMS = [i["id"] for i in json.loads((REPO / "data" / "items.json").read_text("utf-8"))]
+# Forged visitors come from shared address space (100.64.0.0/10), a new one per probe: a fixed address
+# would run out of allowance after a few runs and then pass by being refused.
+FORGED_POOL = ipaddress.IPv4Network("100.64.0.0/10")
 rng = random.Random(time.time_ns())
 used: set[tuple[int, ...]] = set()
 
@@ -84,7 +91,8 @@ else:
 # Part 2: forged visitors, each with a fresh build. Only meaningful once this connection is refused.
 if last["status"] == 429 and last["code"] == "rate_limited":
     for header in ("x-forwarded-for", "cf-connecting-ip"):
-        result = ask(fresh_build(), {header: "1.2.3.4"})
+        forged = str(FORGED_POOL[rng.randrange(1, FORGED_POOL.num_addresses - 1)])
+        result = ask(fresh_build(), {header: forged})
         log.append(result)
         print(f"forged {header}: {result['status']} cached={result['cached']} code={result['code']}", flush=True)
         if result["status"] == 429 and result["code"] == "rate_limited":
