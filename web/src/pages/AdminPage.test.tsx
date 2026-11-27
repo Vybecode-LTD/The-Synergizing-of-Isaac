@@ -322,6 +322,32 @@ describe("admin inbox", () => {
     expect(screen.queryByText("A live one.")).not.toBeInTheDocument();
   });
 
+  it("locks the draft while its Save is on its way", async () => {
+    // CodeRabbit, PR #12 (follow-up): fields and Cancel stayed live, though nothing typed then is in that request.
+    let finish: (() => void) | undefined;
+    server({ "GET /api/admin/session": [200, SIGNED_IN], "GET /api/admin/submissions?status=new": inbox() });
+    const base = vi.mocked(fetch);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (init?.method === "PATCH") {
+          await new Promise<void>((resolve) => (finish = resolve));
+          return new Response(JSON.stringify(SUB));
+        }
+        return base(url, init);
+      }),
+    );
+    const user = await openAdmin();
+    await user.click(await screen.findByRole("button", { name: "Edit" }));
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    expect(screen.getByRole("textbox", { name: "Description" })).toBeDisabled();
+    expect(screen.getByRole("textbox", { name: /Note to yourself/ })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: "S" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Cancel" })).toHaveAttribute("aria-disabled", "true");
+    finish?.();
+    await vi.waitFor(() => expect(screen.getByRole("textbox", { name: "Description" })).toBeEnabled());
+  });
+
   it("holds Edit and Delete too while a change is on its way", async () => {
     let finish: (() => void) | undefined;
     server({ "GET /api/admin/session": [200, SIGNED_IN], "GET /api/admin/submissions?status=new": inbox() });

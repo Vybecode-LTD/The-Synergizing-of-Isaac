@@ -436,7 +436,8 @@ function SubmissionCard({
         )}
 
         {editing ? (
-          <div className="admin-sub__edit">
+          // Locked while a change is on its way: an edit made then would not be in that request (CodeRabbit, PR #12).
+          <fieldset className="admin-sub__edit" disabled={busy}>
             <fieldset className="field">
               <legend className="field__label">Rating</legend>
               <div className="segmented" role="radiogroup" aria-label="Rating">
@@ -469,7 +470,7 @@ function SubmissionCard({
               </label>
               <input id={`${id}-note`} className="input" value={note} maxLength={500} onChange={(event) => setNote(event.target.value)} />
             </div>
-          </div>
+          </fieldset>
         ) : (
           <>
             <p className="admin-sub__text">{s.description}</p>
@@ -496,7 +497,7 @@ function SubmissionCard({
               <button type="button" className="button" data-size="sm" {...guard(() => save())}>
                 Save
               </button>
-              <button type="button" className="button" data-variant="quiet" data-size="sm" onClick={() => startEditing(false)}>
+              <button type="button" className="button" data-variant="quiet" data-size="sm" {...guard(() => startEditing(false))}>
                 Cancel
               </button>
             </>
