@@ -160,6 +160,10 @@ function SignIn({ onSignedIn }: { onSignedIn: (session: AdminSession) => void })
 
 function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (session: AdminSession) => void }) {
   const [tab, setTab] = useState<Status | "all">("new");
+  // The tab on screen now, for a refresh that runs after a change finishes: the tab may have changed since it
+  // began (CodeRabbit, PR #12).
+  const shown = useRef(tab);
+  shown.current = tab;
   const [inbox, setInbox] = useState<Inbox | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -200,7 +204,7 @@ function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (
     setBusy(true);
     try {
       await work();
-      await load(tab);
+      await load(shown.current);
     } catch (cause) {
       if (signedOut(cause)) expired();
       else setError(errorMessage(cause));
@@ -215,7 +219,8 @@ function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (
     } catch (cause) {
       if (signedOut(cause)) expired();
       // Showing the sign-in form here would hide a session that is still valid (CodeRabbit, PR #12).
-      else setError("Signing out didn't reach the server, so you're still signed in. Try again.");
+      // A failed answer doesn't say whether the server ended the session, so say only what is known.
+      else setError("Couldn't confirm the sign-out. Your session may still be active. Try again.");
     }
   };
 
@@ -503,7 +508,7 @@ function SubmissionCard({
                   Publish
                 </button>
               )}
-              <button type="button" className="button" data-size="sm" onClick={() => startEditing(true)}>
+              <button type="button" className="button" data-size="sm" {...guard(() => startEditing(true))}>
                 Edit
               </button>
               {s.status !== "rejected" && (
@@ -523,7 +528,7 @@ function SubmissionCard({
                   Really delete
                 </button>
               ) : (
-                <button type="button" className="button" data-variant="quiet" data-size="sm" onClick={() => setConfirmDelete(true)}>
+                <button type="button" className="button" data-variant="quiet" data-size="sm" {...guard(() => setConfirmDelete(true))}>
                   <Icon name="trash" />
                   Delete
                 </button>

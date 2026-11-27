@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { gameData } from "../engine/data";
 import { RATINGS, type Rating, type Synergy } from "../engine/types";
 import { readStored, writeStored } from "./storage";
@@ -56,14 +56,17 @@ export function useCustomSynergies() {
   const [mine, setMine] = useState<Synergy[]>(() => sanitize(readStored<unknown>(KEY, [])));
 
   // Every change is made to the latest list, never to the one a callback's render saw: a send's completion
-  // can run after the visitor deleted or added another, and must not undo that (CodeRabbit, PR #12).
+  // can run after the visitor deleted or added another, and must not undo that (CodeRabbit, PR #12). The
+  // updater stays pure; the list is saved once React has committed it, and only after a change.
+  const changed = useRef(false);
   const update = useCallback((change: (list: Synergy[]) => Synergy[]) => {
-    setMine((list) => {
-      const next = change(list);
-      writeStored(KEY, next);
-      return next;
-    });
+    changed.current = true;
+    setMine(change);
   }, []);
+
+  useEffect(() => {
+    if (changed.current) writeStored(KEY, mine);
+  }, [mine]);
 
   const add = useCallback(
     (entry: NewSynergy, submitted = false) => {

@@ -37,7 +37,10 @@ def sent(store: Store, items: tuple[int, ...] = (1, 2), visitor: str = "v1", **k
         rating=kw.get("rating", "A"),
         description=kw.get("description", "The Sad Onion's tears, three at a time."),
     )
-    return store.submit(entry, visitor)[0]
+    [(row_id, _)] = store.submit_all(
+        [entry], visitor, counter=f"sub:{visitor}", per_visitor=99, site_key="sub:*", site=999
+    )
+    return row_id
 
 
 def inline(html: str) -> list[dict[str, Any]]:

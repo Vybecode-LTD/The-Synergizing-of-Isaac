@@ -182,52 +182,70 @@ class Store:
 
     # ------------------------------------------------------------ submissions
 
-    def submit(self, entry: Submission, visitor: str) -> tuple[int, bool]:
-        """Store a submission. Returns (id, repeat).
+    def submit_all(
+        self, entries: list[Submission], visitor: str, *, counter: str, per_visitor: int, site_key: str, site: int
+    ) -> list[tuple[int, bool]]:
+        """Store a visitor's submissions in one step: (id, repeat) for each, or LimitReached and nothing stored.
 
-        The same visitor sending the same combination again is a repeat: while it is still new, its rating,
-        words and link are replaced; once reviewed it is left as the owner left it.
+        Finding the repeats, charging the new ones to today's allowance (`counter` for the visitor, `site_key`
+        for the site) and storing all happen in one transaction under the store's lock. So a repeat is free
+        whatever else is sent at the same moment, and a batch that doesn't fit stores none of itself.
         """
-        now = self._clock().isoformat()
+        day, now = self._day(), self._clock().isoformat()
         with self._lock:
-            row = self._db.execute(
-                "SELECT id, status FROM submissions WHERE visitor = ? AND origin = ? AND combo = ?",
-                (visitor, entry.origin, entry.combo),
-            ).fetchone()
-            if row is not None:
-                if row[1] == "new":
+            self._db.execute("BEGIN IMMEDIATE")
+            try:
+                found = [
                     self._db.execute(
-                        "UPDATE submissions SET rating = ?, description = ?, source_url = ? WHERE id = ?",
-                        (entry.rating, entry.description, entry.source_url, row[0]),
+                        "SELECT id, status FROM submissions WHERE visitor = ? AND origin = ? AND combo = ?",
+                        (visitor, e.origin, e.combo),
+                    ).fetchone()
+                    for e in entries
+                ]
+                fresh = sum(row is None for row in found)
+                if fresh:
+                    if self._count(day, site_key) + fresh > site:
+                        raise LimitReached("budget_exhausted")
+                    if self._count(day, counter) + fresh > per_visitor:
+                        raise LimitReached("rate_limited")
+                    for who in (site_key, counter):
+                        self._db.execute(
+                            "INSERT INTO usage (day, visitor, count) VALUES (?, ?, ?) "
+                            "ON CONFLICT (day, visitor) DO UPDATE SET count = count + ?",
+                            (day, who, fresh, fresh),
+                        )
+                results: list[tuple[int, bool]] = []
+                for entry, row in zip(entries, found, strict=True):
+                    if row is not None:
+                        if row[1] == "new":  # a repeat replaces the words of one still waiting, nothing else
+                            self._db.execute(
+                                "UPDATE submissions SET rating = ?, description = ?, source_url = ? WHERE id = ?",
+                                (entry.rating, entry.description, entry.source_url, row[0]),
+                            )
+                        results.append((int(row[0]), True))
+                        continue
+                    cursor = self._db.execute(
+                        "INSERT INTO submissions (created_at, origin, combo, item_ids, trinket_ids, characters, "
+                        "rating, description, source_url, visitor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        (
+                            now,
+                            entry.origin,
+                            entry.combo,
+                            json.dumps(list(entry.item_ids)),
+                            json.dumps(list(entry.trinket_ids)),
+                            json.dumps(list(entry.characters)),
+                            entry.rating,
+                            entry.description,
+                            entry.source_url,
+                            visitor,
+                        ),
                     )
-                return int(row[0]), True
-            cursor = self._db.execute(
-                "INSERT INTO submissions (created_at, origin, combo, item_ids, trinket_ids, characters, rating, "
-                "description, source_url, visitor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (
-                    now,
-                    entry.origin,
-                    entry.combo,
-                    json.dumps(list(entry.item_ids)),
-                    json.dumps(list(entry.trinket_ids)),
-                    json.dumps(list(entry.characters)),
-                    entry.rating,
-                    entry.description,
-                    entry.source_url,
-                    visitor,
-                ),
-            )
-            return int(cursor.lastrowid or 0), False
-
-    def has_submission(self, visitor: str, origin: str, combo: str) -> bool:
-        """Whether sending this again would be a repeat (free), not a new submission."""
-        with self._lock:
-            return (
-                self._db.execute(
-                    "SELECT 1 FROM submissions WHERE visitor = ? AND origin = ? AND combo = ?", (visitor, origin, combo)
-                ).fetchone()
-                is not None
-            )
+                    results.append((int(cursor.lastrowid or 0), False))
+            except BaseException:
+                self._db.execute("ROLLBACK")
+                raise
+            self._db.execute("COMMIT")
+            return results
 
     def live_twin(self, submission_id: int) -> int | None:
         """Another live (approved) submission for the same combination as this one, if there is one."""

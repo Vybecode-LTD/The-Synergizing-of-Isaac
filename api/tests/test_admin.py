@@ -59,7 +59,10 @@ def sent(store: Store, items: tuple[int, ...] = (1, 2), origin: str = "visitor",
         description=kw.get("description", "They work together."),
         source_url=kw.get("source_url"),
     )
-    return store.submit(entry, visitor)[0]
+    [(row_id, _)] = store.submit_all(
+        [entry], visitor, counter=f"sub:{visitor}", per_visitor=99, site_key="sub:*", site=999
+    )
+    return row_id
 
 
 # ---------------------------------------------------------------- the password

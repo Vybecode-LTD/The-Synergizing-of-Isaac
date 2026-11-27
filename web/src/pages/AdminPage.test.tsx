@@ -263,9 +263,88 @@ describe("admin inbox", () => {
     });
     const user = await openAdmin();
     await user.click(await screen.findByRole("button", { name: "Sign out" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("Signing out didn't reach the server");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Couldn't confirm the sign-out. Your session may still be active.");
     expect(screen.queryByRole("form", { name: "Sign in" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument();
+  });
+
+  it("says the same when the sign-out request never left", async () => {
+    const routed = server({ "GET /api/admin/session": [200, SIGNED_IN], "GET /api/admin/submissions?status=new": inbox([]) });
+    const base = vi.mocked(fetch);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string, init?: RequestInit) =>
+        url.endsWith("/logout") ? Promise.reject(new TypeError("offline")) : base(url, init),
+      ),
+    );
+    const user = await openAdmin();
+    await user.click(await screen.findByRole("button", { name: "Sign out" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Couldn't confirm the sign-out.");
+    expect(screen.queryByRole("form", { name: "Sign in" })).not.toBeInTheDocument();
+    expect(routed.length).toBeGreaterThan(0);
+  });
+
+  it("refreshes the tab on screen when a change finishes, not the tab it started on", async () => {
+    // CodeRabbit, PR #12 (follow-up): the refresh after a change used the tab captured when it began.
+    let finish: (() => void) | undefined;
+    const live = { ...SUB, id: 8, status: "approved" as const, description: "A live one." };
+    const rejected = { ...SUB, id: 9, status: "rejected" as const, description: "A rejected one." };
+    const counts = { new: 0, approved: 1, rejected: 1, added: 0 };
+    const calls = server({
+      "GET /api/admin/session": [200, SIGNED_IN],
+      "GET /api/admin/submissions?status=new": inbox([], counts),
+      "GET /api/admin/submissions?status=approved": inbox([live], counts),
+      "GET /api/admin/submissions?status=rejected": inbox([rejected], counts),
+    });
+    const base = vi.mocked(fetch);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (init?.method === "PATCH") {
+          await new Promise<void>((resolve) => (finish = resolve));
+          return new Response(JSON.stringify(live));
+        }
+        return base(url, init);
+      }),
+    );
+    const user = await openAdmin();
+    await user.click(await screen.findByRole("button", { name: /^Live/ }));
+    await user.click(await screen.findByRole("button", { name: "Unpublish" }));
+    await user.click(screen.getByRole("button", { name: /^Rejected/ }));
+    expect(await screen.findByText("A rejected one.")).toBeInTheDocument();
+    const before = calls.length;
+    finish?.();
+    // Wait for the refresh the finished change makes, then check which tab it asked for and what is shown.
+    await vi.waitFor(() => expect(calls.length).toBeGreaterThan(before));
+    expect(calls.at(-1)?.key).toBe("GET /api/admin/submissions?status=rejected");
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(screen.getByText("A rejected one.")).toBeInTheDocument();
+    expect(screen.queryByText("A live one.")).not.toBeInTheDocument();
+  });
+
+  it("holds Edit and Delete too while a change is on its way", async () => {
+    let finish: (() => void) | undefined;
+    server({ "GET /api/admin/session": [200, SIGNED_IN], "GET /api/admin/submissions?status=new": inbox() });
+    const base = vi.mocked(fetch);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (init?.method === "PATCH") {
+          await new Promise<void>((resolve) => (finish = resolve));
+          return new Response(JSON.stringify(SUB));
+        }
+        return base(url, init);
+      }),
+    );
+    const user = await openAdmin();
+    await user.click(await screen.findByRole("button", { name: "Publish" }));
+    for (const name of ["Edit", "Delete"]) {
+      expect(screen.getByRole("button", { name })).toHaveAttribute("aria-disabled", "true");
+    }
+    await user.click(screen.getByRole("button", { name: "Edit" }));
+    expect(screen.queryByRole("textbox", { name: "Description" })).not.toBeInTheDocument();
+    finish?.();
+    await vi.waitFor(() => expect(screen.getByRole("button", { name: "Edit" })).toHaveAttribute("aria-disabled", "false"));
   });
 
   it("drops the draft on Cancel", async () => {

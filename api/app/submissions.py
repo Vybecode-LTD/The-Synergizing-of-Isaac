@@ -83,26 +83,19 @@ def routes(
     router = APIRouter(prefix="/api/submissions")
 
     def keep(entries: list[Submission], visitor: str) -> list[tuple[int, bool]]:
-        """Store them all, or none. Only new ones are charged, together, before anything is stored: a repeat
-        is free even when the day's allowance is used up, and a batch that doesn't fit stores nothing."""
-        fresh = sum(not store.has_submission(visitor, e.origin, e.combo) for e in entries)
-        reservation = None
-        if fresh:
-            try:
-                reservation = store.reserve(
-                    f"sub:{visitor}",
-                    settings.submissions_per_visitor_per_day,
-                    settings.submissions_site_per_day,
-                    site_key=SITE_KEY,
-                    amount=fresh,
-                )
-            except LimitReached as refused:
-                raise problem(429, "submissions_limited") from refused
-        results = [store.submit(e, visitor) for e in entries]
-        stored = sum(not repeat for _, repeat in results)
-        if reservation is not None and stored < fresh:
-            store.release(reservation, amount=fresh - stored)  # another request stored one first
-        return results
+        """Store them all, or none, in one step (Store.submit_all): only new ones are charged, a repeat is free
+        even when the day's allowance is used up, and a batch that doesn't fit stores nothing."""
+        try:
+            return store.submit_all(
+                entries,
+                visitor,
+                counter=f"sub:{visitor}",
+                per_visitor=settings.submissions_per_visitor_per_day,
+                site_key=SITE_KEY,
+                site=settings.submissions_site_per_day,
+            )
+        except LimitReached as refused:
+            raise problem(429, "submissions_limited") from refused
 
     @router.post("")
     def submit(body: SubmissionRequest, request: Request) -> dict[str, object]:

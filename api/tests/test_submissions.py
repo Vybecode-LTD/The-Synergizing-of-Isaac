@@ -331,15 +331,24 @@ def test_a_repeat_costs_nothing_even_when_the_day_is_used_up(site: Callable[...,
     assert store.submissions()[0]["description"] == "Better words."
 
 
-def test_a_send_another_request_stored_first_is_given_back(
-    site: Callable[..., TestClient], store: Store, monkeypatch: pytest.MonkeyPatch
+async def test_two_sends_of_one_new_synergy_at_the_limit_both_land(
+    settings: Settings, analyzer: FakeAnalyzer, store: Store
 ) -> None:
-    """The repeat check and the insert are separate steps: if another request stores the same combination in
-    between, the charge for it is refunded."""
-    client = site(submissions_per_visitor_per_day=2)
-    assert send(client, VALID).status_code == 200
-    monkeypatch.setattr(store, "has_submission", lambda *args: False)  # as if the first had not landed yet
-    assert send(client, VALID).json()["duplicate"] is True
-    monkeypatch.undo()
-    assert send(client, {**VALID, "items": [1, 3]}).status_code == 200  # the refund left room for this
-    assert send(client, {**VALID, "items": [1, 4]}).status_code == 429
+    """Finding (CodeRabbit, PR #12): with one left, two sends of the same new synergy could both miss the repeat
+    check; the first took the last slot and the second was refused, though it was by then a free repeat.
+    Checking, charging and storing are one step now (Store.submit_all). Red on the old code, which had the
+    check apart, with a barrier holding both requests there: (429, 200)."""
+    import asyncio
+
+    import httpx
+
+    app = create_app(replace(settings, submissions_per_visitor_per_day=1), analyzer=analyzer, store=store)
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://test", headers={"x-forwarded-for": "203.0.113.7"}
+    ) as http:
+        a, b = await asyncio.gather(
+            http.post("/api/submissions", json=VALID), http.post("/api/submissions", json=VALID)
+        )
+    assert (a.status_code, b.status_code) == (200, 200)
+    assert sorted([a.json()["duplicate"], b.json()["duplicate"]]) == [False, True]
+    assert len(store.submissions()) == 1

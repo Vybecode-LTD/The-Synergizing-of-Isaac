@@ -1,5 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { StrictMode } from "react";
+import { describe, expect, it, vi } from "vitest";
 import { useCustomSynergies, type NewSynergy } from "./useCustomSynergies";
 
 const entry = (description: string): NewSynergy => ({
@@ -30,5 +31,21 @@ describe("useCustomSynergies", () => {
     ]);
     const saved = JSON.parse(localStorage.getItem("isaac-toys:my-synergies:v1")!);
     expect(saved.map((s: { description: string }) => s.description)).toEqual(["A", "C"]);
+  });
+});
+
+describe("useCustomSynergies, saving", () => {
+  it("writes to storage after the change is committed, never from inside a state update", () => {
+    // CodeRabbit, PR #12 (follow-up): updaters must be pure; React may run one for a render it then drops.
+    // Strict Mode runs every updater twice to show it up: storage must be written once per change.
+    const setItem = vi.spyOn(Storage.prototype, "setItem");
+    const { result } = renderHook(() => useCustomSynergies(), { wrapper: StrictMode });
+    expect(setItem).not.toHaveBeenCalled(); // nothing written just for opening the page
+    act(() => result.current.add(entry("A")));
+    expect(setItem).toHaveBeenCalledTimes(1);
+    act(() => result.current.markSubmitted(result.current.mine[0]!.id));
+    expect(setItem).toHaveBeenCalledTimes(2);
+    expect(JSON.parse(localStorage.getItem("isaac-toys:my-synergies:v1")!)[0].submitted).toBe(true);
+    setItem.mockRestore();
   });
 });
