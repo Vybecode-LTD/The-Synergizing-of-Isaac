@@ -208,3 +208,12 @@ def test_two_live_rows_for_one_combination_show_and_back_up_once(site: TestClien
         store.review(row, {"status": "approved"})
     assert [r["description"] for r in inline(site.get("/").text)] == ["Oldest words."]
     assert [e["description"] for e in site.get("/api/community").json()["entries"]] == ["Oldest words."]
+
+
+def test_an_entry_id_already_taken_gets_the_next_number(data: Any) -> None:
+    from app.community import slug_id
+
+    taken = {"brimstone+tammys-head", "brimstone+tammys-head~2"}
+    assert slug_id(data, [118, 38], [], [], taken) == "brimstone+tammys-head~3"
+    assert "brimstone+tammys-head~3" in taken
+    assert slug_id(data, [118], [39], ["azazel"], taken) == "brimstone+t-cancer+c-azazel"

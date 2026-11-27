@@ -368,15 +368,10 @@ def test_the_export_is_ready_for_add_submissions(owner: TestClient, store: Store
             "rating": "B",
             "description": "They work together.",
         },
-        {
-            "id": "brimstone+tammys-head~2",
-            "items": ["Tammy's Head", "Brimstone"],
-            "trinkets": [],
-            "characters": [],
-            "rating": "B",
-            "description": "A better description.",
-        },
     ]
+    # A combination the curated list has is not exported (add-submissions would refuse the whole file); its
+    # row is listed against the curated entry.
+    assert {"id": twin, "entry": "brimstone+tammys-head", "origin": "visitor", "sourceUrl": None} in body["submissions"]
     assert body["submissions"][0] == {
         "id": plain,
         "entry": "the-inner-eye+the-sad-onion",
@@ -417,3 +412,24 @@ def test_the_export_lists_a_later_twin_against_the_oldest_entry(owner: TestClien
         (first, "the-inner-eye+the-sad-onion"),
         (second, "the-inner-eye+the-sad-onion"),
     ]
+
+
+# ---------------------------------------------------------------- CodeRabbit review of PR #12
+
+
+def test_a_username_that_is_not_ascii_works(make: Callable[..., TestClient]) -> None:
+    """Finding: the session check compared str with compare_digest, which refuses non-ASCII text."""
+    client = make(admin_username="José")
+    assert client.post("/api/admin/login", json={**LOGIN, "username": "José"}).status_code == 200
+    assert client.get("/api/admin/session").json()["signedIn"] is True
+    assert client.get("/api/admin/submissions").status_code == 200
+
+
+def test_a_submission_deleted_while_it_is_being_saved_is_a_404(
+    owner: TestClient, store: Store, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Finding: a delete between the update and the read-back hit an assert (a 500)."""
+    row = sent(store)
+    monkeypatch.setattr(store, "submission", lambda _id: None)
+    r = owner.patch(f"/api/admin/submissions/{row}", json={"note": "x"})
+    assert r.status_code == 404 and r.json()["detail"]["code"] == "not_found"

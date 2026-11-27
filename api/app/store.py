@@ -376,9 +376,10 @@ class Store:
             if row is None:
                 return False
             created, seen = datetime.datetime.fromisoformat(row[2]), datetime.datetime.fromisoformat(row[3])
+            # Bytes, not str: compare_digest refuses str that is not ASCII, and a username need not be.
             live = (
-                secrets.compare_digest(row[0], username)
-                and secrets.compare_digest(row[1], secret_tag)
+                secrets.compare_digest(row[0].encode(), username.encode())
+                and secrets.compare_digest(row[1].encode(), secret_tag.encode())
                 and now - created < SESSION_LIFETIME
                 and now - seen < SESSION_IDLE
             )

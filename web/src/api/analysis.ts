@@ -60,6 +60,22 @@ function codeFor(status: number, code: string | null): AnalysisErrorCode {
 
 const strings = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((line) => typeof line === "string");
+const numbers = (value: unknown): value is number[] =>
+  Array.isArray(value) && value.every((n) => typeof n === "number");
+
+/** One find, checked field by field: the panel reads every one of them as it draws. */
+function isFind(value: unknown): value is FoundSynergy {
+  const f = value as Partial<FoundSynergy> | null;
+  return Boolean(
+    f &&
+      typeof f.key === "string" &&
+      numbers(f.itemIds) &&
+      numbers(f.trinketIds) &&
+      strings(f.characterSlugs) &&
+      RATINGS.includes(f.rating as Rating) &&
+      typeof f.description === "string",
+  );
+}
 
 /** Whether a response body is the shape this page can show. Anything else is treated as no answer. */
 export function isAnalysis(body: unknown): body is Analysis {
@@ -73,6 +89,7 @@ export function isAnalysis(body: unknown): body is Analysis {
       RATINGS.includes(read.verdict?.tier as Rating) &&
       typeof read.verdict?.why === "string" &&
       Array.isArray(a.found) &&
+      a.found.every(isFind) &&
       typeof a.cached === "boolean",
   );
 }

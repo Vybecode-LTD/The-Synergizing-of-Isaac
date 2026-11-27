@@ -99,6 +99,9 @@ def test_finds_are_kept_only_when_they_fit_the_build(data: GameData) -> None:
 def test_a_find_that_needs_a_character_needs_one_chosen(data: GameData) -> None:
     found = read_answer(answer(synergies_found=[find(["i3"], only_as_character=True)]), data, Build(items=(3,)))
     assert found.found == []
+    # Finding (CodeRabbit, PR #12): with two pickups it passed the count and lost its character condition.
+    two = read_answer(answer(synergies_found=[find(["i1", "i3"], only_as_character=True)]), data, Build(items=(1, 3)))
+    assert two.found == []
 
 
 @pytest.mark.parametrize(

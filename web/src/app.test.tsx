@@ -430,6 +430,14 @@ describe("sending your synergy to the site", () => {
     expect(await within(dialog).findByRole("alert")).toHaveTextContent("Bad link.");
     expect(localStorage.getItem("isaac-toys:my-synergies:v1")).toBeNull();
 
+    // Emptied after the failure, the fallback refuses too (CodeRabbit, PR #12).
+    const words = within(dialog).getByRole("textbox", { name: "What happens?" });
+    await user.clear(words);
+    await user.click(within(dialog).getByRole("button", { name: "Save without sending" }));
+    expect(within(dialog).getByText(/Say what the combination does/)).toBeInTheDocument();
+    expect(localStorage.getItem("isaac-toys:my-synergies:v1")).toBeNull();
+    await user.type(words, "Words to keep.");
+
     await user.click(within(dialog).getByRole("button", { name: "Save without sending" }));
     expect(screen.getByText("Words to keep.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Send to isaac.toys" })).toBeInTheDocument();

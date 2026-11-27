@@ -254,7 +254,8 @@ describe("admin inbox", () => {
     expect(await screen.findByRole("form", { name: "Sign in" })).toBeInTheDocument();
   });
 
-  it("still signs out here when the server can't be told", async () => {
+  it("stays signed in, and says so, when the sign-out never reached the server", async () => {
+    // CodeRabbit, PR #12: showing the sign-in form here hid a session that was still valid.
     server({
       "GET /api/admin/session": [200, SIGNED_IN],
       "GET /api/admin/submissions?status=new": inbox([]),
@@ -262,7 +263,89 @@ describe("admin inbox", () => {
     });
     const user = await openAdmin();
     await user.click(await screen.findByRole("button", { name: "Sign out" }));
-    expect(await screen.findByRole("form", { name: "Sign in" })).toBeInTheDocument();
+    expect(await screen.findByRole("alert")).toHaveTextContent("Signing out didn't reach the server");
+    expect(screen.queryByRole("form", { name: "Sign in" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument();
+  });
+
+  it("drops the draft on Cancel", async () => {
+    // CodeRabbit, PR #12: a cancelled edit came back on the next Edit and was sent by Save.
+    const calls = server({
+      "GET /api/admin/session": [200, SIGNED_IN],
+      "GET /api/admin/submissions?status=new": inbox(),
+      "PATCH /api/admin/submissions/4": [200, SUB],
+    });
+    const user = await openAdmin();
+    await user.click(await screen.findByRole("button", { name: "Edit" }));
+    await user.type(screen.getByRole("textbox", { name: "Description" }), " cancelled words");
+    await user.click(screen.getByRole("radio", { name: "D" }));
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    await user.click(screen.getByRole("button", { name: "Edit" }));
+    expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue("Ten lasers in a ring.");
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    expect(calls.find((c) => c.key.startsWith("PATCH"))?.body).toEqual({ rating: "A", description: "Ten lasers in a ring.", note: "" });
+  });
+
+  it("runs one change at a time", async () => {
+    // CodeRabbit, PR #12: Publish then Reject could both be in flight, and the slower one won.
+    let finish: (() => void) | undefined;
+    const patches: unknown[] = [];
+    const base = server({
+      "GET /api/admin/session": [200, SIGNED_IN],
+      "GET /api/admin/submissions?status=new": inbox(),
+    });
+    const routed = vi.mocked(fetch);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (init?.method === "PATCH") {
+          patches.push(JSON.parse(String(init.body)));
+          await new Promise<void>((resolve) => (finish = resolve));
+          return new Response(JSON.stringify(SUB));
+        }
+        return routed(url, init);
+      }),
+    );
+    const user = await openAdmin();
+    await user.click(await screen.findByRole("button", { name: "Publish" }));
+    await user.click(screen.getByRole("button", { name: "Reject" }));
+    expect(patches).toEqual([{ status: "approved" }]);
+    finish?.();
+    await vi.waitFor(() => expect(screen.getByRole("button", { name: "Reject" })).not.toHaveAttribute("aria-disabled", "true"));
+    expect(base.filter((c) => c.key.startsWith("GET /api/admin/submissions")).length).toBeGreaterThan(1);
+  });
+
+  it("ignores an answer for a tab that is no longer chosen", async () => {
+    // CodeRabbit, PR #12: a slow Live list arriving after Rejected was chosen replaced it.
+    let releaseLive: (() => void) | undefined;
+    const live = { ...SUB, id: 8, status: "approved" as const, description: "A live one." };
+    const rejected = { ...SUB, id: 9, status: "rejected" as const, description: "A rejected one." };
+    const routed = server({
+      "GET /api/admin/session": [200, SIGNED_IN],
+      "GET /api/admin/submissions?status=new": inbox([]),
+      "GET /api/admin/submissions?status=rejected": inbox([rejected]),
+    });
+    const base = vi.mocked(fetch);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string, init?: RequestInit) => {
+        if (url.endsWith("status=approved")) {
+          await new Promise<void>((resolve) => (releaseLive = resolve));
+          return new Response(JSON.stringify({ submissions: [live], counts: COUNTS }));
+        }
+        return base(url, init);
+      }),
+    );
+    const user = await openAdmin();
+    await screen.findByText(/Nothing here yet/);
+    await user.click(screen.getByRole("button", { name: /Live/ }));
+    await user.click(screen.getByRole("button", { name: /Rejected/ }));
+    expect(await screen.findByText("A rejected one.")).toBeInTheDocument();
+    releaseLive?.();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(screen.getByText("A rejected one.")).toBeInTheDocument();
+    expect(screen.queryByText("A live one.")).not.toBeInTheDocument();
+    expect(routed.length).toBeGreaterThan(0);
   });
 
   it("says so when the inbox or the export can't be loaded", async () => {

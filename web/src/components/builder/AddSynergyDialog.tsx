@@ -78,6 +78,8 @@ function AddSynergyForm({ build, onSave, onClose }: Omit<AddSynergyDialogProps, 
   };
 
   const saveOnly = () => {
+    setTried(true);
+    if (missing) return;
     onSave(entry(), false);
     onClose();
   };

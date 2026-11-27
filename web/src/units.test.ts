@@ -47,6 +47,15 @@ describe("isAnalysis", () => {
     expect(isAnalysis({ ...good, read: { ...good.read, verdict: { tier: "Z", why: "b" } } })).toBe(false);
     expect(isAnalysis({ ...good, read: { ...good.read, howItPlays: [1] } })).toBe(false);
     expect(isAnalysis({ ...good, found: null })).toBe(false);
+    // Each find too (CodeRabbit, PR #12): a bad one used to pass and break the panel while it drew.
+    const find = { key: "i:1.2|t:|c:", itemIds: [1, 2], trinketIds: [], characterSlugs: [], rating: "B", description: "d" };
+    expect(isAnalysis({ ...good, found: [find] })).toBe(true);
+    expect(isAnalysis({ ...good, found: [null] })).toBe(false);
+    expect(isAnalysis({ ...good, found: [{ ...find, itemIds: undefined }] })).toBe(false);
+    expect(isAnalysis({ ...good, found: [{ ...find, trinketIds: ["1"] }] })).toBe(false);
+    expect(isAnalysis({ ...good, found: [{ ...find, rating: "Z" }] })).toBe(false);
+    expect(isAnalysis({ ...good, found: [{ ...find, key: 3 }] })).toBe(false);
+    expect(isAnalysis({ ...good, found: [{ ...find, description: null }] })).toBe(false);
     expect(isAnalysis(null)).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   STATUSES,
   getExport,
@@ -168,12 +168,19 @@ function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (
     [onSignedOut],
   );
 
+  // Each load is numbered; only the newest may fill the inbox, so a slow answer for a tab left behind
+  // never replaces the one on screen (CodeRabbit, PR #12).
+  const latest = useRef(0);
   const load = useCallback(
     async (which: Status | "all") => {
+      const ticket = ++latest.current;
       try {
-        setInbox(await getInbox(which));
+        const fresh = await getInbox(which);
+        if (ticket !== latest.current) return;
+        setInbox(fresh);
         setError(null);
       } catch (cause) {
+        if (ticket !== latest.current) return;
         if (signedOut(cause)) expired();
         else setError(errorMessage(cause));
       }
@@ -185,21 +192,30 @@ function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (
     void load(tab);
   }, [load, tab]);
 
+  // One change at a time: while one is on its way, every card's controls wait, so two changes to the same
+  // submission can never race and leave the slower one standing (CodeRabbit, PR #12).
+  const [busy, setBusy] = useState(false);
   const act = async (work: () => Promise<unknown>) => {
+    if (busy) return;
+    setBusy(true);
     try {
       await work();
       await load(tab);
     } catch (cause) {
       if (signedOut(cause)) expired();
       else setError(errorMessage(cause));
+    } finally {
+      setBusy(false);
     }
   };
 
   const leave = async () => {
     try {
       onSignedOut(await signOut());
-    } catch {
-      expired();
+    } catch (cause) {
+      if (signedOut(cause)) expired();
+      // Showing the sign-in form here would hide a session that is still valid (CodeRabbit, PR #12).
+      else setError("Signing out didn't reach the server, so you're still signed in. Try again.");
     }
   };
 
@@ -251,6 +267,7 @@ function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (
             <li key={s.id}>
               <SubmissionCard
                 submission={s}
+                busy={busy}
                 onReview={(changes) => act(() => review(s.id, changes))}
                 onDelete={() => act(() => removeSubmission(s.id))}
               />
@@ -334,10 +351,13 @@ function ExportPanel({ count }: { count: number }) {
 
 function SubmissionCard({
   submission: s,
+  busy,
   onReview,
   onDelete,
 }: {
   submission: Submission;
+  /** A change is on its way: the controls wait for it. */
+  busy: boolean;
   onReview: (changes: Review) => void;
   onDelete: () => void;
 }) {
@@ -357,6 +377,15 @@ function SubmissionCard({
     })),
   ];
   const when = new Date(s.createdAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+
+  const startEditing = (on: boolean) => {
+    setRating(s.rating);
+    setDescription(s.description);
+    setNote(s.note ?? "");
+    setEditing(on);
+  };
+  // While a change is on its way the buttons stay put but do nothing, and say so to assistive tech.
+  const guard = (run: () => void) => ({ "aria-disabled": busy, onClick: busy ? undefined : run });
 
   const save = (status?: Status) =>
     onReview({ rating, description: description.trim(), note: note.trim(), ...(status ? { status } : {}) });
@@ -455,41 +484,41 @@ function SubmissionCard({
         <div className="admin-sub__actions">
           {editing ? (
             <>
-              <button type="button" className="button" data-variant="primary" data-size="sm" onClick={() => save("approved")}>
+              <button type="button" className="button" data-variant="primary" data-size="sm" {...guard(() => save("approved"))}>
                 <Icon name="check" />
                 Save and publish
               </button>
-              <button type="button" className="button" data-size="sm" onClick={() => save()}>
+              <button type="button" className="button" data-size="sm" {...guard(() => save())}>
                 Save
               </button>
-              <button type="button" className="button" data-variant="quiet" data-size="sm" onClick={() => setEditing(false)}>
+              <button type="button" className="button" data-variant="quiet" data-size="sm" onClick={() => startEditing(false)}>
                 Cancel
               </button>
             </>
           ) : (
             <>
               {s.status !== "approved" && (
-                <button type="button" className="button" data-variant="primary" data-size="sm" onClick={() => onReview({ status: "approved" })}>
+                <button type="button" className="button" data-variant="primary" data-size="sm" {...guard(() => onReview({ status: "approved" }))}>
                   <Icon name="check" />
                   Publish
                 </button>
               )}
-              <button type="button" className="button" data-size="sm" onClick={() => setEditing(true)}>
+              <button type="button" className="button" data-size="sm" onClick={() => startEditing(true)}>
                 Edit
               </button>
               {s.status !== "rejected" && (
-                <button type="button" className="button" data-size="sm" onClick={() => onReview({ status: "rejected" })}>
+                <button type="button" className="button" data-size="sm" {...guard(() => onReview({ status: "rejected" }))}>
                   <Icon name="close" />
                   Reject
                 </button>
               )}
               {s.status !== "new" && (
-                <button type="button" className="button" data-variant="quiet" data-size="sm" onClick={() => onReview({ status: "new" })}>
+                <button type="button" className="button" data-variant="quiet" data-size="sm" {...guard(() => onReview({ status: "new" }))}>
                   {s.status === "approved" ? "Unpublish" : "Back to new"}
                 </button>
               )}
               {confirmDelete ? (
-                <button type="button" className="button" data-variant="quiet" data-size="sm" onClick={onDelete}>
+                <button type="button" className="button" data-variant="quiet" data-size="sm" {...guard(onDelete)}>
                   <Icon name="trash" />
                   Really delete
                 </button>

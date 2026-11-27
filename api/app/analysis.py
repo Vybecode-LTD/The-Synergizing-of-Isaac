@@ -264,6 +264,8 @@ def read_answer(text: str, data: GameData, build: Build, max_found: int = MAX_FO
             else:
                 break
         else:
+            if f.only_as_character and not build.character:
+                continue  # it holds only for a character, and none is chosen: it cannot be stated for this build
             characters = [build.character] if f.only_as_character and build.character else []
             pieces = (tuple(sorted(items)), tuple(sorted(trinkets)))
             description = _clean(f.description, MAX_DESCRIPTION)

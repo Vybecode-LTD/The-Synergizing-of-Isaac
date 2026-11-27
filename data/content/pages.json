@@ -76,7 +76,7 @@
     "titles": ["Synergy Inbox | {domain}"],
     "description": "Where the owner of {domain} reviews the synergies visitors send in.",
     "h1": "Synergy inbox",
-    "lede": "Synergies visitors sent in. Approve the good ones, then export them for data/synergies.json."
+    "lede": "Synergies visitors sent in. Publishing one puts it on the site at once, marked Community. Moving live ones into data/synergies.json is optional, by export and pull request."
   },
   "notFound": {
     "titles": ["Page Not Found | {domain}"],

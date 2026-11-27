@@ -48,20 +48,28 @@ export function sanitize(raw: unknown): Synergy[] {
   return out;
 }
 
+/** Counts saves in this page's life, so two in the same millisecond still get different ids. */
+let serial = 0;
+
 /** Synergies this visitor wrote themselves. They live in this browser only. */
 export function useCustomSynergies() {
   const [mine, setMine] = useState<Synergy[]>(() => sanitize(readStored<unknown>(KEY, [])));
 
-  const save = useCallback((next: Synergy[]) => {
-    setMine(next);
-    writeStored(KEY, next);
+  // Every change is made to the latest list, never to the one a callback's render saw: a send's completion
+  // can run after the visitor deleted or added another, and must not undo that (CodeRabbit, PR #12).
+  const update = useCallback((change: (list: Synergy[]) => Synergy[]) => {
+    setMine((list) => {
+      const next = change(list);
+      writeStored(KEY, next);
+      return next;
+    });
   }, []);
 
   const add = useCallback(
     (entry: NewSynergy, submitted = false) => {
       const synergy: Synergy = {
         // Two saves in the same millisecond (saving several AI finds) must not share an id.
-        id: `mine-${Date.now().toString(36)}-${mine.length.toString(36)}`,
+        id: `mine-${Date.now().toString(36)}-${(serial++).toString(36)}`,
         itemIds: entry.itemIds,
         trinketIds: entry.trinketIds,
         characterSlugs: entry.character ? [entry.character] : [],
@@ -70,16 +78,16 @@ export function useCustomSynergies() {
         custom: true,
         ...(submitted ? { submitted: true } : {}),
       };
-      save([...mine, synergy]);
+      update((list) => [...list, synergy]);
     },
-    [mine, save],
+    [update],
   );
 
-  const remove = useCallback((id: string) => save(mine.filter((s) => s.id !== id)), [mine, save]);
+  const remove = useCallback((id: string) => update((list) => list.filter((s) => s.id !== id)), [update]);
 
   const markSubmitted = useCallback(
-    (id: string) => save(mine.map((s) => (s.id === id ? { ...s, submitted: true } : s))),
-    [mine, save],
+    (id: string) => update((list) => list.map((s) => (s.id === id ? { ...s, submitted: true } : s))),
+    [update],
   );
 
   return { mine, add, remove, markSubmitted };

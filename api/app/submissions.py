@@ -55,15 +55,20 @@ def check_url(raw: str | None) -> str | None:
     url = (raw or "").strip()
     if not url:
         return None
-    parts = urlsplit(url)
+    refused = problem(422, "invalid", "The link must be a web address starting with http:// or https://.")
+    try:
+        parts = urlsplit(url)
+        host = parts.hostname
+    except ValueError as error:  # an unmatched bracket, for one: urlsplit raises rather than returning parts
+        raise refused from error
     if (
         len(url) > MAX_URL
         or parts.scheme not in ("http", "https")
-        or not parts.hostname
+        or not host
         or re.search(r"\s", url)
-        or "." not in parts.hostname
+        or "." not in host
     ):
-        raise problem(422, "invalid", "The link must be a web address starting with http:// or https://.")
+        raise refused
     return url
 
 

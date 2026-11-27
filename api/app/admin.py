@@ -142,7 +142,8 @@ def routes(settings: Settings, data: GameData, store: Store, visitor_of: Callabl
         if not store.review(submission_id, changes):
             raise problem(404, "not_found")
         row = store.submission(submission_id)
-        assert row is not None
+        if row is None:  # deleted by another request between the update and this read
+            raise problem(404, "not_found")
         return on_list(row)
 
     @router.delete("/submissions/{submission_id}", dependencies=[Depends(signed_in)])
@@ -157,7 +158,9 @@ def routes(settings: Settings, data: GameData, store: Store, visitor_of: Callabl
         """Every approved submission as a data/synergies.json entry, for scripts/gamedata.py add-submissions."""
         taken = {s.id for s in data.synergies}
         entries, sources = [], []
-        by_combo: dict[str, str] = {}
+        # A combination the curated list has is never exported (add-submissions would refuse the whole file);
+        # its rows are listed against the curated entry instead, as a later twin is against the oldest.
+        by_combo: dict[str, str] = {s.combo: s.id for s in data.synergies}
         for row in sorted(store.submissions("approved"), key=lambda r: r["id"]):
             combo = combo_key(row["itemIds"], row["trinketIds"], row["characterSlugs"])
             if combo in by_combo:

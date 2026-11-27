@@ -129,6 +129,8 @@ def test_words_are_kept_as_one_plain_paragraph(client: TestClient, store: Store)
         ({"sourceUrl": "https://"}, None),
         ({"sourceUrl": "http://localhost/admin"}, None),
         ({"sourceUrl": "https://exa mple.com/"}, None),
+        ({"sourceUrl": "https://[example.com"}, None),  # urlsplit raises on it (CodeRabbit, PR #12)
+        ({"sourceUrl": "http://[::1]:x/"}, None),
         ({"sourceUrl": "https://example.com/" + "a" * 300}, None),
         ({"rating": "Z"}, None),
         ({"description": "x" * 2401}, None),
