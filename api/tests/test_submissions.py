@@ -332,16 +332,29 @@ def test_a_repeat_costs_nothing_even_when_the_day_is_used_up(site: Callable[...,
 
 
 async def test_two_sends_of_one_new_synergy_at_the_limit_both_land(
-    settings: Settings, analyzer: FakeAnalyzer, store: Store
+    settings: Settings, analyzer: FakeAnalyzer, store: Store, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Finding (CodeRabbit, PR #12): with one left, two sends of the same new synergy could both miss the repeat
     check; the first took the last slot and the second was refused, though it was by then a free repeat.
     Checking, charging and storing are one step now (Store.submit_all). Red on the old code, which had the
-    check apart, with a barrier holding both requests there: (429, 200)."""
+    check apart, with a barrier holding both requests there: (429, 200).
+
+    Deterministic: a barrier holds both requests just before that step, outside its lock, so both are past
+    every check and neither has stored anything when they go on. If the two were not in flight together, the
+    barrier would time out and the test would fail, so it cannot pass by one request finishing first."""
     import asyncio
+    import threading
 
     import httpx
 
+    both_ready = threading.Barrier(2, timeout=5)
+    real = store.submit_all
+
+    def after_both_arrive(*args: Any, **kwargs: Any) -> list[tuple[int, bool]]:
+        both_ready.wait()  # raises BrokenBarrierError, a 500, if the other request never arrives
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(store, "submit_all", after_both_arrive)
     app = create_app(replace(settings, submissions_per_visitor_per_day=1), analyzer=analyzer, store=store)
     async with httpx.AsyncClient(
         transport=httpx.ASGITransport(app=app), base_url="http://test", headers={"x-forwarded-for": "203.0.113.7"}
