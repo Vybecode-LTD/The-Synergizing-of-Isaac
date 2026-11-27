@@ -1,4 +1,4 @@
-# Starting prompt — isaac.toys (written 2026-11-26, end of the seventh session)
+# Starting prompt — isaac.toys (written 2026-11-27, end of the seventh session)
 
 Work in `C:\DEV\The-Synergizing-of-Isaac`. Read `CLAUDE.md` (project), then `docs/HANDOFF.md`. This file
 says what to do next; those say what exists.
@@ -10,50 +10,53 @@ says what to do next; those say what exists.
 
 ## 2. Rules beyond `CLAUDE.md`
 - **Never merge, change Railway settings or variables, or spend on the AI without the owner's explicit OK.**
-  `dev plans/tools/limit_check.py` spends money.
+  `dev plans/tools/limit_check.py` spends money (`--self-test` does not).
 - Never list Railway variables (MCP `list-variables` or CLI): it prints the Anthropic key.
-- Game facts come from the wiki for Repentance. The site's own art stays original.
-- Wait for CodeRabbit before merging: merging first cancels its review for good.
+- Game facts come from the wiki for Repentance. The site's own art stays original; the footer's CarbonDSP
+  brandmark is the reverse version on purpose (decision 0007).
+- Wait for a real CodeRabbit review before merging. Its check can read "Review rate limited";
+  `@coderabbitai review` posts as the owner, so ask each time.
 
 ## 3. State when this was written (verify before trusting it)
-- `main`: `7a494aa` (PR #10: data and libraries in their own chunks, CarbonDSP brandmark in the footer;
-  merged 11:24 am EST). Live deployment `db828f7f` is that commit, SUCCESS; live e2e 13 of 13, smoke 12 of 12.
-- AI limit: `AI_PER_VISITOR_PER_DAY=10` on Railway (owner, 2026-11-26); the site cap stays 200.
-- **PR #11** (`docs/ai-limit-10`, docs and a tool): the limit change in DEPLOY, decision 0003 and
-  `dev plans/tools/limit_check.py`, plus this prompt and the handoff. Check `gh pr checks 11`.
+- `main`: `8c59906` (PR #11, merged 2026-11-27 1:39 pm EST). No PR is open. Live deployment `be23bd88` is
+  that commit; see the handoff for what was verified after it.
+- **Uncommitted on purpose:** this file and `docs/HANDOFF.md`, refreshed after #11 merged. Carry them into
+  your first branch.
+- AI: 10 fresh analyses per visitor per day (`AI_PER_VISITOR_PER_DAY=10` on Railway), site cap 200.
 - Deploy checks 1 to 5 passed; check 3's other-network half is unproven ("Not now", 2026-11-26).
-- Merged branches still on GitHub: `ci/docker-smoke`, `data/transformations-repentance`,
+- Merged branches on GitHub and here: `ci/docker-smoke`, `data/transformations-repentance`,
   `docs/deploy-checks-and-handoff`, `fix/home-link-and-theme-switch`, `feat/e2e-and-footer`,
-  `perf/split-data-chunk`.
+  `perf/split-data-chunk`, `docs/ai-limit-10`.
 
 ## 4. First job, then the order
-1. PR #11: CI green and a real CodeRabbit review. Its check can read "Review rate limited";
-   `@coderabbitai review` posts as the owner, so ask first. Then **ask the owner** to merge (it redeploys).
-2. The tracker's older item names: ask first (section 5).
+1. Ask the owner the open questions in section 5; nothing planned is blocked on code.
+2. If the owner says rename, fix the tracker's older item names ("1UP", "Number two") at the source
+   (`data/sources/` or `scripts/gamedata.py`, never the output), then `build`, `validate`, parity, both suites.
+3. Otherwise offer the handoff's candidates (a free browser test of the AI panel with AI off; Firefox or
+   WebKit in CI) and let the owner pick.
 
 ## 5. Waiting on the owner (ask, do not decide)
-- Merge PR #11? Delete the six merged branches? Switch on Railway's "Wait for CI" (dashboard toggle)?
-  Rename the items with the tracker's older spellings ("1UP", "Number two")? Run check 3's other-network
-  half (now up to 12 paid analyses, phone on mobile data)?
+- Delete the seven merged branches? Switch on Railway's "Wait for CI" (dashboard toggle)? Rename the
+  items with the tracker's older spellings? Run check 3's other-network half (up to 12 paid analyses,
+  phone on mobile data)?
 
 ## 6. Environment and traps
 - Start: `cd web; npm run check`, then `cd ../api; .venv\Scripts\python -m pytest --cov`.
-- Browser test here: `npm run build`, start the `site` preview server (`.claude/launch.json`, port 8001),
-  then `npm run e2e`. It drives the installed Chrome; Playwright can't download browsers on this machine.
-  Restart the 8001 server after every build (it caches the old `index.html`).
-- The CSP allows no inline script; a saved theme is applied by `web/public/theme.js` and `applyTheme`.
-- An SVG comment must not contain `--`. `gh pr merge --match-head-commit` needs the full SHA.
-- The GitHub API (5,000 calls an hour, shared) ran out once; `git push` still works when it does.
+- Browser test here: `npm run build`, start the `site` preview server (port 8001), then `npm run e2e`; it
+  drives the installed Chrome. Restart 8001 after every build. `SITE=https://isaac.toys npm run e2e` is free.
+- Verify a Railway setting inside the container (`railway ssh`, key in the `railway-deploy-playbook`
+  skill), printing only that setting. `gh pr merge --match-head-commit` needs the full SHA.
 
 ## 7. Where things are
 Decisions `docs/decisions/0001`–`0007`, next free `0008`. Evidence: `docs/TESTING.md`. Deploy facts:
-`docs/DEPLOY.md`. Tools: `dev plans/tools/`. Memory: the project's `MEMORY.md` (this session's
-candidates: `seventh-session-promotion-candidates`). Next PR number: 12.
+`docs/DEPLOY.md`. Tools: `dev plans/tools/`. Memory: `seventh-session-promotion-candidates`. Next PR: 12.
 
 ## 8. Promotion candidates for `knowledge/` (owner approves)
-1. Prove a browser suite against the live site before deploying the change: the old build must fail exactly
-   the new checks and pass the rest. It's a free positive control with production's real headers.
-2. A Playwright reporter that fails a run with nothing passed or anything skipped (`web/e2e/no-vacuous-pass.ts`);
-   Playwright takes a changed status from `onEnd` only as a promise.
-3. A console-error fixture doubles as a CSP check; prove it with an injected inline script.
-4. Earlier: `2026-11-26-promotion-candidates` and the older memory notes.
+1. Run a new browser suite against the live site before deploying: the old build must fail exactly the new
+   checks. A free positive control with production's real headers.
+2. A Playwright reporter that fails a run with nothing passed or anything skipped; `onEnd` changes the
+   status only through a promise.
+3. Check what ships by chunk membership (a build plugin's `moduleIds` report), not text markers: data
+   files share words.
+4. Give a paid probe's verdicts a pure function and `--self-test`, then mutation-test it for free.
+5. More in the memory note named in section 7.

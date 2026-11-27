@@ -27,6 +27,16 @@
     border-radius: var(--radius-md);
   }
 
+  /* The AI's verdict: the same sticker, big, slapped on at a slant. */
+  .rating[data-size="lg"] {
+    --rating-size: var(--size-seal-lg);
+    --rating-tilt: var(--tilt-slight);
+
+    font: var(--type-seal-lg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--elevation-sticker);
+  }
+
   .rating[data-rating="S"] { --rating-fg: var(--fg-on-tier-s); --rating-bg: var(--bg-tier-s); }
   .rating[data-rating="A"] { --rating-fg: var(--fg-on-tier-a); --rating-bg: var(--bg-tier-a); }
   .rating[data-rating="B"] { --rating-fg: var(--fg-on-tier-b); --rating-bg: var(--bg-tier-b); }

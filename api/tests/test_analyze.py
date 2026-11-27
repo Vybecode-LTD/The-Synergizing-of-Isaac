@@ -12,12 +12,12 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from app.analysis import SYSTEM, AnalysisFailed, cache_key
+from app.analysis import SCHEMA, SYSTEM, AnalysisFailed, cache_key
 from app.main import create_app
 from app.settings import Settings
 from app.store import Store
 
-from .conftest import Clock, FakeAnalyzer
+from .conftest import Clock, FakeAnalyzer, answer_json, read_of
 
 BRIM_TAMMY = {"character": None, "items": [118, 38], "trinkets": []}
 
@@ -29,7 +29,7 @@ def post(client: TestClient, body: dict[str, object], ip: str = "203.0.113.7", *
 def test_answers_and_reports_what_is_left(client: TestClient, analyzer: FakeAnalyzer) -> None:
     r = post(client, {"character": "azazel", "items": [118, 38], "trinkets": [39]})
     assert r.status_code == 200
-    assert r.json() == {"text": "How it plays:\n- Answer number 1.", "cached": False, "remaining": 4, "limit": 5}
+    assert r.json() == {"read": read_of("Answer number 1."), "found": [], "cached": False, "remaining": 4, "limit": 5}
     assert len(analyzer.calls) == 1
 
 
@@ -39,10 +39,10 @@ def test_the_prompt_is_built_from_server_data_only(client: TestClient, analyzer:
     assert system == SYSTEM
     assert "Character: Azazel" in user
     assert (
-        "- Brimstone: quality 4 of 4, passive item. Tears become blood laser, hits 9 times. tears multiplier x0.33."
-        in user
+        "- [i118] Brimstone: quality 4 of 4, passive item. Tears become blood laser, hits 9 times. "
+        "tears multiplier x0.33." in user
     )
-    assert "- Cancer: tears +1." in user
+    assert "- [t39] Cancer: tears +1." in user
     # The curated entry that applies is handed to the model as ground truth.
     assert "[S] Brimstone + Tammy's Head: Using Tammy's Head fires 10 Brimstone lasers" in user
 
@@ -56,7 +56,7 @@ def test_says_so_when_the_list_has_nothing(client: TestClient, analyzer: FakeAna
 def test_the_same_build_is_answered_from_the_cache_for_free(client: TestClient, analyzer: FakeAnalyzer) -> None:
     first = post(client, BRIM_TAMMY)
     again = post(client, {"character": None, "items": [38, 118], "trinkets": []})  # picked in the other order
-    assert again.json() == {"text": first.json()["text"], "cached": True, "remaining": 4, "limit": 5}
+    assert again.json() == {**first.json(), "cached": True, "remaining": 4}
     assert len(analyzer.calls) == 1
     # Someone else gets it too, without spending any of their own allowance.
     other = post(client, BRIM_TAMMY, ip="198.51.100.9")
@@ -76,7 +76,7 @@ class SlowAnalyzer(FakeAnalyzer):
         await asyncio.sleep(0.05)
         if first and self.fail_first:
             raise AnalysisFailed("boom")
-        return "Slow answer."
+        return answer_json("Slow answer.")
 
 
 def overlapping(settings: Settings, clock: Clock, analyzer: FakeAnalyzer) -> httpx.AsyncClient:
@@ -97,7 +97,7 @@ async def test_two_requests_for_the_same_build_share_one_model_call(settings: Se
         assert (a.status_code, b.status_code) == (200, 200)
         assert len(analyzer.calls) == 1
         assert sorted([a.json()["cached"], b.json()["cached"]]) == [False, True]
-        assert a.json()["text"] == b.json()["text"] == "Slow answer."
+        assert a.json()["read"] == b.json()["read"] == read_of("Slow answer.")
         # One analysis came out of the visitor's allowance, not two.
         assert a.json()["remaining"] == b.json()["remaining"] == 4
 
@@ -119,7 +119,10 @@ async def test_a_waiting_request_makes_its_own_call_when_the_first_one_fails(set
         assert len(analyzer.calls) == 2
         answered = a if a.status_code == 200 else b
         # The failed call was refunded, so only the one that answered was charged.
-        assert answered.json() == {"text": "Slow answer.", "cached": False, "remaining": 4, "limit": 5}
+        assert answered.json() == {"read": read_of("Slow answer."), "found": [], "cached": False} | {
+            "remaining": 4,
+            "limit": 5,
+        }
 
 
 def test_each_visitor_has_a_daily_limit(make_client: Callable[..., TestClient], analyzer: FakeAnalyzer) -> None:
@@ -205,7 +208,13 @@ def test_without_a_key_it_says_ai_is_off(make_client: Callable[..., TestClient])
 
 
 def test_health(client: TestClient) -> None:
-    assert client.get("/api/health").json() == {"status": "ok", "ai": True, "items": 719, "synergies": 442}
+    assert client.get("/api/health").json() == {
+        "status": "ok",
+        "ai": True,
+        "items": 719,
+        "synergies": 442,
+        "community": 0,
+    }
 
 
 def test_a_forged_cloudflare_header_does_not_dodge_the_limit(make_client: Callable[..., TestClient]) -> None:
@@ -236,6 +245,9 @@ def test_cache_key_depends_on_the_model_and_on_every_word_the_model_is_told() ->
     assert a != cache_key("m1", "system", "prompt with a corrected synergy")
     # Where one part ends and the next begins is part of the key.
     assert cache_key("m", "ab", "c") != cache_key("m", "a", "bc")
+    # So is the shape the answer was asked for: no plain-text answer from before the schema is served.
+    assert cache_key("m", "s", "p", SCHEMA) != cache_key("m", "s", "p")
+    assert cache_key("m", "s", "p", SCHEMA) != cache_key("m", "s", "p", {**SCHEMA, "required": []})
 
 
 # ---------------------------------------------------------------- second review (2026-11-24)
@@ -277,7 +289,7 @@ def test_an_unexpected_analyzer_error_is_refunded_and_answers_502(settings: Sett
             self.calls.append((system, user))
             if len(self.calls) == 1:
                 raise RuntimeError("the SDK changed shape")
-            return "Fine now."
+            return answer_json("Fine now.")
 
     app = create_app(replace(settings, per_visitor_per_day=1), analyzer=Broken(), store=Store(clock=clock))
     client = TestClient(app, raise_server_exceptions=False)
@@ -285,7 +297,8 @@ def test_an_unexpected_analyzer_error_is_refunded_and_answers_502(settings: Sett
     assert failed.status_code == 502
     assert failed.json()["detail"]["code"] == "failed"
     # The one analysis they are allowed is still there.
-    assert post(client, {"items": [1]}).json() == {"text": "Fine now.", "cached": False, "remaining": 0, "limit": 1}
+    ok = post(client, {"items": [1]}).json()
+    assert (ok["read"], ok["cached"], ok["remaining"], ok["limit"]) == (read_of("Fine now."), False, 0, 1)
 
 
 def test_a_failure_the_model_was_paid_for_stays_on_the_site_budget(

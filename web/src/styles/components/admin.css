@@ -1,0 +1,239 @@
+/* The owner's synergy inbox at /admin (decision 0008). Page colours throughout: it is a work tool. */
+@layer components {
+  .admin {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-separate);
+    max-inline-size: var(--width-content);
+  }
+
+  .admin__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+  }
+
+  .admin__title {
+    font: var(--type-h1);
+    letter-spacing: var(--tracking-display);
+    color: var(--fg-strong);
+  }
+
+  .admin__lede {
+    max-inline-size: var(--measure-prose);
+    font: var(--type-lead);
+    color: var(--fg-muted);
+  }
+
+  .admin__loading {
+    font: var(--type-ui);
+    color: var(--fg-muted);
+  }
+
+  .admin__inbox {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-grouped);
+  }
+
+  .admin__bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-related);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .admin__who {
+    font: var(--type-ui);
+    color: var(--fg-default);
+  }
+
+  /* ---- Cards: sign-in, set-up, export -------------------------------------------------- */
+  .admin-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-grouped);
+    padding: var(--pad-card);
+    color: var(--fg-default);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--elevation-card);
+  }
+
+  .admin-card__title {
+    font: var(--type-h3);
+    color: var(--fg-strong);
+  }
+
+  .admin-card__text {
+    max-inline-size: var(--measure-prose);
+    font: var(--type-body);
+  }
+
+  .admin-signin {
+    max-inline-size: var(--width-form);
+  }
+
+  .admin-export {
+    background: var(--bg-selected);
+  }
+
+  .admin-export__actions,
+  .admin-sub__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+  }
+
+  .admin-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    padding-inline-start: var(--indent-list);
+    font: var(--type-body);
+  }
+
+  .admin__code {
+    padding-inline: var(--gap-fused);
+    font: var(--type-code);
+    color: var(--fg-strong);
+    overflow-wrap: anywhere;
+    background: var(--bg-sunken);
+    border-radius: var(--radius-md);
+  }
+
+  /* ---- Status tabs ---------------------------------------------------------------------- */
+  .admin-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+  }
+
+  .admin-tabs__tab {
+    display: inline-flex;
+    gap: var(--gap-tight);
+    align-items: center;
+    min-block-size: var(--size-control-sm);
+    padding: var(--pad-block-sm) var(--pad-inline-md);
+    font: var(--type-ui);
+    color: var(--fg-strong);
+    cursor: pointer;
+    background: var(--bg-surface);
+    border: var(--stroke-thick) solid var(--border-ink);
+    border-radius: var(--radius-full);
+  }
+
+  .admin-tabs__tab:hover { background: var(--bg-selected); }
+
+  .admin-tabs__tab:focus-visible {
+    outline: var(--stroke-focus) solid var(--border-focus);
+    outline-offset: var(--stroke-focus);
+  }
+
+  .admin-tabs__tab[aria-pressed="true"] {
+    color: var(--fg-on-ink);
+    background: var(--bg-ink);
+  }
+
+  .admin-tabs__count {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: var(--size-seal-sm);
+    padding-inline: var(--gap-fused);
+    font: var(--type-label);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-strong);
+    background: var(--bg-sunken);
+    border-radius: var(--radius-full);
+  }
+
+  /* ---- One submission ------------------------------------------------------------------- */
+  .admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-grouped);
+    padding: var(--space-0);
+    list-style: none;
+  }
+
+  .admin-sub {
+    display: flex;
+    gap: var(--gap-grouped);
+    align-items: flex-start;
+    padding: var(--pad-card);
+    color: var(--fg-default);
+    background: var(--bg-surface);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--elevation-card);
+  }
+
+  .admin-sub__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--gap-related);
+    min-inline-size: 0;
+  }
+
+  .admin-sub__recipe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-tile);
+    color: var(--fg-strong);
+  }
+
+  .admin-sub__piece {
+    display: inline-flex;
+    gap: var(--gap-fused);
+    align-items: center;
+  }
+
+  .admin-sub__plus,
+  .admin-sub__as {
+    color: var(--fg-muted);
+  }
+
+  .admin-sub__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-small);
+    color: var(--fg-muted);
+  }
+
+  .admin-sub__warning {
+    display: flex;
+    gap: var(--gap-tight);
+    align-items: flex-start;
+    padding: var(--pad-block-sm) var(--pad-inline-sm);
+    font: var(--type-small);
+    color: var(--fg-strong);
+    background: var(--bg-selected);
+    border: var(--stroke-thick) solid var(--border-ink);
+    border-radius: var(--radius-lg);
+  }
+
+  .admin-sub__text {
+    max-inline-size: var(--measure-prose);
+    font: var(--type-body);
+  }
+
+  .admin-sub__note,
+  .admin-sub__source {
+    font: var(--type-small);
+    color: var(--fg-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .admin-sub__edit {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-grouped);
+  }
+}

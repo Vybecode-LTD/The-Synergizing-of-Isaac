@@ -56,9 +56,10 @@ export function SynergyCard({ synergy, openable = true, actions }: SynergyCardPr
           </p>
         )}
         <p className="synergy-card__text">{synergy.description}</p>
-        {(openable || actions || synergy.custom) && (
+        {(openable || actions || synergy.custom || synergy.community) && (
           <div className="synergy-card__footer">
             {synergy.custom && <Tag tone="accent">Yours</Tag>}
+            {synergy.community && <Tag>Community</Tag>}
             {openable && (
               <Link className="text-link" to={builderPath(buildFor(synergy))}>
                 Open in builder

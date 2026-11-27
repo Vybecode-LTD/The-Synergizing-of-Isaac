@@ -73,7 +73,8 @@ def _synergy(data: GameData, s: Synergy) -> str:
     if s.character_slugs:
         who = [_a(f"/characters/{c}", data.character_by_slug[c]["name"]) for c in s.character_slugs]
         out.append(f"<p>as {', '.join(who)}</p>")
-    out.append(f"<p>{escape(s.rating)} tier, {escape(RATING_MEANING[s.rating])}.</p>")
+    tier = f"{escape(s.rating)} tier, {escape(RATING_MEANING[s.rating])}."
+    out.append(f"<p>{tier} Sent in by a visitor and approved.</p>" if s.community else f"<p>{tier}</p>")
     out.append(f"<p>{escape(s.description)}</p>")
     out.append(f"<p>{_a(_builder_href(s), 'Open in builder')}</p>")
     return "<article>" + "".join(out) + "</article>"
@@ -198,6 +199,9 @@ def render_copy(page: Page, data: GameData, domain: str) -> str:
                 else:
                     out.append("<ul>" + "".join(f"<li>{_segments(li, values)}</li>" for li in block["ul"]) + "</ul>")
 
+    elif page.kind == "admin":
+        pass  # the heading and lede say what it is; the inbox itself needs the owner signed in
+
     else:  # notFound
         out.append(f"<p>{_a('/', 'Open the builder')}</p>")
 
@@ -216,7 +220,7 @@ def _breadcrumbs(page: Page, site_url: str) -> dict[str, Any] | None:
         "about": "About",
     }
     parts = page.path.strip("/").split("/")
-    if not page.found or page.kind == "home":
+    if not page.indexable or page.kind == "home":
         return None
     trail = [("Builder", "/")]
     trail.append((labels[parts[0]], f"/{parts[0]}"))
@@ -234,7 +238,7 @@ def _breadcrumbs(page: Page, site_url: str) -> dict[str, Any] | None:
 
 def structured_data(page: Page, data: GameData, site_url: str, domain: str) -> list[dict[str, Any]]:
     """JSON-LD for the page. It describes only what the page shows."""
-    if not page.found:
+    if not page.indexable:
         return []
     site = {"@type": "WebSite", "name": domain, "url": site_url + "/"}
     url = site_url + page.path
@@ -288,7 +292,7 @@ def render_head(page: Page, data: GameData, site_url: str, domain: str) -> str:
         meta("property", "og:image", site_url + "/og.png"),
         meta("name", "twitter:card", "summary_large_image"),
     ]
-    if page.found:
+    if page.indexable:
         tags.append(f'<link rel="canonical" href="{escape(url, quote=True)}" />')
         tags.append(meta("property", "og:url", url))
     else:

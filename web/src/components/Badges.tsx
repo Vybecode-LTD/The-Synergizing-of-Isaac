@@ -10,7 +10,7 @@ const RATING_MEANING: Record<Rating, string> = {
 };
 
 /** The letter carries the meaning; colour only repeats it. */
-export function RatingBadge({ rating, size = "md" }: { rating: Rating; size?: "sm" | "md" }) {
+export function RatingBadge({ rating, size = "md" }: { rating: Rating; size?: "sm" | "md" | "lg" }) {
   return (
     <span className="rating" data-rating={rating} data-size={size} title={`${rating} tier: ${RATING_MEANING[rating]}`}>
       <span aria-hidden="true">{rating}</span>

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import datetime
+import json
 from collections.abc import Callable
 from dataclasses import replace
 from pathlib import Path
+from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
@@ -15,6 +17,29 @@ from app.settings import Settings
 from app.store import Store
 
 
+def answer_json(line: str = "It plays well.", found: list[dict[str, Any]] | None = None, tier: str = "A") -> str:
+    """An answer in the shape the model is held to (analysis.SCHEMA)."""
+    return json.dumps(
+        {
+            "how_it_plays": [line],
+            "best_interactions": ["Brimstone and Tammy's Head fire lasers in every direction."],
+            "watch_out_for": [],
+            "verdict": {"tier": tier, "why": "Strong damage."},
+            "synergies_found": found or [],
+        }
+    )
+
+
+def read_of(line: str = "It plays well.", tier: str = "A") -> dict[str, Any]:
+    """What the page is sent for answer_json(line)."""
+    return {
+        "howItPlays": [line],
+        "bestInteractions": ["Brimstone and Tammy's Head fire lasers in every direction."],
+        "watchOutFor": [],
+        "verdict": {"tier": tier, "why": "Strong damage."},
+    }
+
+
 class FakeAnalyzer:
     """Stands in for the model: records what it was asked and answers, or fails, on demand."""
 
@@ -22,12 +47,14 @@ class FakeAnalyzer:
         self.calls: list[tuple[str, str]] = []
         self.fail = False
         self.billed = False
+        self.found: list[dict[str, Any]] = []
+        self.raw: str | None = None  # answer this text instead, to test what the server does with it
 
     async def analyze(self, system: str, user: str) -> str:
         self.calls.append((system, user))
         if self.fail:
             raise AnalysisFailed("boom", billed=self.billed)
-        return f"How it plays:\n- Answer number {len(self.calls)}."
+        return self.raw if self.raw is not None else answer_json(f"Answer number {len(self.calls)}.", self.found)
 
 
 class Clock:

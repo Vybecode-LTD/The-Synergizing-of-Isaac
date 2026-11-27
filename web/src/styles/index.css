@@ -22,6 +22,7 @@
 @import url("components/builder.css");
 @import url("components/browse.css");
 @import url("components/detail.css");
+@import url("components/admin.css");
 
 @import url("utilities.css");
 @import url("overrides.css");

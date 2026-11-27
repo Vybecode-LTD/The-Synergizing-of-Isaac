@@ -1,7 +1,27 @@
-import type { Build } from "../engine/types";
+import type { Build, Rating } from "../engine/types";
+import { RATINGS } from "../engine/types";
+import { postJson, ApiError } from "./http";
+
+/** The AI read, in the sections the server checked (api/app/analysis.py, read_answer). */
+export interface AnalysisRead {
+  howItPlays: string[];
+  bestInteractions: string[];
+  watchOutFor: string[];
+  verdict: { tier: Rating; why: string };
+}
+
+/** An interaction the AI found that the curated list lacks, already checked against the build. */
+export interface FoundSynergy {
+  itemIds: number[];
+  trinketIds: number[];
+  characterSlugs: string[];
+  rating: Rating;
+  description: string;
+}
 
 export interface Analysis {
-  text: string;
+  read: AnalysisRead;
+  found: FoundSynergy[];
   /** True when this exact build was analysed before and the saved answer was reused. */
   cached: boolean;
   /** Fresh analyses this visitor has left today. */
@@ -28,7 +48,7 @@ const FALLBACK: Record<AnalysisErrorCode, string> = {
   failed: "The AI didn't answer. Try again in a moment.",
 };
 
-function codeFor(status: number, code: unknown): AnalysisErrorCode {
+function codeFor(status: number, code: string | null): AnalysisErrorCode {
   if (code === "rate_limited" || code === "budget_exhausted" || code === "not_configured") return code;
   if (status === 429) return "rate_limited";
   if (status === 503) return "not_configured";
@@ -36,50 +56,74 @@ function codeFor(status: number, code: unknown): AnalysisErrorCode {
   return "failed";
 }
 
-/** Ask the server for an AI read on a build. Throws AnalysisError with a message fit to show. */
-export async function analyzeBuild(build: Build, signal?: AbortSignal): Promise<Analysis> {
-  let response: Response;
-  try {
-    response = await fetch("/api/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ character: build.character, items: build.items, trinkets: build.trinkets }),
-      signal,
-    });
-  } catch (cause) {
-    if (cause instanceof DOMException && cause.name === "AbortError") throw cause;
-    throw new AnalysisError("failed", FALLBACK.failed);
-  }
+const strings = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((line) => typeof line === "string");
 
-  const body: unknown = await response.json().catch(() => null);
-  if (response.ok && body && typeof (body as Analysis).text === "string") return body as Analysis;
-
-  const detail = (body as { detail?: { code?: unknown; message?: unknown } } | null)?.detail;
-  const code = codeFor(response.status, detail?.code);
-  throw new AnalysisError(code, typeof detail?.message === "string" ? detail.message : FALLBACK[code]);
+/** Whether a response body is the shape this page can show. Anything else is treated as no answer. */
+export function isAnalysis(body: unknown): body is Analysis {
+  const a = body as Partial<Analysis> | null;
+  const read = a?.read;
+  return Boolean(
+    read &&
+      strings(read.howItPlays) &&
+      strings(read.bestInteractions) &&
+      strings(read.watchOutFor) &&
+      RATINGS.includes(read.verdict?.tier as Rating) &&
+      typeof read.verdict?.why === "string" &&
+      Array.isArray(a.found) &&
+      typeof a.cached === "boolean",
+  );
 }
 
-export type AnalysisBlock = { kind: "heading" | "paragraph"; text: string } | { kind: "list"; items: string[] };
+/** Ask the server for an AI read on a build. Throws AnalysisError with a message fit to show. */
+export async function analyzeBuild(build: Build, signal?: AbortSignal): Promise<Analysis> {
+  try {
+    const body = await postJson("/api/analyze", buildBody(build), signal);
+    if (isAnalysis(body)) return body;
+    throw new AnalysisError("failed", FALLBACK.failed);
+  } catch (cause) {
+    if (cause instanceof ApiError) {
+      const code = codeFor(cause.status, cause.code);
+      throw new AnalysisError(code, cause.serverMessage ?? FALLBACK[code]);
+    }
+    throw cause;
+  }
+}
+
+/** The ids of a build, and nothing else: the only thing the server ever takes from the browser. */
+export function buildBody(build: Build) {
+  return { character: build.character, items: build.items, trinkets: build.trinkets };
+}
+
+export type Segment = { text: string } | { kind: "item" | "trinket"; id: number; name: string };
 
 /**
- * Turn the model's plain-text answer into blocks we render ourselves.
- * Nothing in the answer is ever treated as HTML.
+ * Split a sentence into plain text and the build's pickups it names, so the page can show each name
+ * with its sprite. Longest names first ("Brimstone" never eats "Brimstone Bombs"), whole words only.
+ * Nothing in the text is ever treated as HTML.
  */
-export function analysisBlocks(text: string): AnalysisBlock[] {
-  const blocks: AnalysisBlock[] = [];
-  for (const raw of text.split(/\r?\n/)) {
-    const line = raw.replace(/\*\*/g, "").replace(/^#+\s*/, "").trim();
-    if (!line) continue;
-    const bullet = /^[-*•]\s+(.*)$/.exec(line);
-    if (bullet) {
-      const last = blocks[blocks.length - 1];
-      if (last?.kind === "list") last.items.push(bullet[1]!);
-      else blocks.push({ kind: "list", items: [bullet[1]!] });
-    } else if (line.endsWith(":") && line.length <= 40) {
-      blocks.push({ kind: "heading", text: line.slice(0, -1) });
+export function mentions(text: string, pieces: { kind: "item" | "trinket"; id: number; name: string }[]): Segment[] {
+  const sorted = [...pieces].sort((a, b) => b.name.length - a.name.length);
+  const out: Segment[] = [];
+  let plain = "";
+  const word = /[\p{L}\p{N}]/u;
+  for (let at = 0; at < text.length; ) {
+    const hit = sorted.find(
+      (p) =>
+        text.startsWith(p.name, at) &&
+        !word.test(text[at - 1] ?? "") &&
+        !word.test(text[at + p.name.length] ?? ""),
+    );
+    if (hit) {
+      if (plain) out.push({ text: plain });
+      plain = "";
+      out.push({ kind: hit.kind, id: hit.id, name: hit.name });
+      at += hit.name.length;
     } else {
-      blocks.push({ kind: "paragraph", text: line });
+      plain += text[at];
+      at += 1;
     }
   }
-  return blocks;
+  if (plain) out.push({ text: plain });
+  return out;
 }

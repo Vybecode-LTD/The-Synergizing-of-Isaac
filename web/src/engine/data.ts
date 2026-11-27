@@ -87,10 +87,63 @@ export function createGameData(
   };
 }
 
-export const gameData: GameData = createGameData(
+/** The element the server puts the live community synergies in (api/app/community.py, ELEMENT_ID). */
+export const COMMUNITY_ELEMENT_ID = "community-synergies";
+
+const RATING_SET: ReadonlySet<string> = new Set(["S", "A", "B", "C", "D"]);
+const numbers = (value: unknown): number[] =>
+  Array.isArray(value) ? value.filter((v): v is number => typeof v === "number") : [];
+const strings = (value: unknown): string[] =>
+  Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : [];
+
+/**
+ * The community synergies the server sent with the page, kept only where they make sense against this
+ * roster. Anything malformed is dropped: a bad entry must never stop the page.
+ */
+export function communitySynergies(raw: unknown, data: GameData): Synergy[] {
+  if (!Array.isArray(raw)) return [];
+  const out: Synergy[] = [];
+  for (const entry of raw as Record<string, unknown>[]) {
+    if (!entry || typeof entry.id !== "string" || typeof entry.description !== "string") continue;
+    if (!RATING_SET.has(entry.rating as string)) continue;
+    const itemIds = numbers(entry.itemIds).filter((id) => data.itemById.has(id));
+    const trinketIds = numbers(entry.trinketIds).filter((id) => data.trinketById.has(id));
+    const characterSlugs = strings(entry.characterSlugs).filter((slug) => data.characterBySlug.has(slug));
+    if (itemIds.length + trinketIds.length === 0) continue;
+    out.push({
+      id: entry.id,
+      itemIds,
+      trinketIds,
+      characterSlugs,
+      rating: entry.rating as Synergy["rating"],
+      description: entry.description,
+      community: true,
+    });
+  }
+  return out;
+}
+
+/** What the server put in the page, or nothing (the dev server, tests, a page served before this existed). */
+export function readCommunity(doc: Document | undefined = globalThis.document): unknown {
+  const text = doc?.getElementById(COMMUNITY_ELEMENT_ID)?.textContent;
+  if (!text) return [];
+  try {
+    return JSON.parse(text);
+  } catch {
+    return [];
+  }
+}
+
+const curated = createGameData(
   itemsJson as Item[],
   trinketsJson as Trinket[],
   charactersJson as Character[],
   synergiesJson as SynergyRecord[],
   transformationsJson.transformations as Transformation[],
 );
+
+/** The curated list, then the community synergies the owner approved: the same list the server rendered from. */
+export const gameData: GameData = {
+  ...curated,
+  synergies: [...curated.synergies, ...communitySynergies(readCommunity(), curated)],
+};

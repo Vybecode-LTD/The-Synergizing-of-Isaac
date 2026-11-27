@@ -1,0 +1,30 @@
+name: Community backup
+
+# Once a week, saves the community synergies that are live on isaac.toys (approved submissions, decision
+# 0008) to the backup/community branch, so they outlive the Railway volume they are stored on. About 15
+# seconds of Actions time a week; nothing is committed when the list has not changed.
+on:
+  schedule:
+    - cron: "17 9 * * 1" # Mondays, 09:17 UTC (4:17 am Eastern)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: community-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Save the live community list
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      # Run from a copy: the script switches branches, which takes its own file out of the checkout.
+      - run: |
+          cp .github/scripts/community-backup.sh "$RUNNER_TEMP/"
+          bash "$RUNNER_TEMP/community-backup.sh" https://isaac.toys origin

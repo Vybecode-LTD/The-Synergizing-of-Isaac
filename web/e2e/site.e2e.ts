@@ -133,6 +133,23 @@ test.describe("desktop", () => {
     await expect(page.getByText(`${SYNERGIES} synergies`, { exact: true })).toBeVisible();
   });
 
+  test("the owner's inbox loads on its own, is never indexed, and asks for a sign-in or the set-up", async ({ page }) => {
+    const response = await page.goto("/admin");
+    expect(response?.status()).toBe(200);
+    expect(response?.headers()["x-robots-tag"]).toBe("noindex");
+    await expect(h1(page)).toHaveText("Synergy inbox");
+    await expect(page).toHaveTitle("Synergy Inbox | isaac.toys");
+    // Either the site has an admin set (Railway variables) or it explains how to set one; never the inbox itself.
+    const signIn = page.getByRole("form", { name: "Sign in" });
+    const setUp = page.getByRole("heading", { name: "The inbox isn’t set up on this site" });
+    await expect(signIn.or(setUp)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Sign out" })).toHaveCount(0);
+    // A visitor's pages never load the inbox's code.
+    await page.goto("/");
+    const scripts = await page.evaluate(() => performance.getEntriesByType("resource").map((r) => r.name));
+    expect(scripts.filter((name) => /AdminPage-[\w-]+\.js$/.test(name))).toEqual([]);
+  });
+
   test("an address that leads nowhere is a real 404, and so is one in the wrong case", async ({ page, problems }) => {
     for (const path of ["/no-such-room", "/Items"]) {
       const response = await page.goto(path);
@@ -166,7 +183,7 @@ test.describe("phone", () => {
     expect(await theme(page)).toBe("light");
   });
 
-  for (const path of ["/", "/?i=118.38", "/items/brimstone", "/synergies", "/about"]) {
+  for (const path of ["/", "/?i=118.38", "/items/brimstone", "/synergies", "/about", "/admin"]) {
     test(`no sideways scroll at phone width on ${path}`, async ({ page }) => {
       await page.goto(path);
       await expect(h1(page)).toBeVisible();

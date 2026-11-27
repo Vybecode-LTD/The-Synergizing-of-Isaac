@@ -1,19 +1,22 @@
 import { useId, useState, type FormEvent } from "react";
+import { errorMessage } from "../../api/http";
+import { canSubmit, submitSynergy } from "../../api/submissions";
 import { gameData } from "../../engine/data";
 import { RATINGS, type Build, type Rating } from "../../engine/types";
 import { MAX_DESCRIPTION, type NewSynergy } from "../../hooks/useCustomSynergies";
 import { ratingMeaning } from "../Badges";
 import { Dialog } from "../Dialog";
+import { Icon } from "../Icon";
 import { Sprite } from "../Sprite";
 
 interface AddSynergyDialogProps {
   open: boolean;
   build: Build;
-  onSave: (entry: NewSynergy) => void;
+  onSave: (entry: NewSynergy, submitted: boolean) => void;
   onClose: () => void;
 }
 
-/** Write down an interaction for the build on screen. The combination is the build; you add the rating and the words. */
+/** Write down an interaction for the build on screen, and optionally send it to the site's owner. */
 export function AddSynergyDialog({ open, build, onSave, onClose }: AddSynergyDialogProps) {
   return (
     <Dialog open={open} title="Add your own synergy" onClose={onClose}>
@@ -22,29 +25,83 @@ export function AddSynergyDialog({ open, build, onSave, onClose }: AddSynergyDia
   );
 }
 
+type Phase = { status: "editing" } | { status: "sending" } | { status: "done"; sent: boolean } | { status: "error"; message: string };
+
 function AddSynergyForm({ build, onSave, onClose }: Omit<AddSynergyDialogProps, "open">) {
   const [rating, setRating] = useState<Rating>("A");
   const [description, setDescription] = useState("");
   const [forCharacter, setForCharacter] = useState(false);
+  const [send, setSend] = useState(false);
+  const [sourceUrl, setSourceUrl] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [tried, setTried] = useState(false);
+  const [phase, setPhase] = useState<Phase>({ status: "editing" });
   const id = useId();
   const character = build.character ? gameData.characterBySlug.get(build.character) : undefined;
   const missing = description.trim().length === 0;
+  const chosenCharacter = forCharacter && character ? character.slug : null;
+  const sendable = canSubmit(build.items, build.trinkets, chosenCharacter ? [chosenCharacter] : []);
 
-  const submit = (event: FormEvent) => {
+  const entry = (): NewSynergy => ({
+    itemIds: build.items,
+    trinketIds: build.trinkets,
+    character: chosenCharacter,
+    rating,
+    description,
+  });
+
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
     setTried(true);
-    if (missing) return;
-    onSave({
-      itemIds: build.items,
-      trinketIds: build.trinkets,
-      character: forCharacter && character ? character.slug : null,
-      rating,
-      description,
-    });
+    if (missing || phase.status === "sending") return;
+    if (!(send && sendable)) {
+      onSave(entry(), false);
+      onClose();
+      return;
+    }
+    setPhase({ status: "sending" });
+    try {
+      await submitSynergy({
+        character: chosenCharacter,
+        items: build.items,
+        trinkets: build.trinkets,
+        rating,
+        description,
+        sourceUrl: sourceUrl.trim() || null,
+        website: honeypot,
+      });
+      onSave(entry(), true);
+      setPhase({ status: "done", sent: true });
+    } catch (cause) {
+      setPhase({ status: "error", message: errorMessage(cause, "It couldn't be sent. Try again in a moment.") });
+    }
+  };
+
+  const saveOnly = () => {
+    onSave(entry(), false);
     onClose();
   };
 
+  if (phase.status === "done") {
+    return (
+      <div className="synergy-form">
+        <p className="synergy-form__thanks">
+          <Icon name="check" />
+          Saved to your synergies, and sent to isaac.toys. Thank you!
+        </p>
+        <p className="field__hint">
+          If the site&rsquo;s owner approves it, it goes up on isaac.toys for everyone, marked Community.
+        </p>
+        <div className="dialog__actions">
+          <button type="button" className="button" data-variant="primary" onClick={onClose}>
+            Done
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const sending = phase.status === "sending";
   return (
     <form className="synergy-form" onSubmit={submit} noValidate>
       <div className="field">
@@ -114,17 +171,77 @@ function AddSynergyForm({ build, onSave, onClose }: Omit<AddSynergyDialogProps, 
           </span>
         ) : (
           <span id={`${id}-hint`} className="field__hint">
-            Saved in this browser only. It isn&rsquo;t sent anywhere.
+            {send && sendable ? "Saved in this browser, and sent to isaac.toys." : "Saved in this browser only."}
           </span>
         )}
       </div>
+
+      <div className="synergy-form__send">
+        <label className="synergy-form__check" data-disabled={!sendable}>
+          <input
+            type="checkbox"
+            checked={send && sendable}
+            disabled={!sendable}
+            aria-describedby={`${id}-send-hint`}
+            onChange={(event) => setSend(event.target.checked)}
+          />
+          <span>Send it to isaac.toys for the shared list</span>
+        </label>
+        <span id={`${id}-send-hint`} className="field__hint">
+          {sendable
+            ? "The site’s owner reviews every one. No name or account is attached."
+            : "A synergy for the shared list needs two things: two pickups, or a pickup and a character."}
+        </span>
+        {send && sendable && (
+          <div className="field">
+            <label className="field__label" htmlFor={`${id}-link`}>
+              Where did you see it? <span className="field__optional">(optional link)</span>
+            </label>
+            <input
+              id={`${id}-link`}
+              className="input"
+              type="url"
+              inputMode="url"
+              placeholder="https://bindingofisaacrebirth.wiki.gg/…"
+              value={sourceUrl}
+              maxLength={300}
+              onChange={(event) => setSourceUrl(event.target.value)}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* For bots that fill in every box. People never see it, and screen readers skip it. */}
+      <div className="visually-hidden" aria-hidden="true">
+        <label>
+          Website
+          <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+        </label>
+      </div>
+
+      {phase.status === "error" && (
+        <p className="field__error" role="alert">
+          {phase.message}
+        </p>
+      )}
 
       <div className="dialog__actions">
         <button type="button" className="button" data-variant="quiet" onClick={onClose}>
           Cancel
         </button>
-        <button type="submit" className="button" data-variant="primary">
-          Save synergy
+        {phase.status === "error" && (
+          <button type="button" className="button" onClick={saveOnly}>
+            Save without sending
+          </button>
+        )}
+        <button
+          type="submit"
+          className="button"
+          data-variant="primary"
+          data-state={sending ? "loading" : undefined}
+          aria-disabled={sending}
+        >
+          {sending ? "Sending…" : send && sendable ? "Save and send" : "Save synergy"}
         </button>
       </div>
     </form>

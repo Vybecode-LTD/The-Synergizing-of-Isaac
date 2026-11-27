@@ -271,6 +271,19 @@
     --fg-on-spotlight:     var(--neutral-0);
     --border-on-spotlight: oklch(100% 0 0 / 0.4);
 
+    /* The AI read's sections take turns on the spotlight: a chalk-blue
+       card, then a deep-navy one, each with its own text pair (muted for
+       small print). Same in both themes, like the spotlight itself. */
+    --bg-spotlight-light:          var(--info-100);
+    --fg-on-spotlight-light:       var(--neutral-900);
+    --fg-on-spotlight-light-muted: var(--neutral-600);
+    --bg-spotlight-deep:           var(--info-900);
+    --fg-on-spotlight-deep:        var(--neutral-0);
+    --fg-on-spotlight-deep-muted:  var(--info-100);
+    /* Ink and navy are both too close to the pool (under 3:1) to mark a
+       deep card's edge, so a deep card wears a chalk-blue rim. */
+    --border-spotlight-deep:       var(--info-100);
+
     /* The ink band at the foot of the page. */
     --bg-band:            var(--neutral-900);
     --fg-on-band:         var(--neutral-0);
@@ -418,6 +431,7 @@
     --size-pip:          var(--space-3);    /* quality pip                    */
     --size-seal:         calc(var(--space-10) + var(--space-1));  /* rating sticker, 44px */
     --size-seal-sm:      calc(var(--space-6) + var(--space-1));   /* small sticker, 28px  */
+    --size-seal-lg:      calc(var(--space-16) + var(--space-2));  /* the AI's verdict, 72px */
     --size-mark:         var(--space-6);    /* wordmark glyph                 */
     --size-control-sm:   var(--tap-min);    /* compact button, icon button    */
     --size-control-md:   calc(var(--space-12) + var(--space-0-5));  /* button, 50px  */
@@ -451,6 +465,7 @@
     /* The rating letter: display face, set solid so it centres in its sticker. */
     --type-seal:    var(--weight-extrabold) var(--text-2xl)/var(--leading-none)  var(--font-display);
     --type-seal-sm: var(--weight-extrabold) var(--text-base)/var(--leading-none) var(--font-display);
+    --type-seal-lg: var(--weight-extrabold) var(--text-4xl)/var(--leading-none)  var(--font-display);
     --type-sticker: var(--weight-extrabold) var(--text-3xl)/var(--leading-none)  var(--font-display);
   }
 

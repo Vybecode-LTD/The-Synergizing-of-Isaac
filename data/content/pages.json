@@ -72,6 +72,12 @@
     "h1": "About {domain}",
     "lede": ""
   },
+  "admin": {
+    "titles": ["Synergy Inbox | {domain}"],
+    "description": "Where the owner of {domain} reviews the synergies visitors send in.",
+    "h1": "Synergy inbox",
+    "lede": "Synergies visitors sent in. Approve the good ones, then export them for data/synergies.json."
+  },
   "notFound": {
     "titles": ["Page Not Found | {domain}"],
     "description": "Nothing lives at this address on {domain}. Open the Binding of Isaac synergy builder or browse every item, trinket and character instead.",

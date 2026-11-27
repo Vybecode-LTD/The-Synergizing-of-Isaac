@@ -1,30 +1,63 @@
 import { describe, expect, it, vi } from "vitest";
-import { analysisBlocks } from "./api/analysis";
+import { isAnalysis, mentions } from "./api/analysis";
+import { canSubmit } from "./api/submissions";
 import { readStored, writeStored } from "./hooks/storage";
 import { sanitize } from "./hooks/useCustomSynergies";
 import { wordmarkParts } from "./site";
 
-describe("analysisBlocks", () => {
-  it("splits the model's plain text into headings, lists and paragraphs", () => {
-    const text = "How it plays:\n- First point\n* Second point\n\nA plain sentence.\n**Verdict:**\nS: strong.";
-    expect(analysisBlocks(text)).toEqual([
-      { kind: "heading", text: "How it plays" },
-      { kind: "list", items: ["First point", "Second point"] },
-      { kind: "paragraph", text: "A plain sentence." },
-      { kind: "heading", text: "Verdict" },
-      { kind: "paragraph", text: "S: strong." },
+const BRIM = { kind: "item" as const, id: 118, name: "Brimstone" };
+const BOMBS = { kind: "item" as const, id: 443, name: "Brimstone Bombs" };
+const PENNY = { kind: "trinket" as const, id: 1, name: "Swallowed Penny" };
+
+describe("mentions", () => {
+  it("finds the build's pickups in a sentence, longest name first", () => {
+    expect(mentions("Brimstone Bombs and Brimstone, then Swallowed Penny.", [BRIM, BOMBS, PENNY])).toEqual([
+      { kind: "item", id: 443, name: "Brimstone Bombs" },
+      { text: " and " },
+      { kind: "item", id: 118, name: "Brimstone" },
+      { text: ", then " },
+      { kind: "trinket", id: 1, name: "Swallowed Penny" },
+      { text: "." },
     ]);
   });
 
-  it("treats markup as text, never as HTML", () => {
-    expect(analysisBlocks("<img src=x onerror=alert(1)>")).toEqual([
-      { kind: "paragraph", text: "<img src=x onerror=alert(1)>" },
+  it("matches whole words only, and leaves everything else as text", () => {
+    expect(mentions("Brimstones are not Brimstone's, xBrimstone.", [BRIM])).toEqual([
+      { text: "Brimstones are not " },
+      { kind: "item", id: 118, name: "Brimstone" },
+      { text: "'s, xBrimstone." },
     ]);
+    expect(mentions("<img src=x onerror=alert(1)>", [BRIM])).toEqual([{ text: "<img src=x onerror=alert(1)>" }]);
+    expect(mentions("", [BRIM])).toEqual([]);
   });
+});
 
-  it("does not mistake a long sentence ending in a colon for a heading", () => {
-    const long = "This is a long sentence that happens to end with a colon:";
-    expect(analysisBlocks(long)).toEqual([{ kind: "paragraph", text: long }]);
+describe("isAnalysis", () => {
+  const good = {
+    read: { howItPlays: ["a"], bestInteractions: [], watchOutFor: [], verdict: { tier: "S", why: "b" } },
+    found: [],
+    cached: false,
+    remaining: 1,
+    limit: 2,
+  };
+
+  it("accepts the server's shape and nothing else", () => {
+    expect(isAnalysis(good)).toBe(true);
+    expect(isAnalysis({ text: "the old plain-text answer", cached: false })).toBe(false);
+    expect(isAnalysis({ ...good, read: { ...good.read, verdict: { tier: "Z", why: "b" } } })).toBe(false);
+    expect(isAnalysis({ ...good, read: { ...good.read, howItPlays: [1] } })).toBe(false);
+    expect(isAnalysis({ ...good, found: null })).toBe(false);
+    expect(isAnalysis(null)).toBe(false);
+  });
+});
+
+describe("canSubmit", () => {
+  it("needs two things, and at least one pickup", () => {
+    expect(canSubmit([118, 38], [], [])).toBe(true);
+    expect(canSubmit([118], [], ["azazel"])).toBe(true);
+    expect(canSubmit([], [1], ["azazel"])).toBe(true);
+    expect(canSubmit([118], [], [])).toBe(false);
+    expect(canSubmit([], [], ["azazel", "isaac"])).toBe(false);
   });
 });
 

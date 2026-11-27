@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { errorMessage } from "../api/http";
+import { canSubmit, submitSynergy } from "../api/submissions";
 import { Link, useLocation, useSearchParams } from "react-router";
 import { RatingBadge } from "../components/Badges";
 import { AddSynergyDialog } from "../components/builder/AddSynergyDialog";
@@ -32,7 +34,7 @@ import {
   tally,
   type PickupKind,
 } from "../engine/synergy";
-import { EMPTY_BUILD, type Build } from "../engine/types";
+import { EMPTY_BUILD, type Build, type Synergy } from "../engine/types";
 import { useBuildStore } from "../hooks/BuildStore";
 import { useCustomSynergies } from "../hooks/useCustomSynergies";
 import { usePage } from "../hooks/usePage";
@@ -78,7 +80,7 @@ export function BuilderPage() {
   const [choosingCharacter, setChoosingCharacter] = useState(false);
   const [addingSynergy, setAddingSynergy] = useState(false);
   const [copied, setCopied] = useState(false);
-  const { mine, add: addMine, remove: removeMine } = useCustomSynergies();
+  const { mine, add: addMine, remove: removeMine, markSubmitted } = useCustomSynergies();
 
   // "/" jumps to the search box, as it does on most sites with one.
   useEffect(() => {
@@ -228,16 +230,19 @@ export function BuilderPage() {
                     openable={false}
                     actions={
                       s.custom ? (
-                        <button
-                          type="button"
-                          className="button"
-                          data-variant="quiet"
-                          data-size="sm"
-                          onClick={() => removeMine(s.id)}
-                        >
-                          <Icon name="trash" />
-                          Delete
-                        </button>
+                        <>
+                          <SendMine synergy={s} onSent={() => markSubmitted(s.id)} />
+                          <button
+                            type="button"
+                            className="button"
+                            data-variant="quiet"
+                            data-size="sm"
+                            onClick={() => removeMine(s.id)}
+                          >
+                            <Icon name="trash" />
+                            Delete
+                          </button>
+                        </>
                       ) : undefined
                     }
                   />
@@ -259,7 +264,7 @@ export function BuilderPage() {
 
             <Suggestions suggestions={suggestions} onAdd={onPick} />
 
-            {pickups > 0 && <AiPanel build={build} />}
+            {pickups > 0 && <AiPanel build={build} onSave={addMine} />}
 
             {pickups > 0 && (
               <div className="notice" data-tone="quiet">
@@ -285,5 +290,59 @@ export function BuilderPage() {
       />
       <AddSynergyDialog open={addingSynergy} build={build} onSave={addMine} onClose={() => setAddingSynergy(false)} />
     </div>
+  );
+}
+
+type Sending = { status: "idle" } | { status: "sending" } | { status: "error"; message: string };
+
+/** On a visitor's own synergy: send it to the site's owner, once. */
+function SendMine({ synergy, onSent }: { synergy: Synergy; onSent: () => void }) {
+  const [sending, setSending] = useState<Sending>({ status: "idle" });
+  if (synergy.submitted) {
+    return (
+      <span className="synergy-card__sent">
+        <Icon name="check" />
+        Sent for review
+      </span>
+    );
+  }
+  if (!canSubmit(synergy.itemIds, synergy.trinketIds, synergy.characterSlugs)) return null;
+
+  const send = async () => {
+    setSending({ status: "sending" });
+    try {
+      await submitSynergy({
+        character: synergy.characterSlugs[0] ?? null,
+        items: synergy.itemIds,
+        trinkets: synergy.trinketIds,
+        rating: synergy.rating,
+        description: synergy.description,
+      });
+      onSent();
+    } catch (cause) {
+      setSending({ status: "error", message: errorMessage(cause, "It couldn't be sent. Try again in a moment.") });
+    }
+  };
+
+  const busy = sending.status === "sending";
+  return (
+    <>
+      <button
+        type="button"
+        className="button"
+        data-size="sm"
+        data-state={busy ? "loading" : undefined}
+        aria-disabled={busy}
+        onClick={busy ? undefined : send}
+      >
+        <Icon name="send" />
+        {busy ? "Sending…" : "Send to isaac.toys"}
+      </button>
+      {sending.status === "error" && (
+        <span className="field__error" role="alert">
+          {sending.message}
+        </span>
+      )}
+    </>
   );
 }

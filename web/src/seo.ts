@@ -24,6 +24,7 @@ export type PageKind =
   | "character"
   | "synergies"
   | "about"
+  | "admin"
   | "notFound";
 
 export interface PageMeta {
@@ -138,6 +139,8 @@ const LISTS: Record<string, PageKind> = {
   "/characters": "characters",
   "/synergies": "synergies",
   "/about": "about",
+  // The owner's inbox. A page like the others, but never indexed and never in the sitemap.
+  "/admin": "admin",
 };
 
 /** The page at a path. An address the site does not have gets the notFound page. */

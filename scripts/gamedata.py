@@ -509,6 +509,62 @@ def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict])
     return problems
 
 
+# ---------------------------------------------------------------- add-submissions
+
+
+def add_submissions(export: Path, data_dir: Path = DATA) -> list[str]:
+    """Append the admin inbox's export (GET /api/admin/export) to synergies.json. Returns the ids added.
+
+    Refuses the whole file, writing nothing, if any entry names something the roster lacks, has a bad
+    rating or no words, or repeats a combination the list (or the file) already has. Each entry still needs
+    its wiki check before the pull request merges (data/synergy-checks.md, decision 0008).
+    """
+    doc = read_json(export)
+    entries = doc["entries"] if isinstance(doc, dict) else doc
+    path = data_dir / "synergies.json"
+    synergies = read_json(path)
+    names = {
+        "items": {i["name"] for i in read_json(data_dir / "items.json")},
+        "trinkets": {t["name"] for t in read_json(data_dir / "trinkets.json")},
+        "characters": {c["name"] for c in read_json(data_dir / "characters.json")},
+    }
+
+    def combination(s: dict) -> tuple:
+        return tuple(tuple(sorted(s.get(field, []))) for field in ("items", "trinkets", "characters"))
+
+    taken_ids = {s["id"] for s in synergies}
+    taken = {combination(s): s["id"] for s in synergies}
+    problems, added = [], []
+    for n, entry in enumerate(entries):
+        where = f"entry #{n} ({entry.get('id', '?')})"
+        clean = {
+            "id": str(entry.get("id", "")).strip(),
+            "items": list(entry.get("items", [])),
+            "trinkets": list(entry.get("trinkets", [])),
+            "characters": list(entry.get("characters", [])),
+            "rating": entry.get("rating"),
+            "description": " ".join(str(entry.get("description", "")).split()),
+        }
+        for field, known in names.items():
+            problems += [f"{where}: unknown {field[:-1]} {name!r}" for name in clean[field] if name not in known]
+        if clean["rating"] not in RATINGS:
+            problems.append(f"{where}: rating {clean['rating']!r} is not one of {'/'.join(RATINGS)}")
+        if not clean["description"]:
+            problems.append(f"{where}: empty description")
+        if not clean["id"] or clean["id"] in taken_ids:
+            problems.append(f"{where}: missing or duplicate id")
+        if combination(clean) in taken:
+            problems.append(f"{where}: same combination as {taken[combination(clean)]}")
+        taken_ids.add(clean["id"])
+        taken[combination(clean)] = clean["id"]
+        synergies.append(clean)
+        added.append(clean["id"])
+    if problems:
+        raise SystemExit("add-submissions: nothing written\n" + "\n".join(problems))
+    write_json(path, synergies)
+    return added
+
+
 # ---------------------------------------------------------------- cli
 
 
@@ -521,6 +577,8 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("build")
     sub.add_parser("migrate-synergies")
     sub.add_parser("validate")
+    add = sub.add_parser("add-submissions", help="append the admin inbox's export to synergies.json")
+    add.add_argument("export", type=Path)
     args = parser.parse_args(argv)
 
     if args.command == "import-sources":
@@ -535,6 +593,10 @@ def main(argv: list[str] | None = None) -> int:
             print("PROBLEM", p)
         print(f"validate: {len(problems)} problem(s)")
         return 1 if problems else 0
+    elif args.command == "add-submissions":
+        added = add_submissions(args.export)
+        print(f"add-submissions: {len(added)} added: {', '.join(added) or 'none'}")
+        print("Check each against the wiki for Repentance, record it in data/synergy-checks.md, then run validate.")
     return 0
 
 

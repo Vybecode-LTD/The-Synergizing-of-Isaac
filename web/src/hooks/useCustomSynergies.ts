@@ -42,6 +42,7 @@ export function sanitize(raw: unknown): Synergy[] {
       rating: entry.rating as Rating,
       description: entry.description.slice(0, MAX_DESCRIPTION),
       custom: true,
+      ...(entry.submitted === true ? { submitted: true } : {}),
     });
   }
   return out;
@@ -57,15 +58,17 @@ export function useCustomSynergies() {
   }, []);
 
   const add = useCallback(
-    (entry: NewSynergy) => {
+    (entry: NewSynergy, submitted = false) => {
       const synergy: Synergy = {
-        id: `mine-${Date.now().toString(36)}`,
+        // Two saves in the same millisecond (saving several AI finds) must not share an id.
+        id: `mine-${Date.now().toString(36)}-${mine.length.toString(36)}`,
         itemIds: entry.itemIds,
         trinketIds: entry.trinketIds,
         characterSlugs: entry.character ? [entry.character] : [],
         rating: entry.rating,
         description: entry.description.trim().slice(0, MAX_DESCRIPTION),
         custom: true,
+        ...(submitted ? { submitted: true } : {}),
       };
       save([...mine, synergy]);
     },
@@ -74,5 +77,10 @@ export function useCustomSynergies() {
 
   const remove = useCallback((id: string) => save(mine.filter((s) => s.id !== id)), [mine, save]);
 
-  return { mine, add, remove };
+  const markSubmitted = useCallback(
+    (id: string) => save(mine.map((s) => (s.id === id ? { ...s, submitted: true } : s))),
+    [mine, save],
+  );
+
+  return { mine, add, remove, markSubmitted };
 }

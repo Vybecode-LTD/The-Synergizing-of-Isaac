@@ -1,7 +1,7 @@
 # Testing
 
-Last run: 2026-11-26, on the owner's Windows machine, branch `perf/split-data-chunk` (the game data and
-the libraries in chunks of their own).
+Last run: 2026-11-27, on the owner's Windows machine, branch `feat/synergy-submissions` (synergy
+submissions, live community synergies, the admin inbox, the AI read in sections; decision 0008).
 
 ## Frameworks
 
@@ -20,16 +20,17 @@ the libraries in chunks of their own).
 
 | Command | Where | Result |
 |---|---|---|
-| `npm run test:coverage` | `web/` | 166 passed. Fails under 85% lines |
-| `npm run bundle:check` | `web/`, after `npm run build` | passes, all eight data modules in the data chunk: entry 57.1 kB, `vendor` 256.7 kB, `data` 316.9 kB, runtime 0.6 kB; the single 630.8 kB bundle before the split fails it |
-| `npm run e2e` | `web/`, built site running on 8001 (`SITE=<url>` for another) | 13 of 13 browser checks, none skipped |
+| `npm run test:coverage` | `web/` | 194 passed, 98.8% of lines. Fails under 85% lines |
+| `npm run bundle:check` | `web/`, after `npm run build` | passes, all eight data modules in the data chunk: entry 70.1 kB, `vendor` 256.7 kB, `data` 317.1 kB, the inbox's own `AdminPage` chunk 12.2 kB, runtime 0.6 kB; the single 630.8 kB bundle before the split fails it |
+| `npm run e2e` | `web/`, built site running on 8001 (`SITE=<url>` for another) | 15 of 15 browser checks, none skipped, on a site without an admin (8001) and one with (the local demo, 8011) |
 | `npm run lint`, `npm run typecheck` | `web/` | clean |
-| `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 66 files |
+| `npm run design:audit` | `web/` | clean, Laws 1 to 6 hold across 73 files |
 | `python scripts/design/check_roles.py web/src/styles/tokens.css` | repo root | 100 of 100 role pairs pass |
-| same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 70 of 70 pass (stickers, feature, spotlight, band, ink, tints, outlines; light and dark) |
+| same, `--pairs scripts/design/toy-box-pairs.json` | repo root | 84 of 84 pass (stickers, feature, spotlight and its light and deep sections, band, ink, tints, outlines; light and dark) |
 | `npm run build` | `web/` | builds with no chunk-size warning; the fonts ship as six woff2 files (Latin, Latin-ext, Vietnamese) |
-| `.venv\Scripts\python -m pytest --cov` | `api/` | 131 passed; 99% of `app/` |
-| `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
+| `.venv\Scripts\python -m pytest --cov` | `api/` | 237 passed; 99% of `app/`, the new modules (`admin`, `admin_password`, `community`, `submissions`, `web`) at 100% |
+| `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai off` | `api/`, built site running | 13 of 13 checks pass |
+| `bash .github/scripts/community-backup.sh <site> <remote>` | a throwaway clone and bare remote | first run commits `community.json` to `backup/community`; a site that is down fails with curl's exit code |
 | CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off`, then `npm run e2e` against it | GitHub Actions | smoke 13 of 13 on PR #5 (log read: health answered with 719 items); on PR #9's head, smoke 13 of 13 and browser 13 passed, none skipped |
 | `SITE=https://isaac.toys npm run e2e` | `web/`, the live site | 13 of 13 on 2026-11-26 after PR #9 deployed (`703fd94`), and again after PR #10 (`7a494aa`, the brandmark checks included) |
 | `app.smoke https://web-production-6d147b3c.up.railway.app --ai off --indexable --site-url https://isaac.toys` | `api/`, the live site | 13 of 13, 2026-11-25, before the key was set |
@@ -94,6 +95,24 @@ the libraries in chunks of their own).
   it. Which chunk holds which module comes from the report the build writes (`chunkReport` in
   `web/vite.config.ts`, to `web/node_modules/.cache/isaac-toys/chunks.json`, never into `dist/`). A missing
   report, or one that doesn't match `dist/assets`, fails.
+
+- **Submissions** (`api/tests/test_submissions.py`): a valid send, a pickup and a character as two
+  requirements, a repeat replacing a new one and costing nothing, a reviewed one left alone, 15 kinds of bad
+  input refused with nothing stored, the honeypot, the daily limits apart from the AI's, the AI's finds
+  stored from the server's own saved answer (never words from the browser), submitted words never in a prompt.
+- **Community synergies** (`api/tests/test_community.py`, `web/src/engine/community.test.tsx`): nothing
+  live until approved; approving puts it on every page at once, counted and titled the same on both sides;
+  unpublish, delete and edit apply at once; the inline list cannot break out of its element; a combination the
+  curated list has is shown once; the next start-up retires copies a deploy folded in; community words never
+  reach the model; the AI never offers what is live; the weekly backup restores through `add-submissions`.
+- **Admin** (`api/tests/test_admin.py`, `web/src/pages/AdminPage.test.tsx`): the auth-threat-model checklist
+  as tests: off without settings, one answer and one full hash for a wrong name or password, ten failures
+  lock that visitor out for the day and nobody else, the cookie's flags, a new token at every sign-in, idle and
+  absolute expiry, a password change signing out everywhere, another site's `Origin` or `Sec-Fetch-Site`
+  refused on every write, no inbox without a session, `no-store`; then the inbox: edit, publish, delete, export.
+- **The AI's answer** (`api/tests/test_reading.py`): the schema closed and complete at every level; stray
+  Markdown and references removed; finds kept only when they fit the build; an answer it cannot show is a
+  billed failure that refunds the visitor and is not saved.
 
 ## Checks that tests can fail
 
@@ -211,6 +230,20 @@ the libraries in chunks of their own).
   `python scripts/gamedata.py validate`, then `python -m app.parity` (in `api/`) and `npm run og -- isaac.toys`
   when the count changes, then both suites. The 2026-11-25 extraction scripts were scratch work, not kept.
 
+- **Rendered contrast on the AI read, 2026-11-27.** The read appears only after the click's request
+  returns and the gate measures right after a click, so a pass could be vacuous. Control: one colour
+  (`--fg-on-spotlight-deep-muted`) broken in the built CSS made the verdict label, the finds' lede and hint
+  fail at 1.8:1, in the light theme (`--click-each '.ai-panel .button, .notice[data-tone="quiet"] .button'`,
+  whose "Send" state exists only once the read is on screen) and in the dark (the same with `.theme-toggle`
+  first, `--schemes light`). Real runs after a rebuild: 12 and 8 states, 0 failing; the sign-in page 4 and the
+  open dialog 8, 0 failing. The gate had also caught deep navy on the pool at 2.73:1 (a deep card now wears
+  a chalk-blue rim, `--border-spotlight-deep`) and ink on pool at 2.93:1.
+- **Browser test against live, 2026-11-27**, before PR #12 deployed: 13 passed and exactly the two new
+  `/admin` checks failed (404), so they test the new page and nothing else.
+- Every web test of the new paths was watched fail once on a real mistake before passing: the clipboard
+  stub user-event installs, a cookie jar filing `testserver` as `testserver.local`, unsorted ids, the phone-width
+  overflow of a find's button (fixed by stacking the card).
+
 ## Known gaps
 
 - The browser test covers the paths above, not every interaction: the AI panel (it would be paid for), the
@@ -219,4 +252,8 @@ the libraries in chunks of their own).
   pages; other clipping and sticky behaviour is only checked by eye.
 - The `Dockerfile` cannot be built locally (no Docker on this machine). CI's `docker` job builds and runs it
   on every pull request and push to `main`.
-- `ClaudeAnalyzer` is tested against a stubbed client. No real model call has been made.
+- `ClaudeAnalyzer` is tested against a stubbed client. No real model call has been made, and none with the
+  JSON schema: the first paid analysis after PR #12 deploys is the first proof the schema is accepted.
+- The admin inbox signed in was seen in a browser on the local demo only; the rendered-contrast gate cannot
+  sign in, so the inbox's colours are covered by the role pairs, not by a rendered run.
+- The backup workflow has not run on GitHub; its script ran against a local bare remote.
