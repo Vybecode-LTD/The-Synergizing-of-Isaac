@@ -16,25 +16,25 @@ says what to do next; those say what exists.
 - Wait for CodeRabbit before merging: merging first cancels its review for good.
 
 ## 3. State when this was written (verify before trusting it)
-- `main`: `703fd94` (PR #9: browser e2e test in CI, CarbonDSP footer credit; merged 9:32 am EST). Live
-  deployment `7ae5af93` is that commit, SUCCESS; live e2e 13 of 13, smoke 12 of 12.
-- **PR #10** (`perf/split-data-chunk`): the game data and the libraries in chunks of their own
-  (`web/vite.config.ts`, held by `npm run bundle:check`), CodeRabbit's two fixes, and the CarbonDSP
-  brandmark in the footer (reverse version, decision 0007). Check `gh pr checks 10`.
+- `main`: `7a494aa` (PR #10: data and libraries in their own chunks, CarbonDSP brandmark in the footer;
+  merged 11:24 am EST). Live deployment `db828f7f` is that commit, SUCCESS; live e2e 13 of 13, smoke 12 of 12.
+- AI limit: `AI_PER_VISITOR_PER_DAY=10` on Railway (owner, 2026-11-26); the site cap stays 200.
+- **PR #11** (`docs/ai-limit-10`, docs and a tool): the limit change in DEPLOY, decision 0003 and
+  `dev plans/tools/limit_check.py`, plus this prompt and the handoff. Check `gh pr checks 11`.
 - Deploy checks 1 to 5 passed; check 3's other-network half is unproven ("Not now", 2026-11-26).
 - Merged branches still on GitHub: `ci/docker-smoke`, `data/transformations-repentance`,
-  `docs/deploy-checks-and-handoff`, `fix/home-link-and-theme-switch`, `feat/e2e-and-footer`.
+  `docs/deploy-checks-and-handoff`, `fix/home-link-and-theme-switch`, `feat/e2e-and-footer`,
+  `perf/split-data-chunk`.
 
 ## 4. First job, then the order
-1. PR #10: CI green and CodeRabbit finished, then **ask the owner** to merge (merging deploys). After the
-   deploy: `SITE=https://isaac.toys npm run e2e` in `web/` (13 of 13), and the live page loads
-   `data-*.js` and `vendor-*.js`.
+1. PR #11: CI green and a real CodeRabbit review. Its check can read "Review rate limited";
+   `@coderabbitai review` posts as the owner, so ask first. Then **ask the owner** to merge (it redeploys).
 2. The tracker's older item names: ask first (section 5).
 
 ## 5. Waiting on the owner (ask, do not decide)
-- Merge PR #10? Delete the five merged branches? Switch on Railway's "Wait for CI" (dashboard toggle)?
+- Merge PR #11? Delete the six merged branches? Switch on Railway's "Wait for CI" (dashboard toggle)?
   Rename the items with the tracker's older spellings ("1UP", "Number two")? Run check 3's other-network
-  half (one paid analysis, phone on mobile data)?
+  half (now up to 12 paid analyses, phone on mobile data)?
 
 ## 6. Environment and traps
 - Start: `cd web; npm run check`, then `cd ../api; .venv\Scripts\python -m pytest --cov`.
@@ -48,7 +48,7 @@ says what to do next; those say what exists.
 ## 7. Where things are
 Decisions `docs/decisions/0001`–`0007`, next free `0008`. Evidence: `docs/TESTING.md`. Deploy facts:
 `docs/DEPLOY.md`. Tools: `dev plans/tools/`. Memory: the project's `MEMORY.md` (this session's
-candidates: `seventh-session-promotion-candidates`). Next PR number: 11.
+candidates: `seventh-session-promotion-candidates`). Next PR number: 12.
 
 ## 8. Promotion candidates for `knowledge/` (owner approves)
 1. Prove a browser suite against the live site before deploying the change: the old build must fail exactly

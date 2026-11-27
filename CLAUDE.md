@@ -20,10 +20,11 @@ it reads its own old data and gets no new work unless the owner asks.
   apart from check 3's other-network half).
 - PR #9 (merged and live 2026-11-26): a browser end-to-end test in CI's `docker` job (`web/e2e/`,
   Playwright), and a footer credit, "Built by CarbonDSP for the TBOI community", linked to carbondsp.com.
-- PR #10 (open): the game data and the libraries load as chunks of their own (`web/vite.config.ts`), so
-  no file passes 500 kB and a deploy that changes only the app leaves them cached; `npm run bundle:check`
-  holds it in CI. Also the CarbonDSP brandmark in the footer, the reverse version for the dark band
-  (decision 0007).
+- PR #10 (merged and live 2026-11-26): the game data and the libraries load as chunks of their own
+  (`web/vite.config.ts`), so no file passes 500 kB and a deploy that changes only the app leaves them
+  cached; `npm run bundle:check` holds it in CI. Also the CarbonDSP brandmark in the footer, the reverse
+  version for the dark band (decision 0007).
+- AI: 10 fresh analyses per visitor per day (`AI_PER_VISITOR_PER_DAY` on Railway, owner, 2026-11-26).
 - PR #7 (merged 2026-11-26): a light/dark switch, the logo goes home to an empty builder, an original
   favicon (decision 0005, amended).
 - Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B

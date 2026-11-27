@@ -25,7 +25,10 @@ visitors without it.
   `claude-sonnet-5-5` (about half) and `claude-haiku-5-5` (under a tenth of a cent, weaker knowledge of
   the game) lost. `AI_MODEL` changes it without a code change.
 - **Caps: 5 per visitor and 200 for the site per day** stay. The question offered them as standing
-  unless the owner said otherwise, and the owner did not change them.
+  unless the owner said otherwise, and the owner did not change them. *Amended 2026-11-26:* the owner
+  raised the per-visitor cap to **10** ("let's also increase the limit to 10 AI calls per IP"), set as
+  `AI_PER_VISITOR_PER_DAY=10` on Railway; the code's default stays 5. The site cap stays 200, so the
+  most the site can spend in a day (about $4) is unchanged.
 - **Client address: DNS only, no Cloudflare proxy.** `CLIENT_IP_HEADER` stays at its default. If that
   ever changes, the app first needs a check that a request came through Cloudflare (`docs/DEPLOY.md`).
 

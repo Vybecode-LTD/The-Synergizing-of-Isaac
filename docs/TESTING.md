@@ -31,7 +31,7 @@ the libraries in chunks of their own).
 | `.venv\Scripts\python -m pytest --cov` | `api/` | 131 passed; 99% of `app/` |
 | `.venv\Scripts\python -m app.smoke http://127.0.0.1:8001 --ai skip` | `api/`, built site running | 12 of 12 checks pass |
 | CI job `docker`: builds the `Dockerfile`, runs it with `PORT` and a volume at `/data`, then `app.smoke --ai off`, then `npm run e2e` against it | GitHub Actions | smoke 13 of 13 on PR #5 (log read: health answered with 719 items); on PR #9's head, smoke 13 of 13 and browser 13 passed, none skipped |
-| `SITE=https://isaac.toys npm run e2e` | `web/`, the live site | 13 of 13 on 2026-11-26 after PR #9 deployed (`703fd94`) |
+| `SITE=https://isaac.toys npm run e2e` | `web/`, the live site | 13 of 13 on 2026-11-26 after PR #9 deployed (`703fd94`), and again after PR #10 (`7a494aa`, the brandmark checks included) |
 | `app.smoke https://web-production-6d147b3c.up.railway.app --ai off --indexable --site-url https://isaac.toys` | `api/`, the live site | 13 of 13, 2026-11-25, before the key was set |
 | `.venv\Scripts\python -m ruff check .`, `-m ruff format --check .`, `-m mypy` | `api/` | clean |
 | `.venv\Scripts\python -m app.parity --check` | `api/` | snapshot is current |
@@ -180,6 +180,11 @@ the libraries in chunks of their own).
   the live site, which lacks it, exactly those six checks failed and seven passed. With the two PNGs moved out
   of `dist/assets`, the test failed twice over: the image never loaded, and the 404 reached the console.
   Rendered contrast on Brimstone's page: 0 failing in 8 states.
+- Limit check tool, 2026-11-26 (PR #11, CodeRabbit's three findings, all real): it reported "limit holds"
+  when refused before any answer, added a false "no refusal" FAIL after a limit mismatch, and DEPLOY's
+  check 3 assumed a full allowance. `dev plans/tools/limit_check.py --self-test` now runs 8 made-up runs
+  and sends nothing: 8 of 8 pass. With each finding's old behaviour put back on a copy, the self-test
+  failed on exactly the case for it (3 of 3).
 - The web coverage floor is applied, not just written: with the threshold set to 100 the run failed with
   "Coverage for lines (98.47%) does not meet global threshold (100%)"; at 85 it passes.
 - Not provable on this machine: the over-long-name 500 needs Python 3.12 on Linux (Windows answers 404
