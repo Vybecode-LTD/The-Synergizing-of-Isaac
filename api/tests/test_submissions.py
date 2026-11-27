@@ -368,21 +368,28 @@ async def test_two_sends_of_one_new_synergy_at_the_limit_both_land(
 
 
 def test_the_lock_is_held_from_the_repeat_lookup_through_charging_and_storing(store: Store) -> None:
-    """Deterministic companion to the test above (CodeRabbit, PR #12): it records every take and release of the
-    store's lock and every statement, and checks the lock is never let go between the repeat lookup and the
-    stored row, with the charge in between. Nothing waits inside the lock."""
+    """Deterministic companion to the test above (CodeRabbit, PR #12): it records, with every statement a send
+    runs, whether the store's lock is held at that moment, and every take and release. From the repeat lookup to
+    the stored row, the lock must be held at each statement and never let go, with the charge in between.
+    It fails if the send takes no lock at all, or lets go part-way. Nothing waits inside the lock."""
     from app.store import Submission
 
     events: list[str] = []
+    statements: list[tuple[str, bool]] = []
+    held = False
     real_lock, real_db = store._lock, store._db
 
     class TrackedLock:
         def acquire(self, *args: Any, **kwargs: Any) -> bool:
+            nonlocal held
             taken = real_lock.acquire(*args, **kwargs)
+            held = True
             events.append("lock")
             return taken
 
         def release(self) -> None:
+            nonlocal held
+            held = False
             events.append("unlock")
             real_lock.release()
 
@@ -396,7 +403,9 @@ def test_the_lock_is_held_from_the_repeat_lookup_through_charging_and_storing(st
     class RecordedDb:
         def execute(self, sql: str, *args: Any) -> Any:
             table = "submissions" if "submissions" in sql else "usage" if "usage" in sql else ""
-            events.append(f"{sql.split()[0].upper()} {table}".strip())
+            name = f"{sql.split()[0].upper()} {table}".strip()
+            events.append(name)
+            statements.append((name, held))
             return real_db.execute(sql, *args)
 
     entry = Submission("visitor", (1, 2), (), (), "B", "Words.")
@@ -405,6 +414,9 @@ def test_the_lock_is_held_from_the_repeat_lookup_through_charging_and_storing(st
         store.submit_all([entry], "v1", counter="sub:v1", per_visitor=1, site_key="sub:*", site=9)
     finally:
         store._lock, store._db = real_lock, real_db
-    held = events[events.index("SELECT submissions") : events.index("INSERT submissions") + 1]
-    assert "unlock" not in held and "lock" not in held, events
-    assert "INSERT usage" in held, events  # the charge happens inside the same hold
+    names = [name for name, _ in statements]
+    span = statements[names.index("SELECT submissions") : names.index("INSERT submissions") + 1]
+    assert [name for name, _ in span if name == "INSERT usage"], statements  # the charge is in the span
+    assert all(was_held for _, was_held in span), statements  # held at every statement of it
+    between = events[events.index("SELECT submissions") : events.index("INSERT submissions") + 1]
+    assert "unlock" not in between and "lock" not in between, events  # and never let go and taken again
