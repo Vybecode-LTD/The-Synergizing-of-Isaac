@@ -365,3 +365,46 @@ async def test_two_sends_of_one_new_synergy_at_the_limit_both_land(
     assert (a.status_code, b.status_code) == (200, 200)
     assert sorted([a.json()["duplicate"], b.json()["duplicate"]]) == [False, True]
     assert len(store.submissions()) == 1
+
+
+def test_the_lock_is_held_from_the_repeat_lookup_through_charging_and_storing(store: Store) -> None:
+    """Deterministic companion to the test above (CodeRabbit, PR #12): it records every take and release of the
+    store's lock and every statement, and checks the lock is never let go between the repeat lookup and the
+    stored row, with the charge in between. Nothing waits inside the lock."""
+    from app.store import Submission
+
+    events: list[str] = []
+    real_lock, real_db = store._lock, store._db
+
+    class TrackedLock:
+        def acquire(self, *args: Any, **kwargs: Any) -> bool:
+            taken = real_lock.acquire(*args, **kwargs)
+            events.append("lock")
+            return taken
+
+        def release(self) -> None:
+            events.append("unlock")
+            real_lock.release()
+
+        def __enter__(self) -> TrackedLock:
+            self.acquire()
+            return self
+
+        def __exit__(self, *exc: object) -> None:
+            self.release()
+
+    class RecordedDb:
+        def execute(self, sql: str, *args: Any) -> Any:
+            table = "submissions" if "submissions" in sql else "usage" if "usage" in sql else ""
+            events.append(f"{sql.split()[0].upper()} {table}".strip())
+            return real_db.execute(sql, *args)
+
+    entry = Submission("visitor", (1, 2), (), (), "B", "Words.")
+    store._lock, store._db = TrackedLock(), RecordedDb()  # type: ignore[assignment]
+    try:
+        store.submit_all([entry], "v1", counter="sub:v1", per_visitor=1, site_key="sub:*", site=9)
+    finally:
+        store._lock, store._db = real_lock, real_db
+    held = events[events.index("SELECT submissions") : events.index("INSERT submissions") + 1]
+    assert "unlock" not in held and "lock" not in held, events
+    assert "INSERT usage" in held, events  # the charge happens inside the same hold
