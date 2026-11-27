@@ -7,7 +7,8 @@ checked by both test suites, so the two cannot drift apart unnoticed.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from collections.abc import Iterable
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,12 @@ class Synergy:
     character_slugs: tuple[str, ...]
     rating: str
     description: str
+    # Sent by a visitor and approved by the owner: live from the database, not from data/ (decision 0008).
+    community: bool = False
+
+    @property
+    def combo(self) -> str:
+        return combo_key(self.item_ids, self.trinket_ids, self.character_slugs)
 
     @property
     def requirements(self) -> int:
@@ -44,6 +51,15 @@ def _strength(s: Synergy) -> tuple[int, int, str]:
     return (RATING_ORDER[s.rating], -s.requirements, s.id)
 
 
+def combo_key(items: Iterable[int], trinkets: Iterable[int], characters: Iterable[str]) -> str:
+    """One combination, however it was picked: "i:38.118|t:|c:azazel"."""
+    return (
+        f"i:{'.'.join(str(i) for i in sorted(items))}"
+        f"|t:{'.'.join(str(t) for t in sorted(trinkets))}"
+        f"|c:{'.'.join(sorted(characters))}"
+    )
+
+
 @dataclass
 class GameData:
     items: list[dict[str, Any]]
@@ -58,6 +74,19 @@ class GameData:
     trinket_by_slug: dict[str, dict[str, Any]] = field(default_factory=dict)
     character_by_slug: dict[str, dict[str, Any]] = field(default_factory=dict)
     transformations: list[dict[str, Any]] = field(default_factory=list)
+    # The curated entries by their pickups, sorted, whatever characters they need.
+    synergies_by_pieces: dict[tuple[tuple[int, ...], tuple[int, ...]], list[str]] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        for s in self.synergies:
+            key = (tuple(sorted(s.item_ids)), tuple(sorted(s.trinket_ids)))
+            self.synergies_by_pieces.setdefault(key, []).append(s.id)
+
+    def with_community(self, community: list[Synergy]) -> GameData:
+        """The same data with the live community synergies added after the curated ones."""
+        if not community:
+            return self
+        return replace(self, synergies=[*self.synergies, *community], synergies_by_pieces={})
 
     @classmethod
     def load(cls, path: Path) -> GameData:

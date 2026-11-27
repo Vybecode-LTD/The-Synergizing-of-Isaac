@@ -88,3 +88,6 @@ Skills `railway-deploy-playbook` (bind `$PORT`, client IP behind the edge, never
 - Will Cloudflare proxy the domain? It decides `CLIENT_IP_HEADER`.
 
 ## Changes after approval
+
+- 2026-11-27: the non-goal "no community submission of synergies" is replaced by decision 0008
+  (`contracts/synergy-submissions.md`); `/api/analyze` answers in sections (`read`, `found`), not `text`.

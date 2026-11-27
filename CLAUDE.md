@@ -13,7 +13,13 @@ character also has its own page. Unofficial fan project.
 It replaced a desktop app (Avalonia, .NET 9) that still lives under `src/` and still builds, but is frozen:
 it reads its own old data and gets no new work unless the owner asks.
 
-## Current state (2026-11-26)
+## Current state (2026-11-27)
+
+- **PR #12 (open, not merged): synergy submissions and Community synergies** (decision 0008,
+  `dev plans/contracts/synergy-submissions.md`). Visitors send synergies (by hand or from the AI read's
+  "Synergies found"); the owner publishes them at `/admin` and they are live at once from SQLite, marked
+  Community; a weekly Action backs them up to the `backup/community` branch. The AI read is now JSON in
+  sections. Needs `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH` on Railway (`docs/DEPLOY.md`).
 
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Live at
   `isaac.toys` with AI on** since 2026-11-26 (Railway; `docs/DEPLOY.md` has the ids; checks 1 to 5 passed,
@@ -42,8 +48,9 @@ it reads its own old data and gets no new work unless the owner asks.
 | `data/` | The one copy of the game data (JSON, sprites, shared page text). Rules: `data/README.md` |
 | `scripts/gamedata.py` | Builds and validates `data/`. `scripts/design/` holds the design-system audit |
 | `web/` | React 19 + TypeScript + Vite single-page app. `src/engine/` is the pure logic |
-| `api/` | FastAPI: `/api/analyze`, crawler-ready HTML for every page, sitemap, robots, serves `web/dist` |
+| `api/` | FastAPI: `/api/analyze`, `/api/submissions`, `/api/admin/*`, `/api/community`, crawler-ready HTML for every page (with the live Community list inline), sitemap, robots, serves `web/dist` |
 | `Dockerfile`, `railway.toml` | One image for Railway: builds `web/`, runs `api/` |
+| `.github/workflows/` | `ci.yml` (every PR and push to `main`); `community-backup.yml` (weekly, to `backup/community`) |
 | `docs/` | `HANDOFF.md`, `DEPLOY.md`, `TESTING.md`, `decisions/`, `archive/desktop-app/` |
 | `dev plans/` | Contracts and the next session's starting prompt (`README.md` lists them) |
 | `src/`, `*.sln`, `build_mosaic.py` | The frozen desktop app |
@@ -78,13 +85,16 @@ the machine's global Python 3.14 lacks wheels for some packages).
 | Refresh the browser/server snapshot | `.venv\Scripts\python -m app.parity` (in `api/`) |
 | Bundle layout (data in its own chunk, nothing over 500 kB) | `npm run bundle:check` (after `npm run build`) |
 | Browser end-to-end test (installed Chrome here; site running) | `npm run e2e` (in `web/`; `SITE=<url>` for another site, e.g. live, at no cost) |
+| Admin password hash for Railway (asks twice, prints one line) | `.venv\Scripts\python -m app.admin_password` (in `api/`) |
+| Move live Community synergies into the curated file | `python scripts/gamedata.py add-submissions <export or backup>` (repo root), then a PR |
 | Smoke-test a running site (local, CI's image, live) | `.venv\Scripts\python -m app.smoke <url> --ai on\|off\|skip` (in `api/`; `--indexable` for production) |
 
 ## Rules that are specific to this project
 
 1. **Game data has one home.** `data/items.json`, `trinkets.json`, `characters.json` and `meta.json` are
    generated: change `data/sources/` or `scripts/gamedata.py`, never the output. `data/synergies.json`,
-   `data/transformations.json` and `data/content/*.json` are edited by hand. After a change to
+   `data/transformations.json` and `data/content/*.json` are edited by hand. Community synergies live in
+   SQLite on top of it (decision 0008) and join it only through `add-submissions` and a PR. After a change to
    `transformations.json`, run `build`; run `validate` after any change.
 2. **A fact needs a source.** Item facts come from the sources listed in `data/README.md`. Do not add
    numbers, effects or quotes from memory; an honest gap beats a confident guess.
@@ -95,8 +105,9 @@ the machine's global Python 3.14 lacks wheels for some packages).
 4. **Design tokens or nothing.** Literal values live only in `web/src/styles/tokens.css`. Components read
    Tier-2 roles. `npm run design:audit` and `scripts/design/check_roles.py` must stay clean, and visual
    changes pass the rendered-contrast gate (`verify-real-pass` skill) before they are shown.
-5. **The AI endpoint takes ids only.** `/api/analyze` builds its prompt from server data. Never let text
-   from the browser reach the model; that is what keeps the paid key from being used as a free proxy.
+5. **The AI endpoint takes ids only.** `/api/analyze` builds its prompt from the curated data. Never let
+   text from the browser reach the model, submitted and Community synergies included; that is what keeps
+   the paid key from being used as a free proxy.
 6. **The site's name is one setting per side:** `web/src/site.ts` (`SITE.domain`) and the API's `SITE_URL`.
    `web/public/og.png` is drawn with the name and `data/`'s counts in it: rerun `npm run og -- <domain>`
    when either changes.

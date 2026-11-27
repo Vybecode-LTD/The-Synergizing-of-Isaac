@@ -12,6 +12,7 @@ Plans, contracts, design sources and starting prompts for this project.
 | `contracts/transformations-repentance.md` | Contract for counting transformations as Repentance does, Repentance+ marked (decision 0006). Approved 2026-11-25; PR #6 |
 | `tools/limit_check.py` | DEPLOY check 3 against `isaac.toys`. **Spends up to twelve paid analyses (the limit of 10, plus 2): the owner's OK first.** `--self-test` checks its verdicts on made-up runs and sends nothing |
 | `tools/favicon_draw.py` | The favicon's 32px grid and palette; rewrites `web/public/favicon.svg` byte for byte |
+| `contracts/synergy-submissions.md` | Contract for synergy submissions, live Community synergies, the admin inbox and the AI read in sections (decision 0008). Draft; PR #12 |
 | `contracts/web-app-seams.md` | Contract for the web app's seams: build-link format, `/api/analyze`, the SQLite tables, public URLs, environment variables. Status: draft, with open questions for the owner |
 
 Decisions are in `docs/decisions/`, the current state in `docs/HANDOFF.md`.

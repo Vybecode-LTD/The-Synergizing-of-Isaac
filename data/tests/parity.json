@@ -128,6 +128,15 @@
    "answer": ""
   },
   {
+   "path": "/admin",
+   "kind": "admin",
+   "title": "Synergy Inbox | isaac.toys",
+   "description": "Where the owner of isaac.toys reviews the synergies visitors send in.",
+   "h1": "Synergy inbox",
+   "lede": "Synergies visitors sent in. Publishing one puts it on the site at once, marked Community. Moving live ones into data/synergies.json is optional, by export and pull request.",
+   "answer": ""
+  },
+  {
    "path": "/items/no-such-item",
    "kind": "notFound",
    "title": "Page Not Found | isaac.toys",

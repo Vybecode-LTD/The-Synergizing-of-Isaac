@@ -31,7 +31,8 @@
             ["Item and trinket names, IDs, effects and stat changes come from the open-source ", { "text": "Rebirth Item Tracker", "href": "https://github.com/Rchardon/RebirthItemTracker" }, " (BSD 2-Clause, copyright Brett824, Hyphen-ated and Gamonymous)."],
             ["Which items and trinkets count toward each transformation comes from the ", { "text": "Binding of Isaac wiki", "href": "https://bindingofisaacrebirth.wiki.gg/" }, " for Repentance. What counts only in Repentance+ is marked."],
             ["Quality, item pools and starting items are the numbers in the game's own data files for Repentance 1.7.9b."],
-            ["The synergies were written by hand, and every one was checked against the ", { "text": "Binding of Isaac wiki", "href": "https://bindingofisaacrebirth.wiki.gg/" }, " for Repentance on 24 and 25 November 2026. Where the wiki says nothing about a pair, it was checked against each item's own effects."]
+            ["The synergies were written by hand, and every one was checked against the ", { "text": "Binding of Isaac wiki", "href": "https://bindingofisaacrebirth.wiki.gg/" }, " for Repentance on 24 and 25 November 2026. Where the wiki says nothing about a pair, it was checked against each item's own effects."],
+            ["Synergies marked Community were sent in by visitors, by hand or from an AI read, and approved by the site's owner. They have not been checked against the wiki the same way."]
           ]
         },
         { "p": ["Stat changes are the items' own numbers added up. The game then runs them through its damage and fire-rate formulas, so they are a tally of what you picked up, not your final stats."] }
@@ -47,7 +48,8 @@
     {
       "heading": "What happens to your data?",
       "blocks": [
-        { "p": ["There are no accounts. Your current build and any synergies you write are kept in your browser's own storage and never leave it, unless you ask for an AI analysis as described above."] }
+        { "p": ["There are no accounts. Your current build and any synergies you write are kept in your browser's own storage and never leave it, unless you ask for an AI analysis as described above or send a synergy to the site."] },
+        { "p": ["A synergy you send is stored on the site's server with no name or account. Beside it is a scrambled form of your internet address that cannot be turned back into it, used only to limit how many one visitor can send in a day. If the site's owner approves it, it appears on the site for everyone, marked Community."] }
       ]
     },
     {

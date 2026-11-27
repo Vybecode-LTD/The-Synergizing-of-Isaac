@@ -90,6 +90,10 @@ export interface Synergy {
   description: string;
   /** Added by this visitor and stored only in their browser. */
   custom?: boolean;
+  /** A custom one this visitor has also sent to the site's owner for review. */
+  submitted?: boolean;
+  /** Sent in by a visitor and approved by the owner: live from the server's database (decision 0008). */
+  community?: boolean;
 }
 
 export interface Build {

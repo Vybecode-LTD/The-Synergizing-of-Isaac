@@ -51,7 +51,8 @@ def long_date(iso: str) -> str:
 
 @dataclass(frozen=True)
 class Page:
-    kind: str  # home | items | item | trinkets | trinket | characters | character | synergies | about | notFound
+    # home | items | item | trinkets | trinket | characters | character | synergies | about | admin | notFound
+    kind: str
     path: str
     title: str
     description: str
@@ -63,6 +64,11 @@ class Page:
     @property
     def found(self) -> bool:
         return self.kind != "notFound"
+
+    @property
+    def indexable(self) -> bool:
+        """Whether search engines may list it: every page that exists, except the owner's inbox."""
+        return self.found and self.kind != "admin"
 
 
 def site_values(data: GameData, domain: str) -> dict[str, Any]:
@@ -119,6 +125,8 @@ LISTS = {
     "/characters": "characters",
     "/synergies": "synergies",
     "/about": "about",
+    # The owner's inbox. A page like the others, but never indexed and never in the sitemap.
+    "/admin": "admin",
 }
 DETAILS = {"items": "item", "trinkets": "trinket", "characters": "character"}
 

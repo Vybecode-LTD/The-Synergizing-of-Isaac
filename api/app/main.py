@@ -3,23 +3,35 @@
 from __future__ import annotations
 
 import asyncio
-import ipaddress
 import logging
 import mimetypes
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, Response
-from pydantic import BaseModel, Field
 
-from . import server_copy
-from .analysis import SYSTEM, AnalysisFailed, Analyzer, ClaudeAnalyzer, build_prompt, cache_key
-from .gamedata import Build, GameData
+from . import admin, server_copy, submissions
+from .analysis import (
+    SCHEMA,
+    SYSTEM,
+    AnalysisFailed,
+    Analyzer,
+    ClaudeAnalyzer,
+    Reading,
+    build_prompt,
+    cache_key,
+    read_answer,
+)
+from .community import Community
+from .gamedata import GameData
 from .inflight import KeyedLocks
 from .pages import describe
-from .settings import MAX_ITEMS, MAX_TRINKETS, Settings
+from .settings import Settings
 from .store import LimitReached, Store
+from .web import MESSAGES, BuildRequest, check_build, client_ip, problem
+
+__all__ = ["MESSAGES", "client_ip", "create_app", "problem"]
 
 log = logging.getLogger("isaac_toys")
 
@@ -29,13 +41,6 @@ BARE_SHELL = (
     '<!--head-start--><!--head-end--></head><body><div id="root"><!--server-copy--></div></body></html>'
 )
 HEAD_START, HEAD_END, COPY = "<!--head-start-->", "<!--head-end-->", "<!--server-copy-->"
-
-MESSAGES = {
-    "rate_limited": "You've used today's AI analyses. They reset at midnight UTC.",
-    "budget_exhausted": "The site's AI budget for today is used up. It resets at midnight UTC.",
-    "not_configured": "AI analysis isn't switched on for this site yet.",
-    "failed": "The AI didn't answer. Try again in a moment.",
-}
 
 CSP = (
     "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
@@ -54,41 +59,8 @@ BUILT_TYPES = {
 }
 
 
-class AnalyzeRequest(BaseModel):
-    character: str | None = Field(default=None, max_length=40)
-    items: list[int] = Field(default_factory=list, max_length=MAX_ITEMS)
-    trinkets: list[int] = Field(default_factory=list, max_length=MAX_TRINKETS)
-
-
-def problem(status: int, code: str, message: str | None = None) -> HTTPException:
-    return HTTPException(status, {"code": code, "message": message or MESSAGES[code]})
-
-
-def client_ip(request: Request, header: str) -> str:
-    """Who to count a request against: the visitor's address behind Railway's edge (and Cloudflare, when
-    it proxies the domain).
-
-    Railway's edge overwrites X-Forwarded-For, so its first entry is the real peer. CF-Connecting-IP is
-    only trustworthy when every request comes through Cloudflare, which is why it is opt-in.
-
-    An IPv6 visitor is counted by their /64: a subscriber is handed the whole network, so counting single
-    addresses would give them a fresh allowance for every one they cared to use.
-    """
-    candidates = []
-    if header == "cf-connecting-ip":
-        candidates.append(request.headers.get("cf-connecting-ip", ""))
-    candidates.append(request.headers.get("x-forwarded-for", "").split(",")[0])
-    for candidate in candidates:
-        try:
-            address = ipaddress.ip_address(candidate.strip())
-        except ValueError:
-            continue
-        if isinstance(address, ipaddress.IPv6Address):
-            if address.ipv4_mapped is not None:
-                return str(address.ipv4_mapped)
-            return str(ipaddress.ip_network((address, 64), strict=False))
-        return str(address)
-    return request.client.host if request.client else "unknown"
+class AnalyzeRequest(BuildRequest):
+    pass
 
 
 def create_app(
@@ -99,6 +71,7 @@ def create_app(
     settings = settings or Settings.from_env()
     data = GameData.load(settings.data_path)
     store = store or Store(settings.data_dir / "isaac-toys.sqlite3")
+    community = Community(data, store)
     if analyzer is None and settings.anthropic_api_key:
         analyzer = ClaudeAnalyzer(settings)
     upstream = asyncio.Semaphore(4)
@@ -120,8 +93,12 @@ def create_app(
         response.headers["Content-Security-Policy"] = CSP
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        if not settings.indexable:
+        path = request.url.path
+        if not settings.indexable or path == "/admin" or path.startswith("/admin/"):
             response.headers["X-Robots-Tag"] = "noindex"
+        if path.startswith("/api/admin/"):
+            # The inbox is the owner's alone: no shared cache, and no back-button copy after signing out.
+            response.headers["Cache-Control"] = "no-store"
         return response
 
     @app.exception_handler(RequestValidationError)
@@ -135,41 +112,65 @@ def create_app(
 
     @app.get("/api/health")
     async def health() -> dict[str, object]:
-        return {"status": "ok", "ai": analyzer is not None, "items": len(data.items), "synergies": len(data.synergies)}
+        return {
+            "status": "ok",
+            "ai": analyzer is not None,
+            "items": len(data.items),
+            "synergies": len(data.synergies),
+            "community": len(community.synergies()),
+        }
+
+    @app.get("/api/community")
+    async def community_list() -> JSONResponse:
+        """The live community synergies as data/synergies.json entries: public, and the weekly backup's source."""
+        return JSONResponse({"entries": community.entries()}, headers={"Cache-Control": "no-cache"})
+
+    def visitor_of(request: Request) -> str:
+        return store.visitor(client_ip(request, settings.client_ip_header))
+
+    app.include_router(submissions.routes(settings, data, store, visitor_of))
+    app.include_router(admin.routes(settings, data, store, visitor_of))
 
     @app.post("/api/analyze")
     async def analyze(body: AnalyzeRequest, request: Request) -> dict[str, object]:
-        if body.character is not None and body.character not in data.character_by_slug:
-            raise problem(422, "invalid", "Unknown character.")
-        if any(i not in data.item_by_id for i in body.items) or any(t not in data.trinket_by_id for t in body.trinkets):
-            raise problem(422, "invalid", "Unknown item or trinket.")
-        if len(set(body.items)) != len(body.items) or len(set(body.trinkets)) != len(body.trinkets):
-            raise problem(422, "invalid", "The same pickup is listed twice.")
-        if not body.items and not body.trinkets:
-            raise problem(422, "invalid", "Add at least one item or trinket first.")
+        # Order of pickup does not change a build: one prompt, and so one saved answer, per build.
+        build = check_build(data, body).canonical()
         if analyzer is None:
             raise problem(503, "not_configured")
 
-        # Order of pickup does not change a build: one prompt, and so one saved answer, per build.
-        build = Build(character=body.character, items=tuple(body.items), trinkets=tuple(body.trinkets))
-        prompt = build_prompt(data, build.canonical())
-        key = cache_key(settings.ai_model, SYSTEM, prompt)
-        visitor = store.visitor(client_ip(request, settings.client_ip_header))
+        prompt = build_prompt(data, build)
+        key = cache_key(settings.ai_model, SYSTEM, prompt, SCHEMA)
+        visitor = visitor_of(request)
         limit = settings.per_visitor_per_day
 
-        def from_cache(saved: str) -> dict[str, object]:
-            return {"text": saved, "cached": True, "remaining": max(0, limit - store.used(visitor)), "limit": limit}
+        def answer(reading: Reading, cached: bool) -> dict[str, object]:
+            return {
+                "read": reading.read,
+                "found": reading.found,
+                "cached": cached,
+                "remaining": max(0, limit - store.used(visitor)),
+                "limit": limit,
+            }
 
-        saved = store.cached(key)
-        if saved is not None:
-            return from_cache(saved)
+        def saved_reading() -> Reading | None:
+            saved = store.cached(key)
+            if saved is None:
+                return None
+            try:
+                return read_answer(saved, community.view(), build)
+            except AnalysisFailed:
+                return None  # only readable answers are saved, so this is a reader stricter than the writer
+
+        reading = saved_reading()
+        if reading is not None:
+            return answer(reading, cached=True)
 
         # One model call per build at a time. A request that arrives while the same build is being
         # answered waits here, then finds the saved answer: no second paid call, nothing off its allowance.
         async with in_flight.hold(key):
-            saved = store.cached(key)
-            if saved is not None:
-                return from_cache(saved)
+            reading = saved_reading()
+            if reading is not None:
+                return answer(reading, cached=True)
             try:
                 reservation = store.reserve(visitor, limit, settings.site_per_day)
             except LimitReached as refused:
@@ -177,6 +178,8 @@ def create_app(
             try:
                 async with upstream:
                     text = await analyzer.analyze(SYSTEM, prompt)
+                # An answer that doesn't fit the schema was paid for but can't be shown: billed, not saved.
+                reading = read_answer(text, community.view(), build)
             except AnalysisFailed as error:
                 # The visitor got nothing either way. The site's budget is refunded only if nobody paid.
                 store.release(reservation, site=not error.billed)
@@ -189,7 +192,7 @@ def create_app(
                 log.exception("analysis failed unexpectedly")
                 raise problem(502, "failed") from error
             store.remember(key, text)
-        return {"text": text, "cached": False, "remaining": max(0, limit - store.used(visitor)), "limit": limit}
+        return answer(reading, cached=False)
 
     @app.api_route("/api/{rest:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)
     async def no_such_endpoint(rest: str) -> JSONResponse:
@@ -207,7 +210,7 @@ def create_app(
 
     @app.get("/llms.txt", include_in_schema=False)
     async def llms() -> PlainTextResponse:
-        return PlainTextResponse(server_copy.llms_txt(data, settings.site_url, domain))
+        return PlainTextResponse(server_copy.llms_txt(community.view(), settings.site_url, domain))
 
     # ------------------------------------------------------------ pages and files
 
@@ -239,9 +242,10 @@ def create_app(
             # Looks like a file and is not one we have: a plain 404, not a page.
             return PlainTextResponse("Not found", status_code=404)
 
-        described = describe("/" + path, data, domain)
-        head = server_copy.render_head(described, data, settings.site_url, domain)
-        body = server_copy.render_copy(described, data, domain)
+        view = community.view()
+        described = describe("/" + path, view, domain)
+        head = server_copy.render_head(described, view, settings.site_url, domain) + "\n    " + community.inline_tag()
+        body = server_copy.render_copy(described, view, domain)
         html = before_head + HEAD_START + "\n    " + head + "\n    " + HEAD_END + after_head.replace(COPY, body, 1)
         return HTMLResponse(html, status_code=200 if described.found else 404, headers={"Cache-Control": "no-cache"})
 

@@ -449,20 +449,213 @@
     color: var(--fg-on-spotlight);
   }
 
-  .ai-panel__answer {
+  /* ---- The AI read: a stack of stickers on the pool panel, light and deep by turns ---- */
+  .ai-read {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-grouped);
+  }
+
+  .ai-read__verdict,
+  .ai-read__section {
+    /* Tier 3: the card's own pair, light by default. */
+    --read-fg: var(--fg-on-spotlight-light);
+    --read-muted: var(--fg-on-spotlight-light-muted);
+    --read-bg: var(--bg-spotlight-light);
+    --read-badge-fg: var(--fg-on-spotlight);
+    --read-badge-bg: var(--bg-spotlight);
+    --border-focus: var(--fg-on-spotlight-light);
+
     display: flex;
     flex-direction: column;
     gap: var(--gap-related);
-    max-inline-size: var(--measure-prose);
-    font: var(--type-body);
-    color: var(--fg-on-spotlight);
+    padding: var(--pad-card);
+    color: var(--read-fg);
+    background: var(--read-bg);
+    border: var(--stroke-ink) solid var(--border-ink);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--elevation-card);
   }
 
-  .ai-panel__list {
+  .ai-read__verdict[data-tone="deep"],
+  .ai-read__section[data-tone="deep"] {
+    --read-fg: var(--fg-on-spotlight-deep);
+    --read-muted: var(--fg-on-spotlight-deep-muted);
+    --read-bg: var(--bg-spotlight-deep);
+    --read-badge-fg: var(--fg-on-spotlight-light);
+    --read-badge-bg: var(--bg-spotlight-light);
+    --border-focus: var(--fg-on-spotlight-deep);
+
+    border-color: var(--border-spotlight-deep);
+  }
+
+  .ai-read__verdict {
+    flex-direction: row;
+    gap: var(--gap-grouped);
+    align-items: center;
+  }
+
+  .ai-read__verdict-text {
     display: flex;
     flex-direction: column;
     gap: var(--gap-fused);
+    min-inline-size: 0;
+  }
+
+  .ai-read__label {
+    font: var(--type-label);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--read-muted);
+  }
+
+  .ai-read__why {
+    font: var(--type-lead);
+    color: var(--read-fg);
+  }
+
+  .ai-read__heading {
+    display: flex;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-h3);
+    color: var(--read-fg);
+  }
+
+  .ai-read__icon {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    inline-size: var(--size-seal-sm);
+    block-size: var(--size-seal-sm);
+    color: var(--read-badge-fg);
+    background: var(--read-badge-bg);
+    border: var(--stroke-thick) solid var(--border-ink);
+    border-radius: var(--radius-full);
+  }
+
+  .ai-read__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    max-inline-size: var(--measure-prose);
     padding-inline-start: var(--indent-list);
+    font: var(--type-body);
+    list-style: square;
+  }
+
+  .ai-read__item::marker { color: var(--read-muted); }
+
+  .ai-read__lede {
+    font: var(--type-small);
+    color: var(--read-muted);
+  }
+
+  /* A pickup named in a sentence, with its sprite. The sprite sits in the line without making it taller. */
+  .ai-mention {
+    display: inline-flex;
+    gap: var(--gap-hair);
+    align-items: center;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .ai-mention__art {
+    display: inline-flex;
+    margin-block: calc(var(--gap-tight) * -1);
+  }
+
+  /* ---- Synergies found: page-coloured cards, each with its own save --------------------- */
+  .ai-finds {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-related);
+    padding: var(--space-0);
+    list-style: none;
+  }
+
+  .ai-find {
+    /* Back on the page's own colours, so the focus ring is the page's ink again. */
+    --border-focus: var(--fg-strong);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    padding: var(--pad-block-md) var(--pad-inline-md);
+    color: var(--fg-default);
+    background: var(--bg-surface);
+    border: var(--stroke-thick) solid var(--border-ink);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--elevation-sticker);
+  }
+
+  /* The sticker and the recipe share a row; the words and the button get the card's full width,
+     which a phone needs: three panels deep, a column beside the sticker is too narrow for a button. */
+  .ai-find__head {
+    display: flex;
+    gap: var(--gap-related);
+    align-items: center;
+  }
+
+  .ai-find__recipe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-ui);
+    color: var(--fg-strong);
+  }
+
+  .ai-find__piece {
+    display: inline-flex;
+    gap: var(--gap-fused);
+    align-items: center;
+  }
+
+  .ai-find__plus,
+  .ai-find__as {
+    color: var(--fg-muted);
+  }
+
+  .ai-find__text {
+    font: var(--type-small);
+    color: var(--fg-default);
+  }
+
+  .ai-find__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+  }
+
+  .ai-find__done,
+  .synergy-card__sent {
+    display: inline-flex;
+    gap: var(--gap-fused);
+    align-items: center;
+    font: var(--type-ui);
+    color: var(--fg-success);
+  }
+
+  .ai-finds__send {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    align-items: flex-start;
+  }
+
+  .ai-finds__sent {
+    display: inline-flex;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-subtitle);
+    color: var(--read-fg);
+  }
+
+  .ai-finds__hint {
+    max-inline-size: var(--measure-prose);
+    font: var(--type-small);
+    color: var(--read-muted);
   }
 
   .ai-panel__note {
@@ -564,5 +757,33 @@
     font: var(--type-ui);
     color: var(--fg-default);
     cursor: pointer;
+  }
+
+  .synergy-form__check[data-disabled="true"] {
+    color: var(--fg-disabled);
+    cursor: not-allowed;
+  }
+
+  /* Sending is a choice of its own: a dashed well round the box and its link. */
+  .synergy-form__send {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    padding: var(--pad-well);
+    border: var(--stroke-thick) dashed var(--border-ink);
+    border-radius: var(--radius-xl);
+  }
+
+  .synergy-form__thanks {
+    display: inline-flex;
+    gap: var(--gap-tight);
+    align-items: center;
+    font: var(--type-subtitle);
+    color: var(--fg-success);
+  }
+
+  .field__optional {
+    font-weight: var(--weight-regular);
+    color: var(--fg-muted);
   }
 }

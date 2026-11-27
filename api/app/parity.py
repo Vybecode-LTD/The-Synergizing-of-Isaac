@@ -34,6 +34,7 @@ PATHS = [
     "/characters/tainted-lost",
     "/synergies",
     "/about",
+    "/admin",
     "/items/no-such-item",
     "/nowhere/at/all",
 ]

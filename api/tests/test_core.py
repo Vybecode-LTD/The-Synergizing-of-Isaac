@@ -229,7 +229,7 @@ async def test_calls_the_model_with_low_effort_and_a_refusal_fallback(monkeypatc
         "max_tokens": 4000,
         "system": "SYS",
         "messages": [{"role": "user", "content": "USER"}],
-        "output_config": {"effort": "low"},
+        "output_config": {"effort": "low", "format": {"type": "json_schema", "schema": analysis.SCHEMA}},
         "betas": ["server-side-fallback-2026-07-01"],
         "fallbacks": "default",
     }
@@ -241,7 +241,10 @@ async def test_a_model_without_server_fallbacks_is_not_sent_the_parameter(monkey
         "S", "U"
     )
     assert "fallbacks" not in messages.kwargs and "betas" not in messages.kwargs
-    assert messages.kwargs["output_config"] == {"effort": "medium"}
+    assert messages.kwargs["output_config"] == {
+        "effort": "medium",
+        "format": {"type": "json_schema", "schema": analysis.SCHEMA},
+    }
 
 
 def api_error(cls: type[anthropic.APIStatusError], status: int) -> anthropic.APIStatusError:

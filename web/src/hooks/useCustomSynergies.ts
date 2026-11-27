@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { gameData } from "../engine/data";
 import { RATINGS, type Rating, type Synergy } from "../engine/types";
 import { readStored, writeStored } from "./storage";
@@ -42,37 +42,56 @@ export function sanitize(raw: unknown): Synergy[] {
       rating: entry.rating as Rating,
       description: entry.description.slice(0, MAX_DESCRIPTION),
       custom: true,
+      ...(entry.submitted === true ? { submitted: true } : {}),
     });
   }
   return out;
 }
 
+/** Counts saves in this page's life, so two in the same millisecond still get different ids. */
+let serial = 0;
+
 /** Synergies this visitor wrote themselves. They live in this browser only. */
 export function useCustomSynergies() {
   const [mine, setMine] = useState<Synergy[]>(() => sanitize(readStored<unknown>(KEY, [])));
 
-  const save = useCallback((next: Synergy[]) => {
-    setMine(next);
-    writeStored(KEY, next);
+  // Every change is made to the latest list, never to the one a callback's render saw: a send's completion
+  // can run after the visitor deleted or added another, and must not undo that (CodeRabbit, PR #12). The
+  // updater stays pure; the list is saved once React has committed it, and only after a change.
+  const changed = useRef(false);
+  const update = useCallback((change: (list: Synergy[]) => Synergy[]) => {
+    changed.current = true;
+    setMine(change);
   }, []);
 
+  useEffect(() => {
+    if (changed.current) writeStored(KEY, mine);
+  }, [mine]);
+
   const add = useCallback(
-    (entry: NewSynergy) => {
+    (entry: NewSynergy, submitted = false) => {
       const synergy: Synergy = {
-        id: `mine-${Date.now().toString(36)}`,
+        // Two saves in the same millisecond (saving several AI finds) must not share an id.
+        id: `mine-${Date.now().toString(36)}-${(serial++).toString(36)}`,
         itemIds: entry.itemIds,
         trinketIds: entry.trinketIds,
         characterSlugs: entry.character ? [entry.character] : [],
         rating: entry.rating,
         description: entry.description.trim().slice(0, MAX_DESCRIPTION),
         custom: true,
+        ...(submitted ? { submitted: true } : {}),
       };
-      save([...mine, synergy]);
+      update((list) => [...list, synergy]);
     },
-    [mine, save],
+    [update],
   );
 
-  const remove = useCallback((id: string) => save(mine.filter((s) => s.id !== id)), [mine, save]);
+  const remove = useCallback((id: string) => update((list) => list.filter((s) => s.id !== id)), [update]);
 
-  return { mine, add, remove };
+  const markSubmitted = useCallback(
+    (id: string) => update((list) => list.map((s) => (s.id === id ? { ...s, submitted: true } : s))),
+    [update],
+  );
+
+  return { mine, add, remove, markSubmitted };
 }

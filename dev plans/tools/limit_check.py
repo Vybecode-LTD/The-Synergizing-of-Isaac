@@ -136,7 +136,8 @@ def main() -> int:
             "remaining": payload.get("remaining"),
             "limit": payload.get("limit"),
             "code": detail.get("code"),
-            "text_start": (payload.get("text") or "")[:70].replace("\n", " "),
+            # The answer's verdict line (PR #12 turned the plain text into sections), for the log only.
+            "text_start": str(((payload.get("read") or {}).get("verdict") or {}).get("why") or "")[:70],
         }
 
     # Part 1: fresh builds from this connection until refused, or until an answer reports another limit.

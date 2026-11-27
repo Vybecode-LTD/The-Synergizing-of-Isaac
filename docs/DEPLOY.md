@@ -36,7 +36,9 @@ Railway change need the owner's go-ahead. Background: the `railway-deploy-playbo
 
 One Railway project, one service, built from the repo's `Dockerfile` (it builds `web/`, then runs `api/`,
 which serves the app, the crawler HTML and `/api`). One volume for the SQLite file that holds saved AI
-answers and the daily counters. No database server.
+answers, the daily counters, submitted synergies (the live Community ones among them) and admin sessions.
+No database server (decision 0008 kept SQLite). A weekly GitHub Action copies the live Community
+synergies to the `backup/community` branch.
 
 ## Owner steps (Railway dashboard, production)
 
@@ -64,8 +66,28 @@ answers and the daily counters. No database server.
 | `AI_SITE_PER_DAY` | optional, default `200` | Fresh analyses for the whole site per day: the spending cap |
 | `AI_MAX_TOKENS` | optional, default `4000` | Ceiling for one answer, thinking included. A cut-off answer is refused, not saved; the log says to raise this |
 | `CLIENT_IP_HEADER` | leave unset: the owner chose DNS only, no Cloudflare proxy | Which header names the visitor. `cf-connecting-ip` is for a proxied domain only |
+| `ADMIN_USERNAME` | a name the owner chooses | Turns on the synergy inbox at `/admin` (with the next row) |
+| `ADMIN_PASSWORD_HASH` | the line `python -m app.admin_password` prints (see below) | The admin password's scrypt hash, never the password. Changing it signs out every session |
+| `SUBMISSIONS_PER_VISITOR_PER_DAY` | optional, default `20` | Synergies one visitor can send a day |
+| `SUBMISSIONS_SITE_PER_DAY` | optional, default `500` | Synergies the whole site takes a day |
 
 Railway injects `PORT`; the container binds to it.
+
+## The synergy inbox (owner, decision 0008)
+
+1. On this PC, in `api/`: `.venv\Scripts\python -m app.admin_password`. Type a password of 15 characters
+   or more, twice (a few unrelated words is easiest). It prints one line starting `scrypt$`.
+2. Railway → Service → **Variables**: `ADMIN_USERNAME` (your choice) and `ADMIN_PASSWORD_HASH` (that line).
+   Saving redeploys. Never paste the password itself anywhere.
+3. Open `https://isaac.toys/admin` and sign in. **Publish** puts a submission on the site at once, marked
+   Community; **Unpublish** or **Reject** takes it off. Ten wrong sign-ins from one connection lock it out
+   until midnight UTC (7 pm EST); a session ends after 2 idle hours or 12 hours.
+4. Optional, whenever you like: **Download export** in the inbox, then
+   `python scripts/gamedata.py add-submissions <file>` and a pull request moves the live ones into the
+   curated `data/synergies.json`. After it deploys, they show "In the curated list" on their own.
+5. The weekly backup (`.github/workflows/community-backup.yml`, Mondays 4:17 am EST) commits
+   `community.json` to the `backup/community` branch when the list changed. Restore it with the same
+   `add-submissions` command. Run it now from GitHub → Actions → Community backup → Run workflow.
 
 **If Cloudflare is ever put in front** (not planned): `cf-connecting-ip` is only true for requests that came through
 Cloudflare. Anyone can connect to Railway directly (the generated `*.up.railway.app` domain, or the custom
@@ -100,7 +122,7 @@ secret header set by a Cloudflare rule, or Cloudflare's address ranges), and rem
    `curl -X POST <site>/api/analyze -H "content-type: application/json" -H "cf-connecting-ip: 1.2.3.4" -d "{\"items\":[3]}"`
    A 429 means the limiter refused the forged visitor, as it must. A 200 with `"cached": false` means the
    forged header got a fresh allowance: switch AI off (remove the key) until `client_ip` in
-   `api/app/main.py` is fixed. A 200 with `"cached": true` proves nothing: repeat with a new build. The
+   `api/app/web.py` is fixed. A 200 with `"cached": true` proves nothing: repeat with a new build. The
    first header is the one the app trusts by default: it counts on Railway's edge overwriting
    `X-Forwarded-For`, which is known from another project and not yet proven here. The second may pass
    only when `CLIENT_IP_HEADER` says Cloudflare. A limiter that worked locally let 39 of 40 through behind

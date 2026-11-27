@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 // Files, never inlined into the script: the browser keeps them across deploys that change only the app.
 import brandmark from "./assets/brand/carbondsp-reverse-128.png?no-inline";
 import brandmark2x from "./assets/brand/carbondsp-reverse-256.png?no-inline";
@@ -15,6 +15,9 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { SynergiesPage } from "./pages/SynergiesPage";
 import { TrinketPage, TrinketsPage } from "./pages/TrinketPages";
 import { SITE, wordmarkParts } from "./site";
+
+// The owner's inbox is a chunk of its own: no visitor downloads it.
+const AdminPage = lazy(() => import("./pages/AdminPage"));
 
 const NAV = [
   { to: "/", label: "Builder", end: true },
@@ -128,6 +131,15 @@ export function App() {
           <Route path="characters/:slug" caseSensitive element={<CharacterPage />} />
           <Route path="synergies" caseSensitive element={<SynergiesPage />} />
           <Route path="about" caseSensitive element={<AboutPage />} />
+          <Route
+            path="admin"
+            caseSensitive
+            element={
+              <Suspense fallback={<p className="admin__loading">Loading the inbox…</p>}>
+                <AdminPage />
+              </Suspense>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

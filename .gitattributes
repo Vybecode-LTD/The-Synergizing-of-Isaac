@@ -5,5 +5,6 @@ api/**      text=auto eol=lf
 data/**     text=auto eol=lf
 scripts/**  text=auto eol=lf
 docs/**     text=auto eol=lf
+.github/**  text=auto eol=lf
 *.png       binary
 *.webp      binary

@@ -212,31 +212,51 @@ describe("builder", () => {
 describe("AI analysis", () => {
   const answer = (body: unknown, status = 200) =>
     vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } }));
+  const READ = {
+    howItPlays: ["Ten lasers at once with Brimstone."],
+    bestInteractions: ["Tammy's Head fires every laser you have."],
+    watchOutFor: [],
+    verdict: { tier: "S", why: "It clears rooms." },
+  };
+  const reply = (extra: Record<string, unknown> = {}) => ({ read: READ, found: [], cached: false, remaining: 4, limit: 5, ...extra });
+  const line = (text: string) => (_: string, el: Element | null) => el?.tagName === "LI" && el.textContent === text;
 
-  it("sends only ids and shows the answer with what is left today", async () => {
-    const fetchMock = answer({
-      text: "How it plays:\n- Ten lasers at once.\n\nVerdict:\nS: it clears rooms.",
-      cached: false,
-      remaining: 4,
-      limit: 5,
-    });
+  it("sends only ids and lays the read out in sections", async () => {
+    const fetchMock = answer(reply());
     vi.stubGlobal("fetch", fetchMock);
     const user = open("/?c=azazel&i=118.38");
     await user.click(screen.getByRole("button", { name: "Analyse this build" }));
 
-    expect(await screen.findByText("Ten lasers at once.")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3, name: "How it plays" })).toBeInTheDocument();
+    const plays = await screen.findByText(line("Ten lasers at once with Brimstone."));
+    // The pickup it names is shown with its sprite.
+    expect(within(plays).getByText("Brimstone").closest(".ai-mention")?.querySelector(".sprite")).not.toBeNull();
+    expect(screen.getByRole("heading", { level: 3, name: "Verdict: S tier, run-defining" })).toBeInTheDocument();
+    expect(screen.getByText("It clears rooms.")).toBeInTheDocument();
+    const sections = ["How it plays", "Best interactions"].map((name) => screen.getByRole("region", { name }));
+    expect(sections.map((s) => s.dataset.tone)).toEqual(["light", "deep"]);
+    // A section with nothing in it is left out.
+    expect(screen.queryByRole("heading", { name: "Watch out for" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Synergies found" })).not.toBeInTheDocument();
     expect(screen.getByText(/4 of 5 analyses left today/)).toBeInTheDocument();
+
     const [url, init] = fetchMock.mock.calls[0]!;
     expect(url).toBe("/api/analyze");
     expect(JSON.parse(init.body)).toEqual({ character: "azazel", items: [118, 38], trinkets: [] });
   });
 
   it("says when a saved answer was reused", async () => {
-    vi.stubGlobal("fetch", answer({ text: "Fine.", cached: true, remaining: 5, limit: 5 }));
+    vi.stubGlobal("fetch", answer(reply({ cached: true, remaining: 5 })));
     const user = open("/?i=118.38");
     await user.click(screen.getByRole("button", { name: "Analyse this build" }));
     expect(await screen.findByText(/analysed before/)).toBeInTheDocument();
+  });
+
+  it("treats an answer in a shape it can't show as no answer", async () => {
+    vi.stubGlobal("fetch", answer({ text: "How it plays:\n- The old plain text.", cached: false, remaining: 4, limit: 5 }));
+    const user = open("/?i=118.38");
+    await user.click(screen.getByRole("button", { name: "Analyse this build" }));
+    expect(await screen.findByText(/didn't answer/)).toBeInTheDocument();
+    expect(screen.queryByText(/The old plain text/)).not.toBeInTheDocument();
   });
 
   it("shows the server's reason when the daily limit is reached, with no retry", async () => {
@@ -259,12 +279,70 @@ describe("AI analysis", () => {
   });
 
   it("drops the answer when the build changes", async () => {
-    vi.stubGlobal("fetch", answer({ text: "Old answer.", cached: false, remaining: 4, limit: 5 }));
+    vi.stubGlobal("fetch", answer(reply()));
     const user = open("/?i=118.38");
     await user.click(screen.getByRole("button", { name: "Analyse this build" }));
-    expect(await screen.findByText("Old answer.")).toBeInTheDocument();
+    expect(await screen.findByText("It clears rooms.")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Remove Tammy's Head" }));
-    expect(screen.queryByText("Old answer.")).not.toBeInTheDocument();
+    expect(screen.queryByText("It clears rooms.")).not.toBeInTheDocument();
+  });
+
+  describe("synergies found", () => {
+    const FIND = {
+      key: "i:1.2|t:|c:",
+      itemIds: [1, 2],
+      trinketIds: [],
+      characterSlugs: [],
+      rating: "B",
+      description: "Three fast tears a shot.",
+    };
+
+    it("saves a find to your own synergies, and sends them all to the owner", async () => {
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValueOnce(new Response(JSON.stringify(reply({ found: [FIND] }))))
+        .mockResolvedValueOnce(new Response(JSON.stringify({ received: true, ids: [7] })));
+      vi.stubGlobal("fetch", fetchMock);
+      const user = open("/?i=1.2");
+      await user.click(screen.getByRole("button", { name: "Analyse this build" }));
+
+      const found = await screen.findByRole("region", { name: "Synergies found" });
+      expect(within(found).getByText("Three fast tears a shot.")).toBeInTheDocument();
+      expect(within(found).getByText(/One interaction in this build/)).toBeInTheDocument();
+
+      await user.click(within(found).getByRole("button", { name: "Save to my synergies" }));
+      expect(within(found).getByText("Saved to your synergies")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { level: 2, name: "1 synergy" })).toBeInTheDocument();
+      const [saved] = JSON.parse(localStorage.getItem("isaac-toys:my-synergies:v1")!);
+      expect(saved).toMatchObject({ itemIds: [1, 2], rating: "B", description: "Three fast tears a shot.", custom: true });
+
+      await user.click(within(found).getByRole("button", { name: "Send it to isaac.toys" }));
+      expect(await within(found).findByText(/Sent to isaac.toys for review/)).toBeInTheDocument();
+      const [url, init] = fetchMock.mock.calls[1]!;
+      expect(url).toBe("/api/submissions/from-analysis");
+      // Each find's key, never the words: the server stores its own copy.
+      expect(JSON.parse(init.body)).toEqual({ character: null, items: [1, 2], trinkets: [], picks: ["i:1.2|t:|c:"] });
+    });
+
+    it("counts several finds and says why sending failed", async () => {
+      const second = { ...FIND, key: "i:1|t:|c:azazel", itemIds: [1], characterSlugs: ["azazel"], description: "Only as Azazel." };
+      vi.stubGlobal(
+        "fetch",
+        vi
+          .fn()
+          .mockResolvedValueOnce(new Response(JSON.stringify(reply({ found: [FIND, second] }))))
+          .mockResolvedValueOnce(
+            new Response(JSON.stringify({ detail: { code: "submissions_limited", message: "More tomorrow." } }), { status: 429 }),
+          ),
+      );
+      const user = open("/?c=azazel&i=1.2");
+      await user.click(screen.getByRole("button", { name: "Analyse this build" }));
+      const found = await screen.findByRole("region", { name: "Synergies found" });
+      expect(within(found).getByText("Azazel")).toBeInTheDocument();
+      await user.click(within(found).getByRole("button", { name: "Send all 2 to isaac.toys" }));
+      expect(await within(found).findByText("More tomorrow.")).toBeInTheDocument();
+      expect(within(found).getByRole("button", { name: "Send all 2 to isaac.toys" })).toBeInTheDocument();
+    });
   });
 });
 
@@ -295,6 +373,100 @@ describe("your own synergies", () => {
     await user.click(screen.getByRole("button", { name: "Add your own synergy" }));
     await user.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Cancel" }));
     expect(localStorage.getItem("isaac-toys:my-synergies:v1")).toBeNull();
+  });
+});
+
+describe("sending your synergy to the site", () => {
+  const ok = () => new Response(JSON.stringify({ received: true, id: 3, duplicate: false }));
+
+  it("saves it here and sends it, with an optional link", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(ok());
+    vi.stubGlobal("fetch", fetchMock);
+    const user = open("/?i=1.2");
+    await user.click(screen.getByRole("button", { name: "Add your own synergy" }));
+    const dialog = screen.getByRole("dialog", { name: "Add your own synergy" });
+    await user.type(within(dialog).getByRole("textbox", { name: "What happens?" }), "Three fast tears.");
+    await user.click(within(dialog).getByRole("checkbox", { name: "Send it to isaac.toys for the shared list" }));
+    await user.type(within(dialog).getByRole("textbox", { name: /Where did you see it/ }), "https://example.com/wiki");
+    await user.click(within(dialog).getByRole("button", { name: "Save and send" }));
+
+    expect(await within(dialog).findByText(/Saved to your synergies, and sent to isaac.toys/)).toBeInTheDocument();
+    const [url, init] = fetchMock.mock.calls[0]!;
+    expect(url).toBe("/api/submissions");
+    expect(JSON.parse(init.body)).toEqual({
+      character: null,
+      items: [1, 2],
+      trinkets: [],
+      rating: "A",
+      description: "Three fast tears.",
+      sourceUrl: "https://example.com/wiki",
+      website: "",
+    });
+    await user.click(within(dialog).getByRole("button", { name: "Done" }));
+    expect(screen.getByText("Sent for review")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Send to isaac.toys" })).not.toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem("isaac-toys:my-synergies:v1")!)[0].submitted).toBe(true);
+  });
+
+  it("needs two things to send, and says so", async () => {
+    const user = open("/?i=1");
+    await user.click(screen.getByRole("button", { name: "Add your own synergy" }));
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("checkbox", { name: "Send it to isaac.toys for the shared list" })).toBeDisabled();
+    expect(within(dialog).getByText(/needs two things/)).toBeInTheDocument();
+  });
+
+  it("keeps the words when sending fails, and can save them without sending", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(JSON.stringify({ detail: { code: "invalid", message: "Bad link." } }), { status: 422 })),
+    );
+    const user = open("/?i=1.2");
+    await user.click(screen.getByRole("button", { name: "Add your own synergy" }));
+    const dialog = screen.getByRole("dialog");
+    await user.type(within(dialog).getByRole("textbox", { name: "What happens?" }), "Words to keep.");
+    await user.click(within(dialog).getByRole("checkbox", { name: "Send it to isaac.toys for the shared list" }));
+    await user.click(within(dialog).getByRole("button", { name: "Save and send" }));
+    expect(await within(dialog).findByRole("alert")).toHaveTextContent("Bad link.");
+    expect(localStorage.getItem("isaac-toys:my-synergies:v1")).toBeNull();
+
+    // Emptied after the failure, the fallback refuses too (CodeRabbit, PR #12).
+    const words = within(dialog).getByRole("textbox", { name: "What happens?" });
+    await user.clear(words);
+    await user.click(within(dialog).getByRole("button", { name: "Save without sending" }));
+    expect(within(dialog).getByText(/Say what the combination does/)).toBeInTheDocument();
+    expect(localStorage.getItem("isaac-toys:my-synergies:v1")).toBeNull();
+    await user.type(words, "Words to keep.");
+
+    await user.click(within(dialog).getByRole("button", { name: "Save without sending" }));
+    expect(screen.getByText("Words to keep.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Send to isaac.toys" })).toBeInTheDocument();
+  });
+
+  it("sends one saved earlier from its card", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(ok());
+    vi.stubGlobal("fetch", fetchMock);
+    const user = open("/?c=azazel&i=118");
+    await user.click(screen.getByRole("button", { name: "Add your own synergy" }));
+    const dialog = screen.getByRole("dialog");
+    await user.click(within(dialog).getByRole("checkbox", { name: "Only when playing Azazel" }));
+    await user.type(within(dialog).getByRole("textbox", { name: "What happens?" }), "A pickup and a character.");
+    await user.click(within(dialog).getByRole("button", { name: "Save synergy" }));
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Send to isaac.toys" }));
+    expect(await screen.findByText("Sent for review")).toBeInTheDocument();
+    expect(JSON.parse(fetchMock.mock.calls[0]![1].body)).toMatchObject({ character: "azazel", items: [118] });
+  });
+
+  it("says why a card couldn't be sent", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
+    const user = open("/?i=1.2");
+    await user.click(screen.getByRole("button", { name: "Add your own synergy" }));
+    await user.type(within(screen.getByRole("dialog")).getByRole("textbox", { name: "What happens?" }), "Offline one.");
+    await user.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Save synergy" }));
+    await user.click(screen.getByRole("button", { name: "Send to isaac.toys" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("It couldn't be sent. Try again in a moment.");
   });
 });
 
