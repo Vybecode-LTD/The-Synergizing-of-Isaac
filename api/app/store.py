@@ -73,6 +73,7 @@ class Reservation:
     visitor: str
     day: str
     site_key: str = SITE
+    amount: int = 1
 
 
 def utc_now() -> datetime.datetime:
@@ -124,8 +125,8 @@ class Store:
             )
             return self._count(day, key)
 
-    def reserve(self, visitor: str, per_visitor: int, site: int, site_key: str = SITE) -> Reservation:
-        """Take one from today's allowance, or raise LimitReached.
+    def reserve(self, visitor: str, per_visitor: int, site: int, site_key: str = SITE, amount: int = 1) -> Reservation:
+        """Take `amount` from today's allowance, all or none, or raise LimitReached.
 
         The AI's counters are keyed by the visitor and SITE. Other allowances (submissions) pass their own
         prefixed keys, so they share the table and the midnight reset but never each other's counts.
@@ -134,21 +135,21 @@ class Store:
         with self._lock:
             self._db.execute("BEGIN IMMEDIATE")
             try:
-                if self._count(day, site_key) >= site:
+                if self._count(day, site_key) + amount > site:
                     raise LimitReached("budget_exhausted")
-                if self._count(day, visitor) >= per_visitor:
+                if self._count(day, visitor) + amount > per_visitor:
                     raise LimitReached("rate_limited")
                 for who in (site_key, visitor):
                     self._db.execute(
-                        "INSERT INTO usage (day, visitor, count) VALUES (?, ?, 1) "
-                        "ON CONFLICT (day, visitor) DO UPDATE SET count = count + 1",
-                        (day, who),
+                        "INSERT INTO usage (day, visitor, count) VALUES (?, ?, ?) "
+                        "ON CONFLICT (day, visitor) DO UPDATE SET count = count + ?",
+                        (day, who, amount, amount),
                     )
-                return Reservation(visitor=visitor, day=day, site_key=site_key)
+                return Reservation(visitor=visitor, day=day, site_key=site_key, amount=amount)
             finally:
                 self._db.execute("COMMIT")
 
-    def release(self, reservation: Reservation, *, site: bool = True) -> None:
+    def release(self, reservation: Reservation, *, site: bool = True, amount: int | None = None) -> None:
         """Give an analysis back when the model call failed: the visitor got nothing for it.
 
         The refund goes to the day the reservation was taken from, not today: a call reserved just before
@@ -157,11 +158,12 @@ class Store:
         `site=False` keeps the site's counter charged, for a failure the model was paid for: the site's
         daily budget is the spending cap, so it counts every call that cost money.
         """
+        back = reservation.amount if amount is None else min(amount, reservation.amount)
         with self._lock:
             for who in (reservation.site_key, reservation.visitor) if site else (reservation.visitor,):
                 self._db.execute(
-                    "UPDATE usage SET count = count - 1 WHERE day = ? AND visitor = ? AND count > 0",
-                    (reservation.day, who),
+                    "UPDATE usage SET count = MAX(count - ?, 0) WHERE day = ? AND visitor = ?",
+                    (back, reservation.day, who),
                 )
 
     # ------------------------------------------------------------ cache
@@ -216,6 +218,26 @@ class Store:
                 ),
             )
             return int(cursor.lastrowid or 0), False
+
+    def has_submission(self, visitor: str, origin: str, combo: str) -> bool:
+        """Whether sending this again would be a repeat (free), not a new submission."""
+        with self._lock:
+            return (
+                self._db.execute(
+                    "SELECT 1 FROM submissions WHERE visitor = ? AND origin = ? AND combo = ?", (visitor, origin, combo)
+                ).fetchone()
+                is not None
+            )
+
+    def live_twin(self, submission_id: int) -> int | None:
+        """Another live (approved) submission for the same combination as this one, if there is one."""
+        with self._lock:
+            row = self._db.execute(
+                "SELECT id FROM submissions WHERE status = 'approved' AND id != ? "
+                "AND combo = (SELECT combo FROM submissions WHERE id = ?) ORDER BY id LIMIT 1",
+                (submission_id, submission_id),
+            ).fetchone()
+        return int(row[0]) if row else None
 
     def submissions(self, status: str | None = None) -> list[dict[str, Any]]:
         """Rows as the inbox shows them, newest first. The visitor hash never leaves this module."""

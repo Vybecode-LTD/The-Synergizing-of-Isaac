@@ -24,6 +24,7 @@ MESSAGES = {
     "too_many_attempts": "Too many wrong sign-ins from here today. Try again after midnight UTC.",
     "bad_origin": "That request came from another site.",
     "not_found": "No such submission.",
+    "already_live": "Another submission for this combination is live. Edit that one, or unpublish it first.",
 }
 
 

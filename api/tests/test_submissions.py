@@ -24,6 +24,7 @@ VALID = {
     "sourceUrl": "https://bindingofisaacrebirth.wiki.gg/wiki/The_Inner_Eye",
 }
 FIND = {"pieces": ["i1", "i2"], "only_as_character": False, "tier": "B", "description": "Three fast tears a shot."}
+KEY = "i:1.2|t:|c:"  # the find's key: its combination
 
 
 @pytest.fixture
@@ -195,14 +196,21 @@ def test_the_ai_read_lists_what_it_found(client: TestClient, analyzer: FakeAnaly
     analyzer.found = [FIND]
     found = analyze(client).json()["found"]
     assert found == [
-        {"itemIds": [1, 2], "trinketIds": [], "characterSlugs": [], "rating": "B", "description": FIND["description"]}
+        {
+            "key": KEY,
+            "itemIds": [1, 2],
+            "trinketIds": [],
+            "characterSlugs": [],
+            "rating": "B",
+            "description": FIND["description"],
+        }
     ]
 
 
 def test_a_visitor_can_send_what_the_ai_found(client: TestClient, analyzer: FakeAnalyzer, store: Store) -> None:
     analyzer.found = [FIND, {**FIND, "pieces": ["i1"], "only_as_character": False}]  # the second one is dropped
     assert len(analyze(client).json()["found"]) == 1
-    r = picks(client, {**ONION_EYE, "items": [2, 1], "picks": [0, 0]})
+    r = picks(client, {**ONION_EYE, "items": [2, 1], "picks": [KEY, KEY]})
     assert r.status_code == 200 and r.json() == {"received": True, "ids": [1]}
     [row] = store.submissions()
     assert (row["origin"], row["itemIds"], row["description"], row["sourceUrl"]) == (
@@ -212,7 +220,7 @@ def test_a_visitor_can_send_what_the_ai_found(client: TestClient, analyzer: Fake
         None,
     )
     # Sending the same find again is a repeat, not a second row.
-    assert picks(client, {**ONION_EYE, "picks": [0]}).json()["ids"] == [1]
+    assert picks(client, {**ONION_EYE, "picks": [KEY]}).json()["ids"] == [1]
     assert len(store.submissions()) == 1
 
 
@@ -221,7 +229,7 @@ def test_an_ai_find_and_a_visitor_entry_for_the_same_pieces_are_both_kept(
 ) -> None:
     analyzer.found = [FIND]
     analyze(client)
-    picks(client, {**ONION_EYE, "picks": [0]})
+    picks(client, {**ONION_EYE, "picks": [KEY]})
     send(client, VALID)
     assert sorted(r["origin"] for r in store.submissions()) == ["ai", "visitor"]
 
@@ -229,14 +237,14 @@ def test_an_ai_find_and_a_visitor_entry_for_the_same_pieces_are_both_kept(
 def test_a_pick_must_be_one_the_read_found(client: TestClient, analyzer: FakeAnalyzer) -> None:
     analyzer.found = [FIND]
     analyze(client)
-    for bad in ([1], [-1]):
+    for bad in ([1], [-1], ["i:1.4|t:|c:"]):
         r = picks(client, {**ONION_EYE, "picks": bad})
         assert r.status_code == 422 and r.json()["detail"]["code"] == "invalid"
     assert picks(client, {**ONION_EYE, "picks": []}).status_code == 422
 
 
 def test_without_a_saved_read_there_is_nothing_to_send(client: TestClient) -> None:
-    r = picks(client, {**ONION_EYE, "picks": [0]})
+    r = picks(client, {**ONION_EYE, "picks": [KEY]})
     assert r.status_code == 409 and r.json()["detail"]["code"] == "no_analysis"
 
 
@@ -248,7 +256,7 @@ def test_a_saved_read_the_server_can_no_longer_read_is_treated_as_expired(
 
     build = Build(items=(1, 2))
     store.remember(cache_key(Settings().ai_model, SYSTEM, build_prompt(data, build), SCHEMA), "not json")
-    assert picks(client, {**ONION_EYE, "picks": [0]}).status_code == 409
+    assert picks(client, {**ONION_EYE, "picks": [KEY]}).status_code == 409
     # And the analysis endpoint asks the model again rather than serving it.
     assert analyze(client).json()["cached"] is False
     assert len(analyzer.calls) == 1
@@ -260,5 +268,76 @@ def test_ai_finds_count_against_the_same_daily_allowance(
     client = site(submissions_per_visitor_per_day=1)
     analyzer.found = [FIND, {**FIND, "pieces": ["i1", "i2", "i3"]}]
     assert len(analyze(client, {"items": [1, 2, 3]}).json()["found"]) == 2
-    r = picks(client, {"items": [1, 2, 3], "picks": [0, 1]})
+    r = picks(client, {"items": [1, 2, 3], "picks": [KEY, "i:1.2.3|t:|c:"]})
     assert r.status_code == 429 and r.json()["detail"]["code"] == "submissions_limited"
+
+
+# ---------------------------------------------------------------- review of PR #12 (Codex, 2026-11-27)
+
+
+def key_of(items: list[int], trinkets: list[int] = (), characters: list[str] = ()) -> str:  # type: ignore[assignment]
+    from app.gamedata import combo_key
+
+    return combo_key(items, trinkets, characters)
+
+
+def test_a_find_is_sent_by_its_key_whatever_was_published_since(
+    client: TestClient, analyzer: FakeAnalyzer, store: Store
+) -> None:
+    """Finding: picks were places in a list that publishing or unpublishing could reorder."""
+    analyzer.found = [FIND, {**FIND, "pieces": ["i1", "i3"], "description": "The one the visitor saw."}]
+    live = send(client, VALID).json()["id"]  # the visitor's own (1, 2), published below
+    store.review(live, {"status": "approved"})
+    build = {"items": [1, 2, 3]}
+    seen = analyze(client, build).json()["found"]
+    assert [f["key"] for f in seen] == [key_of([1, 3])]  # (1, 2) is live, so it is not offered
+    store.review(live, {"status": "new"})  # unpublished after the visitor saw the read
+    r = picks(client, {**build, "picks": [seen[0]["key"]]})
+    assert r.status_code == 200
+    stored = [s for s in store.submissions() if s["origin"] == "ai"]
+    assert [(s["itemIds"], s["description"]) for s in stored] == [([1, 3], "The one the visitor saw.")]
+
+
+def test_a_key_the_read_did_not_find_is_refused(client: TestClient, analyzer: FakeAnalyzer) -> None:
+    analyzer.found = [FIND]
+    analyze(client)
+    for bad in ([key_of([1, 4])], ["not a key"], [0]):
+        assert picks(client, {**ONION_EYE, "picks": bad}).status_code == 422
+
+
+def test_sending_several_finds_is_all_or_nothing(
+    site: Callable[..., TestClient], analyzer: FakeAnalyzer, store: Store
+) -> None:
+    """Finding: with one left, the first of two finds was stored, the second refused, and the visitor told
+    nothing had gone; retrying could not recover."""
+    client = site(submissions_per_visitor_per_day=1)
+    analyzer.found = [FIND, {**FIND, "pieces": ["i1", "i3"]}]
+    found = analyze(client, {"items": [1, 2, 3]}).json()["found"]
+    refused = picks(client, {"items": [1, 2, 3], "picks": [f["key"] for f in found]})
+    assert refused.status_code == 429 and refused.json()["detail"]["code"] == "submissions_limited"
+    assert store.submissions() == []
+    # One fits, and sending it again afterwards is a free repeat, even with the day's allowance used up.
+    assert picks(client, {"items": [1, 2, 3], "picks": [found[0]["key"]]}).status_code == 200
+    assert picks(client, {"items": [1, 2, 3], "picks": [found[0]["key"]]}).json()["ids"] == [1]
+
+
+def test_a_repeat_costs_nothing_even_when_the_day_is_used_up(site: Callable[..., TestClient], store: Store) -> None:
+    client = site(submissions_per_visitor_per_day=1)
+    assert send(client, VALID).json()["duplicate"] is False
+    again = send(client, {**VALID, "description": "Better words."})
+    assert again.status_code == 200 and again.json()["duplicate"] is True
+    assert store.submissions()[0]["description"] == "Better words."
+
+
+def test_a_send_another_request_stored_first_is_given_back(
+    site: Callable[..., TestClient], store: Store, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The repeat check and the insert are separate steps: if another request stores the same combination in
+    between, the charge for it is refunded."""
+    client = site(submissions_per_visitor_per_day=2)
+    assert send(client, VALID).status_code == 200
+    monkeypatch.setattr(store, "has_submission", lambda *args: False)  # as if the first had not landed yet
+    assert send(client, VALID).json()["duplicate"] is True
+    monkeypatch.undo()
+    assert send(client, {**VALID, "items": [1, 3]}).status_code == 200  # the refund left room for this
+    assert send(client, {**VALID, "items": [1, 4]}).status_code == 429

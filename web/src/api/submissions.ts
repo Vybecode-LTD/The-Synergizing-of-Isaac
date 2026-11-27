@@ -19,10 +19,10 @@ export async function submitSynergy(body: SubmissionBody): Promise<void> {
 }
 
 /**
- * Send what the AI read found, by its place in the read's list. The server stores its own saved copy,
- * never words from this page, so a find marked "found by AI" really came from the AI.
+ * Send what the AI read found, by each find's key. The server stores its own saved copy, never words from
+ * this page, so a find marked "found by AI" really came from the AI. All are stored, or none.
  */
-export async function submitFound(build: Build, picks: number[]): Promise<void> {
+export async function submitFound(build: Build, picks: string[]): Promise<void> {
   await postJson("/api/submissions/from-analysis", { ...buildBody(build), picks });
 }
 

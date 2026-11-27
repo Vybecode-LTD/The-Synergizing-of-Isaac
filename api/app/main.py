@@ -128,7 +128,7 @@ def create_app(
     def visitor_of(request: Request) -> str:
         return store.visitor(client_ip(request, settings.client_ip_header))
 
-    app.include_router(submissions.routes(settings, data, store, visitor_of, community.view))
+    app.include_router(submissions.routes(settings, data, store, visitor_of))
     app.include_router(admin.routes(settings, data, store, visitor_of))
 
     @app.post("/api/analyze")

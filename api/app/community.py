@@ -46,6 +46,7 @@ class Community:
         revision = self._store.revision
         if self._cached is None or self._cached[0] != revision:
             live = []
+            shown: set[str] = set()
             for row in self._store.community():
                 synergy = Synergy(
                     id=f"community-{row['id']}",
@@ -56,8 +57,10 @@ class Community:
                     description=row["description"],
                     community=True,
                 )
-                # A combination the curated list already has is shown once, from the curated list.
-                if (synergy.item_ids or synergy.trinket_ids) and synergy.combo not in self._curated:
+                # A combination is shown once: from the curated list if it has it, else the oldest approved.
+                # (The inbox lets only one be live; this holds for rows published any other way too.)
+                if (synergy.item_ids or synergy.trinket_ids) and synergy.combo not in self._curated | shown:
+                    shown.add(synergy.combo)
                     live.append(synergy)
             self._cached = (revision, self._data.with_community(live), live)
         return self._cached[1], self._cached[2]

@@ -209,7 +209,7 @@ function Found({
   const send = async () => {
     setSending({ status: "sending" });
     try {
-      await submitFound(build, found.map((_, n) => n));
+      await submitFound(build, found.map((f) => f.key));
       setSending({ status: "sent" });
     } catch (cause) {
       setSending({ status: "error", message: errorMessage(cause, "They couldn't be sent. Try again in a moment.") });
@@ -231,7 +231,7 @@ function Found({
       </p>
       <ul className="ai-finds" role="list">
         {found.map((f, n) => (
-          <li key={n} className="ai-find">
+          <li key={f.key} className="ai-find">
             <div className="ai-find__head">
               <RatingBadge rating={f.rating} size="sm" />
               <p className="ai-find__recipe">

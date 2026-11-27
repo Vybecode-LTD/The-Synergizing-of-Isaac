@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field
 from . import admin_password
 from .analysis import MAX_DESCRIPTION
 from .community import slug_id
-from .gamedata import GameData
+from .gamedata import GameData, combo_key
 from .settings import Settings
 from .store import SESSION_LIFETIME, Store
 from .submissions import plain_text
@@ -136,6 +136,9 @@ def routes(settings: Settings, data: GameData, store: Store, visitor_of: Callabl
                 raise problem(422, "invalid", f"The description needs 1 to {MAX_DESCRIPTION} characters.")
         if "note" in changes:
             changes["note"] = plain_text(changes["note"])[:MAX_NOTE] or None  # an empty note clears it
+        if changes.get("status") == "approved" and store.live_twin(submission_id) is not None:
+            # One live synergy per combination: two would show twice and break the backup's import.
+            raise problem(409, "already_live")
         if not store.review(submission_id, changes):
             raise problem(404, "not_found")
         row = store.submission(submission_id)
@@ -154,8 +157,17 @@ def routes(settings: Settings, data: GameData, store: Store, visitor_of: Callabl
         """Every approved submission as a data/synergies.json entry, for scripts/gamedata.py add-submissions."""
         taken = {s.id for s in data.synergies}
         entries, sources = [], []
+        by_combo: dict[str, str] = {}
         for row in sorted(store.submissions("approved"), key=lambda r: r["id"]):
+            combo = combo_key(row["itemIds"], row["trinketIds"], row["characterSlugs"])
+            if combo in by_combo:
+                # The oldest live one is the entry; a later twin is listed against it, not exported again.
+                sources.append(
+                    {"id": row["id"], "entry": by_combo[combo], "origin": row["origin"], "sourceUrl": row["sourceUrl"]}
+                )
+                continue
             entry_id = slug_id(data, row["itemIds"], row["trinketIds"], row["characterSlugs"], taken)
+            by_combo[combo] = entry_id
             entries.append(
                 {
                     "id": entry_id,

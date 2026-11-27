@@ -12,6 +12,8 @@ export interface AnalysisRead {
 
 /** An interaction the AI found that the curated list lacks, already checked against the build. */
 export interface FoundSynergy {
+  /** The find's combination: what is sent back to pick it, so a pick never depends on its place in a list. */
+  key: string;
   itemIds: number[];
   trinketIds: number[];
   characterSlugs: string[];

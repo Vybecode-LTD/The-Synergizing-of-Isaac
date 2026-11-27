@@ -223,12 +223,15 @@ def _lines(texts: list[str]) -> list[str]:
     return [line for line in (_clean(t, MAX_LINE) for t in texts) if line][:MAX_LINES]
 
 
-def read_answer(text: str, data: GameData, build: Build) -> Reading:
+def read_answer(text: str, data: GameData, build: Build, max_found: int = MAX_FOUND) -> Reading:
     """Check the model's JSON and turn it into what the page shows. Raises AnalysisFailed when it can't.
 
     A find survives only if every piece it names is in this build, it has at least two requirements (two
     pickups, or one and the build's character), and no curated entry has the same pickups: the visitor is
     shown what the list lacks, never a copy of a card already on screen.
+
+    Each find carries `key`, its combination: what the browser sends back to pick it, so a pick means the
+    same find however the live list changed in between (PR #12 review).
     """
     try:
         answer = _Answer.model_validate_json(text)
@@ -275,6 +278,7 @@ def read_answer(text: str, data: GameData, build: Build) -> Reading:
             seen.add(combo)
             found.append(
                 {
+                    "key": combo,
                     "itemIds": list(pieces[0]),
                     "trinketIds": list(pieces[1]),
                     "characterSlugs": characters,
@@ -282,7 +286,7 @@ def read_answer(text: str, data: GameData, build: Build) -> Reading:
                     "description": description,
                 }
             )
-            if len(found) == MAX_FOUND:
+            if len(found) == max_found:
                 break
     return Reading(read=read, found=found)
 

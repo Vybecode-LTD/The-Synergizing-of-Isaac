@@ -384,3 +384,36 @@ def test_the_export_is_ready_for_add_submissions(owner: TestClient, store: Store
         "sourceUrl": "https://example.com/a",
     }
     assert json.loads(json.dumps(body)) == body
+
+
+def test_only_one_submission_per_combination_can_be_live(owner: TestClient, store: Store) -> None:
+    """Finding (PR #12 review): two live rows for one combination showed twice and broke the backup import."""
+    first = sent(store, (1, 2), visitor="v1")
+    second = sent(store, (1, 2), visitor="v2", description="Other words.")
+    ai = sent(store, (1, 2), origin="ai", visitor="v1")
+    assert owner.patch(f"/api/admin/submissions/{first}", json={"status": "approved"}).status_code == 200
+    for row in (second, ai):
+        refused = owner.patch(f"/api/admin/submissions/{row}", json={"status": "approved"})
+        assert refused.status_code == 409 and refused.json()["detail"]["code"] == "already_live"
+        assert store.submission(row)["status"] == "new"  # type: ignore[index]
+    # Editing the live one is fine, and once it is unpublished another can take its place.
+    assert owner.patch(f"/api/admin/submissions/{first}", json={"status": "approved", "rating": "S"}).status_code == 200
+    owner.patch(f"/api/admin/submissions/{first}", json={"status": "rejected"})
+    assert owner.patch(f"/api/admin/submissions/{second}", json={"status": "approved"}).status_code == 200
+    # A different character is a different combination.
+    other = sent(store, (1, 2), characters=("azazel",), visitor="v3")
+    assert owner.patch(f"/api/admin/submissions/{other}", json={"status": "approved"}).status_code == 200
+
+
+def test_the_export_lists_a_later_twin_against_the_oldest_entry(owner: TestClient, store: Store) -> None:
+    """Rows published by the store directly (or before the one-live rule) still export one entry each."""
+    first = sent(store, (1, 2), visitor="v1", description="Oldest.")
+    second = sent(store, (1, 2), visitor="v2", description="Newer.")
+    for row in (first, second):
+        store.review(row, {"status": "approved"})
+    body = owner.get("/api/admin/export").json()
+    assert [e["description"] for e in body["entries"]] == ["Oldest."]
+    assert [(s["id"], s["entry"]) for s in body["submissions"]] == [
+        (first, "the-inner-eye+the-sad-onion"),
+        (second, "the-inner-eye+the-sad-onion"),
+    ]

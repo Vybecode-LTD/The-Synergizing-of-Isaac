@@ -166,7 +166,10 @@ def test_the_ai_does_not_find_what_the_community_already_has(
     # The same saved answer, read against the live list: the find is now on the site, so it is not offered.
     again = site.post("/api/analyze", json={"items": [1, 2]}).json()
     assert again["cached"] is True and again["found"] == []
-    assert site.post("/api/submissions/from-analysis", json={"items": [1, 2], "picks": [0]}).status_code == 422
+    # A visitor who saw it before it went live can still send it: a pick is a combination, not a place in
+    # a list, and the inbox shows the owner that it is live already.
+    sent_late = site.post("/api/submissions/from-analysis", json={"items": [1, 2], "picks": ["i:1.2|t:|c:"]})
+    assert sent_late.status_code == 200
 
 
 def test_the_synergies_page_lists_live_ones(site: TestClient, store: Store) -> None:
@@ -194,3 +197,14 @@ def test_the_backup_restores_into_the_curated_list(site: TestClient, store: Stor
     script = load_gamedata_script()
     assert script.add_submissions(backup, copy) == ["the-inner-eye+the-sad-onion", "spoon-bender+the-sad-onion"]
     assert [p for p in script.validate(copy) if "no sprite" not in p] == []
+
+
+def test_two_live_rows_for_one_combination_show_and_back_up_once(site: TestClient, store: Store, tmp_path: Any) -> None:
+    """Finding (PR #12 review): rows published before the one-live rule, or by the store directly, still
+    show once, oldest first, and the backup stays importable."""
+    first = sent(store, description="Oldest words.")
+    second = sent(store, visitor="v2", description="Newer words.")
+    for row in (first, second):
+        store.review(row, {"status": "approved"})
+    assert [r["description"] for r in inline(site.get("/").text)] == ["Oldest words."]
+    assert [e["description"] for e in site.get("/api/community").json()["entries"]] == ["Oldest words."]

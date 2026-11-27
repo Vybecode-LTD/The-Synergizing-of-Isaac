@@ -19,7 +19,8 @@ The AI read comes back as a fixed shape the page lays out in sections.
 **`POST /api/analyze`** (changed). Same request. The model answers in a JSON schema (`output_config.format`);
 the server validates it and answers 200 with
 `{"read": {"howItPlays": str[], "bestInteractions": str[], "watchOutFor": str[], "verdict": {"tier": "S"|"A"|"B"|"C"|"D", "why": str}}, "found": Found[], "cached", "remaining", "limit"}`.
-`Found` is `{"itemIds": int[], "trinketIds": int[], "characterSlugs": str[], "rating", "description"}`: only
+`Found` is `{"key": str, "itemIds": int[], "trinketIds": int[], "characterSlugs": str[], "rating", "description"}`
+(`key` is the combination, e.g. `i:1.2|t:|c:`): only
 pieces from the build, at least two requirements, none whose pickups match a curated or live community
 entry, at most 4. An answer that fails validation is a 502 `failed`, billed (the visitor is refunded, the
 site is not) and not saved. The cache key also hashes the schema. The prompt is built from the curated
@@ -32,9 +33,12 @@ requirements (pickups, plus the character when given). 200 `{"received": true, "
 bool}`; 422 `invalid`; 429 `submissions_limited`. A visitor's repeat of the same combination while it is
 still `new` replaces its rating, words and link, and costs nothing from the allowance.
 
-**`POST /api/submissions/from-analysis`** (no auth). `{"character", "items", "trinkets", "picks": int[]}`:
-indexes into that build's `found`. The server stores its own saved copy with origin `ai`, so no text from
-the browser is ever stored as the AI's. 200 `{"received": true, "ids": int[]}`; 409 `no_analysis`; 422.
+**`POST /api/submissions/from-analysis`** (no auth). `{"character", "items", "trinkets", "picks": str[]}`:
+keys from that build's `found`, matched against the saved answer read with the curated list only, so a pick
+means the same find whatever was published since. The server stores its own saved copy with origin `ai`,
+so no text from the browser is ever stored as the AI's. All picks are stored or none: new ones are charged
+together before anything is stored, and a repeat is free even at the limit. 200 `{"received": true, "ids":
+int[]}`; 409 `no_analysis`; 422; 429.
 
 **Community synergies.** Submissions with status `approved` whose combination (pickups and characters) the
 curated list lacks. Id `community-<row id>`. Every HTML page carries them in its head as
@@ -55,7 +59,9 @@ cookie, 401 `wrong_login` (same answer and a full hash for a wrong name or passw
 with `id, createdAt, origin, itemIds, trinketIds, characterSlugs, rating, description, sourceUrl, status,
 note, reviewedAt, alsoSent, onList` (curated ids with the same pickups).
 `PATCH submissions/{id} {status?, rating?, description?, note?}`: setting `approved` publishes, any other
-status unpublishes; an edit to a live one shows at once. `DELETE submissions/{id}`.
+status unpublishes; an edit to a live one shows at once. 409 `already_live` when another submission for the
+same combination is live: one live synergy per combination (the live list and the exports also keep only the
+oldest, for rows published any other way). `DELETE submissions/{id}`.
 `GET export` → `{"entries": [...], "submissions": [{"id", "entry", "origin", "sourceUrl"}]}` for every
 approved row. Statuses: `new`, `approved` ("Live"), `rejected`, `added` ("In the curated list", set by the
 server at start-up when the curated file has the combination).
@@ -127,3 +133,5 @@ Skills `claude-api` (structured outputs, fallbacks), `auth-threat-model-checklis
 
 ## Changes after approval
 - 2026-11-27: "via a PR" became "approve = live" (owner's second answer); SQLite kept; weekly backup added.
+- 2026-11-27, Codex review of PR #12: picks are keys, not places in a list; sending several finds is all or
+  nothing and a repeat is free at the limit; one live submission per combination.

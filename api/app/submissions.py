@@ -10,7 +10,7 @@ import logging
 import re
 import unicodedata
 from collections.abc import Callable
-from typing import Literal
+from typing import Annotated, Literal
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Request
@@ -40,7 +40,8 @@ class SubmissionRequest(BuildRequest):
 
 
 class FromAnalysisRequest(BuildRequest):
-    picks: list[int] = Field(min_length=1, max_length=MAX_FOUND)
+    # Each find's `key` from /api/analyze: its combination, which no change to the live list can reorder.
+    picks: list[Annotated[str, Field(max_length=200)]] = Field(min_length=1, max_length=MAX_FOUND)
 
 
 def plain_text(text: str) -> str:
@@ -71,27 +72,32 @@ def routes(
     data: GameData,
     store: Store,
     visitor_of: Callable[[Request], str],
-    view: Callable[[], GameData],
 ) -> APIRouter:
-    """`data` is the curated list (the prompt is built from it); `view` adds the live community synergies,
-    which the AI's finds are checked against, exactly as /api/analyze does."""
+    """`data` is the curated list: the prompt is built from it, and a visitor's picks are found in the read
+    of it, so a pick means the same find whatever was published or unpublished since it was shown."""
     router = APIRouter(prefix="/api/submissions")
 
-    def keep(entry: Submission, visitor: str) -> tuple[int, bool]:
-        """Store one, out of the visitor's daily allowance. A repeat is given back: it added nothing."""
-        try:
-            reservation = store.reserve(
-                f"sub:{visitor}",
-                settings.submissions_per_visitor_per_day,
-                settings.submissions_site_per_day,
-                site_key=SITE_KEY,
-            )
-        except LimitReached as refused:
-            raise problem(429, "submissions_limited") from refused
-        found_id, repeat = store.submit(entry, visitor)
-        if repeat:
-            store.release(reservation)
-        return found_id, repeat
+    def keep(entries: list[Submission], visitor: str) -> list[tuple[int, bool]]:
+        """Store them all, or none. Only new ones are charged, together, before anything is stored: a repeat
+        is free even when the day's allowance is used up, and a batch that doesn't fit stores nothing."""
+        fresh = sum(not store.has_submission(visitor, e.origin, e.combo) for e in entries)
+        reservation = None
+        if fresh:
+            try:
+                reservation = store.reserve(
+                    f"sub:{visitor}",
+                    settings.submissions_per_visitor_per_day,
+                    settings.submissions_site_per_day,
+                    site_key=SITE_KEY,
+                    amount=fresh,
+                )
+            except LimitReached as refused:
+                raise problem(429, "submissions_limited") from refused
+        results = [store.submit(e, visitor) for e in entries]
+        stored = sum(not repeat for _, repeat in results)
+        if reservation is not None and stored < fresh:
+            store.release(reservation, amount=fresh - stored)  # another request stored one first
+        return results
 
     @router.post("")
     def submit(body: SubmissionRequest, request: Request) -> dict[str, object]:
@@ -118,7 +124,7 @@ def routes(
             description=description,
             source_url=check_url(body.source_url),
         )
-        found_id, repeat = keep(entry, visitor_of(request))
+        [(found_id, repeat)] = keep([entry], visitor_of(request))
         return {"received": True, "id": found_id, "duplicate": repeat}
 
     @router.post("/from-analysis")
@@ -128,25 +134,24 @@ def routes(
         if saved is None:
             raise problem(409, "no_analysis")
         try:
-            found = read_answer(saved, view(), build).found
+            # Read against the curated list only and uncapped: every find the visitor could have been shown.
+            found = {f["key"]: f for f in read_answer(saved, data, build, max_found=10_000).found}
         except AnalysisFailed as error:
             raise problem(409, "no_analysis") from error
         picks = list(dict.fromkeys(body.picks))
-        if any(not 0 <= n < len(found) for n in picks):
+        if any(key not in found for key in picks):
             raise problem(422, "invalid", "That read didn't find that synergy.")
-        visitor = visitor_of(request)
-        ids = []
-        for n in picks:
-            f = found[n]
-            entry = Submission(
+        entries = [
+            Submission(
                 origin="ai",
-                item_ids=tuple(f["itemIds"]),
-                trinket_ids=tuple(f["trinketIds"]),
-                characters=tuple(f["characterSlugs"]),
-                rating=f["rating"],
-                description=f["description"],
+                item_ids=tuple(found[key]["itemIds"]),
+                trinket_ids=tuple(found[key]["trinketIds"]),
+                characters=tuple(found[key]["characterSlugs"]),
+                rating=found[key]["rating"],
+                description=found[key]["description"],
             )
-            ids.append(keep(entry, visitor)[0])
-        return {"received": True, "ids": ids}
+            for key in picks
+        ]
+        return {"received": True, "ids": [found_id for found_id, _ in keep(entries, visitor_of(request))]}
 
     return router

@@ -288,7 +288,14 @@ describe("AI analysis", () => {
   });
 
   describe("synergies found", () => {
-    const FIND = { itemIds: [1, 2], trinketIds: [], characterSlugs: [], rating: "B", description: "Three fast tears a shot." };
+    const FIND = {
+      key: "i:1.2|t:|c:",
+      itemIds: [1, 2],
+      trinketIds: [],
+      characterSlugs: [],
+      rating: "B",
+      description: "Three fast tears a shot.",
+    };
 
     it("saves a find to your own synergies, and sends them all to the owner", async () => {
       const fetchMock = vi
@@ -313,12 +320,12 @@ describe("AI analysis", () => {
       expect(await within(found).findByText(/Sent to isaac.toys for review/)).toBeInTheDocument();
       const [url, init] = fetchMock.mock.calls[1]!;
       expect(url).toBe("/api/submissions/from-analysis");
-      // Places in the read's list, never the words: the server stores its own copy.
-      expect(JSON.parse(init.body)).toEqual({ character: null, items: [1, 2], trinkets: [], picks: [0] });
+      // Each find's key, never the words: the server stores its own copy.
+      expect(JSON.parse(init.body)).toEqual({ character: null, items: [1, 2], trinkets: [], picks: ["i:1.2|t:|c:"] });
     });
 
     it("counts several finds and says why sending failed", async () => {
-      const second = { ...FIND, itemIds: [1], characterSlugs: ["azazel"], description: "Only as Azazel." };
+      const second = { ...FIND, key: "i:1|t:|c:azazel", itemIds: [1], characterSlugs: ["azazel"], description: "Only as Azazel." };
       vi.stubGlobal(
         "fetch",
         vi
