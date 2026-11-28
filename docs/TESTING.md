@@ -118,6 +118,10 @@ check in /admin, the weekly fold, a "New synergy found" card per AI find; decisi
   check; the daily ceiling, taken in one step so two checks at once can't both pass it (Codex, PR #14); an
   older database file gains the column; the public list carries the check and
   whether the owner changed the words; the inbox shows the check and "Use this wording" fills the editor.
+- **Google Analytics** (`web/src/analytics.test.ts`, `api/tests/test_pages.py`): `analytics.js` sets consent
+  before anything else (denied in the EEA, UK and Switzerland, ads denied everywhere), then starts Tag Manager
+  once; the server adds it to production pages only, never `/admin` (a planted mistake turns it red); the CSP
+  allows Google's tag hosts and still no inline script or eval.
 - **Runtime requirements** (`test_requirements.py`): every package `app/` imports is installed by
   `requirements.txt` itself or a package it requires. The image installs only that file; `httpx` came only
   from the dev file and crashed the image at start-up in PR #14's first CI run while every test passed.

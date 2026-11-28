@@ -265,3 +265,31 @@ def test_built_files_are_served_with_their_type_on_any_host(
 
     served = {name: client.get("/" + name).headers["content-type"].split(";")[0] for name in BUILT_TYPES}
     assert served == BUILT_TYPES
+
+
+# ---------------------------------------------------------------- Google Analytics (owner, 2026-11-28)
+
+ANALYTICS = '<script src="/analytics.js" async></script>'
+
+
+def test_production_pages_load_analytics_and_the_inbox_does_not(make_client: Callable[..., TestClient]) -> None:
+    client = make_client()  # production, as the conftest settings are
+    for path in ("/", "/items/the-sad-onion", "/synergies", "/about"):
+        assert client.get(path).text.count(ANALYTICS) == 1, path
+    # The owner's own inbox is not counted.
+    assert ANALYTICS not in client.get("/admin").text
+
+
+@pytest.mark.parametrize("environment", ["development", "ci"])
+def test_no_analytics_anywhere_but_production(make_client: Callable[..., TestClient], environment: str) -> None:
+    """CI's browser test and local runs must never count as visits."""
+    assert ANALYTICS not in make_client(environment=environment).get("/").text
+
+
+def test_the_policy_lets_tag_manager_and_analytics_in_and_nothing_inline(client: TestClient) -> None:
+    policy = dict(part.strip().split(" ", 1) for part in client.get("/").headers["content-security-policy"].split(";"))
+    assert policy["script-src"] == "'self' https://*.googletagmanager.com"
+    assert "https://*.google-analytics.com" in policy["connect-src"]
+    assert "https://*.analytics.google.com" in policy["connect-src"]
+    assert "https://*.google-analytics.com" in policy["img-src"]
+    assert "'unsafe-inline'" not in policy["script-src"] and "'unsafe-eval'" not in policy["script-src"]

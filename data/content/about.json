@@ -48,7 +48,8 @@
     {
       "heading": "What happens to your data?",
       "blocks": [
-        { "p": ["There are no accounts. Your current build and any synergies you write are kept in your browser's own storage and never leave it, unless you ask for an AI analysis as described above or send a synergy to the site."] },
+        { "p": ["There are no accounts. Your current build and any synergies you write are kept in your browser's own storage. They leave it only when you ask for an AI analysis as described above, send a synergy to the site, or, for the build, as part of a page's address counted by Google Analytics (below)."] },
+        { "p": ["The site counts visits with ", { "text": "Google Analytics", "href": "https://policies.google.com/technologies/partner-sites" }, ", loaded through Google Tag Manager: which pages are viewed and their addresses (in the builder the address holds your build), roughly where from, and what device and browser, under a random ID kept in a cookie. Visitors in the European Economic Area, the UK and Switzerland get no analytics cookie; for them Google receives only signals without one. The site shows no ads, and Google's advertising features are turned off."] },
         { "p": ["A synergy you send is stored on the site's server with no name or account. Beside it is a scrambled form of your internet address that cannot be turned back into it, used only to limit how many one visitor can send in a day. If the site's owner approves it, it appears on the site for everyone, marked Community."] }
       ]
     },
