@@ -90,7 +90,7 @@ Railway injects `PORT`; the container binds to it.
 4. Nothing else to do: the weekly Action (`.github/workflows/community-backup.yml`, Mondays 4:17 am EST)
    first saves `community.json` to the `backup/community` branch when the list changed, then folds the
    **checked** live ones into `data/synergies.json` (with their checks in `data/synergy-checks.md`, the
-   snapshot and the share image redrawn) on a branch `community/fold-<date>-<run>`, runs the full CI on it,
+   snapshot and the share image redrawn) on a branch `community/fold-<date>-<run>-<attempt>`, runs the full CI on it,
    and merges it into `main` if CI passes; Railway deploys it and they show "In the curated list". A live
    one without a check stays Community. If CI fails, the branch stays for a look and nothing is merged.
    Run it any time from GitHub → Actions → Community backup → Run workflow.

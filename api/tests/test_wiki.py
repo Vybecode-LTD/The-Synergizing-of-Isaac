@@ -215,3 +215,25 @@ async def test_the_client_answers_none_when_the_wiki_cannot_be_reached(monkeypat
 
     monkeypatch.setattr("httpx.AsyncClient.get", get)
     assert await wiki.WikiClient().page("Car Battery") is None
+
+
+def test_a_quote_counts_only_on_the_page_it_names() -> None:
+    """Finding (CodeRabbit, PR #14): a quote naming a page the model was not given was looked up on every page,
+    so it could carry an invented page and found=true. Now the page must be one read (its title or the member
+    it was read for, in any case), or the quote is not found."""
+    pages = {"Car battery": CAR_BATTERY, "Mega Blast": MEGA_BLAST}  # the member's name differs in case
+    _, excerpts = wiki.prompt([Member("item", "Car battery"), Member("item", "Mega Blast")], pages)
+    line = "{{I|Mega Blast|r+}}: Extends the length of the effect"
+    quotes = [
+        {"page": "Made Up Page", "text": line},  # the words are on Car Battery's page, the page is invented
+        {"page": "Mega Blast", "text": line},  # a real page, but not the one these words are on
+        {"page": "car battery", "text": line},  # the member's name, in another case: the page it was read for
+        {"page": "Car Battery", "text": line},  # the wiki's own title
+    ]
+    check = wiki.read_check(answer(quotes=quotes), pages, excerpts, NOW)
+    assert [(q["page"], q["found"]) for q in check["quotes"]] == [
+        ("Made Up Page", False),
+        ("Mega Blast", False),
+        ("Car Battery", True),
+        ("Car Battery", True),
+    ]

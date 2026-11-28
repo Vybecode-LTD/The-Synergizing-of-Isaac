@@ -278,3 +278,53 @@ def test_an_entry_id_already_taken_gets_the_next_number(data: Any) -> None:
     assert slug_id(data, [118, 38], [], [], taken) == "brimstone+tammys-head~3"
     assert "brimstone+tammys-head~3" in taken
     assert slug_id(data, [118], [39], ["azazel"], taken) == "brimstone+t-cancer+c-azazel"
+
+
+def test_a_fold_whose_record_cannot_be_written_leaves_the_list_as_it_was(
+    site: TestClient, store: Store, tmp_path: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Finding (CodeRabbit, PR #14): if synergy-checks.md could not be written, synergies.json already held the
+    new entries, and a retry skipped them as folded, so their checks were never recorded."""
+    import shutil
+    from pathlib import Path
+
+    from .test_core import load_gamedata_script
+
+    row = sent(store, (1, 2), rating="C", description="Checked words.")
+    store.review(row, {"status": "approved"})
+    store.set_check(
+        row,
+        {
+            "checkedAt": "2026-11-28T12:00:00+00:00",
+            "verdict": "from_effects",
+            "rating": "C",
+            "description": "Checked words.",
+            "why": "Each page's effects.",
+            "pages": [],
+            "quotes": [],
+        },
+    )
+    backup = tmp_path / "community.json"
+    backup.write_text(json.dumps(site.get("/api/community").json()), encoding="utf-8")
+    copy = tmp_path / "data"
+    shutil.copytree(
+        Path(__file__).resolve().parents[2] / "data", copy, ignore=shutil.ignore_patterns("sprites", "sources", "tests")
+    )
+    before = (copy / "synergies.json").read_bytes()
+
+    script = load_gamedata_script()
+
+    def cannot_write(*args: Any, **kwargs: Any) -> None:
+        raise PermissionError("synergy-checks.md is read-only")
+
+    monkeypatch.setattr(script, "record_checks", cannot_write)
+    with pytest.raises(PermissionError):
+        script.add_submissions(backup, copy, checked_only=True, today="2026-12-01")
+    assert (copy / "synergies.json").read_bytes() == before
+
+    # Once it can be written, the retry folds and records it.
+    monkeypatch.undo()
+    assert script.add_submissions(backup, copy, checked_only=True, today="2026-12-01") == [
+        "the-inner-eye+the-sad-onion"
+    ]
+    assert "`the-inner-eye+the-sad-onion`" in (copy / "synergy-checks.md").read_text(encoding="utf-8")

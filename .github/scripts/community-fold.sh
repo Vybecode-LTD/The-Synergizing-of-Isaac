@@ -27,7 +27,8 @@ python scripts/gamedata.py validate
 (cd api && python -m app.parity)
 (cd web && npm run og -- "${site#*://}")
 
-branch="community/fold-$(date -u +%F)-${GITHUB_RUN_ID:-local}"
+# The attempt too: "Re-run all jobs" keeps the run id, and its new commit could not go on the old branch.
+branch="community/fold-$(date -u +%F)-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}"
 git switch --quiet -c "$branch"
 git add data/synergies.json data/synergy-checks.md data/tests/parity.json web/public/og.png
 git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \

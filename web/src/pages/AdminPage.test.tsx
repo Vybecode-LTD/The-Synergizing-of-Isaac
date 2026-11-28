@@ -562,5 +562,7 @@ describe("admin inbox", () => {
     await openAdmin();
     expect(await screen.findByText(/stays Community until it is checked/)).toBeInTheDocument();
     expect(screen.getByText(/Every Monday/)).toBeInTheDocument();
+    // The by-hand route names every step to the live site (CodeRabbit, PR #14).
+    expect(screen.getByText(/open a pull request/)).toBeInTheDocument();
   });
 });

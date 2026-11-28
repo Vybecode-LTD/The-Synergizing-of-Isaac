@@ -341,9 +341,15 @@ function ExportPanel({ count }: { count: number }) {
       </p>
       <p className="admin-card__text">
         Every Monday a GitHub Action also moves the ones you checked against the wiki into the curated list, runs
-        every test, merges and deploys. Nothing to do by hand; one without a check stays Community. To do it
-        yourself instead, download the export and run{" "}
-        <code className="admin__code">python scripts/gamedata.py add-submissions &lt;file&gt;</code>.
+        every test, merges and deploys. Nothing to do by hand; one without a check stays Community.
+      </p>
+      <p className="admin-card__text">
+        To do it yourself instead: download the export, run{" "}
+        <code className="admin__code">python scripts/gamedata.py add-submissions &lt;file&gt;</code>, check each one
+        against the wiki and record it in <code className="admin__code">data/synergy-checks.md</code>, run{" "}
+        <code className="admin__code">python scripts/gamedata.py validate</code>, and open a pull request. Once it
+        merges and deploys, they move to &ldquo;In the curated list&rdquo; on their own (steps in{" "}
+        <code className="admin__code">docs/DEPLOY.md</code>).
       </p>
       <div className="admin-export__actions">
         <button type="button" className="button" data-variant="primary" data-size="sm" onClick={download}>

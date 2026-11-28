@@ -581,9 +581,15 @@ def add_submissions(
         raise SystemExit("add-submissions: nothing written\n" + "\n".join(problems))
     if not added:
         return added
+    before = path.read_bytes()
     write_json(path, synergies)
     if checked_only:
-        record_checks(data_dir / "synergy-checks.md", checks, today or datetime.date.today().isoformat())
+        try:
+            record_checks(data_dir / "synergy-checks.md", checks, today or datetime.date.today().isoformat())
+        except BaseException:
+            # Put the list back: otherwise a retry would skip these as folded and never record their checks.
+            path.write_bytes(before)
+            raise
     return added
 
 

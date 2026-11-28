@@ -265,14 +265,18 @@ def read_check(
     description = _clean(answer.description, MAX_DESCRIPTION)
     if not description:
         raise ValueError("the check came back with no description")
+    # The pages a quote may name: each one read, by the wiki's title or by the member it was read for, in any
+    # case. A quote naming any other page is not found, even if its words are on a page that was read.
+    titles = {title.lower(): title for title in excerpts}
+    titles |= {member.lower(): p.title for member, p in pages.items() if p is not None and p.title in excerpts}
     quotes = []
     for quote in answer.quotes[:MAX_QUOTES]:
         said = _flat(quote.text)
         if not said:
             continue
-        # Looked up on the page it names, or on any page when it names one the model was not given.
-        where = [excerpts[quote.page]] if quote.page in excerpts else list(excerpts.values())
-        quotes.append({"page": quote.page, "text": said[:400], "found": any(said in _flat(e.text()) for e in where)})
+        page = titles.get(quote.page.strip().lower())
+        found = page is not None and said in _flat(excerpts[page].text())
+        quotes.append({"page": page or quote.page, "text": said[:400], "found": found})
     read = {p.title: p for p in pages.values() if p is not None}
     return {
         "checkedAt": now.isoformat(),
