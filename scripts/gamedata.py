@@ -605,14 +605,15 @@ def record_checks(log: Path, checks: list[tuple[dict, dict]], today: str) -> Non
     section = (
         f"\n## {today}: {len(rows)} Community synergies folded in by the weekly Action\n\n"
         "**What:** synergies sent in by visitors and published by the owner at `/admin`, each checked there\n"
-        "against the wiki before it went live (decision 0008, point 8), then added by `add-submissions\n"
-        "--checked-only`. The check read each member's wiki page at the revision given; the model wrote from\n"
-        "those pages, not from the submitted words, and the owner accepted or edited the result.\n\n"
+        "against the wiki before it went live (decision 0008, point 8), then added by the weekly Action with\n"
+        "`add-submissions --checked-only`. The check read each member's wiki page at the revision given; the\n"
+        "model wrote from those pages, not from the submitted words, and the owner accepted or edited it.\n\n"
         "| Entry | Members | Rating | Verdict | Why (pages and revisions read) |\n"
         "|---|---|---|---|---|\n" + "\n".join(rows) + "\n"
     )
     text = log.read_text(encoding="utf-8")
-    log.write_text(text.rstrip("\n") + "\n" + section, encoding="utf-8")
+    with open(log, "w", encoding="utf-8", newline="\n") as out:  # LF on every machine, as .gitattributes keeps it
+        out.write(text.rstrip("\n") + "\n" + section)
 
 
 # ---------------------------------------------------------------- cli
@@ -652,7 +653,8 @@ def main(argv: list[str] | None = None) -> int:
         added = add_submissions(args.export, checked_only=args.checked_only)
         print(f"add-submissions: {len(added)} added: {', '.join(added) or 'none'}")
         if args.checked_only:
-            print("Their checks are recorded in data/synergy-checks.md. Unchecked ones stay Community.")
+            if added:
+                print("Their checks are recorded in data/synergy-checks.md. Unchecked ones stay Community.")
         else:
             print("Check each against the wiki for Repentance, record it in data/synergy-checks.md, then run validate.")
     return 0
