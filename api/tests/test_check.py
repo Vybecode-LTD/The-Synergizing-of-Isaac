@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import sqlite3
 from collections.abc import Callable
@@ -9,6 +10,7 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
+import httpx
 import pytest
 from fastapi.testclient import TestClient
 
@@ -239,3 +241,29 @@ def test_the_public_list_carries_the_check_and_whether_the_owner_changed_it(owne
 
     owner.patch(f"/api/admin/submissions/{row}", json={"description": "The owner's own words."})
     assert owner.get("/api/community").json()["entries"][0]["check"]["edited"] is True
+
+
+@pytest.mark.asyncio
+async def test_two_checks_at_once_cannot_both_pass_the_ceiling(
+    settings: Settings, store: Store, analyzer: FakeAnalyzer
+) -> None:
+    """Finding (Codex, PR #14): both requests passed the limit check while they waited for the wiki, then both
+    asked the paid model. The allowance is now taken in one step, after the pages and before the model."""
+    analyzer.raw = check_answer()
+    both_reading = asyncio.Barrier(2)
+
+    class SlowWiki:
+        async def page(self, title: str) -> Page | None:
+            if title == "Car Battery":
+                await both_reading.wait()  # each request is past the early check before either goes on
+            return PAGES.get(title)
+
+    values: dict[str, Any] = {"admin_username": "owner", "admin_password_hash": HASH, "admin_checks_per_day": 1}
+    app = create_app(replace(settings, **values), analyzer=analyzer, store=store, wiki=SlowWiki())
+    row = a_pair(store)
+    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url=HTTPS) as client:
+        assert (await client.post("/api/admin/login", json=LOGIN)).status_code == 200
+        replies = await asyncio.gather(*(client.post(f"/api/admin/submissions/{row}/check") for _ in range(2)))
+    assert sorted(r.status_code for r in replies) == [200, 429]
+    assert len(analyzer.calls) == 1
+    assert store.used("check") == 1

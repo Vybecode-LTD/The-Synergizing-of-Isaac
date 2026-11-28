@@ -115,8 +115,12 @@ check in /admin, the weekly fold, a "New synergy found" card per AI find; decisi
   below; a name counts only whole; the submitted words never reach the prompt (a planted leak turns it red);
   a quote from the excerpt is found and an invented one, or one on the page but not shown, is not; one page
   is enough and none means no model call and nothing counted; a broken answer is a 502 that keeps the old
-  check; the daily ceiling; an older database file gains the column; the public list carries the check and
+  check; the daily ceiling, taken in one step so two checks at once can't both pass it (Codex, PR #14); an
+  older database file gains the column; the public list carries the check and
   whether the owner changed the words; the inbox shows the check and "Use this wording" fills the editor.
+- **Runtime requirements** (`test_requirements.py`): every package `app/` imports is installed by
+  `requirements.txt` itself or a package it requires. The image installs only that file; `httpx` came only
+  from the dev file and crashed the image at start-up in PR #14's first CI run while every test passed.
 - **The weekly fold** (`test_community.py`): `add-submissions --checked-only` takes only checked entries,
   writes no `check` into the list, appends their rows to `synergy-checks.md` (a `|` escaped), and skips, not
   refuses, ones already folded. Tests never state the synergy count; they read it from the data, so a fold

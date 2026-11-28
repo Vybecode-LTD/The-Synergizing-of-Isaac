@@ -133,6 +133,20 @@ class Store:
             )
             return self._count(day, key)
 
+    def take(self, key: str, limit: int) -> bool:
+        """Count one against today's limit for a key, if it is under it, in one step: two requests can never both
+        see room for one. False when the limit is reached (and nothing is counted)."""
+        day = self._day()
+        with self._lock:
+            if self._count(day, key) >= limit:
+                return False
+            self._db.execute(
+                "INSERT INTO usage (day, visitor, count) VALUES (?, ?, 1) "
+                "ON CONFLICT (day, visitor) DO UPDATE SET count = count + 1",
+                (day, key),
+            )
+            return True
+
     def reserve(self, visitor: str, per_visitor: int, site: int, site_key: str = SITE, amount: int = 1) -> Reservation:
         """Take `amount` from today's allowance, all or none, or raise LimitReached.
 

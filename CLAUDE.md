@@ -68,7 +68,7 @@ it reads its own old data and gets no new work unless the owner asks.
 | Web | React 19, React Router 8, TypeScript 6 (strict), Vite 8, plain CSS with design tokens |
 | Fonts | Bricolage Grotesque and Figtree, self-hosted from `@fontsource-variable` |
 | Web tests | Vitest 5, React Testing Library, jsdom; Playwright 1.65 for the browser end-to-end test |
-| API | Python 3.12, FastAPI, Uvicorn, Anthropic SDK 2.x, SQLite (standard library) |
+| API | Python 3.12, FastAPI, Uvicorn, Anthropic SDK 2.x, httpx (the wiki check's reads), SQLite (standard library) |
 | API tests | pytest, pytest-asyncio, pytest-cov, ruff, mypy (strict) |
 | Data tooling | Python standard library only; sharp (Node) packs the sprite sheets |
 | Hosting | Railway, one service, one volume for the SQLite file |

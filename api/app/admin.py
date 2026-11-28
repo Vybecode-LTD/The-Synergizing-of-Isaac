@@ -166,7 +166,7 @@ def routes(
         if row is None:
             raise problem(404, "not_found")
         if store.used(CHECKS) >= settings.admin_checks_per_day:
-            raise problem(429, "checks_limited")
+            raise problem(429, "checks_limited")  # early, to spare the wiki; take() below is what holds
         members = [
             *(wiki.Member("item", data.item_by_id[i]["name"]) for i in row["itemIds"] if i in data.item_by_id),
             *(
@@ -184,7 +184,10 @@ def routes(
         if not any(found.values()):
             raise problem(502, "wiki_unreachable")
         prompt, excerpts = wiki.prompt(members, found)
-        store.bump(CHECKS)  # counted once the model is asked, whatever it answers
+        # Checked and counted in one step, after the wiki and right before the model: a request that waited on
+        # the wiki beside another can't also pass (Codex, PR #14). Counted whatever the model answers.
+        if not store.take(CHECKS, settings.admin_checks_per_day):
+            raise problem(429, "checks_limited")
         try:
             text = await analyzer.analyze(wiki.SYSTEM, prompt, schema=wiki.SCHEMA)
             result = wiki.read_check(text, found, excerpts, store.now())
