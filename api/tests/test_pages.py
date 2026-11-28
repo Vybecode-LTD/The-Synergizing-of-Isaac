@@ -293,3 +293,9 @@ def test_the_policy_lets_tag_manager_and_analytics_in_and_nothing_inline(client:
     assert "https://*.analytics.google.com" in policy["connect-src"]
     assert "https://*.google-analytics.com" in policy["img-src"]
     assert "'unsafe-inline'" not in policy["script-src"] and "'unsafe-eval'" not in policy["script-src"]
+    # Finding (CodeRabbit, PR #15): Google's CSP guide lists *.google.com in connect-src for GA4 without ad
+    # features, and www.google.com for Tag Manager itself. Only there: no ad hosts, no frames, no google.com images.
+    assert "https://*.google.com" in policy["connect-src"].split()
+    assert "google.com" not in policy["img-src"].replace("google-analytics.com", "")
+    assert "doubleclick" not in client.get("/").headers["content-security-policy"]
+    assert "frame-src" not in policy

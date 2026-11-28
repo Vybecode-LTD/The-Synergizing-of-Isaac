@@ -18,12 +18,18 @@ everyone" or a cookie banner); built in PR #15.
 
 ## How it fits the CSP
 
-The CSP still forbids inline scripts and eval. It allows the hosts Google documents for its tag:
-`https://*.googletagmanager.com` for scripts, and `https://*.google-analytics.com`,
-`https://*.analytics.google.com`, `https://*.googletagmanager.com` for beacons and pixels. So Tag Manager
-"Custom HTML" tags and "Custom JavaScript" variables will not run. If the GA4 property turns on Google
-signals, Google may also call `*.g.doubleclick.net` or `www.google.com`, which the CSP refuses; add those
-hosts only if that is wanted.
+The CSP still forbids inline scripts and eval. It allows the hosts Google's CSP guide
+(developers.google.com/tag-platform/security/guides/csp) lists for Tag Manager and for GA4 without ad
+features: `https://*.googletagmanager.com` for scripts; `https://*.google-analytics.com` and
+`https://*.googletagmanager.com` for images; those, `https://*.analytics.google.com` and
+`https://*.google.com` for requests. So Tag Manager "Custom HTML" tags and "Custom JavaScript" variables
+will not run.
+
+The container's GA4 tag (`G-Q3KQT0CFY6`, read from the public container on 2026-11-28) has **Google
+signals enabled**. Google signals is an ad feature: the guide adds `*.g.doubleclick.net`, the
+`*.google.<country>` domains and `pagead2.googlesyndication.com` for it, which the CSP does not allow. With
+ad consent denied everywhere it should send nothing there; if the browser console shows those refused, the
+simplest fix is to turn Google signals off in GA4 (Admin, Data collection), not to widen the CSP.
 
 ## Revisit
 

@@ -43,11 +43,15 @@ BARE_SHELL = (
 )
 HEAD_START, HEAD_END, COPY = "<!--head-start-->", "<!--head-end-->", "<!--server-copy-->"
 
-# Google Tag Manager and Analytics (owner, 2026-11-28) are let in by the hosts Google documents for its tag,
-# nothing more: still no inline script and no eval, so a Tag Manager "Custom HTML" tag will not run.
+# Google Tag Manager and Analytics (owner, 2026-11-28) are let in by the hosts Google's CSP guide lists for
+# Tag Manager and for GA4 without ad features (developers.google.com/tag-platform/security/guides/csp), nothing
+# more: still no inline script and no eval, so a Tag Manager "Custom HTML" tag will not run. *.google.com is
+# for requests only (the guide lists it in connect-src alone; CodeRabbit, PR #15).
 GOOGLE_SCRIPTS = "https://*.googletagmanager.com"
 GOOGLE_IMAGES = "https://*.google-analytics.com https://*.googletagmanager.com"
-GOOGLE_BEACONS = "https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com"
+GOOGLE_BEACONS = (
+    "https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.google.com"
+)
 CSP = (
     f"default-src 'self'; script-src 'self' {GOOGLE_SCRIPTS}; style-src 'self' 'unsafe-inline'; "
     f"img-src 'self' data: {GOOGLE_IMAGES}; font-src 'self'; connect-src 'self' {GOOGLE_BEACONS}; "
