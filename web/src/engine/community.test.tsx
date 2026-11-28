@@ -58,7 +58,7 @@ describe("community synergies from the page", () => {
     serverList([LIVE]);
     const [{ App }, data] = await Promise.all([import("../App"), import("./data")]);
     expect(data.gameData.synergies.at(-1)).toMatchObject({ id: "community-7", community: true });
-    expect(data.gameData.synergies).toHaveLength(443);
+    expect(data.gameData.synergies).toHaveLength(446);
 
     render(
       <MemoryRouter initialEntries={["/?i=1.2"]}>

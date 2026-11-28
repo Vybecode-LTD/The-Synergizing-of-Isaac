@@ -523,3 +523,20 @@ wiki's Repentance lists in `transformations.json`, with the Repentance+ differen
 | `godhead+mucormycosis` | Godhead, Mucormycosis | B | Confirmed | The pair is on the wiki |
 | `crickets-body+technology` | Technology, Cricket's Body | B | Corrected | This works in Repentance (marked r), not only Repentance+ |
 | `technology+the-parasite` | Technology, The Parasite | B | Corrected | This works in Repentance (marked r), not only Repentance+; the split beams deal full damage |
+
+## 2026-11-28: the first three Community synergies
+
+**What:** three synergies the AI read found, sent from the builder and published by the owner at `/admin`
+(decision 0008), moved here with `add-submissions` from the inbox's export.
+
+**Against:** the same wiki, read through its API on 2026-11-28, by the same rules: Car Battery (revision
+274460), Mega Blast (268534), The Battery (270153), 4.5 Volt (269934) and 9 Volt (274252).
+
+**Result:** 3 entries: 2 corrected, 1 re-rated. The list went from 442 entries to 445. All three
+descriptions had a version or mechanism wrong, so a find stays worth checking even after it is published.
+
+| Entry | Members | Rating | Verdict | Why |
+|---|---|---|---|---|
+| `car-battery+mega-blast` | Car Battery, Mega Blast | S → C | Re-rated | In Repentance Car Battery has no effect on Mega Blast (marked nr+ on both pages); Repentance+ makes the beam about 23 seconds instead of 15, not twice as long |
+| `car-battery+the-battery` | The Battery, Car Battery | B | Corrected | Neither page has the pair; each supports two stored uses, each upgraded. Car Battery doubles or upgrades the items it works on rather than always triggering twice |
+| `4-5-volt+9-volt` | 9 Volt, 4.5 Volt | B | Corrected | In Repentance 9 Volt gives a charge back on use and does not lower the charge needed; a one-charge item gets a timed recharge, which 4.5 Volt still adds to (4.5 Volt page) |

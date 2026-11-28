@@ -133,7 +133,7 @@ def test_everything_but_production_is_kept_out_of_search(make_client: Callable[.
 
 def test_llms_txt_summarises_the_site(client: TestClient) -> None:
     text = client.get("/llms.txt").text
-    assert text.startswith("# isaac.toys\n\n> isaac.toys checks your character, items and trinkets against 442")
+    assert text.startswith("# isaac.toys\n\n> isaac.toys checks your character, items and trinkets against 445")
     assert "- [All items](https://isaac.toys/items)" in text
     assert "## Strongest synergies" in text
 

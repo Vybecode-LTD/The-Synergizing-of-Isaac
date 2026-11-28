@@ -41,3 +41,6 @@ run_error.txt
 
 # Claude session data
 .claude/
+
+# Inbox exports downloaded from /admin (visitor submissions): never committed
+isaac-toys-submissions-*.json
