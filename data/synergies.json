@@ -4918,5 +4918,38 @@
   "characters": [],
   "rating": "B",
   "description": "In Repentance the laser splits into two perpendicular beams that deal full damage when it hits an obstacle or enemy. Repentance+ also adds small split tears."
+ },
+ {
+  "id": "car-battery+mega-blast",
+  "items": [
+   "Car Battery",
+   "Mega Blast"
+  ],
+  "trinkets": [],
+  "characters": [],
+  "rating": "C",
+  "description": "Only in Repentance+: Car Battery makes Mega Blast's beam last half as long again, about 23 seconds instead of 15. In Repentance itself Car Battery has no effect on Mega Blast."
+ },
+ {
+  "id": "car-battery+the-battery",
+  "items": [
+   "The Battery",
+   "Car Battery"
+  ],
+  "trinkets": [],
+  "characters": [],
+  "rating": "B",
+  "description": "The Battery lets the active item hold one extra full charge, and Car Battery doubles or otherwise upgrades each use of an item it works on, so you can fire two upgraded uses back to back."
+ },
+ {
+  "id": "4-5-volt+9-volt",
+  "items": [
+   "9 Volt",
+   "4.5 Volt"
+  ],
+  "trinkets": [],
+  "characters": [],
+  "rating": "B",
+  "description": "With 4.5 Volt the active item charges from the damage you deal instead of from cleared rooms. 9 Volt gives one charge back each time you use an item of two or more charges, so each use takes less damage to earn back. A one-charge item gets 9 Volt's 15-second timed recharge instead, and 4.5 Volt's damage still charges it too."
  }
 ]

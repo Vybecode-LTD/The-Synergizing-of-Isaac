@@ -13,13 +13,16 @@ character also has its own page. Unofficial fan project.
 It replaced a desktop app (Avalonia, .NET 9) that still lives under `src/` and still builds, but is frozen:
 it reads its own old data and gets no new work unless the owner asks.
 
-## Current state (2026-11-27)
+## Current state (2026-11-28)
 
-- **PR #12 (open, not merged): synergy submissions and Community synergies** (decision 0008,
+- **PR #13 (open): the first three Community synergies move into the curated list**, each checked against
+  the wiki first (`data/synergy-checks.md`: 2 corrected, 1 re-rated). The list becomes 445.
+- PR #12 (merged and live 2026-11-27): synergy submissions and Community synergies (decision 0008,
   `dev plans/contracts/synergy-submissions.md`). Visitors send synergies (by hand or from the AI read's
   "Synergies found"); the owner publishes them at `/admin` and they are live at once from SQLite, marked
-  Community; a weekly Action backs them up to the `backup/community` branch. The AI read is now JSON in
-  sections. Needs `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH` on Railway (`docs/DEPLOY.md`).
+  Community; a weekly Action backs them up to the `backup/community` branch. The AI read is JSON in
+  sections (a paid live run passed on 2026-11-28). The admin login is set on Railway (2026-11-28).
+  **A published find is not checked:** check it against the wiki before `add-submissions` goes in a PR.
 
 - Web app, API, data pipeline, tests and CI are on `main` (PR #1, merged 2026-11-25). **Live at
   `isaac.toys` with AI on** since 2026-11-26 (Railway; `docs/DEPLOY.md` has the ids; checks 1 to 5 passed,
@@ -34,7 +37,7 @@ it reads its own old data and gets no new work unless the owner asks.
 - PR #7 (merged 2026-11-26): a light/dark switch, the logo goes home to an empty builder, an original
   favicon (decision 0005, amended).
 - Every synergy checked against the wiki for Repentance (`data/synergy-checks.md`): S and D in PR #2, A, B
-  and C in PR #4 (merged 2026-11-25). The list is 442.
+  and C in PR #4 (merged 2026-11-25). The list is 442 on `main`, 445 with PR #13.
 - The Toy Box look (decision 0005, PR #3) is on `main`: light by default, a dark Toy Box by system
   setting or the header switch. See `docs/HANDOFF.md` for what is next.
 - PR #5 (merged): CI builds and smoke-tests the Docker image. Transformations follow Repentance with the

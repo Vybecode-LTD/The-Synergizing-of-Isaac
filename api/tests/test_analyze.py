@@ -212,7 +212,7 @@ def test_health(client: TestClient) -> None:
         "status": "ok",
         "ai": True,
         "items": 719,
-        "synergies": 442,
+        "synergies": 445,
         "community": 0,
     }
 

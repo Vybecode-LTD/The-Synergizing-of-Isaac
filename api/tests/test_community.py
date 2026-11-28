@@ -179,7 +179,7 @@ def test_the_synergies_page_lists_live_ones(site: TestClient, store: Store) -> N
     row = sent(store, rating="S", description="Live S-tier words.")
     store.review(row, {"status": "approved"})
     page = site.get("/synergies").text
-    assert "<p>443 synergies</p>" in page and "Live S-tier words." in page
+    assert "<p>446 synergies</p>" in page and "Live S-tier words." in page
 
 
 def test_the_backup_restores_into_the_curated_list(site: TestClient, store: Store, tmp_path: Any) -> None:
