@@ -32,7 +32,7 @@
             ["Which items and trinkets count toward each transformation comes from the ", { "text": "Binding of Isaac wiki", "href": "https://bindingofisaacrebirth.wiki.gg/" }, " for Repentance. What counts only in Repentance+ is marked."],
             ["Quality, item pools and starting items are the numbers in the game's own data files for Repentance 1.7.9b."],
             ["The synergies were written by hand, and every one was checked against the ", { "text": "Binding of Isaac wiki", "href": "https://bindingofisaacrebirth.wiki.gg/" }, " for Repentance on 24 and 25 November 2026. Where the wiki says nothing about a pair, it was checked against each item's own effects."],
-            ["Synergies marked Community were sent in by visitors, by hand or from an AI read, and approved by the site's owner. They have not been checked against the wiki the same way."]
+            ["Synergies marked Community were sent in by visitors, by hand or from an AI read, and approved by the site's owner, who checks each against the wiki first. Once a week the checked ones join the main list, and their checks are listed with the others."]
           ]
         },
         { "p": ["Stat changes are the items' own numbers added up. The game then runs them through its damage and fire-rate formulas, so they are a tally of what you picked up, not your final stats."] }

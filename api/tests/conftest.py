@@ -45,13 +45,15 @@ class FakeAnalyzer:
 
     def __init__(self) -> None:
         self.calls: list[tuple[str, str]] = []
+        self.schemas: list[dict[str, Any] | None] = []
         self.fail = False
         self.billed = False
         self.found: list[dict[str, Any]] = []
         self.raw: str | None = None  # answer this text instead, to test what the server does with it
 
-    async def analyze(self, system: str, user: str) -> str:
+    async def analyze(self, system: str, user: str, schema: dict[str, Any] | None = None) -> str:
         self.calls.append((system, user))
+        self.schemas.append(schema)
         if self.fail:
             raise AnalysisFailed("boom", billed=self.billed)
         return self.raw if self.raw is not None else answer_json(f"Answer number {len(self.calls)}.", self.found)

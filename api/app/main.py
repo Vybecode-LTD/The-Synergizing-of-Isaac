@@ -30,6 +30,7 @@ from .pages import describe
 from .settings import Settings
 from .store import LimitReached, Store
 from .web import MESSAGES, BuildRequest, check_build, client_ip, problem
+from .wiki import Wiki
 
 __all__ = ["MESSAGES", "client_ip", "create_app", "problem"]
 
@@ -67,6 +68,7 @@ def create_app(
     settings: Settings | None = None,
     analyzer: Analyzer | None = None,
     store: Store | None = None,
+    wiki: Wiki | None = None,
 ) -> FastAPI:
     settings = settings or Settings.from_env()
     data = GameData.load(settings.data_path)
@@ -129,7 +131,7 @@ def create_app(
         return store.visitor(client_ip(request, settings.client_ip_header))
 
     app.include_router(submissions.routes(settings, data, store, visitor_of))
-    app.include_router(admin.routes(settings, data, store, visitor_of))
+    app.include_router(admin.routes(settings, data, store, visitor_of, analyzer, wiki))
 
     @app.post("/api/analyze")
     async def analyze(body: AnalyzeRequest, request: Request) -> dict[str, object]:

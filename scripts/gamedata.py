@@ -12,6 +12,7 @@ Where each fact comes from is recorded in `data/README.md`.
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import re
 import shutil
@@ -512,12 +513,26 @@ def validate_transformations(doc: dict, items: list[dict], trinkets: list[dict])
 # ---------------------------------------------------------------- add-submissions
 
 
-def add_submissions(export: Path, data_dir: Path = DATA) -> list[str]:
-    """Append the admin inbox's export (GET /api/admin/export) to synergies.json. Returns the ids added.
+VERDICTS = {
+    "on_wiki": "On the wiki",
+    "from_effects": "From each page's effects",
+    "repentance_plus_only": "Repentance+ only",
+    "none": "No interaction found",
+}
+
+
+def add_submissions(
+    export: Path, data_dir: Path = DATA, *, checked_only: bool = False, today: str | None = None
+) -> list[str]:
+    """Append the admin inbox's export (GET /api/admin/export) or the public list (GET /api/community) to
+    synergies.json. Returns the ids added.
 
     Refuses the whole file, writing nothing, if any entry names something the roster lacks, has a bad
-    rating or no words, or repeats a combination the list (or the file) already has. Each entry still needs
-    its wiki check before the pull request merges (data/synergy-checks.md, decision 0008).
+    rating or no words, or repeats a combination the list (or the file) already has.
+
+    `checked_only` is the weekly fold's mode (decision 0008, point 9): only entries the owner checked against
+    the wiki in /admin are taken, one the list already has is skipped (folded, not yet deployed), and each
+    check is written into data/synergy-checks.md. Without it, each entry still needs its wiki check by hand.
     """
     doc = read_json(export)
     entries = doc["entries"] if isinstance(doc, dict) else doc
@@ -534,7 +549,9 @@ def add_submissions(export: Path, data_dir: Path = DATA) -> list[str]:
 
     taken_ids = {s["id"] for s in synergies}
     taken = {combination(s): s["id"] for s in synergies}
-    problems, added = [], []
+    if checked_only:
+        entries = [e for e in entries if e.get("check") and combination(e) not in taken]
+    problems, added, checks = [], [], []
     for n, entry in enumerate(entries):
         where = f"entry #{n} ({entry.get('id', '?')})"
         clean = {
@@ -559,10 +576,43 @@ def add_submissions(export: Path, data_dir: Path = DATA) -> list[str]:
         taken[combination(clean)] = clean["id"]
         synergies.append(clean)
         added.append(clean["id"])
+        checks.append((clean, entry.get("check") or {}))
     if problems:
         raise SystemExit("add-submissions: nothing written\n" + "\n".join(problems))
+    if not added:
+        return added
     write_json(path, synergies)
+    if checked_only:
+        record_checks(data_dir / "synergy-checks.md", checks, today or datetime.date.today().isoformat())
     return added
+
+
+def record_checks(log: Path, checks: list[tuple[dict, dict]], today: str) -> None:
+    """Append the weekly fold's section to synergy-checks.md: one row per synergy, from its /admin check."""
+
+    def cell(text: str) -> str:
+        return " ".join(str(text).split()).replace("|", "\\|")
+
+    rows = []
+    for entry, check in checks:
+        members = ", ".join([*entry["items"], *entry["trinkets"], *entry["characters"]])
+        verdict = VERDICTS.get(check.get("verdict"), str(check.get("verdict")))
+        if check.get("edited"):
+            verdict += "; words edited by the owner"
+        pages = ", ".join(f"{p['title']} {p['revision']}" for p in check.get("pages", []))
+        why = cell(check.get("why", "")) + (f" ({cell(pages)})" if pages else "")
+        rows.append(f"| `{entry['id']}` | {cell(members)} | {entry['rating']} | {verdict} | {why} |")
+    section = (
+        f"\n## {today}: {len(rows)} Community synergies folded in by the weekly Action\n\n"
+        "**What:** synergies sent in by visitors and published by the owner at `/admin`, each checked there\n"
+        "against the wiki before it went live (decision 0008, point 8), then added by `add-submissions\n"
+        "--checked-only`. The check read each member's wiki page at the revision given; the model wrote from\n"
+        "those pages, not from the submitted words, and the owner accepted or edited the result.\n\n"
+        "| Entry | Members | Rating | Verdict | Why (pages and revisions read) |\n"
+        "|---|---|---|---|---|\n" + "\n".join(rows) + "\n"
+    )
+    text = log.read_text(encoding="utf-8")
+    log.write_text(text.rstrip("\n") + "\n" + section, encoding="utf-8")
 
 
 # ---------------------------------------------------------------- cli
@@ -579,6 +629,11 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("validate")
     add = sub.add_parser("add-submissions", help="append the admin inbox's export to synergies.json")
     add.add_argument("export", type=Path)
+    add.add_argument(
+        "--checked-only",
+        action="store_true",
+        help="the weekly fold: only entries checked in /admin, recorded in synergy-checks.md",
+    )
     args = parser.parse_args(argv)
 
     if args.command == "import-sources":
@@ -594,9 +649,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"validate: {len(problems)} problem(s)")
         return 1 if problems else 0
     elif args.command == "add-submissions":
-        added = add_submissions(args.export)
+        added = add_submissions(args.export, checked_only=args.checked_only)
         print(f"add-submissions: {len(added)} added: {', '.join(added) or 'none'}")
-        print("Check each against the wiki for Repentance, record it in data/synergy-checks.md, then run validate.")
+        if args.checked_only:
+            print("Their checks are recorded in data/synergy-checks.md. Unchecked ones stay Community.")
+        else:
+            print("Check each against the wiki for Repentance, record it in data/synergy-checks.md, then run validate.")
     return 0
 
 

@@ -24,7 +24,16 @@ Contract: `dev plans/contracts/synergy-submissions.md`.
    synergies to the `backup/community` branch, in `data/synergies.json`'s format, so they outlive the
    volume. That branch is never deployed.
 7. Under "Synergies found" a visitor can save each find to their own synergies and send them all to the
-   inbox, marked as found by the AI.
+   inbox, marked as found by the AI. *Amended 2026-11-28:* each find is its own "New synergy found" card
+   with its own "Send for review" button.
+8. **The wiki check happens in `/admin`** (owner, 2026-11-28). A button reads the members' wiki pages and
+   has the model write the synergy from them, never from the submitted words; the owner accepts or edits
+   the result before publishing. All three of the first published AI finds had a claim the wiki
+   contradicts (PR #13), which is why the check comes before anything goes live.
+9. **The weekly Action folds checked Community synergies into the curated list** (owner, 2026-11-28: no
+   button, no token on Railway). It adds them, runs the full CI on a branch, merges it into `main` itself
+   and Railway deploys. An unchecked one stays Community. This replaces point 4's export and pull request,
+   which still work by hand.
 
 ## Why the database, and not the curated file, holds them
 
@@ -39,8 +48,9 @@ browser builds the same list the server rendered from, and both sides title and 
 - Community text never reaches the model: the AI prompt is built from the curated file alone, so no text
   a visitor wrote is ever sent to the paid model (`CLAUDE.md` rule 5). The AI's finds are checked against
   the live list, so it never offers what the site already shows.
-- The owner's approval is the fact check for community synergies; the About page says they were not
-  checked against the wiki the way the curated list was.
+- The owner's approval is the fact check for community synergies, helped since 2026-11-28 by the wiki
+  check (point 8). The wiki check sends the model wiki text and the members' names, not the visitor's
+  words, so rule 5 still holds.
 
 ## What this changes
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { AnalysisError, analyzeBuild, mentions, type Analysis, type FoundSynergy } from "../../api/analysis";
 import { errorMessage } from "../../api/http";
 import { submitFound } from "../../api/submissions";
@@ -127,7 +127,7 @@ function AiRead({ analysis, build, pieces, onSave }: { analysis: Analysis; build
   const { read, found } = analysis;
   const tier = read.verdict.tier;
   const shown = SECTIONS.filter((s) => read[s.key].length > 0);
-  // The verdict is deep, so the sections after it go light, deep, light… and the finds take the next turn.
+  // The verdict is deep, so the sections after it go light, deep, light…
   const tone = (n: number) => (n % 2 === 0 ? "light" : "deep");
   return (
     <div className="ai-read">
@@ -166,7 +166,10 @@ function AiRead({ analysis, build, pieces, onSave }: { analysis: Analysis; build
         </section>
       ))}
 
-      {found.length > 0 && <Found found={found} build={build} onSave={onSave} tone={tone(shown.length)} />}
+      {/* At the bottom of the read: each find the curated list lacks is a card of its own (decision 0008, point 7). */}
+      {found.map((f) => (
+        <NewSynergy key={f.key} find={f} build={build} onSave={onSave} />
+      ))}
 
       <p className="ai-panel__note">
         Written by an AI from this site&rsquo;s item data. It can be wrong; the cards above come from the curated
@@ -181,18 +184,13 @@ function AiRead({ analysis, build, pieces, onSave }: { analysis: Analysis; build
 
 type Sending = { status: "idle" } | { status: "sending" } | { status: "sent" } | { status: "error"; message: string };
 
-/** What the AI found that the list lacks: save each to your own synergies, and send them all to the owner. */
-function Found({
-  found,
-  build,
-  onSave,
-  tone,
-}: { found: FoundSynergy[]; build: Build; tone: "light" | "deep" } & Pick<AiPanelProps, "onSave">) {
-  const [saved, setSaved] = useState<ReadonlySet<number>>(new Set());
+/** One interaction the AI found that the list lacks: send it for review, or keep it in your own synergies. */
+function NewSynergy({ find: f, build, onSave }: { find: FoundSynergy; build: Build } & Pick<AiPanelProps, "onSave">) {
+  const id = useId();
+  const [saved, setSaved] = useState(false);
   const [sending, setSending] = useState<Sending>({ status: "idle" });
 
-  const save = (n: number) => {
-    const f = found[n]!;
+  const save = () => {
     onSave(
       {
         itemIds: f.itemIds,
@@ -203,103 +201,94 @@ function Found({
       },
       sending.status === "sent",
     );
-    setSaved(new Set(saved).add(n));
+    setSaved(true);
   };
 
+  // This find alone, by its key: the server stores its own copy of the words, never the page's.
   const send = async () => {
     setSending({ status: "sending" });
     try {
-      await submitFound(build, found.map((f) => f.key));
+      await submitFound(build, [f.key]);
       setSending({ status: "sent" });
     } catch (cause) {
-      setSending({ status: "error", message: errorMessage(cause, "They couldn't be sent. Try again in a moment.") });
+      setSending({ status: "error", message: errorMessage(cause, "It couldn't be sent. Try again in a moment.") });
     }
   };
 
   const busy = sending.status === "sending";
+  const pieces = [
+    ...f.itemIds.map((pid) => ({ kind: "item" as const, id: pid, name: gameData.itemById.get(pid)!.name })),
+    ...f.trinketIds.map((pid) => ({ kind: "trinket" as const, id: pid, name: gameData.trinketById.get(pid)!.name })),
+  ];
   return (
-    <section className="ai-read__section" data-tone={tone} aria-labelledby="ai-found">
-      <h3 id="ai-found" className="ai-read__heading">
-        <span className="ai-read__icon">
+    <section className="ai-new" aria-labelledby={`${id}-flag ${id}-recipe`}>
+      <h3 id={`${id}-flag`} className="ai-new__flag">
+        <span className="ai-new__icon">
           <Icon name="star" />
         </span>
-        Synergies found
+        New synergy found
       </h3>
-      <p className="ai-read__lede">
-        {found.length === 1 ? "One interaction" : `${found.length} interactions`} in this build that the curated list
-        doesn&rsquo;t have yet.
-      </p>
-      <ul className="ai-finds" role="list">
-        {found.map((f, n) => (
-          <li key={f.key} className="ai-find">
-            <div className="ai-find__head">
-              <RatingBadge rating={f.rating} size="sm" />
-              <p className="ai-find__recipe">
-                {[
-                  ...f.itemIds.map((id) => ({ kind: "item" as const, id, name: gameData.itemById.get(id)!.name })),
-                  ...f.trinketIds.map((id) => ({ kind: "trinket" as const, id, name: gameData.trinketById.get(id)!.name })),
-                ].map((p, i) => (
-                  <span key={`${p.kind}${p.id}`} className="ai-find__piece">
-                    {i > 0 && (
-                      <span className="ai-find__plus" aria-hidden="true">
-                        +
-                      </span>
-                    )}
-                    <Sprite kind={p.kind} id={p.id} />
-                    {p.name}
-                  </span>
-                ))}
-                {f.characterSlugs.map((slug) => (
-                  <span key={slug} className="ai-find__piece">
-                    <span className="ai-find__as">as</span>
-                    <Portrait slug={slug} size="sm" />
-                    {gameData.characterBySlug.get(slug)!.name}
-                  </span>
-                ))}
-              </p>
-            </div>
-            <p className="ai-find__text">{f.description}</p>
-            <div className="ai-find__actions">
-                {saved.has(n) ? (
-                  <span className="ai-find__done">
-                    <Icon name="check" />
-                    Saved to your synergies
-                  </span>
-                ) : (
-                  <button type="button" className="button" data-size="sm" onClick={() => save(n)}>
-                    <Icon name="plus" />
-                    Save to my synergies
-                  </button>
-                )}
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div className="ai-finds__send">
+      <div className="ai-new__head">
+        <RatingBadge rating={f.rating} size="sm" />
+        <p id={`${id}-recipe`} className="ai-new__recipe">
+          {pieces.map((p, i) => (
+            <span key={`${p.kind}${p.id}`} className="ai-new__piece">
+              {i > 0 && (
+                <span className="ai-new__plus" aria-hidden="true">
+                  +
+                </span>
+              )}
+              <Sprite kind={p.kind} id={p.id} />
+              {p.name}
+            </span>
+          ))}
+          {f.characterSlugs.map((slug) => (
+            <span key={slug} className="ai-new__piece">
+              <span className="ai-new__as">as</span>
+              <Portrait slug={slug} size="sm" />
+              {gameData.characterBySlug.get(slug)!.name}
+            </span>
+          ))}
+        </p>
+      </div>
+      <p className="ai-new__text">{f.description}</p>
+      <div className="ai-new__actions">
         {sending.status === "sent" ? (
-          <p className="ai-finds__sent">
+          <p className="ai-new__done">
             <Icon name="check" />
-            Sent to isaac.toys for review. Thank you!
+            Sent for review. Thank you!
           </p>
         ) : (
           <button
             type="button"
             className="button"
             data-variant="primary"
+            data-size="sm"
             data-state={busy ? "loading" : undefined}
             aria-disabled={busy}
             onClick={busy ? undefined : send}
           >
             <Icon name="send" />
-            {busy ? "Sending…" : found.length === 1 ? "Send it to isaac.toys" : `Send all ${found.length} to isaac.toys`}
+            {busy ? "Sending…" : "Send for review"}
           </button>
         )}
-        <p className="ai-finds__hint">
-          {sending.status === "error"
-            ? sending.message
-            : "The site’s owner reviews each one. Approved ones go up on isaac.toys for everyone, marked Community. No name or account is attached."}
-        </p>
+        {saved ? (
+          <p className="ai-new__done">
+            <Icon name="check" />
+            Saved to your synergies
+          </p>
+        ) : (
+          <button type="button" className="button" data-variant="quiet" data-size="sm" onClick={save}>
+            <Icon name="plus" />
+            Save to my synergies
+          </button>
+        )}
       </div>
+      <p className="ai-new__hint" role={sending.status === "error" ? "alert" : undefined}>
+        {sending.status === "error"
+          ? sending.message
+          : "The site’s owner checks it against the wiki first. If it holds up, it goes up on isaac.toys for everyone, marked Community. No name or account is attached."}
+      </p>
     </section>
   );
 }

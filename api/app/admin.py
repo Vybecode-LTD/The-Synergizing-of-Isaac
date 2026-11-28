@@ -18,8 +18,8 @@ from typing import Any, Literal
 from fastapi import APIRouter, Depends, Request, Response
 from pydantic import BaseModel, Field
 
-from . import admin_password
-from .analysis import MAX_DESCRIPTION
+from . import admin_password, wiki
+from .analysis import MAX_DESCRIPTION, AnalysisFailed, Analyzer
 from .community import slug_id
 from .gamedata import GameData, combo_key
 from .settings import Settings
@@ -34,6 +34,7 @@ COOKIE = "isaac_admin"
 SECURE_COOKIE = "__Host-isaac_admin"
 MAX_FAILURES = 10
 MAX_NOTE = 500
+CHECKS = "check"  # the usage key the owner's wiki checks count under
 
 Status = Literal["new", "approved", "rejected", "added"]
 Rating = Literal["S", "A", "B", "C", "D"]
@@ -51,8 +52,16 @@ class ReviewRequest(BaseModel):
     note: str | None = Field(default=None, max_length=4 * MAX_NOTE)
 
 
-def routes(settings: Settings, data: GameData, store: Store, visitor_of: Callable[[Request], str]) -> APIRouter:
+def routes(
+    settings: Settings,
+    data: GameData,
+    store: Store,
+    visitor_of: Callable[[Request], str],
+    analyzer: Analyzer | None = None,
+    pages: wiki.Wiki | None = None,
+) -> APIRouter:
     router = APIRouter(prefix="/api/admin")
+    reader: wiki.Wiki = pages or wiki.WikiClient()
     username = settings.admin_username or ""
     stored = settings.admin_password_hash or ""
     configured = bool(username) and admin_password.parse(stored) is not None
@@ -145,6 +154,49 @@ def routes(settings: Settings, data: GameData, store: Store, visitor_of: Callabl
         if row is None:  # deleted by another request between the update and this read
             raise problem(404, "not_found")
         return on_list(row)
+
+    @router.post("/submissions/{submission_id}/check", dependencies=[Depends(signed_in)])
+    async def check(submission_id: int, request: Request) -> dict[str, object]:
+        """Check a submission against the wiki: the model writes it from the members' pages, never from the
+        submitted words (rule 5). The result is advice stored beside the row; the owner still saves."""
+        same_site(request)
+        if analyzer is None:
+            raise problem(503, "not_configured")
+        row = store.submission(submission_id)
+        if row is None:
+            raise problem(404, "not_found")
+        if store.used(CHECKS) >= settings.admin_checks_per_day:
+            raise problem(429, "checks_limited")
+        members = [
+            *(wiki.Member("item", data.item_by_id[i]["name"]) for i in row["itemIds"] if i in data.item_by_id),
+            *(
+                wiki.Member("trinket", data.trinket_by_id[t]["name"])
+                for t in row["trinketIds"]
+                if t in data.trinket_by_id
+            ),
+            *(
+                wiki.Member("character", data.character_by_slug[c]["name"])
+                for c in row["characterSlugs"]
+                if c in data.character_by_slug
+            ),
+        ]
+        found = {m.name: await reader.page(m.name) for m in members}
+        if not any(found.values()):
+            raise problem(502, "wiki_unreachable")
+        prompt, excerpts = wiki.prompt(members, found)
+        store.bump(CHECKS)  # counted once the model is asked, whatever it answers
+        try:
+            text = await analyzer.analyze(wiki.SYSTEM, prompt, schema=wiki.SCHEMA)
+            result = wiki.read_check(text, found, excerpts, store.now())
+        except (AnalysisFailed, ValueError) as error:
+            log.warning("wiki check of submission %d failed: %s", submission_id, error)
+            raise problem(502, "failed") from error
+        if not store.set_check(submission_id, result):
+            raise problem(404, "not_found")
+        checked = store.submission(submission_id)
+        if checked is None:
+            raise problem(404, "not_found")
+        return on_list(checked)
 
     @router.delete("/submissions/{submission_id}", dependencies=[Depends(signed_in)])
     def delete(submission_id: int, request: Request) -> dict[str, object]:

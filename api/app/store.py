@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS submissions (
     visitor TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'new',
     note TEXT,
-    reviewed_at TEXT
+    reviewed_at TEXT,
+    check_json TEXT
 );
 CREATE UNIQUE INDEX IF NOT EXISTS submissions_once ON submissions (visitor, origin, combo);
 CREATE INDEX IF NOT EXISTS submissions_by_status ON submissions (status, id);
@@ -90,6 +91,10 @@ class Store:
         self._revision = 0
         with self._lock:
             self._db.executescript(SCHEMA)
+            # A file made before the wiki check (2026-11-28) has the table without its column.
+            columns = {row[1] for row in self._db.execute("PRAGMA table_info(submissions)")}
+            if "check_json" not in columns:
+                self._db.execute("ALTER TABLE submissions ADD COLUMN check_json TEXT")
             self._db.execute("INSERT OR IGNORE INTO meta (key, value) VALUES ('salt', ?)", (secrets.token_hex(32),))
             self._salt = self._db.execute("SELECT value FROM meta WHERE key = 'salt'").fetchone()[0]
 
@@ -102,6 +107,9 @@ class Store:
     def visitor(self, ip: str) -> str:
         """A stable stand-in for an IP address that cannot be turned back into one."""
         return hashlib.sha256(f"{self._salt}:{ip}".encode()).hexdigest()[:32]
+
+    def now(self) -> datetime.datetime:
+        return self._clock()
 
     def _day(self) -> str:
         return self._clock().date().isoformat()
@@ -263,7 +271,7 @@ class Store:
         with self._lock:
             rows = self._db.execute(
                 "SELECT id, created_at, origin, combo, item_ids, trinket_ids, characters, rating, description, "
-                f"source_url, status, note, reviewed_at FROM submissions {where} ORDER BY id DESC",
+                f"source_url, status, note, reviewed_at, check_json FROM submissions {where} ORDER BY id DESC",
                 args,
             ).fetchall()
             combos = dict(self._db.execute("SELECT combo, COUNT(*) FROM submissions GROUP BY combo").fetchall())
@@ -282,6 +290,7 @@ class Store:
                 "note": r[11],
                 "reviewedAt": r[12],
                 "alsoSent": int(combos.get(r[3], 1)) - 1,
+                "check": json.loads(r[13]) if r[13] else None,
             }
             for r in rows
         ]
@@ -295,7 +304,7 @@ class Store:
         """The approved submissions: what the site shows as community synergies, oldest first."""
         with self._lock:
             rows = self._db.execute(
-                "SELECT id, item_ids, trinket_ids, characters, rating, description FROM submissions "
+                "SELECT id, item_ids, trinket_ids, characters, rating, description, check_json FROM submissions "
                 "WHERE status = 'approved' ORDER BY id"
             ).fetchall()
         return [
@@ -306,9 +315,21 @@ class Store:
                 "characterSlugs": json.loads(r[3]),
                 "rating": r[4],
                 "description": r[5],
+                "check": json.loads(r[6]) if r[6] else None,
             }
             for r in rows
         ]
+
+    def set_check(self, submission_id: int, check: dict[str, Any]) -> bool:
+        """Store the wiki check on a submission (the words stay the owner's). False when there is no such row."""
+        with self._lock:
+            done = self._db.execute(
+                "UPDATE submissions SET check_json = ? WHERE id = ?",
+                (json.dumps(check, ensure_ascii=False, separators=(",", ":")), submission_id),
+            ).rowcount
+            if done:
+                self._revision += 1  # the public list carries the check
+            return bool(done)
 
     def settle(self, curated: set[str]) -> int:
         """Mark approved submissions whose combination the curated list now has as added. Returns how many.

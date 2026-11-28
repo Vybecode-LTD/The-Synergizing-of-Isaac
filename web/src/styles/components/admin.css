@@ -236,4 +236,81 @@
     flex-direction: column;
     gap: var(--gap-grouped);
   }
+
+  /* ---- The wiki check: advice beside the submission, on a sunken panel -------------------- */
+  .admin-check {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    padding: var(--pad-block-md) var(--pad-inline-md);
+    color: var(--fg-default);
+    background: var(--bg-sunken);
+    border: var(--stroke-thick) solid var(--border-ink);
+    border-radius: var(--radius-lg);
+  }
+
+  .admin-check__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+    align-items: center;
+  }
+
+  .admin-check__verdict {
+    font: var(--type-ui);
+    font-weight: var(--weight-bold);
+    color: var(--fg-strong);
+  }
+
+  .admin-check__when,
+  .admin-check__why,
+  .admin-check__pages,
+  .admin-check__page {
+    font: var(--type-small);
+    color: var(--fg-muted);
+  }
+
+  .admin-check__text {
+    max-inline-size: var(--measure-prose);
+    font: var(--type-body);
+    color: var(--fg-default);
+  }
+
+  .admin-check__quotes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-tight);
+    padding: var(--space-0);
+    list-style: none;
+  }
+
+  .admin-check__quote {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-fused);
+  }
+
+  /* A line from the wiki, as it was read: raised off the sunken panel so it reads as quoted. */
+  .admin-check__line {
+    padding-inline: var(--gap-fused);
+    font: var(--type-code);
+    color: var(--fg-strong);
+    overflow-wrap: anywhere;
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+  }
+
+  .admin-check__missing {
+    display: inline-flex;
+    gap: var(--gap-fused);
+    align-items: center;
+    font: var(--type-small);
+    color: var(--fg-danger);
+  }
+
+  .admin-check__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-tight);
+  }
 }

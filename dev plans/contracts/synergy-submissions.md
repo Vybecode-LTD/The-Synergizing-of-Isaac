@@ -131,7 +131,52 @@ Skills `claude-api` (structured outputs, fallbacks), `auth-threat-model-checklis
 ## 8. Open questions
 - Should a submitter be able to leave a name for credit? (Not built: it is personal data.)
 
+## Amendment of 2026-11-28: the wiki check, the weekly fold, a card per find
+Owner's answers of 2026-11-28: the fact check happens in `/admin` as an AI wiki check the owner accepts or
+edits; no button, the weekly Action folds published synergies into the curated list, tests, merges and
+deploys; each AI find is its own "New synergy found" card with its own send button. Built in PR #14
+(predicted).
+
+**`POST /api/admin/submissions/{id}/check`** (signed in, same-site). The server reads each member's wiki page
+(`bindingofisaacrebirth.wiki.gg/api.php`, `action=parse`, `prop=wikitext|revid`, redirects followed): its
+Effects section, and every bullet under Notes, Synergies, Interactions or No Effect that names another
+member, with the bullet above it and the ones below. The model gets the members' names, those excerpts and
+the check rules; **never the submitted words** (rule 5). It answers in a schema: `{"verdict":
+"on_wiki"|"from_effects"|"repentance_plus_only"|"none", "rating", "description", "why", "quotes": [{"page",
+"text"}]}`. The server marks each quote `found` only if the page text holds it word for word, stores the
+check on the row and answers the row. Errors: 503 `not_configured` (no AI key), 502 `wiki_unreachable` (no
+page read), 502 `failed`, 404, 429 `checks_limited` (`ADMIN_CHECKS_PER_DAY`, 40).
+Rows gain `check`: `{"checkedAt", "verdict", "rating", "description", "why", "pages": [{"title",
+"revision"}], "quotes": [{"page", "text", "found"}]}` or null. The inbox shows it beside the submitted
+words, with "Use this wording" (fills the edit fields; the owner still saves and publishes).
+
+**`GET /api/community`** entries gain `"check": {"date", "verdict", "why", "pages", "edited"}` or null
+(`edited`: the published words or rating differ from the check's). `add-submissions --checked-only` skips
+entries with no check, strips `check`, and appends a dated section to `data/synergy-checks.md` from it.
+
+**Weekly fold** (`.github/workflows/community-backup.yml`, Mondays 09:17 UTC and on demand). After the
+backup: if `/api/community` lists a checked entry, `add-submissions --checked-only`, `validate`,
+`app.parity` and `npm run og` run on a branch `community/fold-<date>`; `ci.yml` runs on it (now also
+`workflow_call` with a `ref` input); if it passes, the branch is merged into `main` with a merge commit
+(`GITHUB_TOKEN`, no pull request: the repository does not let Actions open them) and deleted. Railway
+deploys `main`; at start-up `settle()` retires the Community copies. Unchecked entries stay Community.
+Tests no longer state the synergy count; they read it from `data/synergies.json`.
+
+**AI read.** Under the sections, one card per find: "New synergy found", its pickups, rating and words,
+"Send for review" (that find alone: `picks: [key]`) and "Save to my synergies". The one "Send all" button
+goes. No API change.
+
+**Data.** `submissions.check_json` TEXT, null; added by `ALTER TABLE` when an older file lacks it.
+**Files.** Adds `api/app/wiki.py`, `api/tests/test_wiki.py`; changes `admin.py`, `store.py`, `community.py`,
+`analysis.py` (the schema is a parameter), `settings.py`, `scripts/gamedata.py`, `ci.yml`,
+`community-backup.yml`, `AdminPage.tsx`, `api/admin.ts`, `AiPanel.tsx`, their tests and styles, `about.json`.
+**Acceptance.** The check's tests prove the submitted words never reach the prompt and an invented quote is
+marked not found; the fold's script runs against a fixture with one checked and one unchecked entry;
+rendered contrast 0 failing on the new card and the check panel in both themes.
+
 ## Changes after approval
 - 2026-11-27: "via a PR" became "approve = live" (owner's second answer); SQLite kept; weekly backup added.
 - 2026-11-27, Codex review of PR #12: picks are keys, not places in a list; sending several finds is all or
   nothing and a repeat is free at the limit; one live submission per combination.
+- 2026-11-28 (owner): the amendment above. All three of the first published AI finds had a claim the wiki
+  contradicts (PR #13), so the check moves before publishing and the curated step no longer needs anyone.

@@ -46,6 +46,22 @@ const SUB: Submission = {
   reviewedAt: null,
   alsoSent: 2,
   onList: ["brimstone+tammys-head"],
+  check: null,
+};
+const CHECK: NonNullable<Submission["check"]> = {
+  checkedAt: "2026-11-28T12:00:00+00:00",
+  verdict: "repentance_plus_only",
+  rating: "C",
+  description: "Only in Repentance+: the lasers fire a little longer.",
+  why: "The pair is marked r+ on one page and nr+ on the other.",
+  pages: [
+    { title: "Tammy's Head", revision: 111 },
+    { title: "Brimstone", revision: 222 },
+  ],
+  quotes: [
+    { page: "Brimstone", text: "{{i|Tammy's Head|r+}}: Ten lasers.", found: true },
+    { page: "Brimstone", text: "Made up by the model.", found: false },
+  ],
 };
 const inbox = (subs: Submission[] = [SUB], counts = COUNTS) => [200, { submissions: subs, counts }] as Reply;
 
@@ -480,5 +496,71 @@ describe("admin inbox", () => {
     await user.click(screen.getByRole("button", { name: "Publish" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("That didn't work. Try again in a moment.");
     expect(screen.getByText("Ten lasers in a ring.")).toBeInTheDocument();
+  });
+
+  it("checks a submission against the wiki and puts the checked words in the editor", async () => {
+    let checked = false;
+    const calls = server({
+      "GET /api/admin/session": [200, SIGNED_IN],
+      "GET /api/admin/submissions?status=new": () => [200, { submissions: [checked ? { ...SUB, check: CHECK } : SUB], counts: COUNTS }],
+      "POST /api/admin/submissions/4/check": () => {
+        checked = true;
+        return [200, { ...SUB, check: CHECK }];
+      },
+      "PATCH /api/admin/submissions/4": [200, SUB],
+    });
+    const user = await openAdmin();
+    await screen.findByText("Ten lasers in a ring.");
+    expect(screen.getByText("Not checked against the wiki")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Check against the wiki" }));
+
+    const panel = await screen.findByRole("region", { name: "Wiki check" });
+    expect(within(panel).getByText("Repentance+ only")).toBeInTheDocument();
+    expect(within(panel).getByText(CHECK.description)).toBeInTheDocument();
+    expect(within(panel).getByText(CHECK.why)).toBeInTheDocument();
+    expect(within(panel).getByRole("link", { name: /Tammy's Head, revision 111/ })).toHaveAttribute(
+      "href",
+      "https://bindingofisaacrebirth.wiki.gg/wiki/Tammy's_Head?oldid=111",
+    );
+    // A line the server couldn't find on the page is flagged, so an invented quote can't pass for evidence.
+    const quotes = within(panel).getAllByRole("listitem").filter((li) => li.closest(".admin-check__quotes"));
+    expect(quotes.map((li) => li.dataset.found)).toEqual(["true", "false"]);
+    expect(within(panel).getByText(/Not found on the page/)).toBeInTheDocument();
+    expect(screen.getByText("Checked against the wiki")).toBeInTheDocument();
+
+    await user.click(within(panel).getByRole("button", { name: "Use this wording" }));
+    expect(screen.getByRole("radio", { name: "C" })).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue(CHECK.description);
+    await user.click(screen.getByRole("button", { name: "Save and publish" }));
+    expect(calls.filter((c) => c.key === "PATCH /api/admin/submissions/4").map((c) => c.body)).toEqual([
+      { rating: "C", description: CHECK.description, note: "", status: "approved" },
+    ]);
+  });
+
+  it("says why a check didn't happen", async () => {
+    server({
+      "GET /api/admin/session": [200, SIGNED_IN],
+      "GET /api/admin/submissions?status=new": inbox(),
+      "POST /api/admin/submissions/4/check": [
+        502,
+        { detail: { code: "wiki_unreachable", message: "The wiki couldn't be read just now. Try again in a moment." } },
+      ],
+    });
+    const user = await openAdmin();
+    await screen.findByText("Ten lasers in a ring.");
+    await user.click(screen.getByRole("button", { name: "Check against the wiki" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("The wiki couldn't be read just now.");
+    expect(screen.queryByRole("region", { name: "Wiki check" })).not.toBeInTheDocument();
+  });
+
+  it("says a live synergy without a check stays Community", async () => {
+    const live = { ...SUB, id: 5, status: "approved" as const, onList: [] };
+    server({
+      "GET /api/admin/session": [200, SIGNED_IN],
+      "GET /api/admin/submissions?status=new": inbox([live], { new: 0, approved: 1, rejected: 0, added: 0 }),
+    });
+    await openAdmin();
+    expect(await screen.findByText(/stays Community until it is checked/)).toBeInTheDocument();
+    expect(screen.getByText(/Every Monday/)).toBeInTheDocument();
   });
 });

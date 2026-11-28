@@ -13,6 +13,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.analysis import SCHEMA, SYSTEM, AnalysisFailed, cache_key
+from app.gamedata import GameData
 from app.main import create_app
 from app.settings import Settings
 from app.store import Store
@@ -207,12 +208,12 @@ def test_without_a_key_it_says_ai_is_off(make_client: Callable[..., TestClient])
     assert client.get("/api/health").json()["ai"] is False
 
 
-def test_health(client: TestClient) -> None:
+def test_health(client: TestClient, data: GameData) -> None:
     assert client.get("/api/health").json() == {
         "status": "ok",
         "ai": True,
         "items": 719,
-        "synergies": 445,
+        "synergies": len(data.synergies),
         "community": 0,
     }
 

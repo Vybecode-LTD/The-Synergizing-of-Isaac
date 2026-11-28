@@ -1,5 +1,6 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
+import synergiesJson from "@data/synergies.json";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { COMMUNITY_ELEMENT_ID, communitySynergies, gameData, readCommunity } from "./data";
 
@@ -58,7 +59,7 @@ describe("community synergies from the page", () => {
     serverList([LIVE]);
     const [{ App }, data] = await Promise.all([import("../App"), import("./data")]);
     expect(data.gameData.synergies.at(-1)).toMatchObject({ id: "community-7", community: true });
-    expect(data.gameData.synergies).toHaveLength(446);
+    expect(data.gameData.synergies).toHaveLength(synergiesJson.length + 1);
 
     render(
       <MemoryRouter initialEntries={["/?i=1.2"]}>

@@ -25,6 +25,8 @@ MESSAGES = {
     "bad_origin": "That request came from another site.",
     "not_found": "No such submission.",
     "already_live": "Another submission for this combination is live. Edit that one, or unpublish it first.",
+    "checks_limited": "That's today's wiki checks used up. They reset at midnight UTC.",
+    "wiki_unreachable": "The wiki couldn't be read just now. Try again in a moment.",
 }
 
 

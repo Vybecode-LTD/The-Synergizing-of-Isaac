@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   STATUSES,
+  checkSubmission,
   getExport,
   getInbox,
   getSession,
@@ -8,11 +9,14 @@ import {
   review,
   signIn,
   signOut,
+  pageAt,
   type AdminSession,
   type Inbox,
   type Review,
   type Status,
   type Submission,
+  type Verdict,
+  type WikiCheck,
 } from "../api/admin";
 import { ApiError, errorMessage } from "../api/http";
 import { RatingBadge, Tag, ratingMeaning } from "../components/Badges";
@@ -29,6 +33,13 @@ const TAB_LABEL: Record<Status | "all", string> = {
   rejected: "Rejected",
   added: "In the curated list",
   all: "All",
+};
+
+const VERDICT_LABEL: Record<Verdict, string> = {
+  on_wiki: "On the wiki",
+  from_effects: "From each page's effects",
+  repentance_plus_only: "Repentance+ only",
+  none: "No interaction found",
 };
 
 const signedOut = (cause: unknown) => cause instanceof ApiError && cause.status === 401;
@@ -274,6 +285,7 @@ function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (
                 submission={s}
                 busy={busy}
                 onReview={(changes) => act(() => review(s.id, changes))}
+                onCheck={() => act(() => checkSubmission(s.id))}
                 onDelete={() => act(() => removeSubmission(s.id))}
               />
             </li>
@@ -285,8 +297,8 @@ function InboxView({ username, onSignedOut }: { username: string; onSignedOut: (
 }
 
 /**
- * Live synergies are already on the site. Moving them into data/synergies.json is optional: it puts them in
- * git and in the checked list. Once that deploys, the server marks them as in the curated list by itself.
+ * Live synergies are already on the site. Every Monday the Community backup Action moves the checked ones into
+ * data/synergies.json, tests, merges and deploys (decision 0008, point 9). The export is for doing it by hand.
  */
 function ExportPanel({ count }: { count: number }) {
   const [copied, setCopied] = useState(false);
@@ -325,17 +337,14 @@ function ExportPanel({ count }: { count: number }) {
       </h2>
       <p className="admin-card__text">
         They&rsquo;re on isaac.toys now, marked Community, and a copy is saved to the repository&rsquo;s{" "}
-        <code className="admin__code">backup/community</code> branch every week. When you want them in the curated
-        list itself:
+        <code className="admin__code">backup/community</code> branch every week.
       </p>
-      <ol className="admin-steps">
-        <li>Download the export (or copy it).</li>
-        <li>
-          Run <code className="admin__code">python scripts/gamedata.py add-submissions &lt;file&gt;</code> and open a pull
-          request.
-        </li>
-        <li>Once it merges and deploys, they move to &ldquo;In the curated list&rdquo; on their own.</li>
-      </ol>
+      <p className="admin-card__text">
+        Every Monday a GitHub Action also moves the ones you checked against the wiki into the curated list, runs
+        every test, merges and deploys. Nothing to do by hand; one without a check stays Community. To do it
+        yourself instead, download the export and run{" "}
+        <code className="admin__code">python scripts/gamedata.py add-submissions &lt;file&gt;</code>.
+      </p>
       <div className="admin-export__actions">
         <button type="button" className="button" data-variant="primary" data-size="sm" onClick={download}>
           Download export
@@ -358,12 +367,15 @@ function SubmissionCard({
   submission: s,
   busy,
   onReview,
+  onCheck,
   onDelete,
 }: {
   submission: Submission;
   /** A change is on its way: the controls wait for it. */
   busy: boolean;
   onReview: (changes: Review) => void;
+  /** Ask the server for a wiki check; resolves once it is back (or has failed, which the inbox reports). */
+  onCheck: () => Promise<void>;
   onDelete: () => void;
 }) {
   const id = useId();
@@ -372,6 +384,7 @@ function SubmissionCard({
   const [description, setDescription] = useState(s.description);
   const [note, setNote] = useState(s.note ?? "");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [checking, setChecking] = useState(false);
 
   const pieces = [
     ...s.itemIds.map((pid) => ({ kind: "item" as const, id: pid, name: gameData.itemById.get(pid)?.name ?? `Item ${pid}` })),
@@ -388,6 +401,21 @@ function SubmissionCard({
     setDescription(s.description);
     setNote(s.note ?? "");
     setEditing(on);
+  };
+  // The check's words go into the editor; nothing is saved until the owner says so.
+  const takeCheck = (check: WikiCheck) => {
+    setRating(check.rating);
+    setDescription(check.description);
+    setNote(s.note ?? "");
+    setEditing(true);
+  };
+  const check = async () => {
+    setChecking(true);
+    try {
+      await onCheck();
+    } finally {
+      setChecking(false);
+    }
   };
   // While a change is on its way the buttons stay put but do nothing, and say so to assistive tech.
   const guard = (run: () => void) => ({ "aria-disabled": busy, onClick: busy ? undefined : run });
@@ -423,6 +451,7 @@ function SubmissionCard({
         <div className="admin-sub__meta">
           <Tag tone={s.origin === "ai" ? "accent" : "neutral"}>{s.origin === "ai" ? "Found by the AI" : "From a visitor"}</Tag>
           <Tag>{TAB_LABEL[s.status]}</Tag>
+          <Tag tone={s.check ? "accent" : "neutral"}>{s.check ? "Checked against the wiki" : "Not checked against the wiki"}</Tag>
           <span>{when}</span>
           {s.alsoSent > 0 && <span>Also sent {s.alsoSent === 1 ? "once more" : `${s.alsoSent} more times`}</span>}
         </div>
@@ -432,6 +461,14 @@ function SubmissionCard({
             <Icon name="alert" />
             The curated list already has these pickups ({s.onList.join(", ")}). If the combination is the same, the
             site shows the curated entry, not this one: treat it as a correction to make there, or reject it.
+          </p>
+        )}
+
+        {s.status === "approved" && !s.check && (
+          <p className="admin-sub__warning">
+            <Icon name="alert" />
+            Live, but it stays Community until it is checked: the weekly move into the curated list takes only checked
+            ones.
           </p>
         )}
 
@@ -478,6 +515,9 @@ function SubmissionCard({
           </>
         )}
 
+        {/* Below the submitted words, so the two read top to bottom as "sent" then "checked". */}
+        {s.check && !editing && <CheckPanel check={s.check} busy={busy} onUse={takeCheck} />}
+
         {s.sourceUrl && (
           <p className="admin-sub__source">
             Source given:{" "}
@@ -512,6 +552,10 @@ function SubmissionCard({
               <button type="button" className="button" data-size="sm" {...guard(() => startEditing(true))}>
                 Edit
               </button>
+              <button type="button" className="button" data-size="sm" {...guard(() => void check())}>
+                <Icon name="search" />
+                {checking ? "Checking the wiki…" : s.check ? "Check again" : "Check against the wiki"}
+              </button>
               {s.status !== "rejected" && (
                 <button type="button" className="button" data-size="sm" {...guard(() => onReview({ status: "rejected" }))}>
                   <Icon name="close" />
@@ -539,5 +583,62 @@ function SubmissionCard({
         </div>
       </div>
     </article>
+  );
+}
+
+/** What the wiki check found: advice beside the submission, with the pages and lines it rests on. */
+function CheckPanel({ check, busy, onUse }: { check: WikiCheck; busy: boolean; onUse: (check: WikiCheck) => void }) {
+  const when = new Date(check.checkedAt).toLocaleDateString(undefined, { dateStyle: "medium" });
+  return (
+    <section className="admin-check" aria-label="Wiki check">
+      <div className="admin-check__head">
+        <RatingBadge rating={check.rating} size="sm" />
+        <span className="admin-check__verdict">{VERDICT_LABEL[check.verdict]}</span>
+        <span className="admin-check__when">Checked {when}</span>
+      </div>
+      <p className="admin-check__text">{check.description}</p>
+      <p className="admin-check__why">{check.why}</p>
+      {check.pages.length > 0 && (
+        <p className="admin-check__pages">
+          Read on the wiki:{" "}
+          {check.pages.map((page, n) => (
+            <span key={page.title}>
+              {n > 0 && ", "}
+              <a className="text-link" href={pageAt(page.title, page.revision)} target="_blank" rel="noopener noreferrer">
+                {page.title}, revision {page.revision}
+              </a>
+            </span>
+          ))}
+        </p>
+      )}
+      {check.quotes.length > 0 && (
+        <ul className="admin-check__quotes" role="list">
+          {check.quotes.map((quote, n) => (
+            <li key={n} className="admin-check__quote" data-found={String(quote.found)}>
+              <span className="admin-check__page">{quote.page}</span>
+              <code className="admin-check__line">{quote.text}</code>
+              {!quote.found && (
+                <span className="admin-check__missing">
+                  <Icon name="alert" />
+                  Not found on the page: don&rsquo;t rely on it
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="admin-check__actions">
+        <button
+          type="button"
+          className="button"
+          data-variant="primary"
+          data-size="sm"
+          aria-disabled={busy}
+          onClick={busy ? undefined : () => onUse(check)}
+        >
+          Use this wording
+        </button>
+      </div>
+    </section>
   );
 }

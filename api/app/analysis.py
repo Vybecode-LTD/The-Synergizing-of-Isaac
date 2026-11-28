@@ -114,7 +114,10 @@ class AnalysisFailed(Exception):
 
 
 class Analyzer(Protocol):
-    async def analyze(self, system: str, user: str) -> str: ...
+    """Asks the model, holding its answer to a JSON schema: the build read's by default, the wiki check's
+    when given (api/app/wiki.py)."""
+
+    async def analyze(self, system: str, user: str, schema: dict[str, Any] | None = None) -> str: ...
 
 
 def _stats(record: dict[str, Any]) -> str:
@@ -300,14 +303,14 @@ class ClaudeAnalyzer:
         self._settings = settings
         self._client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key, timeout=45.0, max_retries=1)
 
-    async def analyze(self, system: str, user: str) -> str:
+    async def analyze(self, system: str, user: str, schema: dict[str, Any] | None = None) -> str:
         s = self._settings
         params: dict[str, Any] = {
             "model": s.ai_model,
             "max_tokens": s.ai_max_tokens,
             "system": system,
             "messages": [{"role": "user", "content": user}],
-            "output_config": {"effort": s.ai_effort, "format": {"type": "json_schema", "schema": SCHEMA}},
+            "output_config": {"effort": s.ai_effort, "format": {"type": "json_schema", "schema": schema or SCHEMA}},
         }
         if s.ai_model in FALLBACK_MODELS:
             # If a safety classifier declines, the API reruns the request on a fallback model in the same call.

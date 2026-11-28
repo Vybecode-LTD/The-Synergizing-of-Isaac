@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import synergiesJson from "@data/synergies.json";
 import { App } from "./App";
 
 function open(path: string) {
@@ -236,7 +237,7 @@ describe("AI analysis", () => {
     expect(sections.map((s) => s.dataset.tone)).toEqual(["light", "deep"]);
     // A section with nothing in it is left out.
     expect(screen.queryByRole("heading", { name: "Watch out for" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Synergies found" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: /New synergy found/ })).not.toBeInTheDocument();
     expect(screen.getByText(/4 of 5 analyses left today/)).toBeInTheDocument();
 
     const [url, init] = fetchMock.mock.calls[0]!;
@@ -297,7 +298,7 @@ describe("AI analysis", () => {
       description: "Three fast tears a shot.",
     };
 
-    it("saves a find to your own synergies, and sends them all to the owner", async () => {
+    it("shows a find as a New synergy found card at the bottom, saves it, and sends it for review", async () => {
       const fetchMock = vi
         .fn()
         .mockResolvedValueOnce(new Response(JSON.stringify(reply({ found: [FIND] }))))
@@ -306,42 +307,53 @@ describe("AI analysis", () => {
       const user = open("/?i=1.2");
       await user.click(screen.getByRole("button", { name: "Analyse this build" }));
 
-      const found = await screen.findByRole("region", { name: "Synergies found" });
-      expect(within(found).getByText("Three fast tears a shot.")).toBeInTheDocument();
-      expect(within(found).getByText(/One interaction in this build/)).toBeInTheDocument();
+      const card = await screen.findByRole("region", { name: /New synergy found/ });
+      expect(within(card).getByRole("heading", { level: 3, name: "New synergy found" })).toBeInTheDocument();
+      expect(within(card).getByText("Three fast tears a shot.")).toBeInTheDocument();
+      expect(within(card).getByText("The Sad Onion")).toBeInTheDocument();
+      // At the very bottom: after every section of the read.
+      const sections = screen.getAllByRole("region").filter((r) => r.classList.contains("ai-read__section"));
+      for (const section of sections) {
+        expect(section.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      }
 
-      await user.click(within(found).getByRole("button", { name: "Save to my synergies" }));
-      expect(within(found).getByText("Saved to your synergies")).toBeInTheDocument();
+      await user.click(within(card).getByRole("button", { name: "Save to my synergies" }));
+      expect(within(card).getByText("Saved to your synergies")).toBeInTheDocument();
       expect(screen.getByRole("heading", { level: 2, name: "1 synergy" })).toBeInTheDocument();
       const [saved] = JSON.parse(localStorage.getItem("isaac-toys:my-synergies:v1")!);
       expect(saved).toMatchObject({ itemIds: [1, 2], rating: "B", description: "Three fast tears a shot.", custom: true });
 
-      await user.click(within(found).getByRole("button", { name: "Send it to isaac.toys" }));
-      expect(await within(found).findByText(/Sent to isaac.toys for review/)).toBeInTheDocument();
+      await user.click(within(card).getByRole("button", { name: "Send for review" }));
+      expect(await within(card).findByText(/Sent for review/)).toBeInTheDocument();
+      expect(within(card).queryByRole("button", { name: "Send for review" })).not.toBeInTheDocument();
       const [url, init] = fetchMock.mock.calls[1]!;
       expect(url).toBe("/api/submissions/from-analysis");
-      // Each find's key, never the words: the server stores its own copy.
+      // The find's key, never the words: the server stores its own copy.
       expect(JSON.parse(init.body)).toEqual({ character: null, items: [1, 2], trinkets: [], picks: ["i:1.2|t:|c:"] });
     });
 
-    it("counts several finds and says why sending failed", async () => {
+    it("gives each find its own send button, and says why one failed on that card", async () => {
       const second = { ...FIND, key: "i:1|t:|c:azazel", itemIds: [1], characterSlugs: ["azazel"], description: "Only as Azazel." };
-      vi.stubGlobal(
-        "fetch",
-        vi
-          .fn()
-          .mockResolvedValueOnce(new Response(JSON.stringify(reply({ found: [FIND, second] }))))
-          .mockResolvedValueOnce(
-            new Response(JSON.stringify({ detail: { code: "submissions_limited", message: "More tomorrow." } }), { status: 429 }),
-          ),
-      );
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValueOnce(new Response(JSON.stringify(reply({ found: [FIND, second] }))))
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ detail: { code: "submissions_limited", message: "More tomorrow." } }), { status: 429 }),
+        );
+      vi.stubGlobal("fetch", fetchMock);
       const user = open("/?c=azazel&i=1.2");
       await user.click(screen.getByRole("button", { name: "Analyse this build" }));
-      const found = await screen.findByRole("region", { name: "Synergies found" });
-      expect(within(found).getByText("Azazel")).toBeInTheDocument();
-      await user.click(within(found).getByRole("button", { name: "Send all 2 to isaac.toys" }));
-      expect(await within(found).findByText("More tomorrow.")).toBeInTheDocument();
-      expect(within(found).getByRole("button", { name: "Send all 2 to isaac.toys" })).toBeInTheDocument();
+      const cards = await screen.findAllByRole("region", { name: /New synergy found/ });
+      expect(cards).toHaveLength(2);
+      expect(within(cards[1]!).getByText("Azazel")).toBeInTheDocument();
+
+      await user.click(within(cards[1]!).getByRole("button", { name: "Send for review" }));
+      expect(await within(cards[1]!).findByText("More tomorrow.")).toBeInTheDocument();
+      expect(JSON.parse(fetchMock.mock.calls[1]![1].body).picks).toEqual(["i:1|t:|c:azazel"]);
+      // The failure stays on its card; the other is untouched and can still be sent.
+      expect(within(cards[1]!).getByRole("button", { name: "Send for review" })).toBeInTheDocument();
+      expect(within(cards[0]!).queryByText("More tomorrow.")).not.toBeInTheDocument();
+      expect(within(cards[0]!).getByRole("button", { name: "Send for review" })).toBeInTheDocument();
     });
   });
 });
@@ -522,13 +534,13 @@ describe("browse and detail pages", () => {
 
   it("searches and filters the full synergy list and pages through it", async () => {
     const user = open("/synergies");
-    expect(screen.getByRole("status")).toHaveTextContent("445 synergies");
+    expect(screen.getByRole("status")).toHaveTextContent(`${synergiesJson.length} synergies`);
     expect(screen.getAllByRole("article")).toHaveLength(40);
     await user.click(screen.getByRole("button", { name: "Show 40 more" }));
     expect(screen.getAllByRole("article")).toHaveLength(80);
 
     await user.type(screen.getByRole("searchbox", { name: "Search synergies" }), "tammy brimstone");
-    expect(screen.getByRole("status")).toHaveTextContent(/of 445 synergies/);
+    expect(screen.getByRole("status")).toHaveTextContent(`of ${synergiesJson.length} synergies`);
     expect(screen.getByRole("link", { name: "Open in builder" })).toHaveAttribute("href", "/?i=118.38");
     await user.click(screen.getByRole("button", { name: "D tier" }));
     expect(screen.getByText(/Nothing in the list matches/)).toBeInTheDocument();
