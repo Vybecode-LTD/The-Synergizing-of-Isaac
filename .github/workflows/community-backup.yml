@@ -3,6 +3,11 @@ name: Community backup
 # Once a week, saves the community synergies that are live on isaac.toys (approved submissions, decision
 # 0008) to the backup/community branch, so they outlive the Railway volume they are stored on. About 15
 # seconds of Actions time a week; nothing is committed when the list has not changed.
+#
+# Then the fold (decision 0008, point 9): the ones the owner checked against the wiki in /admin go into
+# data/synergies.json on a branch of their own, the full CI runs on that branch, and only if it passes is the
+# branch merged into main, which Railway deploys. A week with nothing checked stops after the backup. No pull
+# request: this repository does not let Actions open one, and the merge commit and this run are the record.
 on:
   schedule:
     - cron: "17 9 * * 1" # Mondays, 09:17 UTC (4:17 am Eastern)
@@ -28,3 +33,63 @@ jobs:
       - run: |
           cp .github/scripts/community-backup.sh "$RUNNER_TEMP/"
           bash "$RUNNER_TEMP/community-backup.sh" https://isaac.toys origin
+
+  fold:
+    name: Fold the checked ones into the curated list
+    needs: backup
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      branch: ${{ steps.fold.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install what the snapshot and the share image need
+        run: |
+          python -m pip install -r api/requirements.txt
+          (cd web && npm ci --no-audit --no-fund)
+      - name: Add the checked ones on a branch and push it
+        id: fold
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: bash .github/scripts/community-fold.sh https://isaac.toys origin
+
+  ci:
+    name: CI on the fold
+    needs: fold
+    if: needs.fold.outputs.branch != ''
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ needs.fold.outputs.branch }}
+    permissions:
+      contents: read
+
+  land:
+    name: Merge the fold into main
+    needs: [fold, ci]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Merge it, push main (Railway deploys it), and delete the branch
+        env:
+          BRANCH: ${{ needs.fold.outputs.branch }}
+        run: |
+          git fetch --quiet origin "$BRANCH"
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            merge --no-ff --quiet "origin/$BRANCH" -m "Merge $BRANCH: checked Community synergies (weekly fold, run $GITHUB_RUN_ID)"
+          git push --quiet origin HEAD:main
+          git push --quiet origin --delete "$BRANCH"
+          echo "Merged $BRANCH into main."

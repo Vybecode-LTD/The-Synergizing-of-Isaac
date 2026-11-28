@@ -70,6 +70,7 @@ synergies to the `backup/community` branch.
 | `ADMIN_PASSWORD_HASH` | the line `python -m app.admin_password` prints (see below) | The admin password's scrypt hash, never the password. Changing it signs out every session |
 | `SUBMISSIONS_PER_VISITOR_PER_DAY` | optional, default `20` | Synergies one visitor can send a day |
 | `SUBMISSIONS_SITE_PER_DAY` | optional, default `500` | Synergies the whole site takes a day |
+| `ADMIN_CHECKS_PER_DAY` | optional, default `40` | Wiki checks the owner can run a day in `/admin` (each is one paid model call) |
 
 Railway injects `PORT`; the container binds to it.
 
@@ -79,15 +80,23 @@ Railway injects `PORT`; the container binds to it.
    or more, twice (a few unrelated words is easiest). It prints one line starting `scrypt$`.
 2. Railway → Service → **Variables**: `ADMIN_USERNAME` (your choice) and `ADMIN_PASSWORD_HASH` (that line).
    Saving redeploys. Never paste the password itself anywhere.
-3. Open `https://isaac.toys/admin` and sign in. **Publish** puts a submission on the site at once, marked
-   Community; **Unpublish** or **Reject** takes it off. Ten wrong sign-ins from one connection lock it out
-   until midnight UTC (7 pm EST); a session ends after 2 idle hours or 12 hours.
-4. Optional, whenever you like: **Download export** in the inbox, then
-   `python scripts/gamedata.py add-submissions <file>` and a pull request moves the live ones into the
-   curated `data/synergies.json`. After it deploys, they show "In the curated list" on their own.
-5. The weekly backup (`.github/workflows/community-backup.yml`, Mondays 4:17 am EST) commits
-   `community.json` to the `backup/community` branch when the list changed. Restore it with the same
-   `add-submissions` command. Run it now from GitHub → Actions → Community backup → Run workflow.
+3. Open `https://isaac.toys/admin` and sign in. On each submission, **Check against the wiki** reads the
+   members' wiki pages and has the AI write the synergy from them (never from the submitted words): a
+   verdict, a rating, the words, the pages and revisions read, and the lines it rests on (a line it made up
+   is flagged "Not found on the page"). **Use this wording** puts that in the editor; change anything, then
+   **Save and publish**. **Publish** puts a submission on the site at once, marked Community; **Unpublish**
+   or **Reject** takes it off. Ten wrong sign-ins from one connection lock it out until midnight UTC
+   (7 pm EST); a session ends after 2 idle hours or 12 hours. Checks stop at `ADMIN_CHECKS_PER_DAY`.
+4. Nothing else to do: the weekly Action (`.github/workflows/community-backup.yml`, Mondays 4:17 am EST)
+   first saves `community.json` to the `backup/community` branch when the list changed, then folds the
+   **checked** live ones into `data/synergies.json` (with their checks in `data/synergy-checks.md`, the
+   snapshot and the share image redrawn) on a branch `community/fold-<date>-<run>-<attempt>`, runs the full CI on it,
+   and merges it into `main` if CI passes; Railway deploys it and they show "In the curated list". A live
+   one without a check stays Community. If CI fails, the branch stays for a look and nothing is merged.
+   Run it any time from GitHub → Actions → Community backup → Run workflow.
+5. By hand instead, if ever needed: **Download export** in the inbox, then
+   `python scripts/gamedata.py add-submissions <file>` (add `--checked-only` to take only checked ones and
+   record their checks) and a pull request. The backup's `community.json` restores the same way.
 
 **If Cloudflare is ever put in front** (not planned): `cf-connecting-ip` is only true for requests that came through
 Cloudflare. Anyone can connect to Railway directly (the generated `*.up.railway.app` domain, or the custom

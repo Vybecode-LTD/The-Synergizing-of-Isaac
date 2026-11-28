@@ -14,6 +14,7 @@ from typing import Any
 
 from .gamedata import GameData, Synergy
 from .store import Store
+from .wiki import public_check
 
 ELEMENT_ID = "community-synergies"
 
@@ -94,6 +95,8 @@ class Community:
         for scripts/gamedata.py add-submissions."""
         d = self._data
         taken = {s.id for s in d.synergies}
+        # The wiki check each one had (decision 0008, point 8): the weekly fold takes only checked ones.
+        checks = {f"community-{row['id']}": row["check"] for row in self._store.community()}
         return [
             {
                 "id": slug_id(d, list(s.item_ids), list(s.trinket_ids), list(s.character_slugs), taken),
@@ -102,6 +105,7 @@ class Community:
                 "characters": [d.character_by_slug[c]["name"] for c in s.character_slugs],
                 "rating": s.rating,
                 "description": s.description,
+                "check": public_check(checks.get(s.id), s.rating, s.description),
             }
             for s in self.synergies()
         ]

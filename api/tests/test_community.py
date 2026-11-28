@@ -9,6 +9,7 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 
+from app.gamedata import GameData
 from app.main import create_app
 from app.settings import Settings
 from app.store import Store, Submission
@@ -147,6 +148,7 @@ def test_the_public_list_is_in_the_curated_file_format(site: TestClient, store: 
                 "characters": ["Azazel"],
                 "rating": "S",
                 "description": "The Sad Onion's tears, three at a time.",
+                "check": None,  # no wiki check yet (test_check.py has one with)
             }
         ]
     }
@@ -175,11 +177,11 @@ def test_the_ai_does_not_find_what_the_community_already_has(
     assert sent_late.status_code == 200
 
 
-def test_the_synergies_page_lists_live_ones(site: TestClient, store: Store) -> None:
+def test_the_synergies_page_lists_live_ones(site: TestClient, store: Store, data: GameData) -> None:
     row = sent(store, rating="S", description="Live S-tier words.")
     store.review(row, {"status": "approved"})
     page = site.get("/synergies").text
-    assert "<p>446 synergies</p>" in page and "Live S-tier words." in page
+    assert f"<p>{len(data.synergies) + 1} synergies</p>" in page and "Live S-tier words." in page
 
 
 def test_the_backup_restores_into_the_curated_list(site: TestClient, store: Store, tmp_path: Any) -> None:
@@ -202,6 +204,62 @@ def test_the_backup_restores_into_the_curated_list(site: TestClient, store: Stor
     assert [p for p in script.validate(copy) if "no sprite" not in p] == []
 
 
+def test_the_weekly_fold_takes_only_checked_ones_and_records_their_check(
+    site: TestClient, store: Store, tmp_path: Any
+) -> None:
+    """The weekly Action (decision 0008, point 9): add-submissions --checked-only folds in what the owner
+    checked against the wiki, writes the check into synergy-checks.md, and leaves the rest Community."""
+    import shutil
+    from pathlib import Path
+
+    from .test_core import load_gamedata_script
+
+    checked = sent(store, (1, 2), rating="C", description="Checked words.")
+    unchecked = sent(store, (1, 3), description="Unchecked words.")
+    edited = sent(store, (1, 4), rating="B", description="The owner's own words.")
+    for row in (checked, unchecked, edited):
+        store.review(row, {"status": "approved"})
+    check = {
+        "checkedAt": "2026-11-28T12:00:00+00:00",
+        "verdict": "from_effects",
+        "rating": "C",
+        "description": "Checked words.",
+        "why": "No line names the pair | each page's effects do.",
+        "pages": [{"title": "The Sad Onion", "revision": 101}, {"title": "The Inner Eye", "revision": 202}],
+        "quotes": [],
+    }
+    store.set_check(checked, check)
+    store.set_check(edited, {**check, "verdict": "on_wiki", "pages": [{"title": "Cricket's Head", "revision": 303}]})
+    backup = tmp_path / "community.json"
+    backup.write_text(json.dumps(site.get("/api/community").json()), encoding="utf-8")
+    copy = tmp_path / "data"
+    repo_data = Path(__file__).resolve().parents[2] / "data"
+    shutil.copytree(repo_data, copy, ignore=shutil.ignore_patterns("sprites", "sources", "tests"))
+    before = (copy / "synergy-checks.md").read_text(encoding="utf-8")
+
+    script = load_gamedata_script()
+    added = script.add_submissions(backup, copy, checked_only=True, today="2026-12-01")
+    assert added == ["the-inner-eye+the-sad-onion", "crickets-head+the-sad-onion"]
+    listed = json.loads((copy / "synergies.json").read_text(encoding="utf-8"))
+    assert all("check" not in s for s in listed)
+    assert [p for p in script.validate(copy) if "no sprite" not in p] == []
+
+    log = (copy / "synergy-checks.md").read_text(encoding="utf-8")
+    assert log.startswith(before)
+    section = log[len(before) :]
+    assert "## 2026-12-01: 2 Community synergies folded in by the weekly Action" in section
+    assert (
+        "| `the-inner-eye+the-sad-onion` | The Sad Onion, The Inner Eye | C | From each page's effects |"
+        " No line names the pair \\| each page's effects do. (The Sad Onion 101, The Inner Eye 202) |"
+    ) in section
+    edited = "| `crickets-head+the-sad-onion` | The Sad Onion, Cricket's Head | B | On the wiki; words edited"
+    assert edited in section
+
+    # Run again before the deploy retires them: the folded ones are skipped, not refused.
+    assert script.add_submissions(backup, copy, checked_only=True, today="2026-12-08") == []
+    assert (copy / "synergy-checks.md").read_text(encoding="utf-8") == log
+
+
 def test_two_live_rows_for_one_combination_show_and_back_up_once(site: TestClient, store: Store, tmp_path: Any) -> None:
     """Finding (PR #12 review): rows published before the one-live rule, or by the store directly, still
     show once, oldest first, and the backup stays importable."""
@@ -220,3 +278,53 @@ def test_an_entry_id_already_taken_gets_the_next_number(data: Any) -> None:
     assert slug_id(data, [118, 38], [], [], taken) == "brimstone+tammys-head~3"
     assert "brimstone+tammys-head~3" in taken
     assert slug_id(data, [118], [39], ["azazel"], taken) == "brimstone+t-cancer+c-azazel"
+
+
+def test_a_fold_whose_record_cannot_be_written_leaves_the_list_as_it_was(
+    site: TestClient, store: Store, tmp_path: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Finding (CodeRabbit, PR #14): if synergy-checks.md could not be written, synergies.json already held the
+    new entries, and a retry skipped them as folded, so their checks were never recorded."""
+    import shutil
+    from pathlib import Path
+
+    from .test_core import load_gamedata_script
+
+    row = sent(store, (1, 2), rating="C", description="Checked words.")
+    store.review(row, {"status": "approved"})
+    store.set_check(
+        row,
+        {
+            "checkedAt": "2026-11-28T12:00:00+00:00",
+            "verdict": "from_effects",
+            "rating": "C",
+            "description": "Checked words.",
+            "why": "Each page's effects.",
+            "pages": [],
+            "quotes": [],
+        },
+    )
+    backup = tmp_path / "community.json"
+    backup.write_text(json.dumps(site.get("/api/community").json()), encoding="utf-8")
+    copy = tmp_path / "data"
+    shutil.copytree(
+        Path(__file__).resolve().parents[2] / "data", copy, ignore=shutil.ignore_patterns("sprites", "sources", "tests")
+    )
+    before = (copy / "synergies.json").read_bytes()
+
+    script = load_gamedata_script()
+
+    def cannot_write(*args: Any, **kwargs: Any) -> None:
+        raise PermissionError("synergy-checks.md is read-only")
+
+    monkeypatch.setattr(script, "record_checks", cannot_write)
+    with pytest.raises(PermissionError):
+        script.add_submissions(backup, copy, checked_only=True, today="2026-12-01")
+    assert (copy / "synergies.json").read_bytes() == before
+
+    # Once it can be written, the retry folds and records it.
+    monkeypatch.undo()
+    assert script.add_submissions(backup, copy, checked_only=True, today="2026-12-01") == [
+        "the-inner-eye+the-sad-onion"
+    ]
+    assert "`the-inner-eye+the-sad-onion`" in (copy / "synergy-checks.md").read_text(encoding="utf-8")

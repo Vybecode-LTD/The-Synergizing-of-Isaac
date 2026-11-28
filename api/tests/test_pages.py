@@ -131,9 +131,10 @@ def test_everything_but_production_is_kept_out_of_search(make_client: Callable[.
     assert staging.get("/api/health").headers["x-robots-tag"] == "noindex"
 
 
-def test_llms_txt_summarises_the_site(client: TestClient) -> None:
+def test_llms_txt_summarises_the_site(client: TestClient, data: GameData) -> None:
     text = client.get("/llms.txt").text
-    assert text.startswith("# isaac.toys\n\n> isaac.toys checks your character, items and trinkets against 445")
+    lede = f"# isaac.toys\n\n> isaac.toys checks your character, items and trinkets against {len(data.synergies)}"
+    assert text.startswith(lede)
     assert "- [All items](https://isaac.toys/items)" in text
     assert "## Strongest synergies" in text
 

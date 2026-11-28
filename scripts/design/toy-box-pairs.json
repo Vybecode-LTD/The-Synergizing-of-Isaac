@@ -376,5 +376,59 @@
    "light",
    "dark"
   ]
+ },
+ {
+  "fg": "--fg-strong",
+  "bg": "--bg-sunken",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-default",
+  "bg": "--bg-sunken",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-muted",
+  "bg": "--bg-sunken",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-danger",
+  "bg": "--bg-sunken",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-on-accent",
+  "bg": "--bg-accent",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
+ },
+ {
+  "fg": "--fg-muted",
+  "bg": "--bg-surface",
+  "min": 4.5,
+  "scopes": [
+   "light",
+   "dark"
+  ]
  }
 ]

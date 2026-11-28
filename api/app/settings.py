@@ -33,6 +33,8 @@ class Settings:
     site_per_day: int = 200
     submissions_per_visitor_per_day: int = 20
     submissions_site_per_day: int = 500
+    # A ceiling on the owner's wiki checks (each is one paid model call), in case a session is ever stolen.
+    admin_checks_per_day: int = 40
     # Both set, or there is no admin: /api/admin answers admin_off. The hash comes from app.admin_password.
     admin_username: str | None = None
     admin_password_hash: str | None = field(default=None, repr=False)
@@ -69,6 +71,7 @@ class Settings:
                 "SUBMISSIONS_PER_VISITOR_PER_DAY", cls.submissions_per_visitor_per_day
             ),
             submissions_site_per_day=_int("SUBMISSIONS_SITE_PER_DAY", cls.submissions_site_per_day),
+            admin_checks_per_day=_int("ADMIN_CHECKS_PER_DAY", cls.admin_checks_per_day),
             admin_username=env.get("ADMIN_USERNAME", "").strip() or None,
             admin_password_hash=env.get("ADMIN_PASSWORD_HASH", "").strip() or None,
             client_ip_header=header if header in ("x-forwarded-for", "cf-connecting-ip") else cls.client_ip_header,

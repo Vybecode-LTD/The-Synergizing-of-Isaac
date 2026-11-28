@@ -1,7 +1,7 @@
 # Testing
 
-Last run: 2026-11-27, on the owner's Windows machine, branch `feat/synergy-submissions` (synergy
-submissions, live community synergies, the admin inbox, the AI read in sections; decision 0008).
+Last run: 2026-11-28, on the owner's Windows machine, branch `feat/wiki-check-and-weekly-fold` (the wiki
+check in /admin, the weekly fold, a "New synergy found" card per AI find; decision 0008, points 7 to 9).
 
 ## Frameworks
 
@@ -110,6 +110,23 @@ submissions, live community synergies, the admin inbox, the AI read in sections;
   lock that visitor out for the day and nobody else, the cookie's flags, a new token at every sign-in, idle and
   absolute expiry, a password change signing out everywhere, another site's `Origin` or `Sec-Fetch-Site`
   refused on every write, no inbox without a session, `no-store`; then the inbox: edit, publish, delete, export.
+- **The wiki check** (`api/tests/test_wiki.py`, `api/tests/test_check.py`, `AdminPage.test.tsx`): an excerpt
+  keeps the Effects section and only the bullets naming another member, with the bullet above and those
+  below; a name counts only whole; the submitted words never reach the prompt (a planted leak turns it red);
+  a quote from the excerpt is found and an invented one, or one on the page but not shown, is not; one page
+  is enough and none means no model call and nothing counted; a broken answer is a 502 that keeps the old
+  check; the daily ceiling, taken in one step so two checks at once can't both pass it (Codex, PR #14); an
+  older database file gains the column; the public list carries the check and
+  whether the owner changed the words; the inbox shows the check and "Use this wording" fills the editor.
+- **Runtime requirements** (`test_requirements.py`): every package `app/` imports is installed by
+  `requirements.txt` itself or a package it requires. The image installs only that file; `httpx` came only
+  from the dev file and crashed the image at start-up in PR #14's first CI run while every test passed.
+- **The weekly fold** (`test_community.py`): `add-submissions --checked-only` takes only checked entries,
+  writes no `check` into the list, appends their rows to `synergy-checks.md` (a `|` escaped), and skips, not
+  refuses, ones already folded. Tests never state the synergy count; they read it from the data, so a fold
+  can't break them. The workflow itself runs only on GitHub: first proof is its first run.
+- **New synergy found** (`app.test.tsx`): one card per find after every section of the read; each card sends
+  only its own key; a failure stays on its card.
 - **The AI's answer** (`api/tests/test_reading.py`): the schema closed and complete at every level; stray
   Markdown and references removed; finds kept only when they fit the build; an answer it cannot show is a
   billed failure that refunds the visitor and is not saved.
@@ -226,7 +243,8 @@ submissions, live community synergies, the admin inbox, the AI read in sections;
   `api/tests/test_core.py`) compare both sides with `data/tests/parity.json` on every run. The first session
   also compared the browser's titles with the server's on nine routes by hand, once, with no script kept.
 - **Synergy facts** against the wiki for Repentance: method and every verdict in `data/synergy-checks.md`
-  (S and D on 2026-11-24, A, B and C on 2026-11-25, the first three Community ones on 2026-11-28; all 445 entries checked once). After a check,
+  (S and D on 2026-11-24, A, B and C on 2026-11-25, the first three Community ones on 2026-11-28; every entry
+  checked once; since 2026-11-28 Community ones are checked in /admin and recorded by the weekly fold). After a check,
   `python scripts/gamedata.py validate`, then `python -m app.parity` (in `api/`) and `npm run og -- isaac.toys`
   when the count changes, then both suites. The 2026-11-25 extraction scripts were scratch work, not kept.
 
